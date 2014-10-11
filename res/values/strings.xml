@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Money Manager</string>
+    <string name="wiyn">What is your name?</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_money_manager">MoneyManager</string>
+    <string name="enter">Enter</string>
+    <string name="desc1">Add a new transaction</string>
+    <string name="title_activity_start_transaction">StartTransaction</string>
+    <string name="title_activity_add_new_transaction">Add a new Transaction</string>
+    <string name="title_activity_add_new_transaction_category">AddNewTransactionCategory</string>
+	<string name="addNewCat">Add a new Category</string>
+	<string name="chng">Change</string>
+	<string name="totlmny">Total Money is :</string>
+	<string name="zero">0</string>
+	<string name="setCat">Select a Category</string>
+	
+    
+
+</resources>
