@@ -29,7 +29,7 @@ public class AddNewTransactionCategory extends ActionBarActivity implements AddN
 		
 		// receiving category data from DataBase
 		categoryString = db.getAllDataCategoryTable();
-		// if category is empty
+		// if category is empty just in case
 		if (categoryString.isEmpty()) {
 			db.insertDataCategoryTable("Shopping");
 			categoryString.add("Shopping");

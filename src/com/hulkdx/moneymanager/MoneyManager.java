@@ -4,14 +4,18 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog.Communicator {
+public class MoneyManager extends ActionBarActivity implements
+		ChangeMoneyDialog.Communicator {
 
 	TextView totalMoneyTextView;
 	TextView earnedTextView;
@@ -20,8 +24,8 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 	int balance = 0;
 	int earned = 0;
 	int spent = 0;
-	
-	//DataBaseTransactionAdapter dbTransaction;
+
+	// DataBaseTransactionAdapter dbTransaction;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,43 +103,44 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 			spentTextView.setText(String.valueOf(spent));
 			earnedTextView.setText(String.valueOf(earned));
 			
-			// Setting the list View from the table
-			LinearLayout transLinear = (LinearLayout) findViewById(R.id.addItemHere);
-			int countdb = 0;
-			
-			TextView tv = new TextView(this);
-			tv.setText("You have No transaction");
-			tv.setId(10);
-			transLinear.addView(tv);
-			
-			for (String s : db.selectCatTransactionTable()) {
+			// Setting the Transaction Views from the table
+			ListView transactionListV = (ListView) findViewById(R.id.transactionData1);
+			CustomAdapter adapter;
+			// initialization
+			String[] catArray = null;
+			String[] amountArray = null;
+			boolean[] expenseArray = null;
+			int countdb = db.selectCatTransactionTable().length;
+			if (countdb != 0){
+				catArray = new String[countdb];
+				amountArray = new String[countdb];
+				expenseArray = new boolean[countdb];
+			}
+			// TODO CHAnge the order
+			countdb = 0;
+			// Setting the arrays for the custom adapter
+			for (String catThis : db.selectCatTransactionTable()) {
+				String amountThis = String.valueOf(db.selectAmountTransactionTable()[countdb]);
+				boolean expenseThis = db.selectExpenseTransactionTable()[countdb];
 				
-				// TODO if No Transaction text is exist just remove it
-				TextView NoTrsTxtView = (TextView) findViewById(10);
-				if (NoTrsTxtView != null){
-					Toast.makeText(this, "yea", Toast.LENGTH_SHORT).show();
-				}
+				catArray[countdb] = catThis;
+				amountArray[countdb] = amountThis;
+				expenseArray[countdb] = expenseThis;
 				
-				// TODO if it is expanse
-				if (db.selectExpenseTransactionTable()[countdb]){
-
-				} 
-				// if its not
-				else {
-					
-				}
 				countdb++;
 			}
-			
-			// TODO if DB is empty TODO set 3 to 0
+			// if Transaction DB is empty
 			if (countdb == 0){
-				// TODO remove comments Create a TextView with id = 10
-				//TextView tv = new TextView(this);
-				//tv.setText("You have No transaction");
-				//tv.setId(10);
-				
-				//transLinear.addView(tv);
+				String[] noString = {"NOTHING IN DATABASE"};
+				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
+				transactionListV.setAdapter(adapterNo);
+			} 
+			// if its not empty then set the custom adapter
+			else { 
+				adapter = new CustomAdapter(this, catArray, amountArray, expenseArray);
+				transactionListV.setAdapter(adapter);
 			}
+
 		}
 	}
 
@@ -147,16 +152,29 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 		myDialog.show(manager, "changeMoneyDialog");
 
 	}
-	
+
 	// Communication function
 	@Override
-	public void onDialogMessage(String money) {
+	public void onDialogMessage(int money) {
 		// change total amount of money in TextView(totalMoney)
-		totalMoneyTextView.setText(money);
+		String stringMoney = String.valueOf(money);
+		totalMoneyTextView.setText(stringMoney);
 		// save totalMoney
 		SharedPreferences.Editor editor = sp.edit();
-		editor.putString("totalMoney", money);
+		editor.putInt("totalMoney", money);
+		
+		
+		/* reset all of informations
+		 * 1. set the earned to Total Money
+		 * 2. change the local database for earned and ...
+		 */
+		earnedTextView.setText(stringMoney);
+		spentTextView.setText("0");
+		editor.putInt("earned", money);
+		editor.putInt("spent", 0);
 		editor.commit();
+		
+		
 	}
 
 	// clicking on plus sign
@@ -165,5 +183,48 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 		Intent i = new Intent(this, AddNewTransaction.class);
 		startActivity(i);
 	}
+}
 
+class CustomAdapter extends ArrayAdapter<String> {
+	Context context;
+	String[] categoryArray;
+	String[] amountArray;
+	boolean[] expanseB;
+
+	public CustomAdapter(Context c, String[] categoty, String[] amount,
+			boolean[] expanse) {
+		super(c, R.layout.list_view_in_money_manager, R.id.textView1x, categoty);
+		this.context = c;
+		this.amountArray = amount;
+		this.categoryArray = categoty;
+		this.expanseB = expanse;
+	}
+	
+	int count = 0;
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		if (row == null) {
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			row = inflater.inflate(R.layout.list_view_in_money_manager, parent,
+					false);
+		}
+
+		TextView category = (TextView) row.findViewById(R.id.textView1x);
+		TextView amount = (TextView) row.findViewById(R.id.textView2x);
+
+		category.setText(categoryArray[position]);
+		amount.setText(amountArray[position]);
+		
+		if (expanseB[position]){
+			amount.setTextColor(Color.parseColor("#FFFF4444"));
+		}
+		else {
+			amount.setTextColor(Color.parseColor("#0000FF"));
+		}
+
+		return row;
+	}
 }

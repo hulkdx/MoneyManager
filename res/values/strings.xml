@@ -11,10 +11,12 @@
     <string name="title_activity_add_new_transaction">Add a new Transaction</string>
     <string name="title_activity_add_new_transaction_category">AddNewTransactionCategory</string>
 	<string name="addNewCat">Add a new Category</string>
-	<string name="chng">Change</string>
+	<string name="chng">Reset Money</string>
 	<string name="totlmny">Total Money is :</string>
 	<string name="zero">0</string>
 	<string name="setCat">Select a Category</string>
+	<string name="dollar">$</string>
+	<string name="add">Add</string>
 	
     
 

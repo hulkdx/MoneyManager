@@ -1095,9 +1095,8 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050055;
+        public static final int action_settings=0x7f050056;
         public static final int activity_chooser_view_content=0x7f050025;
-        public static final int addItemHere=0x7f050051;
         public static final int always=0x7f05000b;
         public static final int amountEditText=0x7f05003e;
         public static final int beginning=0x7f050011;
@@ -1122,24 +1121,23 @@ containing a value of this type.
         public static final int icon=0x7f05002a;
         public static final int ifRoom=0x7f05000a;
         public static final int image=0x7f050027;
-        public static final int imageButton1=0x7f050052;
+        public static final int imageButton1=0x7f050051;
         public static final int linearLayout1=0x7f05004a;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050029;
         public static final int middle=0x7f050012;
-        public static final int moneyEditText=0x7f050053;
+        public static final int moneyEditText=0x7f050054;
         public static final int nametext=0x7f050048;
         public static final int never=0x7f050009;
         public static final int none=0x7f050010;
         public static final int normal=0x7f050000;
-        public static final int okdialog=0x7f050054;
+        public static final int okdialog=0x7f050055;
         public static final int progress_circular=0x7f050018;
         public static final int progress_horizontal=0x7f050019;
         public static final int radio=0x7f05002f;
         public static final int radioButton1=0x7f050040;
         public static final int radioButton2=0x7f050041;
         public static final int rgroup=0x7f05003f;
-        public static final int scrollView1=0x7f050050;
         public static final int search_badge=0x7f050032;
         public static final int search_bar=0x7f050031;
         public static final int search_button=0x7f050033;
@@ -1159,12 +1157,15 @@ containing a value of this type.
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
         public static final int textView1=0x7f05003d;
+        public static final int textView1x=0x7f050052;
         public static final int textView2=0x7f050045;
+        public static final int textView2x=0x7f050053;
         public static final int textView3=0x7f05004b;
         public static final int textView4=0x7f05004c;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
         public static final int totalMoney=0x7f050049;
+        public static final int transactionData1=0x7f050050;
         public static final int up=0x7f050021;
         public static final int useLogo=0x7f050003;
         public static final int username=0x7f050044;
@@ -1224,10 +1225,11 @@ containing a value of this type.
         public static final int activity_add_new_transaction_category=0x7f030019;
         public static final int activity_main=0x7f03001a;
         public static final int activity_money_manager=0x7f03001b;
-        public static final int my_category_add_dialog=0x7f03001c;
-        public static final int my_change_money_dialog=0x7f03001d;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
-        public static final int test=0x7f03001f;
+        public static final int list_view_in_money_manager=0x7f03001c;
+        public static final int my_category_add_dialog=0x7f03001d;
+        public static final int my_change_money_dialog=0x7f03001e;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
+        public static final int test=0x7f030020;
     }
     public static final class menu {
         public static final int add_new_transaction=0x7f0c0000;
@@ -1278,10 +1280,12 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
         public static final int action_settings=0x7f0a000f;
+        public static final int add=0x7f0a001c;
         public static final int addNewCat=0x7f0a0016;
         public static final int app_name=0x7f0a000d;
         public static final int chng=0x7f0a0017;
         public static final int desc1=0x7f0a0012;
+        public static final int dollar=0x7f0a001b;
         public static final int enter=0x7f0a0011;
         public static final int setCat=0x7f0a001a;
         public static final int title_activity_add_new_transaction=0x7f0a0014;

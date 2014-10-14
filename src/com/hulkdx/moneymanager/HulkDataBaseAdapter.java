@@ -74,6 +74,7 @@ import android.util.Log;
 		}
 
 		
+		
 		public String[] selectCatTransactionTable(){
 			SQLiteDatabase db = helper.getWritableDatabase();
 			String [] columns = {HulkDataBaseHelper.CATEGORY};
@@ -89,6 +90,7 @@ import android.util.Log;
 			}
 			return arrayStr;
 		}
+
 		
 		public int[] selectAmountTransactionTable(){
 			SQLiteDatabase db = helper.getWritableDatabase();

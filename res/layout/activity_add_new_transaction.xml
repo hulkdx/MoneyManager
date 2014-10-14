@@ -26,7 +26,7 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$"
+            android:text="@string/dollar"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
@@ -40,41 +40,32 @@
         </EditText>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/rgroup"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-        
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/rgroup" >
 
         <RadioButton
             android:id="@+id/radioButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Expense"
-            android:checked="true" />
-        
+            android:checked="true"
+            android:text="Expense" />
+
         <RadioButton
-	        android:id="@+id/radioButton2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="Income" />
-        
-        </RadioGroup>
-
-    </LinearLayout>
-
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Income" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
         android:layout_gravity="center_horizontal"
-        android:onClick="onClickAddButton" />
+        android:onClick="onClickAddButton"
+        android:text="Add" />
 
 </LinearLayout>

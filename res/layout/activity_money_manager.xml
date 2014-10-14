@@ -35,14 +35,17 @@
             android:paddingLeft="20dp"
             android:paddingRight="2dp"
             android:paddingStart="20dp"
-            android:text="@string/zero" />
+            android:text="@string/zero"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button1"
-            android:layout_width="wrap_content"
+            android:layout_width="52dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.08"
             android:onClick="changeTotalMoney"
-            android:text="@string/chng" />
+            android:text="@string/chng"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
     <RelativeLayout
@@ -137,39 +140,32 @@
             android:layout_below="@+id/linearLayout1"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Last item :"
+            android:text="Last item (you bought) :"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="15dp" />
 
-        <ScrollView
-            android:id="@+id/scrollView1"
+        <ListView
+            android:id="@+id/transactionData1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/TextView01" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/addItemHere" >
-                
-            </LinearLayout>
-        </ScrollView>
+        </ListView>
     </RelativeLayout>
 
     <ImageButton
         android:id="@+id/imageButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:background="#FFFFFF"
         android:contentDescription="@string/desc1"
         android:onClick="startTransaction"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:src="@drawable/ico_001" />
+        android:src="@drawable/ico_001"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

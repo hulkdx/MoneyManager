@@ -1,5 +1,6 @@
 package com.hulkdx.moneymanager;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ public class ChangeMoneyDialog extends DialogFragment implements View.OnClickLis
 	//define communication
 	Communicator comm;
 	interface Communicator {
-		public void onDialogMessage(String money);
+		public void onDialogMessage(int money);
 	}
 	@Override
 	public void onAttach(Activity activity) {
@@ -48,7 +49,8 @@ public class ChangeMoneyDialog extends DialogFragment implements View.OnClickLis
 	// on clicking OK button
 	@Override
 	public void onClick(View v) {
-		comm.onDialogMessage(moneyEditText.getText().toString());
+		int money = Integer.parseInt(moneyEditText.getText().toString());
+		comm.onDialogMessage(money);
 		dismiss();
 	}
 	
