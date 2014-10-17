@@ -114,15 +114,17 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 				HulkDataBaseAdapter helper = new HulkDataBaseAdapter(this);
 				helper.insertDataTransactionTable(category, amount, expense);
 				
-				/* TODO Save data to Money Management Activity
+				/* Save data to Money Management Activity
 				 * 1. increase or reduce money from total money and save it
 				 * 2. add some interfaces
 				 * 3. intent to money Manager
 				*/
 				
 				Intent i = new Intent(this, MoneyManager.class);
+				i.putExtra("Category", category);
 				i.putExtra("Amount", amount);
 				i.putExtra("isExpense", expense);
+				i.putExtra("isTransaction", true);
 				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(i);
 				finish();

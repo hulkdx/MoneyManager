@@ -1,6 +1,5 @@
 package com.hulkdx.moneymanager;
 
-import android.R.integer;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.os.Bundle;

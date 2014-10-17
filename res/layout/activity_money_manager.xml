@@ -50,9 +50,16 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="344dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical" >
+
+        <View
+            android:id="@+id/hLine1"
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/linearLayout1"
+            android:background="#c0c0c0" />
 
         <TextView
             android:id="@+id/textView2"
@@ -60,15 +67,18 @@
             android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Overview"
+            android:text="@string/owrvw"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="15dp" />
+            android:textColor="#008000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/textView2"
             android:orientation="vertical"
             android:paddingBottom="10dp"
@@ -80,10 +90,10 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Earned"
+                android:text="@string/erned"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#0000FF"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -93,16 +103,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="4dp"
-                android:text="Spent"
+                android:text="@string/spent"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFF4444"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/linearLayout1"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/textView2"
             android:orientation="vertical" >
@@ -116,7 +127,7 @@
                 android:text="@string/zero"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#0000FF"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/spentTextView"
@@ -129,7 +140,7 @@
                 android:text="@string/zero"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFF4444"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <TextView
@@ -137,12 +148,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/linearLayout1"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/hLine1"
+            android:paddingBottom="0dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Last item (you bought) :"
+            android:paddingTop="5dp"
+            android:text="@string/lastitem"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="15dp" />
+            android:textColor="#008000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/transactionData1"
@@ -160,12 +176,12 @@
         android:id="@+id/imageButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:background="#FFFFFF"
         android:contentDescription="@string/desc1"
         android:onClick="startTransaction"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:src="@drawable/ico_001"
-        android:layout_gravity="center_horizontal" />
+        android:src="@drawable/ico_001" />
 
 </LinearLayout>

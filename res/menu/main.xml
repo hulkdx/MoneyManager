@@ -4,9 +4,20 @@
     tools:context="com.hulkdx.moneymanager.MainActivity" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/resetMoney"
+        android:title="@string/resetMoney"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/resetTrans"
+        android:title="@string/resetTrans"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/resetName"
+        android:title="@string/resetName"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/resetAll"
+        android:title="@string/resetAll"
         app:showAsAction="never"/>
 
 </menu>

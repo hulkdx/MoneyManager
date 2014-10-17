@@ -33,7 +33,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="How much money you have?"
+        android:text="@string/howmuch"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText

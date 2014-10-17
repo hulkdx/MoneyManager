@@ -51,13 +51,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Expense" />
+            android:text="@string/expense" />
 
         <RadioButton
             android:id="@+id/radioButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Income" />
+            android:text="@string/income" />
     </RadioGroup>
 
     <Button
@@ -66,6 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:onClick="onClickAddButton"
-        android:text="Add" />
+        android:text="@string/add" />
 
 </LinearLayout>
