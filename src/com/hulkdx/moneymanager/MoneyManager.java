@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog.Communicator {
 
+	private static final String NOTHING = "No Transaction, add more by clicking below";
+	
 	TextView totalMoneyTextView;
 	TextView earnedTextView;
 	TextView spentTextView;
@@ -143,7 +145,7 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 			}
 			// if Transaction DB is empty
 			else {
-				String[] noString = { "NOTHING IN DATABASE" };
+				String[] noString = { NOTHING };
 				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
 				transactionListV.setAdapter(adapterNo);
 			}
@@ -223,7 +225,7 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 				// Remove all DB
 				db.deleteAllTransactionTable();
 				// set list view to nothing
-				String[] noString = { "NOTHING IN DATABASE" };
+				String[] noString = { NOTHING };
 				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
 				transactionListV.setAdapter(adapterNo);
 			}
@@ -234,7 +236,7 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 				// Remove Transaction Table
 				db.deleteAllTransactionTable();
 				// set list view to nothing
-				String[] noString = { "NOTHING IN DATABASE" };
+				String[] noString = { NOTHING };
 				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
 				transactionListV.setAdapter(adapterNo);
 			}
