@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog.Communicator {
+public class MoneyManager extends ActionBarActivity implements FragmentChangeMoneyDialog.Communicator {
 
 	private static final String NOTHING = "No Transaction, add more by clicking below";
-	
+	private static final String DOLLAR = " $";
+
 	TextView totalMoneyTextView;
 	TextView earnedTextView;
 	TextView spentTextView;
@@ -51,9 +51,6 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 
 		// if name is not exist go to MainActivity activity To create a name
 		if (name.equals("")) {
-			// init Category DB
-			initCatDB();
-
 			// go to MainActivity activity
 			Intent i = new Intent(this, MainActivity.class);
 			startActivity(i);
@@ -70,6 +67,9 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 
 			// for first time running equal earned to balance
 			if (isFirstRunning) {
+				// init Category DB
+				initCatDB();
+				
 				earned = balance;
 
 				SharedPreferences.Editor editor = sp.edit();
@@ -111,9 +111,9 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 			}
 
 			// setting the (total money, spent, earned) Text View
-			totalMoneyTextView.setText(String.valueOf(balance));
-			spentTextView.setText(String.valueOf(spent));
-			earnedTextView.setText(String.valueOf(earned));
+			totalMoneyTextView.setText(String.valueOf(balance) + DOLLAR);
+			spentTextView.setText(String.valueOf(spent) + DOLLAR);
+			earnedTextView.setText(String.valueOf(earned) + DOLLAR);
 
 			// Setting the Transaction Views from the table
 			CustomAdapter adapter;
@@ -159,15 +159,8 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 		db.insertDataCategoryTable("Foods and Drinks");
 		db.insertDataCategoryTable("Educations");
 		db.insertDataCategoryTable("House");
+		db.insertDataCategoryTable("Salary");
 		db.insertDataCategoryTable("Other");
-	}
-
-	// clicking on change for total money
-	public void changeTotalMoney(View v) {
-		// Fragment Dialog
-		FragmentManager manager = getFragmentManager();
-		ChangeMoneyDialog myDialog = new ChangeMoneyDialog();
-		myDialog.show(manager, "changeMoneyDialog");
 	}
 
 	// Communication function
@@ -175,7 +168,7 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 	public void onDialogMessage(int money) {
 		// change total amount of money in TextView(totalMoney)
 		String stringMoney = String.valueOf(money);
-		totalMoneyTextView.setText(stringMoney);
+		totalMoneyTextView.setText(stringMoney + DOLLAR);
 		// save totalMoney
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putInt("totalMoney", money);
@@ -184,12 +177,11 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 		 * reset all of informations 1. set the earned to Total Money 2. change
 		 * the local database for earned and ...
 		 */
-		earnedTextView.setText(stringMoney);
-		spentTextView.setText("0");
+		earnedTextView.setText(stringMoney + DOLLAR);
+		spentTextView.setText("0" + DOLLAR);
 		editor.putInt("earned", money);
 		editor.putInt("spent", 0);
 		editor.commit();
-
 	}
 
 	// clicking on plus sign
@@ -216,8 +208,9 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 		case R.id.resetMoney:
 			handle = true;
 			FragmentManager manager = getFragmentManager();
-			ChangeMoneyDialog myDialog = new ChangeMoneyDialog();
+			FragmentChangeMoneyDialog myDialog = new FragmentChangeMoneyDialog();
 			myDialog.show(manager, "changeMoneyDialog");
+			break;
 
 		case R.id.resetTrans:
 			handle = true;
@@ -229,6 +222,7 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
 				transactionListV.setAdapter(adapterNo);
 			}
+			break;
 
 		case R.id.resetAll:
 			handle = true;
@@ -248,55 +242,51 @@ public class MoneyManager extends ActionBarActivity implements ChangeMoneyDialog
 			Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
 			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
+			break;
 
 		default:
 			handle = super.onOptionsItemSelected(item);
 		}
 		return handle;
 	}
+	
+	// Custom adapter for List View
+	class CustomAdapter extends ArrayAdapter<String> {
+		Context context;
+		String[] categoryArray;
+		String[] amountArray;
+		boolean[] expanseB;
 
-	// TODO Remove if after finished...
-	public void message(String s) {
-		Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-	}
-}
-
-class CustomAdapter extends ArrayAdapter<String> {
-	Context context;
-	String[] categoryArray;
-	String[] amountArray;
-	boolean[] expanseB;
-
-	public CustomAdapter(Context c, String[] categoty, String[] amount, boolean[] expanse) {
-		super(c, R.layout.list_view_in_money_manager, R.id.textView1x, categoty);
-		this.context = c;
-		this.amountArray = amount;
-		this.categoryArray = categoty;
-		this.expanseB = expanse;
-	}
-
-	int count = 0;
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View row = convertView;
-		if (row == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			row = inflater.inflate(R.layout.list_view_in_money_manager, parent, false);
+		public CustomAdapter(Context c, String[] categoty, String[] amount, boolean[] expanse) {
+			super(c, R.layout.list_view_in_money_manager, R.id.textView1x, categoty);
+			this.context = c;
+			this.amountArray = amount;
+			this.categoryArray = categoty;
+			this.expanseB = expanse;
 		}
 
-		TextView category = (TextView) row.findViewById(R.id.textView1x);
-		TextView amount = (TextView) row.findViewById(R.id.textView2x);
+		int count = 0;
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View row = convertView;
+			if (row == null) {
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				row = inflater.inflate(R.layout.list_view_in_money_manager, parent, false);
+			}
 
-		category.setText(categoryArray[position]);
-		amount.setText(amountArray[position]);
+			TextView category = (TextView) row.findViewById(R.id.textView1x);
+			TextView amount = (TextView) row.findViewById(R.id.textView2x);
 
-		if (expanseB[position]) {
-			amount.setTextColor(Color.parseColor("#FFFF4444"));
-		} else {
-			amount.setTextColor(Color.parseColor("#0000FF"));
+			category.setText(categoryArray[position]);
+			amount.setText(amountArray[position] + DOLLAR);
+
+			if (expanseB[position]) {
+				amount.setTextColor(Color.parseColor("#FFFF4444"));
+			} else {
+				amount.setTextColor(Color.parseColor("#0000FF"));
+			}
+			return row;
 		}
-
-		return row;
 	}
+
 }

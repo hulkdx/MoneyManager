@@ -62,12 +62,22 @@ public class HulkDataBaseAdapter {
 		return count;
 	}
 
-	public long insertDataTransactionTable(String category, int amount, boolean expense) {
+	public long insertDataTransactionTable(String category, int amount, boolean expense, String date) {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(HulkDataBaseHelper.CATEGORY, category);
 		contentValues.put(HulkDataBaseHelper.AMOUNT, amount);
 		contentValues.put(HulkDataBaseHelper.IS_IT_EXPENSE, expense);
+		contentValues.put(HulkDataBaseHelper.DATE, date);
+		// id will be negative if something went wrong otherwise it contains row
+		long id = db.insert(HulkDataBaseHelper.TABLE_NAME2, null, contentValues);
+		return id;
+	}
+	
+	public long test(String date) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(HulkDataBaseHelper.DATE, date);
 		// id will be negative if something went wrong otherwise it contains row
 		long id = db.insert(HulkDataBaseHelper.TABLE_NAME2, null, contentValues);
 		return id;
@@ -133,7 +143,7 @@ public class HulkDataBaseAdapter {
 	static class HulkDataBaseHelper extends SQLiteOpenHelper {
 
 		private static final String DATABASE_NAME = "hulkdb";
-		private static final int DATABASE_VERSION = 1;
+		private static final int DATABASE_VERSION = 2;
 
 		private static final String TABLE_NAME1 = "CATEGORYTABLE";
 		private static final String TABLE_NAME2 = "TRANSACTIONTB";
@@ -145,10 +155,12 @@ public class HulkDataBaseAdapter {
 		// FOR TABLE Transaction
 		private static final String AMOUNT = "amount";
 		private static final String IS_IT_EXPENSE = "expenseorincome";
+		private static final String DATE = "date";
+		//private static final String NOTE = "note";
 
 		private static final String CREATE_TABLE1 = "CREATE TABLE " + TABLE_NAME1 + " (" + UID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + CATEGORY + " VARCHAR(255));";
 		private static final String CREATE_TABLE2 = "CREATE TABLE " + TABLE_NAME2 + " " + "(" + UID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + CATEGORY + " VARCHAR(255), "
-				+ AMOUNT + " INTEGER, " + IS_IT_EXPENSE + " BOOLEAN );";
+				+ AMOUNT + " INTEGER, " + IS_IT_EXPENSE + " BOOLEAN, "+ DATE +" date );";
 
 		private static final String DROP_TABLE1 = "DROP TABLE IF EXISTS " + TABLE_NAME1;
 		private static final String DROP_TABLE2 = "DROP TABLE IF EXISTS " + TABLE_NAME2;
@@ -169,7 +181,6 @@ public class HulkDataBaseAdapter {
 			} catch (SQLException e) {
 				Log.e("ERROR", "SQL on create");
 			}
-
 		}
 
 		@Override
@@ -182,6 +193,5 @@ public class HulkDataBaseAdapter {
 				Log.e("ERROR", "SQL on upgrade");
 			}
 		}
-
 	}
 }

@@ -50,7 +50,6 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
@@ -104,9 +103,6 @@
                 android:textColor="#FFFF4444"
                 android:textSize="15sp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <View
@@ -191,7 +187,9 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/linearLayout2"
             android:text="Today"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp" />
     </RelativeLayout>
 
     <ImageButton

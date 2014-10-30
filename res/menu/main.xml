@@ -12,10 +12,6 @@
         android:title="@string/resetTrans"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/resetName"
-        android:title="@string/resetName"
-        app:showAsAction="never"/>
-    <item
         android:id="@+id/resetAll"
         android:title="@string/resetAll"
         app:showAsAction="never"/>
