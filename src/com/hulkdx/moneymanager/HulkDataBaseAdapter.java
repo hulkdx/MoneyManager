@@ -25,6 +25,21 @@ public class HulkDataBaseAdapter {
 		long id = db.insert(HulkDataBaseHelper.TABLE_NAME1, null, contentValues);
 		return id;
 	}
+	
+	public String[] selectAllCategoryTable() {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		String[] columns = { HulkDataBaseHelper.CATEGORY };
+		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME1, columns, null, null, null, null, null);
+
+		String[] arrayStr = new String[cursor.getCount()];
+		int count = 0;
+		while (cursor.moveToNext()) {
+			String category = cursor.getString(cursor.getColumnIndex(HulkDataBaseHelper.CATEGORY));
+			arrayStr[count] = category;
+			count++;
+		}
+		return arrayStr;
+	}
 
 	public ArrayList<String> getAllDataCategoryTable() {
 		// saving to ArrayList
@@ -74,13 +89,58 @@ public class HulkDataBaseAdapter {
 		return id;
 	}
 	
-	public long test(String date) {
+	public String[] selectCatFromDate(String month, String year) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(HulkDataBaseHelper.DATE, date);
-		// id will be negative if something went wrong otherwise it contains row
-		long id = db.insert(HulkDataBaseHelper.TABLE_NAME2, null, contentValues);
-		return id;
+		String[] columns = { HulkDataBaseHelper.CATEGORY };
+		String WHERE =  "strftime('%m', date) = '"+month+"' AND strftime('%Y', date) = '"+year+"'";
+		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME2, columns, WHERE, null, null, null, null);
+
+		String[] arrayStr = new String[cursor.getCount()];
+		int count = 0;
+		while (cursor.moveToNext()) {
+			String category = cursor.getString(cursor.getColumnIndex(HulkDataBaseHelper.CATEGORY));
+			arrayStr[count] = category;
+			count++;
+		}
+		return arrayStr;
+	}
+	
+	public int totalAmountOfCatCategoryTable(String cat) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		String[] columns = { HulkDataBaseHelper.AMOUNT , HulkDataBaseHelper.IS_IT_EXPENSE};
+		String WHERE =  HulkDataBaseHelper.CATEGORY+" = '"+cat+"'";
+		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME2, columns, WHERE, null, null, null, null);
+
+		int amountTotal = 0;
+		while (cursor.moveToNext()) {
+			int amountThis = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.AMOUNT));
+			boolean expenseThis = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.IS_IT_EXPENSE)) > 0;
+			if (expenseThis){
+				amountTotal -= amountThis;
+			} else {
+				amountTotal += amountThis;
+			}
+		}
+		return amountTotal;
+	}
+	
+	public int totalAmountOfCatFromDateCategoryTable(String cat,String month, String year) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		String[] columns = { HulkDataBaseHelper.AMOUNT , HulkDataBaseHelper.IS_IT_EXPENSE};
+		String WHERE =  "strftime('%m', date) = '"+month+"' AND strftime('%Y', date) = '"+year+"' AND "+HulkDataBaseHelper.CATEGORY+" = '"+cat+"'";
+		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME2, columns, WHERE, null, null, null, null);
+
+		int amountTotal = 0;
+		while (cursor.moveToNext()) {
+			int amountThis = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.AMOUNT));
+			boolean expenseThis = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.IS_IT_EXPENSE)) > 0;
+			if (expenseThis){
+				amountTotal -= amountThis;
+			} else {
+				amountTotal += amountThis;
+			}
+		}
+		return amountTotal;
 	}
 
 	public String[] selectCatTransactionTable() {
@@ -112,15 +172,50 @@ public class HulkDataBaseAdapter {
 		}
 		return arrayInt;
 	}
+	// TODO
+	public int[] selectAmountFromDate(String month, String year) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		String[] columns = { HulkDataBaseHelper.AMOUNT };
+		String WHERE =  "strftime('%m', date) = '"+month+"' AND strftime('%Y', date) = '"+year+"'";
+		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME2, columns, WHERE, null, null, null, null);
 
+		int[] arrayInt = new int[cursor.getCount()];
+		int count = 0;
+		while (cursor.moveToNext()) {
+			int amount = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.AMOUNT));
+			arrayInt[count] = amount;
+			count++;
+		}
+		return arrayInt;
+	}
+
+	
 	public boolean[] selectExpenseTransactionTable() {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		String[] columns = { HulkDataBaseHelper.UID, HulkDataBaseHelper.CATEGORY, HulkDataBaseHelper.AMOUNT, HulkDataBaseHelper.IS_IT_EXPENSE };
+		String[] columns = { HulkDataBaseHelper.IS_IT_EXPENSE };
 		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME2, columns, null, null, null, null, null);
 
 		boolean[] arrayBool = new boolean[cursor.getCount()];
 		int count = 0;
 		while (cursor.moveToNext()) {
+			// > 0 is for converting Int to boolean
+			boolean expanse = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.IS_IT_EXPENSE)) > 0;
+			arrayBool[count] = expanse;
+			count++;
+		}
+		return arrayBool;
+	}
+	
+	public boolean[] selectExpenseFromDate(String month, String year) {
+		SQLiteDatabase db = helper.getWritableDatabase();
+		String[] columns = { HulkDataBaseHelper.IS_IT_EXPENSE };
+		String WHERE =  "strftime('%m', date) = '"+month+"' AND strftime('%Y', date) = '"+year+"'";
+		Cursor cursor = db.query(HulkDataBaseHelper.TABLE_NAME2, columns, WHERE, null, null, null, null);
+
+		boolean[] arrayBool = new boolean[cursor.getCount()];
+		int count = 0;
+		while (cursor.moveToNext()) {
+			// > 0 is for converting Int to boolean
 			boolean expanse = cursor.getInt(cursor.getColumnIndex(HulkDataBaseHelper.IS_IT_EXPENSE)) > 0;
 			arrayBool[count] = expanse;
 			count++;
@@ -176,7 +271,7 @@ public class HulkDataBaseAdapter {
 				// CATEGORY VARCHAR(255));
 				db.execSQL(CREATE_TABLE1);
 				// CREATE TABLE category (_id INTEGER PRIMARY KEY AUTOINCREMENT,
-				// CATEGORY VARCHAR(255), AMOUNT INTEGER, expense BOOLEAN);
+				// CATEGORY VARCHAR(255), AMOUNT INTEGER, expense BOOLEAN, DATE date);
 				db.execSQL(CREATE_TABLE2);
 			} catch (SQLException e) {
 				Log.e("ERROR", "SQL on create");

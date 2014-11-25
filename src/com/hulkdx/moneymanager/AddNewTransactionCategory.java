@@ -48,19 +48,19 @@ public class AddNewTransactionCategory extends ActionBarActivity implements AddN
 		mydialog.show(manager, "AddNewCategoryDialog");
 	}
 	
-	// on click add button in dialog (Communication metod)
+	// On click add button in dialog (Communication metod)
 	@Override
 	public void onClickAdd(String category) {
-		// add to table
+		// Add to table
 		db.insertDataCategoryTable(category);
 		
-		// update the list view
+		// Update the list view
 		categoryString.add(category);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categoryString);
 		listView.setAdapter(adapter);
 	}
 
-	// on click each item in list view
+	// On click each item in list view
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		Intent i = new Intent(this, AddNewTransaction.class);
@@ -70,6 +70,7 @@ public class AddNewTransactionCategory extends ActionBarActivity implements AddN
 		// give back the same amount and isExpense value
 		if (getIntent().getExtras() != null) {
 			i.putExtra("AMOUNT", getIntent().getExtras().getString("AMOUNT", ""));
+			i.putExtra("NewDate", getIntent().getExtras().getString("NewDate", ""));
 		}
 		
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

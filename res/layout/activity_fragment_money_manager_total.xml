@@ -12,7 +12,7 @@
         android:id="@+id/transactionData1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/totalMontly"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
@@ -20,14 +20,5 @@
         android:layout_alignParentTop="true" >
 
     </ListView>
-
-    <TextView
-        android:id="@+id/totalMontly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/ttal"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

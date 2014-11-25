@@ -27,7 +27,7 @@ public class AddNewCategoryDialog extends DialogFragment implements OnClickListe
 		addButton = (Button) view.findViewById(R.id.button1);
 		addButton.setOnClickListener(this);
 		
-		textCat =  (EditText) view.findViewById(R.id.editText1);
+            textCat =  (EditText) view.findViewById(R.id.editText1);
 		
 		return view;
 	}

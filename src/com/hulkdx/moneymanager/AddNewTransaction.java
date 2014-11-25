@@ -1,9 +1,6 @@
 package com.hulkdx.moneymanager;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -27,7 +24,6 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 	TextView categoryTextView;
 	EditText amountEditText;
 	RadioButton rbExpense;
-	RadioButton rbIncome;
 	TextView dayTodayTextView;
 	TextView monthTodayTextView;
 	TextView yearTodayTextView;
@@ -44,13 +40,13 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 		categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 		amountEditText = (EditText) findViewById(R.id.amountEditText);
 		rbExpense = (RadioButton) findViewById(R.id.radioButton1);
-		rbIncome = (RadioButton) findViewById(R.id.radioButton2);
 		dayTodayTextView = (TextView) findViewById(R.id.dayToday);
 		monthTodayTextView = (TextView) findViewById(R.id.monthToday);
 		yearTodayTextView = (TextView) findViewById(R.id.yearToday);
 
 		categoryTextView.setOnTouchListener(this);
 
+		String checkingTextView = "";
 		// If extra in intent is not null ( if user clicked on a category )
 		if (getIntent().getExtras() != null) {
 
@@ -68,18 +64,30 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 				amountEditText.setText(setEditText);
 				amountEditText.setSelection(amountEditText.getText().length());
 			}
+			checkingTextView = getIntent().getExtras().getString("NewDate", "");
 		}
-
-		// Date
-		Date date = new Date();
-		String phrase = (String) DateFormat.format("dd MMMM yyyy", date.getTime());
+		// set Day, Month, Year TextViews
+		setDayMonthYearTextView(checkingTextView);
+	}
+	
+	public void setDayMonthYearTextView(String checkingTextView){
 		String delims = "[ ]+";
-		// todayDate[0] = day, 1 = Month, 2 = Year
-		String[] todayDate = phrase.split(delims);
 		// setting day, Month, year
-		dayTodayTextView.setText(todayDate[0]);
-		monthTodayTextView.setText(todayDate[1]);
-		yearTodayTextView.setText(todayDate[2]);
+		if (!checkingTextView.isEmpty()) {
+			String[] newText = checkingTextView.split(delims);
+			dayTodayTextView.setText(newText[0]);
+			monthTodayTextView.setText(newText[1]);
+			yearTodayTextView.setText(newText[2]);
+		} else {
+			// Date
+			Date date = new Date();
+			String phrase = (String) DateFormat.format("dd MMMM yyyy", date.getTime());
+			// 0 = day, 1 = Month, 2 = Year
+			String[] todayDate = phrase.split(delims);
+			dayTodayTextView.setText(todayDate[0]);
+			monthTodayTextView.setText(todayDate[1]);
+			yearTodayTextView.setText(todayDate[2]);
+		}
 	}
 
 	// On clicking date
@@ -93,7 +101,6 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 	// for clicking category
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-
 		// if clicked
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			// change color
@@ -106,6 +113,8 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 			if (!amount.isEmpty()) {
 				i.putExtra("AMOUNT", amount);
 			}
+			String date = dayTodayTextView.getText().toString() + " " + monthTodayTextView.getText().toString() + " " + yearTodayTextView.getText().toString();
+			i.putExtra("NewDate", date);
 			startActivity(i);
 
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -160,7 +169,7 @@ public class AddNewTransaction extends ActionBarActivity implements OnTouchListe
 			}
 		}
 	}
-	
+
 	// set Date Text View (Communicator)
 	@Override
 	public void sentDate(String date) {

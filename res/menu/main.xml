@@ -5,15 +5,12 @@
 
     <item
         android:id="@+id/resetMoney"
-        android:title="@string/resetMoney"
-        app:showAsAction="never"/>
+        android:title="@string/resetMoney"/>
     <item
         android:id="@+id/resetTrans"
-        android:title="@string/resetTrans"
-        app:showAsAction="never"/>
+        android:title="@string/resetTrans"/>
     <item
         android:id="@+id/resetAll"
-        android:title="@string/resetAll"
-        app:showAsAction="never"/>
+        android:title="@string/resetAll"/>
 
 </menu>

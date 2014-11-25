@@ -24,7 +24,7 @@
     <string name="owrvw">Overview</string>
     <string name="erned">Earned :</string>
     <string name="spent">Spent  :</string>
-    <string name="lastitem">Last item :</string>
+    <string name="lastitem">Last Transaction :</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
     <string name="howmuch">How much money you have?</string>
@@ -33,5 +33,11 @@
     <string name="date">Date :</string>
     <string name="title_activity_fragment">Fragment</string>
     <string name="hello_world">Hello world!</string>
+    <string name="srt">Sort by :</string>
+    <string name="total">Total</string>
+    <string name="montly">Monthly</string>
+    <string name="ttal">Total : 0$</string>
+    <string name="showAll">Show All</string>
+    <string name="showBy">Show by Category</string>
 
 </resources>

@@ -1,39 +1,47 @@
 package com.hulkdx.moneymanager;
 
-import android.app.FragmentManager;
+import java.util.Calendar;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MoneyManager extends ActionBarActivity implements FragmentChangeMoneyDialog.Communicator {
+public class MoneyManager extends FragmentActivity implements FragmentChangeMoneyDialog.Communicator, OnCheckedChangeListener {
 
-	private static final String NOTHING = "No Transaction, add more by clicking below";
-	private static final String DOLLAR = " $";
+	static final String NOTHING = "No Transaction, add more by clicking below";
+	static final String DOLLAR = " $";
 
 	TextView totalMoneyTextView;
 	TextView earnedTextView;
 	TextView spentTextView;
-	ListView transactionListV;
+	ViewPager myViewpager;
+	RadioGroup radioGroup1;
+	RadioGroup radioGroup2;
 
 	int balance = 0;
 	int earned = 0;
 	int spent = 0;
 
+	// checking for Radio Group
+	boolean rG1;
+	boolean rG2;
+
 	HulkDataBaseAdapter db;
 	SharedPreferences sp;
-
-	int countdbTransaction;
+	FragmentMoneyTotal frgTotalListView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +66,24 @@ public class MoneyManager extends ActionBarActivity implements FragmentChangeMon
 		}
 		// if Name is exist change textView
 		else {
+			// init
 			TextView textViewName = (TextView) findViewById(R.id.nametext);
 			totalMoneyTextView = (TextView) findViewById(R.id.totalMoney);
 			earnedTextView = (TextView) findViewById(R.id.earnedTextView);
 			spentTextView = (TextView) findViewById(R.id.spentTextView);
-			transactionListV = (ListView) findViewById(R.id.transactionData1);
-			textViewName.setText("User : " + name);
+			radioGroup1 = (RadioGroup) findViewById(R.id.rgroup1);
+			radioGroup2 = (RadioGroup) findViewById(R.id.rgroup2);
+			myViewpager = (ViewPager) findViewById(R.id.pager);
+			// radio Groups Value
+			rG1 = false;
+			rG2 = false;
 
+			textViewName.setText("User : " + name);
 			// for first time running equal earned to balance
 			if (isFirstRunning) {
 				// init Category DB
 				initCatDB();
-				
+
 				earned = balance;
 
 				SharedPreferences.Editor editor = sp.edit();
@@ -109,46 +123,39 @@ public class MoneyManager extends ActionBarActivity implements FragmentChangeMon
 					editor.commit();
 				}
 			}
-
 			// setting the (total money, spent, earned) Text View
 			totalMoneyTextView.setText(String.valueOf(balance) + DOLLAR);
 			spentTextView.setText(String.valueOf(spent) + DOLLAR);
 			earnedTextView.setText(String.valueOf(earned) + DOLLAR);
 
-			// Setting the Transaction Views from the table
-			CustomAdapter adapter;
-			// initialization
-			String[] catArray = null;
-			String[] amountArray = null;
-			boolean[] expenseArray = null;
-			countdbTransaction = db.selectCatTransactionTable().length;
-			// if DB is not empty
-			if (countdbTransaction != 0) {
-				// initialization
-				catArray = new String[countdbTransaction];
-				amountArray = new String[countdbTransaction];
-				expenseArray = new boolean[countdbTransaction];
-				// set cat amount expanse to array
-				for (int i = 0, c = countdbTransaction; i < countdbTransaction; i++) {
-					String catThis = String.valueOf(db.selectCatTransactionTable()[i]);
-					String amountThis = String.valueOf(db.selectAmountTransactionTable()[i]);
-					boolean expenseThis = db.selectExpenseTransactionTable()[i];
-					// saving in reverse format
-					c--;
-					catArray[c] = catThis;
-					amountArray[c] = amountThis;
-					expenseArray[c] = expenseThis;
-				}
-				// set the adapter and show it
-				adapter = new CustomAdapter(this, catArray, amountArray, expenseArray);
-				transactionListV.setAdapter(adapter);
+			// on clicking radio button radio group
+			radioGroup1.setOnCheckedChangeListener(this);
+			radioGroup2.setOnCheckedChangeListener(this);
+			
+			// Create a ViewPager for montly
+			FragmentManager fragManag = getSupportFragmentManager();
+			myViewpager.setAdapter(new ViewPagerAdapter(fragManag, false));
+			myViewpager.setCurrentItem(200);
+			
+			// defining FragmentManager and FragmentTransaction
+			FragmentManager manager = getSupportFragmentManager();
+			FragmentTransaction transaction = manager.beginTransaction();
+			// Add list View Fragment for total transactions
+			if (savedInstanceState == null) {
+				// first varible for showing total or by cat
+				// second varible for hide(true)/unhide fragment
+				frgTotalListView = FragmentMoneyTotal.newInstance(false, false);
+				// add it and hide 
+				transaction.add(R.id.frames, frgTotalListView, "frag1");
+				transaction.hide(frgTotalListView);
+				transaction.commit();
+			} else {
+				// retrive the save one
+				frgTotalListView = (FragmentMoneyTotal) getSupportFragmentManager().findFragmentById(R.id.frames);
+				transaction.hide(frgTotalListView);
+				transaction.commit();
 			}
-			// if Transaction DB is empty
-			else {
-				String[] noString = { NOTHING };
-				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
-				transactionListV.setAdapter(adapterNo);
-			}
+			
 		}
 	}
 
@@ -202,14 +209,15 @@ public class MoneyManager extends ActionBarActivity implements FragmentChangeMon
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+		int countdbTransaction = db.selectCatTransactionTable().length;
 		int id = item.getItemId();
 		boolean handle;
 		switch (id) {
 		case R.id.resetMoney:
 			handle = true;
-			FragmentManager manager = getFragmentManager();
-			FragmentChangeMoneyDialog myDialog = new FragmentChangeMoneyDialog();
-			myDialog.show(manager, "changeMoneyDialog");
+			//FragmentManager manager = getFragmentManager();
+			//FragmentChangeMoneyDialog myDialog = new FragmentChangeMoneyDialog();
+			//myDialog.show(manager, "changeMoneyDialog");
 			break;
 
 		case R.id.resetTrans:
@@ -217,10 +225,10 @@ public class MoneyManager extends ActionBarActivity implements FragmentChangeMon
 			if (countdbTransaction != 0) {
 				// Remove all DB
 				db.deleteAllTransactionTable();
-				// set list view to nothing
-				String[] noString = { NOTHING };
-				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
-				transactionListV.setAdapter(adapterNo);
+				// restart the app
+				Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(i);
 			}
 			break;
 
@@ -229,10 +237,6 @@ public class MoneyManager extends ActionBarActivity implements FragmentChangeMon
 			if (countdbTransaction != 0) {
 				// Remove Transaction Table
 				db.deleteAllTransactionTable();
-				// set list view to nothing
-				String[] noString = { NOTHING };
-				ArrayAdapter<String> adapterNo = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, noString);
-				transactionListV.setAdapter(adapterNo);
 			}
 			// Remove Category Table
 			db.deleteAllCategoryTable();
@@ -249,44 +253,143 @@ public class MoneyManager extends ActionBarActivity implements FragmentChangeMon
 		}
 		return handle;
 	}
-	
-	// Custom adapter for List View
-	class CustomAdapter extends ArrayAdapter<String> {
-		Context context;
-		String[] categoryArray;
-		String[] amountArray;
-		boolean[] expanseB;
 
-		public CustomAdapter(Context c, String[] categoty, String[] amount, boolean[] expanse) {
-			super(c, R.layout.list_view_in_money_manager, R.id.textView1x, categoty);
-			this.context = c;
-			this.amountArray = amount;
-			this.categoryArray = categoty;
-			this.expanseB = expanse;
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		// montly or total
+		if (group == radioGroup1) {
+			switch (checkedId) {
+			case R.id.radioButton1:
+				rG1 = false;
+				rgCheck();
+				break;
+			case R.id.radioButton2:
+				rG1 = true;
+				rgCheck();
+				break;
+			}
 		}
-
-		int count = 0;
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View row = convertView;
-			if (row == null) {
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				row = inflater.inflate(R.layout.list_view_in_money_manager, parent, false);
+		// show all or show by cat
+		if (group == radioGroup2) {
+			// false : showAll True: show by category
+			switch (checkedId) {
+			// show all
+			case R.id.rg2radioButton1:
+				rG2 = false;
+				rgCheck();
+				break;
+			// show by cat
+			case R.id.rg2radioButton2:
+				rG2 = true;
+				rgCheck();
+				break;
 			}
-
-			TextView category = (TextView) row.findViewById(R.id.textView1x);
-			TextView amount = (TextView) row.findViewById(R.id.textView2x);
-
-			category.setText(categoryArray[position]);
-			amount.setText(amountArray[position] + DOLLAR);
-
-			if (expanseB[position]) {
-				amount.setTextColor(Color.parseColor("#FFFF4444"));
-			} else {
-				amount.setTextColor(Color.parseColor("#0000FF"));
-			}
-			return row;
 		}
 	}
 
+	// TODO checking for radio group
+	public void rgCheck() {
+		FragmentManager fragManag = getSupportFragmentManager();
+		FragmentTransaction transaction = fragManag.beginTransaction();
+
+		if (!rG1) {
+			// 1. hide fragment
+			transaction.hide(frgTotalListView);
+			transaction.commit();
+			// 2. visible myViewpager
+			myViewpager.setVisibility(View.VISIBLE);
+
+			if (!rG2) {
+				// Montly
+				myViewpager.setAdapter(new ViewPagerAdapter(fragManag, false));
+				myViewpager.setCurrentItem(200);
+			} else {
+				// Montly		
+				myViewpager.setAdapter(new ViewPagerAdapter(fragManag, true));
+				myViewpager.setCurrentItem(200);
+			}
+		} else {
+			// 1. hide myViewpager
+			myViewpager.setVisibility(View.GONE);
+			// 2. visible fragment
+			transaction.show(frgTotalListView);
+			if (!rG2) {
+				// Total
+				// Show it
+				frgTotalListView = FragmentMoneyTotal.newInstance(false, false);
+				transaction.replace(R.id.frames, frgTotalListView, "frag1");
+				transaction.commit();
+			} else {
+				// Total
+				// Show it
+				frgTotalListView = FragmentMoneyTotal.newInstance(true, false);
+				transaction.replace(R.id.frames, frgTotalListView, "frag1");
+				transaction.commit();
+			}
+		}
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		rgCheck();
+	}
+
+	// TODO
+	public void msg(String text) {
+		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+	}
+
+	// View pager for Scroll Slide
+	class ViewPagerAdapter extends FragmentStatePagerAdapter {
+		boolean radioGroup2Track;
+		
+		public ViewPagerAdapter(android.support.v4.app.FragmentManager fm, boolean rG) {
+			super(fm);
+			this.radioGroup2Track = rG;
+		}
+
+		@Override
+		public android.support.v4.app.Fragment getItem(int position) {
+			android.support.v4.app.Fragment frag = null;
+			frag = FragmentMoneyMontly.newInstance(position - 200, radioGroup2Track);
+			return frag;
+		}
+
+		@Override
+		public int getCount() {
+			return 401;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			Calendar cal = Calendar.getInstance();
+			for (int i = 0; i < 199; i++) {
+				if (position == i) {
+					cal.add(Calendar.MONTH, i - 200);
+					return (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+				}
+			}
+
+			if (position == 199) {
+				return "Prev Month";
+			}
+			// show today month
+			if (position == 200) {
+				return "This Month";
+			}
+
+			if (position == 201) {
+				return "Next Month";
+			}
+			// Show next month
+			for (int i = 202; i <= 400; i++) {
+				if (position == i) {
+					cal.add(Calendar.MONTH, i - 200);
+					return (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+				}
+			}
+			return null;
+		}
+	}
 }
