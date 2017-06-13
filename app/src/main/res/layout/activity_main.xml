@@ -3,52 +3,52 @@
 	android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal" >
+    android:gravity="center" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/usernameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/wiyn"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <LinearLayout
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/login_your_name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginBottom="5dp"/>
+
+    <EditText
+        android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textCapSentences"
-            android:layout_weight="1" >
-            <requestFocus />
-        </EditText>
-        
-    </LinearLayout>
+        android:ems="10"
+        android:inputType="textCapSentences"
+        android:layout_marginBottom="50dp"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/initialMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/howmuch"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/login_init_money"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="number" >
-    </EditText>
+        android:inputType="number"
+        android:layout_marginBottom="100dp" />
 
     <Button
         android:id="@+id/butEnter"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="openMain"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/buttonshape"
         android:text="@string/enter" />
 
 </LinearLayout>

@@ -3,21 +3,14 @@ package com.hulkdx.moneymanager.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
-
-import java.util.Collections;
-import java.util.List;
-
 import javax.inject.Inject;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import timber.log.Timber;
+
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
-import com.hulkdx.moneymanager.util.DialogFactory;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
 
@@ -57,6 +50,11 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         super.onDestroy();
 
         mMainPresenter.detachView();
+    }
+
+    @OnClick(R.id.butEnter)
+    void onEnterClicked() {
+        Timber.i("yes");
     }
 
     /***** MVP View methods implementation *****/
