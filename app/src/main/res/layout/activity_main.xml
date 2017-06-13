@@ -17,7 +17,7 @@
         android:layout_marginBottom="5dp"/>
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -25,7 +25,7 @@
         android:layout_marginBottom="50dp"/>
 
     <TextView
-        android:id="@+id/initialMoney"
+        android:id="@+id/initialMoneyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/blue"
@@ -36,7 +36,7 @@
         android:layout_marginBottom="5dp"/>
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/etInitialMoney"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
