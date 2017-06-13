@@ -9,7 +9,6 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 import com.hulkdx.moneymanager.R;
-import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
@@ -39,10 +38,6 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mMainPresenter.attachView(this);
-
-        if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
-            startService(SyncService.getStartIntent(this));
-        }
     }
 
     @Override
