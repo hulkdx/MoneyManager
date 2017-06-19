@@ -17,12 +17,11 @@ import com.hulkdx.moneymanager.util.RxUtil;
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
-    private final DataManager mDataManager;
     private Subscription mSubscription;
 
     @Inject
-    public MainPresenter(DataManager dataManager) {
-        mDataManager = dataManager;
+    public MainPresenter() {
+
     }
 
     @Override
@@ -36,7 +35,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    public void loadRibots() {
+    public void validation() {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
 
