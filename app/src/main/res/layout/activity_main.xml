@@ -5,43 +5,35 @@
     android:orientation="vertical"
     android:gravity="center" >
 
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/name_input_layout"
         android:layout_height="wrap_content"
-        android:textColor="@color/blue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="@string/login_your_name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginBottom="5dp"/>
-
-    <EditText
-        android:id="@+id/etUsername"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textCapSentences"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginTop="20dp"
+        android:theme="@style/TextLabel">
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:layout_marginBottom="50dp"
+            android:hint="@string/login_your_name"/>
+    </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/initialMoneyTextView"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/email_input_layout"
         android:layout_height="wrap_content"
-        android:textColor="@color/blue"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="@string/login_init_money"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginBottom="5dp"/>
-
-    <EditText
-        android:id="@+id/etInitialMoney"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number"
-        android:layout_marginBottom="100dp" />
+        android:layout_marginTop="20dp"
+        android:theme="@style/TextLabel">
+        <EditText
+            android:id="@+id/etInitialMoney"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_marginBottom="100dp"
+            android:hint="@string/login_init_money"/>
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/butEnter"

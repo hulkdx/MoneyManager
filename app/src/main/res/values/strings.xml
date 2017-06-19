@@ -5,7 +5,7 @@
     <string name="dialog_error_title">Sorry</string>
 
     <string name="app_name">Simple Money Manager</string>
-    <string name="login_your_name">Name?</string>
+    <string name="login_your_name">Name</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_money_manager">MoneyManager</string>
     <string name="enter">Enter</string>
@@ -30,7 +30,7 @@
     <string name="lastitem">Last Transaction :</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
-    <string name="login_init_money">Initial Money?</string>
+    <string name="login_init_money">Initial Money</string>
     <string name="howmuch1">How much your money is?</string>
     <string name="ok">OK</string>
     <string name="date">Date :</string>
