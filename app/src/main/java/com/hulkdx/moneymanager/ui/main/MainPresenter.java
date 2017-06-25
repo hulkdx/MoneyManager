@@ -1,15 +1,11 @@
 package com.hulkdx.moneymanager.ui.main;
 
-import java.util.List;
-
+import android.text.TextUtils;
 import javax.inject.Inject;
-
-import rx.Subscriber;
+import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
-import com.hulkdx.moneymanager.data.DataManager;
+import rx.functions.Action1;
+import rx.functions.Func2;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
 import com.hulkdx.moneymanager.util.RxUtil;
@@ -21,7 +17,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     @Inject
     public MainPresenter() {
-
     }
 
     @Override
@@ -35,9 +30,34 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    public void validation() {
+/*
+    Validating name EditText and Initial Money EditText, it shows error if its not validate and hide
+    the button.
+ */
+    public void validation(Observable<CharSequence> nameObservable, Observable<CharSequence> initialMoneyObservable) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
+        mSubscription = Observable.combineLatest(
+                nameObservable, initialMoneyObservable,
+                new Func2<CharSequence, CharSequence, Boolean>() {
+                    @Override
+                    public Boolean call(CharSequence newName, CharSequence newInitialMoney) {
+                        boolean nameValid = !TextUtils.isEmpty(newName);
+                        if (!nameValid) getMvpView().showNameError();
+                        else getMvpView().hideNameError();
+                        boolean initialValid = !TextUtils.isEmpty(newInitialMoney);
+                        if (!initialValid) getMvpView().showInitialError();
+                        else getMvpView().hideInitialError();
+                        return nameValid && initialValid;
+                    }
+                })
+                .distinctUntilChanged()
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean isValid) {
+                        getMvpView().setEnabledButton(isValid);
+                    }
+                });
 
     }
 

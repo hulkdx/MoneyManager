@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main Activity -->
+    <string name="error_invalid_name">Name cannot be empty</string>
+    <string name="error_invalid_initial">Initial money cannot be empty</string>
+
+    <!-- TODO -->
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_error_title">Sorry</string>
