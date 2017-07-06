@@ -1,5 +1,6 @@
 package com.hulkdx.moneymanager.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import rx.Observable;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
+import com.hulkdx.moneymanager.ui.main.MainActivity;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 public class LoginActivity extends BaseActivity implements LoginMvpView {
@@ -50,10 +52,10 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
         mPrefrencesHelper.saveUserInformation( nameEditText.getText().toString(),
                 Integer.parseInt(initialMoneyEditText.getText().toString()) );
 
-//        // Go to MoneyManager activity
-//        Intent i = new Intent(this, MoneyManager.class);
-//        startActivity(i);
-//        finish();
+        // Go to MoneyManager activity
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
 
     }
 
