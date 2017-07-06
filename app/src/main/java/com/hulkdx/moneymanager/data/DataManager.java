@@ -1,12 +1,11 @@
-package com.hulkdx.moneymanager.data;
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
 
-import java.util.List;
+package com.hulkdx.moneymanager.data;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import rx.Observable;
-import rx.functions.Func1;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 
 @Singleton

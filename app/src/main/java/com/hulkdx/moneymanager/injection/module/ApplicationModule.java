@@ -1,10 +1,11 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
+
 package com.hulkdx.moneymanager.injection.module;
 
 import android.app.Application;
 import android.content.Context;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import com.hulkdx.moneymanager.injection.ApplicationContext;

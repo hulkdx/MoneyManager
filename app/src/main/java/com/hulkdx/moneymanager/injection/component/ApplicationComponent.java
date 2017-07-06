@@ -1,3 +1,7 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
+
 package com.hulkdx.moneymanager.injection.component;
 
 import android.app.Application;

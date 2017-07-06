@@ -1,7 +1,10 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
+
 package com.hulkdx.moneymanager.ui.main;
 
 import android.os.Bundle;
-
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 

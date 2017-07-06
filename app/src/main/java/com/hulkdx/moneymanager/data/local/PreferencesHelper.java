@@ -1,11 +1,13 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
+
 package com.hulkdx.moneymanager.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import com.hulkdx.moneymanager.injection.ApplicationContext;
 
 @Singleton

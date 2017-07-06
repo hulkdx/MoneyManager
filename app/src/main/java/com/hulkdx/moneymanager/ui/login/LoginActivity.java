@@ -1,3 +1,7 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 6/13/2017.
+ */
+
 package com.hulkdx.moneymanager.ui.login;
 
 import android.content.Intent;
@@ -10,7 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
-
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;

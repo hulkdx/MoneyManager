@@ -1,20 +1,18 @@
-package com.hulkdx.moneymanager;
-
-import android.app.Application;
-
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 6/13/2017.
  */
+
+package com.hulkdx.moneymanager;
+
 import android.app.Application;
 import android.content.Context;
-
 import com.crashlytics.android.Crashlytics;
-
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 import com.hulkdx.moneymanager.injection.component.ApplicationComponent;
 import com.hulkdx.moneymanager.injection.component.DaggerApplicationComponent;
 import com.hulkdx.moneymanager.injection.module.ApplicationModule;
+
 public class HulkApplication extends Application {
     ApplicationComponent mApplicationComponent;
 

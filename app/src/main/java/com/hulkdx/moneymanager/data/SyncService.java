@@ -1,3 +1,7 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
+
 package com.hulkdx.moneymanager.data;
 
 import android.app.Service;
@@ -6,17 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
-
 import javax.inject.Inject;
-
-import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import com.hulkdx.moneymanager.HulkApplication;
 import com.hulkdx.moneymanager.util.AndroidComponentUtil;
 import com.hulkdx.moneymanager.util.NetworkUtil;
-import com.hulkdx.moneymanager.util.RxUtil;
 
 public class SyncService extends Service {
 

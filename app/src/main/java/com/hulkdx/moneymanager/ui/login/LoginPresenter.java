@@ -1,3 +1,6 @@
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 6/13/2017.
+ */
 package com.hulkdx.moneymanager.ui.login;
 
 import android.text.TextUtils;
@@ -43,11 +46,11 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                     @Override
                     public Boolean call(CharSequence newName, CharSequence newInitialMoney) {
                         boolean nameValid = !TextUtils.isEmpty(newName);
-                        if (!nameValid) getMvpView().showNameError();
-                        else getMvpView().hideNameError();
+                        if (!nameValid) { getMvpView().showNameError(); }
+                        else { getMvpView().hideNameError(); }
                         boolean initialValid = !TextUtils.isEmpty(newInitialMoney);
-                        if (!initialValid) getMvpView().showInitialError();
-                        else getMvpView().hideInitialError();
+                        if (!initialValid) { getMvpView().showInitialError(); }
+                        else { getMvpView().hideInitialError(); }
                         return nameValid && initialValid;
                     }
                 })
