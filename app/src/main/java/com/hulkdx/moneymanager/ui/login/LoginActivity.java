@@ -29,7 +29,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginPresenter.attachView(this);
         //  validation
