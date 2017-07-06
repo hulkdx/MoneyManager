@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanager.ui.main;
+package com.hulkdx.moneymanager.ui.login;
 
 import android.text.TextUtils;
 import javax.inject.Inject;
@@ -11,16 +11,16 @@ import com.hulkdx.moneymanager.ui.base.BasePresenter;
 import com.hulkdx.moneymanager.util.RxUtil;
 
 @ConfigPersistent
-public class MainPresenter extends BasePresenter<MainMvpView> {
+public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     private Subscription mSubscription;
 
     @Inject
-    public MainPresenter() {
+    public LoginPresenter() {
     }
 
     @Override
-    public void attachView(MainMvpView mvpView) {
+    public void attachView(LoginMvpView mvpView) {
         super.attachView(mvpView);
     }
 

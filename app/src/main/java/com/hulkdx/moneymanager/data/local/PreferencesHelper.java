@@ -12,6 +12,8 @@ import com.hulkdx.moneymanager.injection.ApplicationContext;
 public class PreferencesHelper {
 
     public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
+    public static final String USER_NAME = "name";
+    public static final String USER_MONEY = "totalMoney";
 
     private final SharedPreferences mPref;
 
@@ -22,6 +24,19 @@ public class PreferencesHelper {
 
     public void clear() {
         mPref.edit().clear().apply();
+    }
+
+    public String getUserName() {
+        return mPref.getString(USER_NAME, "");
+    }
+
+    public int getUserMoney() {
+        return mPref.getInt(USER_MONEY, 0);
+    }
+
+
+    public void saveUserInformation(String name, int initialMoney){
+        mPref.edit().putString(USER_NAME, name).putInt(USER_MONEY, initialMoney).apply();
     }
 
 }

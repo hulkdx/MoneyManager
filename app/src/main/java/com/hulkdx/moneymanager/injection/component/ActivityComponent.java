@@ -3,7 +3,7 @@ package com.hulkdx.moneymanager.injection.component;
 import dagger.Subcomponent;
 import com.hulkdx.moneymanager.injection.PerActivity;
 import com.hulkdx.moneymanager.injection.module.ActivityModule;
-import com.hulkdx.moneymanager.ui.main.MainActivity;
+import com.hulkdx.moneymanager.ui.login.LoginActivity;
 
 /**
  * This component inject dependencies to all Activities across the application
@@ -12,6 +12,6 @@ import com.hulkdx.moneymanager.ui.main.MainActivity;
 @Subcomponent(modules = ActivityModule.class)
 public interface ActivityComponent {
 
-    void inject(MainActivity mainActivity);
+    void inject(LoginActivity loginActivity);
 
 }

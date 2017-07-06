@@ -1,10 +1,8 @@
-package com.hulkdx.moneymanager.ui.main;
-
-import java.util.List;
+package com.hulkdx.moneymanager.ui.login;
 
 import com.hulkdx.moneymanager.ui.base.MvpView;
 
-public interface MainMvpView extends MvpView {
+public interface LoginMvpView extends MvpView {
 
     void showNameError();
     void hideNameError();
