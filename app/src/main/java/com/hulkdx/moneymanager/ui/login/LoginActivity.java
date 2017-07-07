@@ -37,6 +37,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mLoginPresenter.attachView(this);
+        if (mLoginPresenter.checkLoggedIn()) { redirectToMainActivity(); }
         //  validation
         Observable<CharSequence> nameObservable = RxTextView.textChanges(nameEditText);
         Observable<CharSequence> initialMoneyObservable = RxTextView.textChanges(initialMoneyEditText);
@@ -56,10 +57,13 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
                 Integer.parseInt(initialMoneyEditText.getText().toString()) );
 
         // Go to MoneyManager activity
+        redirectToMainActivity();
+    }
+
+    void redirectToMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
-
     }
 
     /***** MVP View methods implementation *****/
