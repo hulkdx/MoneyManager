@@ -47,5 +47,7 @@
     <string name="ttal">Total : 0$</string>
     <string name="showAll">Show All</string>
     <string name="showBy">Show by Category</string>
+    <string name="balance_default_value">0 EUR</string>
+    <string name="balance">Balance</string>
 
 </resources>

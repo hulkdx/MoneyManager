@@ -4,6 +4,9 @@
     <item name="green" type="color">#4499CC00</item>
     <item name="darkgreen" type="color">#FF669900</item>
     <item name="black" type="color">#000000</item>
+    <item name="white" type="color">#FFFFFF</item>
+    <item name="grey" type="color">#f5f7fa</item>
+    <item name="border_color" type="color">#e0e0e0</item>
     <item name="blue" type="color">#0366D6</item>
     <item name="textGreen" type="color">#008000</item>
 
