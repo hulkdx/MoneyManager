@@ -4,7 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="transactions_text_size">16sp</dimen>
+    <dimen name="transactions_text_size">15sp</dimen>
     <dimen name="transactions_text_size_bigger">18sp</dimen>
 
 </resources>
