@@ -3,6 +3,7 @@ apply from: '../config/quality/quality.gradle'
 apply plugin: 'com.github.triplet.play'
 //TODO uncomment line below after adding fabric api secret and key to fabric.properties
 //apply plugin: 'io.fabric'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 24
