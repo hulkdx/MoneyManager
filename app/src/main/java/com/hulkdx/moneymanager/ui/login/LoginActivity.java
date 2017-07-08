@@ -23,7 +23,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @Inject LoginPresenter mLoginPresenter;
-    @Inject PreferencesHelper mPrefrencesHelper;
+
     @BindView(R.id.et_name) EditText nameEditText;
     @BindView(R.id.etInitialMoney) EditText initialMoneyEditText;
     @BindView(R.id.name_input_layout) TextInputLayout nameInputLayout;
@@ -53,7 +53,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @OnClick(R.id.enterBtn)
     void onEnterClicked() {
         // Save name
-        mPrefrencesHelper.saveUserInformation( nameEditText.getText().toString(),
+        mLoginPresenter.saveUserInformation( nameEditText.getText().toString(),
                 Integer.parseInt(initialMoneyEditText.getText().toString()) );
 
         // Go to MoneyManager activity

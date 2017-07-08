@@ -10,6 +10,7 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func2;
 
+import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
@@ -19,11 +20,11 @@ import com.hulkdx.moneymanager.util.RxUtil;
 public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     private Subscription mSubscription;
-    private PreferencesHelper mPreferencesHelper;
+    private DataManager mDataManager;
 
     @Inject
-    public LoginPresenter(PreferencesHelper prefrencesHelper) {
-        mPreferencesHelper = prefrencesHelper;
+    public LoginPresenter(DataManager dataManager) {
+        mDataManager = dataManager;
     }
 
     @Override
@@ -71,6 +72,11 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
     Check if the user logged in.
      */
     public boolean checkLoggedIn() {
-        return !mPreferencesHelper.getUserName().equals("");
+        return mDataManager.checkLoggedIn();
+    }
+
+    public void saveUserInformation(String name, int initialMoney) {
+        mDataManager.saveUserInformation(name, initialMoney);
+
     }
 }
