@@ -13,25 +13,69 @@
         android:padding="10dp"
         android:background="@color/grey">
 
-        <TextView
-            android:id="@+id/date"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/date_default"
-            android:textSize="15sp"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/date_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JUL"
+                android:textSize="@dimen/transactions_text_size"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/date_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="06"
+                android:gravity="center"
+                android:textSize="@dimen/transactions_text_size_bigger"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="2dp"
             android:text="category"
-            android:layout_weight="1"/>
+            android:fontFamily="sans-serif"
+            android:textSize="@dimen/transactions_text_size"
+            android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/balance"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="- 21,00\n   EUR"
-            android:textSize="15sp"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/balance_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- 21,00"
+                android:textSize="@dimen/transactions_text_size_bigger"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/balance_sign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="EUR"
+                android:textSize="@dimen/transactions_text_size"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

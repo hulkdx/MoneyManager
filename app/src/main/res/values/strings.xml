@@ -49,6 +49,5 @@
     <string name="showBy">Show by Category</string>
     <string name="balance_default_value">0 EUR</string>
     <string name="balance">Balance</string>
-    <string name="date_default">JUL\n <b>03</b> </string>
 
 </resources>
