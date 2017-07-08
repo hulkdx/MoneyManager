@@ -8,7 +8,12 @@ import android.app.Application;
 import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 import com.hulkdx.moneymanager.injection.ApplicationContext;
+
+import javax.inject.Singleton;
 
 /**
  * Provide application-level dependencies.
@@ -30,6 +35,22 @@ public class ApplicationModule {
     @ApplicationContext
     Context provideContext() {
         return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    RealmConfiguration provideRealmConfiguration(@ApplicationContext Context context) {
+        Realm.init(context);
+        RealmConfiguration.Builder builder = new RealmConfiguration.Builder();
+        builder.deleteRealmIfMigrationNeeded();
+        builder.name("boilerplate.realm");
+        builder.deleteRealmIfMigrationNeeded();
+        return builder.build();
+    }
+
+    @Provides
+    Realm provideRealm(RealmConfiguration realmConfiguration) {
+        return Realm.getInstance(realmConfiguration);
     }
 
 }

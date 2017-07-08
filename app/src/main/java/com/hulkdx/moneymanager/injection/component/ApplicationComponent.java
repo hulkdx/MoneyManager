@@ -10,6 +10,8 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.realm.Realm;
+
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
@@ -28,5 +30,6 @@ public interface ApplicationComponent {
     PreferencesHelper preferencesHelper();
     DataManager dataManager();
     RxEventBus eventBus();
+    Realm realm();
 
 }
