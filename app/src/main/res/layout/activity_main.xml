@@ -36,10 +36,12 @@
 
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="7dp"
-        android:background="@drawable/main_activity_border"
-        android:layout_margin="5dp" />
+        android:paddingTop="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/main_activity_border" />
 
 </LinearLayout>

@@ -5,6 +5,8 @@
 package com.hulkdx.moneymanager.ui.main;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
@@ -20,7 +22,10 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Inject MainPresenter mMainPresenter;
     @Inject PreferencesHelper mPrefrencesHelper;
+    @Inject TransactionAdapter mTransactionAdapter;
+
     @BindView(R.id.tv_balance) TextView balanceTextView;
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,9 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         activityComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mRecyclerView.setAdapter(mTransactionAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
 
         balanceTextView.setText(String.valueOf(mPrefrencesHelper.getUserMoney()));
