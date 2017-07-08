@@ -59,7 +59,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     class TransactionHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.root_layout) public LinearLayout rootLayout;
+        @BindView(R.id.root_layout) LinearLayout rootLayout;
 
         public TransactionHolder(View itemView) {
             super(itemView);
