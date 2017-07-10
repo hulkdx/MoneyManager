@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @Inject TransactionAdapter mTransactionAdapter;
 
     @BindView(R.id.tv_balance) TextView balanceTextView;
+    @BindView(R.id.tv_empty_list) TextView emptyListTextView;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
 
     @Override

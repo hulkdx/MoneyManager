@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.hulkdx.moneymanager.ui.main.MainActivity"
     android:background="@color/grey">
 
@@ -15,7 +14,9 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:padding="7dp"
-        android:background="@drawable/main_activity_border">
+        android:background="@drawable/main_activity_border"
+        android:layout_alignParentTop="true"
+        android:id="@+id/linearLayout3">
 
         <TextView
             android:layout_width="0dp"
@@ -34,7 +35,6 @@
 
     </LinearLayout>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -43,6 +43,20 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_margin="5dp"
-        android:background="@drawable/main_activity_border" />
+        android:background="@drawable/main_activity_border"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout3"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:text="@string/empty_list"
+        android:visibility="gone"/>
+
+</RelativeLayout>
