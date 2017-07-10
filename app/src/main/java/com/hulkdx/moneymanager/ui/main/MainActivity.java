@@ -7,12 +7,15 @@ package com.hulkdx.moneymanager.ui.main;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
+import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 
+import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -50,5 +53,15 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     }
 
     /***** MVP View methods implementation *****/
+
+    @Override
+    public void showEmptyTransactions() {
+        emptyListTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showTransactions(List<Transaction> transactions) {
+        emptyListTextView.setVisibility(View.GONE);
+    }
 
 }
