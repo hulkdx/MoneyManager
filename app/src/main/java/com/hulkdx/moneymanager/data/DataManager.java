@@ -9,6 +9,11 @@ import javax.inject.Singleton;
 
 import com.hulkdx.moneymanager.data.local.DatabaseHelper;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
+import com.hulkdx.moneymanager.data.model.Transaction;
+
+import java.util.List;
+
+import rx.Observable;
 
 @Singleton
 public class DataManager {
@@ -32,5 +37,9 @@ public class DataManager {
 
     public boolean checkLoggedIn() {
         return !mPreferencesHelper.getUserName().equals("");
+    }
+
+    public Observable<List<Transaction>> getTransactions() {
+        return mDatabaseHelper.getTransactions().distinct();
     }
 }

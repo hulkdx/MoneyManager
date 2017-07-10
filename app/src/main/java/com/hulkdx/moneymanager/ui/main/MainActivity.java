@@ -37,6 +37,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
+        mMainPresenter.loadTransactions();
 
         balanceTextView.setText(String.valueOf(mPrefrencesHelper.getUserMoney()));
     }

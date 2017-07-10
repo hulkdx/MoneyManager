@@ -4,6 +4,7 @@
 
 package com.hulkdx.moneymanager.ui.main;
 
+import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
 import javax.inject.Inject;
@@ -13,9 +14,11 @@ import rx.Subscription;
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private Subscription mSubscription;
+    private DataManager mDataManager;
 
     @Inject
-    public MainPresenter() {
+    public MainPresenter(DataManager dataManager) {
+        mDataManager = dataManager;
     }
 
     @Override
@@ -29,4 +32,12 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
+    public void loadTransactions() {
+        checkViewAttached();
+        mSubscription = mDataManager.getTransactions()
+//                .observeOn(AndroidSchedulers.mainThread())
+                //.subscribeOn(Schedulers.io())
+                // TODO
+                .subscribe();
+    }
 }

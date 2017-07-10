@@ -1,10 +1,12 @@
 package com.hulkdx.moneymanager.data.model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 7/8/2017.
  */
 
-public class Transaction {
+public class Transaction extends RealmObject {
     
     private String day;
     private String month;
