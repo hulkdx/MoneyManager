@@ -30,8 +30,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public TransactionAdapter(@ApplicationContext Context context) {
         mContext = context;
         mTransactions = new ArrayList<>();
-        mTransactions.add("saba");
-        mTransactions.add("saba");
+//        mTransactions.add("saba");
+//        mTransactions.add("saba");
     }
 
     public void setTransactions(List<String> transactions) {
