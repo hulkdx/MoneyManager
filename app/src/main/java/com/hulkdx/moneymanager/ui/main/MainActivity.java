@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
@@ -20,16 +22,20 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainMvpView {
+public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener {
 
     @Inject MainPresenter mMainPresenter;
     @Inject PreferencesHelper mPrefrencesHelper;
     @Inject TransactionAdapter mTransactionAdapter;
 
-    @BindView(R.id.tv_balance) TextView balanceTextView;
-    @BindView(R.id.tv_empty_list) TextView emptyListTextView;
+    @BindView(R.id.tv_balance) TextView mBalanceTextView;
+    @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
+    @BindView(R.id.et_add_new) EditText mAddNewEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +43,15 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         activityComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mBottomLayout.setOnClickListener(this);
+        mAddNewEditText.setOnClickListener(this);
 
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
 
-        balanceTextView.setText(getString(R.string.balance_value_euro, String.valueOf(mPrefrencesHelper.getUserMoney())));
+        mBalanceTextView.setText(getString(R.string.balance_value_euro, String.valueOf(mPrefrencesHelper.getUserMoney())));
     }
 
     @Override
@@ -52,16 +60,29 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mMainPresenter.detachView();
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bottom_layout:
+            case R.id.et_add_new:
+//                TODO what happens when clicking on this?
+                break;
+
+            default:
+                break;
+        }
+    }
+
     /***** MVP View methods implementation *****/
 
     @Override
     public void showEmptyTransactions() {
-        emptyListTextView.setVisibility(View.VISIBLE);
+        mEmptyListTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showTransactions(List<Transaction> transactions) {
-        emptyListTextView.setVisibility(View.GONE);
+        mEmptyListTextView.setVisibility(View.GONE);
     }
 
 }
