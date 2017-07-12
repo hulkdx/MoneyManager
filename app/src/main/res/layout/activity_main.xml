@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context="com.hulkdx.moneymanager.ui.main.MainActivity"
-    android:background="@color/grey">
+    android:background="@drawable/main_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:padding="7dp"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="@string/balance_default_value"/>
+            android:text="@string/balance_default_value_euro"/>
 
     </LinearLayout>
 
@@ -42,11 +42,11 @@
         android:paddingTop="30dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_margin="5dp"
         android:background="@drawable/main_activity_border"
         android:layout_below="@+id/linearLayout3"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/bottom_layout" />
 
     <TextView
         android:id="@+id/tv_empty_list"
@@ -58,5 +58,28 @@
         android:textSize="15sp"
         android:text="@string/empty_list"
         android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_activity_border"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/button2"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_plus"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
