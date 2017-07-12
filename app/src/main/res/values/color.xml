@@ -5,7 +5,6 @@
     <item name="darkgreen" type="color">#FF669900</item>
     <item name="black" type="color">#000000</item>
     <item name="white" type="color">#FFFFFF</item>
-    <!--F2-->
     <item name="white_transparent" type="color">#D9FFFFFF</item>
     <item name="grey" type="color">#f5f7fa</item>
     <item name="border_color" type="color">#D9e0e0e0</item>
