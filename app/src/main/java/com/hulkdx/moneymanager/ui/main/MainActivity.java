@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
 
-        balanceTextView.setText(String.valueOf(mPrefrencesHelper.getUserMoney()));
+        balanceTextView.setText(getString(R.string.balance_value_euro, String.valueOf(mPrefrencesHelper.getUserMoney())));
     }
 
     @Override
