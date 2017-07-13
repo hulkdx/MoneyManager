@@ -28,9 +28,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener, View.OnTouchListener {
+public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener {
 
     @Inject MainPresenter mMainPresenter;
     @Inject PreferencesHelper mPrefrencesHelper;
@@ -59,7 +60,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
 
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setOnTouchListener(this);
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
 
@@ -135,8 +135,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
      */
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
+    @OnTouch(R.id.recycler_view)
+    public boolean onTouchRecycleView(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
             changeIconsBottomBar(false);
         }
