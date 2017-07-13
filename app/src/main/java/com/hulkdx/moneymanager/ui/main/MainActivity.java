@@ -8,8 +8,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnEditorAction;
 import butterknife.OnTouch;
 import timber.log.Timber;
 
@@ -141,6 +144,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             changeIconsBottomBar(false);
         }
         return false;
+    }
+
+    @OnEditorAction(R.id.et_add_new_balance)
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            Timber.i("done pressed");
+            return false;
+        }
+        return true;
     }
 
     /***** MVP View methods implementation *****/
