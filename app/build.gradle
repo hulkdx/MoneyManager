@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.hulkdx.moneymanager"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 24
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1000

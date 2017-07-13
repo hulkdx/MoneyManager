@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
     @BindView(R.id.imageview_category) ImageView mCategoryImageView;
-    @BindView(R.id.imageview_plus) ImageView mPlusImageView;
+    @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         ButterKnife.bind(this);
         mBottomLayout.setOnClickListener(this);
         mAddNewEditText.setOnClickListener(this);
+        mPlusAndDateImageView.setOnClickListener(this);
 
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -82,6 +83,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 // Change the icons of bottom bar.
                 if (!mAddNewEditText.isFocused()) { ChangeIconsBottomBar(true); }
                 break;
+            case R.id.imageview_plus:
+                Timber.i("date");
+                break;
 
             default:
                 break;
@@ -94,7 +98,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     private void ChangeIconsBottomBar(boolean isShown) {
         // Icons
         mCategoryImageView.setVisibility(isShown ? View.VISIBLE : View.GONE);
-        mPlusImageView.setImageResource(isShown ? R.drawable.ic_date : R.drawable.ic_plus);
+        mPlusAndDateImageView.setImageResource(isShown ? R.drawable.ic_date : R.drawable.ic_plus);
         // Set the EditText focusable and show/hide the keyboad
         mAddNewEditText.setFocusable(isShown);
         mAddNewEditText.setFocusableInTouchMode(isShown);

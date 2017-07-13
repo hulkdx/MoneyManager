@@ -63,10 +63,10 @@
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:background="@drawable/main_activity_border"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <ImageView
@@ -95,5 +95,55 @@
             android:focusableInTouchMode="false"/>
 
     </LinearLayout>
+
+    <!-- The Date Section, appears when date icon clicked. -->
+    <LinearLayout
+        android:id="@+id/bottom_layout_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/main_activity_border"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_date" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Date"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            android:spinnersShown="true"/>
+
+        <Button
+            android:id="@+id/button_date_done"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@drawable/selector_btn_done"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>
