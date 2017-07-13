@@ -72,7 +72,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     protected void onPause() {
         super.onPause();
         // Hide the keyboard if it is still open.
-        ChangeIconsBottomBar(false);
+        changeIconsBottomBar(false);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             case R.id.bottom_layout:
             case R.id.et_add_new_balance:
                 // Change the icons of bottom bar.
-                if (!mAddNewEditText.isFocused()) { ChangeIconsBottomBar(true); }
+                if (!mAddNewEditText.isFocused()) { changeIconsBottomBar(true); }
                 break;
             case R.id.imageview_plus:
                 Timber.i("date");
@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
      * Change the bottom bar icons and make the EditText focusable.
      * @param isShown : when it is true the EditText should be focus.
      */
-    private void ChangeIconsBottomBar(boolean isShown) {
+    private void changeIconsBottomBar(boolean isShown) {
         // Icons
         mCategoryImageView.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mPlusAndDateImageView.setImageResource(isShown ? R.drawable.ic_date : R.drawable.ic_plus);
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
-            ChangeIconsBottomBar(false);
+            changeIconsBottomBar(false);
         }
         return false;
     }
