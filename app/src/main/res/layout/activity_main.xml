@@ -44,7 +44,6 @@
         android:paddingRight="10dp"
         android:background="@drawable/main_activity_border"
         android:layout_below="@+id/linearLayout3"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/bottom_layout" />
 
@@ -121,8 +120,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Date"
+                android:text="@string/date"
                 android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:gravity="center_vertical"/>
 
         </LinearLayout>

@@ -18,5 +18,6 @@
     <string name="balance_default_value_euro">0 EUR</string>
     <string name="balance_value_euro">%1$s EUR</string>
     <string name="empty_list">The list is empty.</string>
+    <string name="date">Date</string>
 
 </resources>
