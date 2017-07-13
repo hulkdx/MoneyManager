@@ -85,13 +85,22 @@
 
         <EditText
             android:id="@+id/et_add_new_balance"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end"
             android:background="@android:color/transparent"
             android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginRight="5dp"
             android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false"
+            android:inputType="number"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/euro"/>
 
     </LinearLayout>
 
