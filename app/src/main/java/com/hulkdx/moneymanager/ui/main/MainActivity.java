@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,9 +40,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
+    @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
     @BindView(R.id.imageview_category) ImageView mCategoryImageView;
     @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView;
+    @BindView(R.id.button_date_done) Button mDateDoneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mBottomLayout.setOnClickListener(this);
         mAddNewEditText.setOnClickListener(this);
         mPlusAndDateImageView.setOnClickListener(this);
+        mDateDoneButton.setOnClickListener(this);
 
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -84,12 +88,23 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 if (!mAddNewEditText.isFocused()) { changeIconsBottomBar(true); }
                 break;
             case R.id.imageview_plus:
-                Timber.i("date");
+                if (mAddNewEditText.isFocused()) { showDateLayout(true); }
                 break;
-
+            case R.id.button_date_done:
+                showDateLayout(false);
+                break;
             default:
                 break;
         }
+    }
+    /*
+     * Show/hide date Layout when the button is clicked
+     * @param showDate : true => show the date layout, false => don't show it.
+     */
+    private void showDateLayout(boolean showDate) {
+        mBottomLayout.setVisibility(showDate ? View.GONE : View.VISIBLE);
+        mDateBottomLayout.setVisibility(showDate ? View.VISIBLE : View.GONE);
+        showKeyboard(!showDate);
     }
     /*
      * Change the bottom bar icons and make the EditText focusable.
@@ -102,8 +117,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         // Set the EditText focusable and show/hide the keyboad
         mAddNewEditText.setFocusable(isShown);
         mAddNewEditText.setFocusableInTouchMode(isShown);
+        showKeyboard(isShown);
+    }
+    /*
+     * @param show: show or hide the keyboard
+     */
+    private void showKeyboard(boolean show) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (isShown) {
+        if (show) {
             mAddNewEditText.requestFocus();
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else {
@@ -111,7 +132,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
     }
-
     /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
      */
