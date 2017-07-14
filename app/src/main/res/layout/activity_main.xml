@@ -85,7 +85,6 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/ic_categories"
-            android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:visibility="gone"/>
 
@@ -103,6 +102,17 @@
             android:inputType="number"/>
 
         <TextView
+            android:id="@+id/tv_plus"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/plus"/>
+
+        <TextView
+            android:id="@+id/tv_currency_bottom"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"

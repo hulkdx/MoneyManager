@@ -20,5 +20,6 @@
     <string name="balance_value">%1$s</string>
     <string name="empty_list">The list is empty.</string>
     <string name="date">Date</string>
+    <string name="plus">+</string>
 
 </resources>

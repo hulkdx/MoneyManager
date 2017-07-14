@@ -42,6 +42,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
 
     @BindView(R.id.tv_balance) TextView mBalanceTextView;
     @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
+    @BindView(R.id.tv_plus) TextView mPlusTextView;
+    @BindView(R.id.tv_currency_bottom) TextView mCurrencyBottomTextView;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
@@ -60,6 +62,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mAddNewEditText.setOnClickListener(this);
         mPlusAndDateImageView.setOnClickListener(this);
         mDateDoneButton.setOnClickListener(this);
+        mPlusTextView.setOnClickListener(this);
+        mCurrencyBottomTextView.setOnClickListener(this);
 
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,6 +89,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tv_plus:
+            case R.id.tv_currency_bottom:
+                // Toggle plus to minus
+                if (mAddNewEditText.isFocused()) { togglePlusTextView(); }
             case R.id.bottom_layout:
             case R.id.et_add_new_balance:
                 // Change the icons of bottom bar.
@@ -99,6 +107,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             default:
                 break;
         }
+    }
+    /*
+     * Toggle plus text view to minus.
+     */
+    private void togglePlusTextView() {
+        if (mPlusTextView.getText().equals("+")) { mPlusTextView.setText("-"); }
+        else { mPlusTextView.setText("+"); }
     }
     /*
      * Show/hide date Layout when the button is clicked
