@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
 
-        mBalanceTextView.setText(getString(R.string.balance_value_euro, String.valueOf(mPrefrencesHelper.getUserMoney())));
+        mBalanceTextView.setText(getString(R.string.balance_value, String.valueOf(mPrefrencesHelper.getUserMoney())));
     }
 
     @Override

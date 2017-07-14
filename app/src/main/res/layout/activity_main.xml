@@ -27,11 +27,17 @@
             android:text="@string/balance"/>
 
         <TextView
-            android:id="@+id/tv_balance"
+        android:id="@+id/tv_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/balance_default_value"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="@string/balance_default_value_euro"/>
+            android:text="@string/euro"/>
 
     </LinearLayout>
 
