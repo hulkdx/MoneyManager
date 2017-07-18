@@ -34,6 +34,7 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnTouch;
 import timber.log.Timber;
+import java.text.DateFormatSymbols;
 
 public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener {
 
@@ -170,7 +171,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
             // TODO Category!
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
-                    String.valueOf(mDatePicker.getMonth()+1), String.valueOf(mDatePicker.getYear()),
+                    String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]), String.valueOf(mDatePicker.getYear()),
                     "", mPlusTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction);
             changeIconsBottomBar(false);

@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
 
@@ -51,7 +52,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (position % 2 == 1) {
             holder.rootLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
         }
-        holder.balanceNumberTV.setText(mTransactions.get(position).getAmountString());
+        if (mTransactions.get(position).isAmountPositive()) {
+            holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_positive,
+                    mTransactions.get(position).getAmount()));
+            holder.balanceNumberTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
+            holder.balanceSignTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
+        } else {
+            holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_negative,
+                     mTransactions.get(position).getAmount() * -1));
+        }
+        holder.dateMonthTV.setText(mTransactions.get(position).getMonth());
+        holder.dateDayTV.setText(mTransactions.get(position).getDay());
     }
 
     @Override
@@ -62,6 +73,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     class TransactionHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.root_layout) LinearLayout rootLayout;
         @BindView(R.id.balance_number) TextView balanceNumberTV;
+        @BindView(R.id.balance_sign) TextView balanceSignTV;
+        @BindView(R.id.date_month) TextView dateMonthTV;
+        @BindView(R.id.date_day) TextView dateDayTV;
 
         public TransactionHolder(View itemView) {
             super(itemView);
