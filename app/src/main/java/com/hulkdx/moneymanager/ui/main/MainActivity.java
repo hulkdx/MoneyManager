@@ -184,9 +184,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     /***** MVP View methods implementation *****/
 
     @Override
-    public void showEmptyTransactions() {
+    public void showEmptyTransactions(List<Transaction> transactions) {
         mEmptyListTextView.setVisibility(View.VISIBLE);
-        mTransactionAdapter.setTransactions(Collections.<Transaction>emptyList());
+        mTransactionAdapter.setTransactions(transactions);
         mTransactionAdapter.notifyDataSetChanged();
     }
 

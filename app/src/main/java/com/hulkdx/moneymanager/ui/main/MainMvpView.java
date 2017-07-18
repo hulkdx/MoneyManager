@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MainMvpView extends MvpView {
 
-    void showEmptyTransactions();
+    void showEmptyTransactions(List<Transaction> transactions);
 
     void showTransactions(List<Transaction> transactions);
 }

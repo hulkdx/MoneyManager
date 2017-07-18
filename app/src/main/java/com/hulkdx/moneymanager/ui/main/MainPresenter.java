@@ -61,7 +61,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     @Override
                     public void onNext(List<Transaction> transactions) {
                         if (transactions.isEmpty()) {
-                            getMvpView().showEmptyTransactions();
+                            getMvpView().showEmptyTransactions(transactions);
                         } else {
                             getMvpView().showTransactions(transactions);
                         }
@@ -69,7 +69,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 });
     }
 
-    public void addTransaction(Transaction newTransaction, boolean isAdapterEmpty) {
+    public void addTransaction(Transaction newTransaction) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.addTransaction(newTransaction)
