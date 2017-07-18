@@ -25,6 +25,7 @@ import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -185,6 +186,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void showEmptyTransactions() {
         mEmptyListTextView.setVisibility(View.VISIBLE);
+        mTransactionAdapter.setTransactions(Collections.<Transaction>emptyList());
+        mTransactionAdapter.notifyDataSetChanged();
     }
 
     @Override
