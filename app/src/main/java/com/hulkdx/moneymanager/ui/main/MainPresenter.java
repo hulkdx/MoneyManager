@@ -45,6 +45,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     public void loadTransactions() {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
+        getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper().getUserMoney());
         mSubscription = mDataManager.getTransactions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Transaction>>() {

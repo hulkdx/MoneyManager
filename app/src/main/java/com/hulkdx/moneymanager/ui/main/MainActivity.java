@@ -40,7 +40,6 @@ import java.text.DateFormatSymbols;
 public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener {
 
     @Inject MainPresenter mMainPresenter;
-    @Inject PreferencesHelper mPrefrencesHelper;
     @Inject TransactionAdapter mTransactionAdapter;
 
     @BindView(R.id.tv_balance) TextView mBalanceTextView;
@@ -73,8 +72,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
-
-        mBalanceTextView.setText(getString(R.string.balance_value, String.valueOf(mPrefrencesHelper.getUserMoney())));
     }
 
     @Override
@@ -197,6 +194,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mEmptyListTextView.setVisibility(View.GONE);
         mTransactionAdapter.setTransactions(transactions);
         mTransactionAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setBalanceTextView(int amount) {
+        mBalanceTextView.setText(getString(R.string.balance_value, amount));
     }
 
 }
