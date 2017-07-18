@@ -69,7 +69,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 });
     }
 
-    public void addTransaction(Transaction newTransaction) {
+    /*
+    * Add a new Transaction.
+     */
+    public void addTransaction(final Transaction newTransaction) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.addTransaction(newTransaction)
