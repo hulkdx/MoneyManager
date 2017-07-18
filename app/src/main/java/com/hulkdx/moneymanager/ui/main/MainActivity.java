@@ -176,6 +176,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                     "", mPlusTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction);
             changeIconsBottomBar(false);
+            mEmptyListTextView.setVisibility(View.GONE);
             return false;
         }
         return true;
