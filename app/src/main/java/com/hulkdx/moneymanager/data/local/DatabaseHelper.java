@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 
 @Singleton
@@ -39,5 +40,39 @@ public class DatabaseHelper {
                         return transactions;
                     }
                 });
+    }
+
+    public Observable<Transaction> addTransaction(final Transaction newTransaction) {
+        return Observable.create(new Observable.OnSubscribe<Transaction>() {
+            @Override
+            public void call(final Subscriber<? super Transaction> subscriber) {
+                Realm realm = null;
+                try {
+                    realm = mRealmProvider.get();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm bgRealm) {
+                            bgRealm.copyToRealm(newTransaction);
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            // Transaction was a success.
+                            subscriber.onCompleted();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            // Transaction failed and was automatically canceled.
+                            subscriber.onError(error);
+                        }
+                    });
+                } finally {
+                    if (realm != null) {
+                        realm.close();
+                    }
+                }
+            }
+        });
     }
 }

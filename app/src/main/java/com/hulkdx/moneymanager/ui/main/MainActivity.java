@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.imageview_category) ImageView mCategoryImageView;
     @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView;
     @BindView(R.id.button_date_done) Button mDateDoneButton;
+    @BindView(R.id.date_picker) DatePicker mDatePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +167,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             Timber.i("done pressed");
+            int amount = Integer.parseInt(mAddNewEditText.getText().toString());
+            // TODO Category!
+            Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
+                    String.valueOf(mDatePicker.getMonth()+1), String.valueOf(mDatePicker.getYear()),
+                    "", mPlusTextView.getText().equals("+") ? amount : -1 * amount);
+            mMainPresenter.addTransaction(newTransaction);
+            changeIconsBottomBar(false);
             return false;
         }
         return true;
@@ -180,6 +189,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void showTransactions(List<Transaction> transactions) {
         mEmptyListTextView.setVisibility(View.GONE);
+        mTransactionAdapter.setTransactions(transactions);
+        mTransactionAdapter.notifyDataSetChanged();
     }
 
 }

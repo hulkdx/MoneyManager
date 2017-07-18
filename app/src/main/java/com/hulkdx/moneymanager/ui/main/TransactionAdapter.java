@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
+import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.injection.ApplicationContext;
 
 import java.util.ArrayList;
@@ -23,18 +25,16 @@ import butterknife.ButterKnife;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
 
-    private List<String> mTransactions;
+    private List<Transaction> mTransactions;
     private Context mContext;
 
     @Inject
     public TransactionAdapter(@ApplicationContext Context context) {
         mContext = context;
         mTransactions = new ArrayList<>();
-//        mTransactions.add("saba");
-//        mTransactions.add("saba");
     }
 
-    public void setTransactions(List<String> transactions) {
+    public void setTransactions(List<Transaction> transactions) {
         mTransactions = transactions;
     }
 
@@ -51,6 +51,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (position % 2 == 1) {
             holder.rootLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
         }
+        holder.balanceNumberTV.setText(mTransactions.get(position).getAmountString());
     }
 
     @Override
@@ -60,6 +61,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     class TransactionHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.root_layout) LinearLayout rootLayout;
+        @BindView(R.id.balance_number) TextView balanceNumberTV;
 
         public TransactionHolder(View itemView) {
             super(itemView);

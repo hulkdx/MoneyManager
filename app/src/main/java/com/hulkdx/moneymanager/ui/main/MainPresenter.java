@@ -68,4 +68,26 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     }
                 });
     }
+
+    public void addTransaction(Transaction newTransaction) {
+        checkViewAttached();
+        RxUtil.unsubscribe(mSubscription);
+        mSubscription = mDataManager.addTransaction(newTransaction)
+                .subscribe(new Subscriber<Transaction>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.i("addTransaction onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.i("addTransaction onError");
+                    }
+
+                    @Override
+                    public void onNext(Transaction transaction) {
+                        Timber.e("addTransaction onNext");
+                    }
+                });
+    }
 }
