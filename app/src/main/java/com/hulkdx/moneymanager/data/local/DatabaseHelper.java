@@ -42,6 +42,17 @@ public class DatabaseHelper {
                 });
     }
 
+    public void removeAllTransactions(){
+        Realm realm = mRealmProvider.get();
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.deleteAll();
+            }
+        });
+    }
+
     public Observable<Transaction> addTransaction(final Transaction newTransaction) {
         return Observable.create(new Observable.OnSubscribe<Transaction>() {
             @Override
