@@ -13,6 +13,8 @@ import java.util.List;
 import javax.inject.Inject;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 @ConfigPersistent
@@ -44,9 +46,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.getTransactions()
-//                .observeOn(AndroidSchedulers.mainThread())
-                //.subscribeOn(Schedulers.io())
-                // TODO
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Transaction>>() {
                     @Override
                     public void onCompleted() {
@@ -69,10 +69,11 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 });
     }
 
-    public void addTransaction(Transaction newTransaction) {
+    public void addTransaction(Transaction newTransaction, boolean isAdapterEmpty) {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.addTransaction(newTransaction)
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<Transaction>() {
                     @Override
                     public void onCompleted() {
