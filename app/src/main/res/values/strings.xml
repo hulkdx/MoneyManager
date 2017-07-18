@@ -22,4 +22,8 @@
     <string name="date">Date</string>
     <string name="plus">+</string>
 
+    <!-- CardView Transaction -->
+    <string name="balance_value_positive">+ %1$.2f</string>
+    <string name="balance_value_negative">- %1$.2f</string>
+
 </resources>

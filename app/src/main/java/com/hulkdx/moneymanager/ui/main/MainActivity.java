@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             Timber.i("done pressed");
-            int amount = Integer.parseInt(mAddNewEditText.getText().toString());
+            float amount = Float.parseFloat(mAddNewEditText.getText().toString());
             // TODO Category!
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
                     String.valueOf(mDatePicker.getMonth()+1), String.valueOf(mDatePicker.getYear()),

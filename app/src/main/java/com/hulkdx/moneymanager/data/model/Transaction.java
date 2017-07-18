@@ -12,11 +12,11 @@ public class Transaction extends RealmObject {
     private String month;
     private String year;
     private String category;
-    private int amount;
+    private float amount;
 
     public Transaction(){}
 
-    public Transaction(String day, String month, String year, String category, int amount) {
+    public Transaction(String day, String month, String year, String category, float amount) {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -48,7 +48,7 @@ public class Transaction extends RealmObject {
         this.category = category;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
@@ -56,7 +56,11 @@ public class Transaction extends RealmObject {
         return String.valueOf(amount);
     }
 
-    public void setAmount(int amount) {
+    public boolean isAmountPositive() {
+        return amount > 0;
+    }
+
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 
