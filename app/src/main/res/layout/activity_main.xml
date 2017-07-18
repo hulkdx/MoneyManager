@@ -99,7 +99,7 @@
             android:layout_marginRight="5dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:inputType="number"/>
+            android:inputType="numberDecimal"/>
 
         <TextView
             android:id="@+id/tv_plus"
