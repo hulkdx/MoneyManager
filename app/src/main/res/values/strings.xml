@@ -12,6 +12,20 @@
     <string name="error_invalid_initial">Initial money cannot be empty</string>
     <string name="login_your_name">Name</string>
     <string name="login_init_money">Initial Money</string>
+    <string-array name="currency">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>GBP</item>
+        <item>INR</item>
+        <item>AUD</item>
+        <item>CAD</item>
+        <item>SGD</item>
+        <item>CHF</item>
+        <item>MYR</item>
+        <item>JPY</item>
+        <item>CNY</item>
+    </string-array>
+
 
     <!-- Main Activity -->
     <string name="balance">Balance</string>
