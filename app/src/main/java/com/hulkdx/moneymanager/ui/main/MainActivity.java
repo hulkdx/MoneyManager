@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     }
 
     @Override
-    public void setBalanceTextView(int amount) {
+    public void setBalanceTextView(float amount) {
         mBalanceTextView.setText(getString(R.string.balance_value, amount));
     }
 

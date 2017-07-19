@@ -81,6 +81,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .subscribe(new Subscriber<Transaction>() {
                     @Override
                     public void onCompleted() {
+                        mDataManager.getPreferencesHelper().updateBalance(newTransaction.getAmount());
                         Timber.i("addTransaction onCompleted");
                     }
 

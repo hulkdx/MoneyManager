@@ -32,13 +32,18 @@ public class PreferencesHelper {
         return mPref.getString(USER_NAME, "");
     }
 
-    public int getUserMoney() {
-        return mPref.getInt(USER_MONEY, 0);
+    public float getUserMoney() {
+        return mPref.getFloat(USER_MONEY, 0);
     }
 
 
-    public void saveUserInformation(String name, int initialMoney){
-        mPref.edit().putString(USER_NAME, name).putInt(USER_MONEY, initialMoney).apply();
+    public void saveUserInformation(String name, float initialMoney){
+        mPref.edit().putString(USER_NAME, name).putFloat(USER_MONEY, initialMoney).apply();
     }
 
+    public float updateBalance(float amount) {
+        float newAmount = getUserMoney() + amount;
+        mPref.edit().putFloat(USER_MONEY, newAmount).apply();
+        return newAmount;
+    }
 }

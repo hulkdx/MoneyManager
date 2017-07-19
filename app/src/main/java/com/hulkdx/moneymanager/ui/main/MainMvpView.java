@@ -15,5 +15,5 @@ public interface MainMvpView extends MvpView {
 
     void showTransactions(List<Transaction> transactions);
 
-    void setBalanceTextView(int amount);
+    void setBalanceTextView(float amount);
 }
