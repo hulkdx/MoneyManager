@@ -46,6 +46,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
     @BindView(R.id.tv_plus) TextView mPlusTextView;
     @BindView(R.id.tv_currency_bottom) TextView mCurrencyBottomTextView;
+    @BindView(R.id.tv_currency) TextView mCurrencyTextView;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
@@ -67,6 +68,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mDateDoneButton.setOnClickListener(this);
         mPlusTextView.setOnClickListener(this);
         mCurrencyBottomTextView.setOnClickListener(this);
+        
+        String currencyName = mMainPresenter.getCurrencyName();
+        mCurrencyBottomTextView.setText(currencyName);
+        mCurrencyTextView.setText(currencyName);
 
         mRecyclerView.setAdapter(mTransactionAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

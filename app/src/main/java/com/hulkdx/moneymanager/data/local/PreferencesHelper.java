@@ -37,6 +37,10 @@ public class PreferencesHelper {
         return mPref.getFloat(USER_MONEY, 0);
     }
 
+    public String getCurrencyName() {
+        return mPref.getString(SAVED_CURRENCY, "EUR");
+    }
+
     public void saveUserInformation(String name, float initialMoney, String currency){
         mPref.edit().putString(USER_NAME, name).putFloat(USER_MONEY, initialMoney).putString(SAVED_CURRENCY, currency).apply();
     }

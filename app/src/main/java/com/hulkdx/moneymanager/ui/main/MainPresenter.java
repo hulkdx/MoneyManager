@@ -39,6 +39,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
+    public String getCurrencyName() {
+        return mDataManager.getPreferencesHelper().getCurrencyName();
+    }
     /*
     * Load transactions from DataManager.
      */
