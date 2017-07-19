@@ -78,10 +78,12 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.addTransaction(newTransaction)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Transaction>() {
                     @Override
                     public void onCompleted() {
-                        mDataManager.getPreferencesHelper().updateBalance(newTransaction.getAmount());
+                        getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper()
+                                                .updateBalance(newTransaction.getAmount()));
                         Timber.i("addTransaction onCompleted");
                     }
 
