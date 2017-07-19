@@ -16,6 +16,7 @@ public class PreferencesHelper {
     public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
     public static final String USER_NAME = "name";
     public static final String USER_MONEY = "totalMoney";
+    public static final String SAVED_CURRENCY = "saved_currency";
 
     private final SharedPreferences mPref;
 
@@ -36,9 +37,8 @@ public class PreferencesHelper {
         return mPref.getFloat(USER_MONEY, 0);
     }
 
-
-    public void saveUserInformation(String name, float initialMoney){
-        mPref.edit().putString(USER_NAME, name).putFloat(USER_MONEY, initialMoney).apply();
+    public void saveUserInformation(String name, float initialMoney, String currency){
+        mPref.edit().putString(USER_NAME, name).putFloat(USER_MONEY, initialMoney).putString(SAVED_CURRENCY, currency).apply();
     }
 
     public float updateBalance(float amount) {

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +31,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     @BindView(R.id.name_input_layout) TextInputLayout nameInputLayout;
     @BindView(R.id.initial_input_layout) TextInputLayout initialInputLayout;
     @BindView(R.id.enterBtn) Button enterBtn;
+    @BindView(R.id.spinner_currency) Spinner currencySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     void onEnterClicked() {
         // Save name
         mLoginPresenter.saveUserInformation( nameEditText.getText().toString(),
-                Integer.parseInt(initialMoneyEditText.getText().toString()) );
+                Integer.parseInt(initialMoneyEditText.getText().toString()), String.valueOf(currencySpinner.getSelectedItem()) );
 
         // Go to MoneyManager activity
         redirectToMainActivity();

@@ -31,10 +31,6 @@ public class DataManager {
         return mPreferencesHelper;
     }
 
-    public void saveUserInformation(String name, int initialMoney) {
-        mPreferencesHelper.saveUserInformation(name, initialMoney);
-    }
-
     public boolean checkLoggedIn() {
         return !mPreferencesHelper.getUserName().equals("");
     }

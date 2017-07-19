@@ -75,8 +75,8 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         return mDataManager.checkLoggedIn();
     }
 
-    public void saveUserInformation(String name, int initialMoney) {
-        mDataManager.saveUserInformation(name, initialMoney);
+    public void saveUserInformation(String name, int initialMoney, String currency) {
+        mDataManager.getPreferencesHelper().saveUserInformation(name, initialMoney, currency);
 
     }
 }
