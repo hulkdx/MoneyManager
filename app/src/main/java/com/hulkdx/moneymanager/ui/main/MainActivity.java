@@ -47,9 +47,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.tv_plus) TextView mPlusTextView;
     @BindView(R.id.tv_currency_bottom) TextView mCurrencyBottomTextView;
     @BindView(R.id.tv_currency) TextView mCurrencyTextView;
-    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.transaction_recycler_view) RecyclerView mTranscationsRecyclerView;
+    @BindView(R.id.category_recycler_view) RecyclerView mCategoryRecyclerView;
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
+    @BindView(R.id.bottom_layout_category) LinearLayout mCategoryBottomLayout;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
     @BindView(R.id.imageview_category) ImageView mCategoryImageView;
     @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView;
@@ -68,13 +70,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mDateDoneButton.setOnClickListener(this);
         mPlusTextView.setOnClickListener(this);
         mCurrencyBottomTextView.setOnClickListener(this);
+        mCategoryImageView.setOnClickListener(this);
         
         String currencyName = mMainPresenter.getCurrencyName();
         mCurrencyBottomTextView.setText(currencyName);
         mCurrencyTextView.setText(currencyName);
 
-        mRecyclerView.setAdapter(mTransactionAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTranscationsRecyclerView.setAdapter(mTransactionAdapter);
+        mTranscationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
     }
@@ -109,6 +112,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 break;
             case R.id.button_date_done:
                 showDateLayout(false);
+                break;
+            case R.id.imageview_category:
+                showCategoryLayout(true);
                 break;
             default:
                 break;
@@ -159,7 +165,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
      */
-    @OnTouch(R.id.recycler_view)
+    @OnTouch(R.id.transaction_recycler_view)
     public boolean onTouchRecycleView(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
             changeIconsBottomBar(false);
@@ -183,6 +189,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             return false;
         }
         return true;
+    }
+    /*
+     * Show/hide category Layout when the button is clicked
+     * @param showCategory : true => show the layout, false => don't show it.
+     */
+    private void showCategoryLayout(boolean showCategory) {
+        mBottomLayout.setVisibility(showCategory ? View.GONE : View.VISIBLE);
+        mCategoryBottomLayout.setVisibility(showCategory ? View.VISIBLE : View.GONE);
+        showKeyboard(!showCategory);
     }
 
     /***** MVP View methods implementation *****/

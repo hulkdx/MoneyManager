@@ -45,7 +45,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/transaction_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="30dp"
@@ -75,7 +75,8 @@
         android:background="@drawable/main_activity_border_transparant"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/imageview_plus"
@@ -171,6 +172,29 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:background="@drawable/selector_btn_done"/>
+
+    </LinearLayout>
+
+    <!-- The Category Section, appears when category icon clicked. -->
+    <LinearLayout
+        android:id="@+id/bottom_layout_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/main_activity_border"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/category_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/main_activity_border_transparant" />
 
     </LinearLayout>
 
