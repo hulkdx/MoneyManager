@@ -80,7 +80,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         checkViewAttached();
         RxUtil.unsubscribe(mSubscription);
         mSubscription = mDataManager.addTransaction(newTransaction)
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Transaction>() {
                     @Override
