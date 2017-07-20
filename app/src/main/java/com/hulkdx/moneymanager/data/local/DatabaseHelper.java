@@ -3,6 +3,7 @@
  */
 package com.hulkdx.moneymanager.data.local;
 
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import java.util.List;
 import javax.inject.Inject;
@@ -24,6 +25,9 @@ public class DatabaseHelper {
         mRealmProvider = realmProvider;
     }
 
+    /*
+     * Transactions Section
+     */
     public Observable<List<Transaction>> getTransactions(){
         Realm realm = mRealmProvider.get();
 
@@ -77,6 +81,60 @@ public class DatabaseHelper {
                         }
                     });
                 } finally {
+                    if (realm != null) {
+                        realm.close();
+                    }
+                }
+            }
+        });
+    }
+
+    /*
+     * Category Section
+     */
+    public Observable<List<Category>> getCategories(){
+        Realm realm = mRealmProvider.get();
+
+        return realm.where(Category.class).findAllAsync().asObservable()
+                .filter(new Func1<RealmResults<Category>, Boolean>() {
+                    @Override
+                    public Boolean call(RealmResults<Category> category) {
+                        return category.isLoaded();
+                    }
+                })
+                .map(new Func1<RealmResults<Category>, List<Category>>() {
+                    @Override
+                    public List<Category> call(RealmResults<Category> category) {
+                        return category;
+                    }
+                });
+    }
+
+    public Observable<Category> addCategory(final Category newCategory) {
+        return Observable.create(new Observable.OnSubscribe<Category>() {
+            @Override
+            public void call(final Subscriber<? super Category> subscriber) {
+                Realm realm = null;
+                try {
+                    realm = mRealmProvider.get();
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm bgRealm) {
+                            bgRealm.copyToRealm(newCategory);
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            subscriber.onCompleted();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            subscriber.onError(error);
+                        }
+                    });
+                }
+                finally {
                     if (realm != null) {
                         realm.close();
                     }

@@ -22,9 +22,11 @@ import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -41,6 +43,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
+    @Inject CategoryAdapter mCategoryAdapter;
 
     @BindView(R.id.tv_balance) TextView mBalanceTextView;
     @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
@@ -56,6 +59,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.imageview_category) ImageView mCategoryImageView;
     @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView;
     @BindView(R.id.button_date_done) Button mDateDoneButton;
+    @BindView(R.id.button_cate_add) Button mCatAddButton;
+    @BindView(R.id.button_cate_done) Button mCatDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
 
     @Override
@@ -71,15 +76,20 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mPlusTextView.setOnClickListener(this);
         mCurrencyBottomTextView.setOnClickListener(this);
         mCategoryImageView.setOnClickListener(this);
-        
+        mCatAddButton.setOnClickListener(this);
+        mCatDoneButton.setOnClickListener(this);
+
         String currencyName = mMainPresenter.getCurrencyName();
         mCurrencyBottomTextView.setText(currencyName);
         mCurrencyTextView.setText(currencyName);
 
         mTranscationsRecyclerView.setAdapter(mTransactionAdapter);
         mTranscationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mCategoryRecyclerView.setAdapter(mCategoryAdapter);
+        mCategoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
+        mMainPresenter.loadCategories();
     }
 
     @Override
@@ -115,6 +125,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 break;
             case R.id.imageview_category:
                 showCategoryLayout(true);
+                break;
+            case R.id.button_cate_add:
+                Category category = new Category("test");
+                mMainPresenter.addCategory(category);
+                break;
+            case R.id.button_cate_done:
+                showCategoryLayout(false);
                 break;
             default:
                 break;
@@ -219,6 +236,17 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void setBalanceTextView(float amount) {
         mBalanceTextView.setText(getString(R.string.balance_value, amount));
+    }
+
+    @Override
+    public void showCategories(List<Category> categories) {
+        mCategoryAdapter.setCategories(categories);
+        mCategoryAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void addCategoryDataSet(Category newCategory) {
+        mCategoryAdapter.notifyDataSetChanged();
     }
 
 }

@@ -5,6 +5,7 @@
 package com.hulkdx.moneymanager.ui.main;
 
 import com.hulkdx.moneymanager.data.DataManager;
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
@@ -59,7 +60,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.i("onError");
+                        Timber.i("onError"  + e.toString());
                     }
 
                     @Override
@@ -91,12 +92,60 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.i("addTransaction onError");
+                        Timber.i("addTransaction onError"  + e.toString()) ;
                     }
 
                     @Override
                     public void onNext(Transaction transaction) {
                         Timber.e("addTransaction onNext");
+                    }
+                });
+    }
+
+    public void loadCategories() {
+        checkViewAttached();
+        RxUtil.unsubscribe(mSubscription);
+        mSubscription = mDataManager.getCategories()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Category>>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.i("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.i("onError" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(List<Category> categories) {
+                        getMvpView().showCategories(categories);
+                        Timber.i("size = " + categories.size());
+                    }
+                });
+    }
+
+    public void addCategory(final Category newCategory) {
+        checkViewAttached();
+        RxUtil.unsubscribe(mSubscription);
+        mSubscription = mDataManager.addCategory(newCategory)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Category>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.i("addCategory onCompleted");
+                        getMvpView().addCategoryDataSet(newCategory);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.i("addCategory onError" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Category category) {
+                        Timber.e("addCategory onNext");
                     }
                 });
     }

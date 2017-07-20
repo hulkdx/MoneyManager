@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import com.hulkdx.moneymanager.data.local.DatabaseHelper;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 
 import java.util.List;
@@ -41,5 +42,13 @@ public class DataManager {
 
     public Observable<Transaction> addTransaction(Transaction newTransaction) {
         return mDatabaseHelper.addTransaction(newTransaction).distinct();
+    }
+
+    public Observable<List<Category>> getCategories() {
+        return mDatabaseHelper.getCategories();
+    }
+
+    public Observable<Category> addCategory(Category newCategory) {
+        return mDatabaseHelper.addCategory(newCategory);
     }
 }

@@ -4,6 +4,7 @@
 
 package com.hulkdx.moneymanager.ui.main;
 
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.MvpView;
 
@@ -16,4 +17,8 @@ public interface MainMvpView extends MvpView {
     void showTransactions(List<Transaction> transactions);
 
     void setBalanceTextView(float amount);
+
+    void showCategories(List<Category> categories);
+
+    void addCategoryDataSet(Category newCategory);
 }
