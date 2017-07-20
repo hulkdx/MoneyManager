@@ -16,17 +16,19 @@ import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
-    private Subscription mSubscription;
+    private CompositeSubscription mSubscriptions;
     private DataManager mDataManager;
 
     @Inject
     public MainPresenter(DataManager dataManager) {
         mDataManager = dataManager;
+        mSubscriptions = new CompositeSubscription();
     }
 
     @Override
@@ -37,7 +39,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mSubscription != null) mSubscription.unsubscribe();
+        if (mSubscriptions != null) mSubscriptions.unsubscribe();
     }
 
     public String getCurrencyName() {
@@ -47,10 +49,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     * Load transactions from DataManager.
      */
     public void loadTransactions() {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
         getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper().getUserMoney());
-        mSubscription = mDataManager.getTransactions()
+        mSubscriptions.add(
+                mDataManager.getTransactions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Transaction>>() {
                     @Override
@@ -71,16 +72,16 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                             getMvpView().showTransactions(transactions);
                         }
                     }
-                });
+                })
+        );
     }
 
     /*
     * Add a new Transaction.
      */
     public void addTransaction(final Transaction newTransaction) {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.addTransaction(newTransaction)
+        mSubscriptions.add(
+                mDataManager.addTransaction(newTransaction)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Transaction>() {
                     @Override
@@ -99,13 +100,13 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     public void onNext(Transaction transaction) {
                         Timber.e("addTransaction onNext");
                     }
-                });
+                })
+        );
     }
 
     public void loadCategories() {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.getCategories()
+        mSubscriptions.add(
+                mDataManager.getCategories()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Category>>() {
                     @Override
@@ -123,13 +124,13 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         getMvpView().showCategories(categories);
                         Timber.i("size = " + categories.size());
                     }
-                });
+                })
+        );
     }
 
     public void addCategory(final Category newCategory) {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = mDataManager.addCategory(newCategory)
+        mSubscriptions.add(
+                mDataManager.addCategory(newCategory)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Category>() {
                     @Override
@@ -147,6 +148,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     public void onNext(Category category) {
                         Timber.e("addCategory onNext");
                     }
-                });
+                })
+        );
     }
 }
