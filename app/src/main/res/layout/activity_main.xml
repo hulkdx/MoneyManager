@@ -76,7 +76,7 @@
         android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imageview_plus"
@@ -157,7 +157,6 @@
 
         </LinearLayout>
 
-
         <DatePicker
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
@@ -179,24 +178,44 @@
     <LinearLayout
         android:id="@+id/bottom_layout_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:orientation="vertical"
         android:background="@drawable/main_activity_border"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/category_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:paddingTop="30dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/main_activity_border_transparant" />
+            android:paddingRight="10dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_cate_add"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_btn_add"
+                android:layout_marginRight="5dp"/>
+
+            <Button
+                android:id="@+id/button_cate_done"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_btn_done"/>
+
+        </LinearLayout>
 
     </LinearLayout>
-
 
 </RelativeLayout>
