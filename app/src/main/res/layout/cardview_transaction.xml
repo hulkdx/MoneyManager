@@ -12,7 +12,6 @@
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
         android:padding="10dp">
 
         <LinearLayout
@@ -25,7 +24,7 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="JUL"
+                tools:text="JUL"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/transactions_text_size" />
@@ -36,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
-                android:text="06"
+                tools:text="06"
                 android:textColor="@color/black"
                 android:textSize="@dimen/transactions_text_size_bigger" />
 
@@ -50,7 +49,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="2dp"
-            android:text="category"
+            tools:text="category"
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/transactions_text_size" />
@@ -64,7 +63,7 @@
                 android:id="@+id/balance_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="- 21,00"
+                tools:text="- 21,00"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/black"
                 android:textSize="@dimen/transactions_text_size_bigger" />

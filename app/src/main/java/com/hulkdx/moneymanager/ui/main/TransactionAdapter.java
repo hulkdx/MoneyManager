@@ -49,9 +49,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(TransactionHolder holder, int position) {
         // Set background of the layout on odd position to white
-        if (position % 2 == 1) {
-            holder.rootLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
-        }
+        holder.rootLayout.setBackgroundColor(ContextCompat
+                .getColor(mContext, (position%2 == 0) ? R.color.white : R.color.grey));
         if (mTransactions.get(position).isAmountPositive()) {
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_positive,
                     mTransactions.get(position).getAmount()));
