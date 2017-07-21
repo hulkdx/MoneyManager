@@ -6,6 +6,7 @@ package com.hulkdx.moneymanager.ui.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mTranscationsRecyclerView.setAdapter(mTransactionAdapter);
         mTranscationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
-        mCategoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mCategoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
         mMainPresenter.loadCategories();

@@ -49,6 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoryHolder holder, int position) {
+        holder.dividerVerticalView.setVisibility((position % 2 == 0) ? View.GONE : View.VISIBLE);
         holder.nameTV.setText(mCategories.get(position).getName());
     }
 
@@ -59,6 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     class CategoryHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name_textview) TextView nameTV;
+        @BindView(R.id.divider_vertical) View dividerVerticalView;
 
         public CategoryHolder(View itemView) {
             super(itemView);
