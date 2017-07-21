@@ -9,12 +9,14 @@ import io.realm.RealmObject;
 public class Category extends RealmObject {
 
     private String name;
+    private String hexColor;
 
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(String name, String hexColor) {
         this.name = name;
+        this.hexColor = hexColor;
     }
 
     public String getName() {
@@ -23,5 +25,13 @@ public class Category extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getHexColor() {
+        return hexColor;
+    }
+
+    public void setHexColor(String hexColor) {
+        this.hexColor = hexColor;
     }
 }

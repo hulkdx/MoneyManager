@@ -128,7 +128,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 showCategoryLayout(true);
                 break;
             case R.id.button_cate_add:
-                Category category = new Category("test");
+                // TODO
+                Category category = new Category("test", "");
                 mMainPresenter.addCategory(category);
                 break;
             case R.id.button_cate_done:
