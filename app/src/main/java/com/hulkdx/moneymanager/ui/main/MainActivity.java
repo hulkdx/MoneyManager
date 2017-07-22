@@ -208,8 +208,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
             // TODO Category!
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
-                    String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]), String.valueOf(mDatePicker.getYear()),
-                    "", mPlusTextView.getText().equals("+") ? amount : -1 * amount);
+                    String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
+                    String.valueOf(mDatePicker.getYear()),
+                    new Category(), mPlusTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction);
             changeIconsBottomBar(false);
             mEmptyListTextView.setVisibility(View.GONE);

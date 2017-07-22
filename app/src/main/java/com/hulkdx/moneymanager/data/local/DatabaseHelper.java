@@ -120,7 +120,11 @@ public class DatabaseHelper {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm bgRealm) {
-                            bgRealm.copyToRealm(newCategory);
+                            // Auto Increment Id
+                            Number currentIdNum = bgRealm.where(Category.class).max("id");
+                            int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
+                            newCategory.setId(nextId);
+                            bgRealm.insert(newCategory);
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override

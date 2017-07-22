@@ -1,6 +1,7 @@
 package com.hulkdx.moneymanager.data.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 7/20/2017.
@@ -8,6 +9,8 @@ import io.realm.RealmObject;
 
 public class Category extends RealmObject {
 
+    @PrimaryKey
+    private long id;
     private String name;
     private int colorIdInResource;
 
@@ -29,5 +32,13 @@ public class Category extends RealmObject {
 
     public int getHexColor() {
         return colorIdInResource;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
