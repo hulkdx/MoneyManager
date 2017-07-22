@@ -1,3 +1,8 @@
+/*
+ * Created by Mohammad Jafarzadeh Rezvan on 22/7/2017.
+ * Category Dialog Fragment Class.
+ * Note: Use android color picker for custom colors: https://github.com/yukuku/ambilwarna
+ */
 package com.hulkdx.moneymanager.ui.main;
 
 import android.app.Dialog;
