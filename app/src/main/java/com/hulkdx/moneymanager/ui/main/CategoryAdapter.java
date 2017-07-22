@@ -28,11 +28,9 @@ import butterknife.ButterKnife;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder> {
 
     private List<Category> mCategories;
-    private Context mContext;
 
     @Inject
     public CategoryAdapter(@ApplicationContext Context context) {
-        mContext = context;
         mCategories = new ArrayList<>();
     }
 
@@ -51,6 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(CategoryHolder holder, int position) {
         holder.dividerVerticalView.setVisibility((position % 2 == 0) ? View.GONE : View.VISIBLE);
         holder.nameTV.setText(mCategories.get(position).getName());
+        holder.hexColorView.setBackgroundColor(mCategories.get(position).getHexColor());
     }
 
     @Override
@@ -60,6 +59,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     class CategoryHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name_textview) TextView nameTV;
+        @BindView(R.id.view_hex_color) View hexColorView;
         @BindView(R.id.divider_vertical) View dividerVerticalView;
 
         public CategoryHolder(View itemView) {
