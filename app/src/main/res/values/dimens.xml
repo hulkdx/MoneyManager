@@ -6,5 +6,7 @@
 
     <dimen name="transactions_text_size">15sp</dimen>
     <dimen name="transactions_text_size_bigger">18sp</dimen>
+    <dimen name="buttons_add_width">86dp</dimen>
+    <dimen name="buttons_add_height">31dp</dimen>
 
 </resources>

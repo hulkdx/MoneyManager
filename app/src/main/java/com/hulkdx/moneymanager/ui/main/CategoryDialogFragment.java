@@ -61,7 +61,7 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
                     if (catColorsSelectedImageViews != -1) {
                         catColorsImageViews[catColorsSelectedImageViews].setImageResource(0);
                     }
-                    ((ImageView) view).setImageResource(R.drawable.ic_plus);
+                    ((ImageView) view).setImageResource(R.drawable.ic_category_selected);
                     catColorsSelectedImageViews = view.getId();
                 }
             });
