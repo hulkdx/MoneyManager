@@ -118,6 +118,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 break;
             case R.id.imageview_plus:
                 if (mAddNewEditText.isFocused()) { showDateLayout(true); }
+                else { changeIconsBottomBar(true); }
                 break;
             case R.id.button_date_done:
                 showDateLayout(false);
