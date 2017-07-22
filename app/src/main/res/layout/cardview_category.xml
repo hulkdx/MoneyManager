@@ -23,13 +23,12 @@
             android:id="@+id/linearLayout"
             android:layout_alignParentStart="true">
 
-
-            <View
+            <ImageView
                 android:id="@+id/view_hex_color"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="10dp"
-                android:background="@android:color/holo_blue_dark" />
+                android:background="@android:color/holo_blue_dark"/>
 
             <TextView
                 android:id="@+id/name_textview"

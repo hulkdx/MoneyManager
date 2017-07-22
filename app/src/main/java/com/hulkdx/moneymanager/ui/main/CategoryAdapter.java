@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
@@ -23,6 +24,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private List<Category> mCategories;
     private Callback mCallback;
+    private ImageView currentSelectedImage = null;
 
     @Inject
     public CategoryAdapter(@ApplicationContext Context context) {
@@ -49,7 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.setCategory(mCategories.get(position));
         holder.dividerVerticalView.setVisibility((position % 2 == 0) ? View.GONE : View.VISIBLE);
         holder.nameTV.setText(mCategories.get(position).getName());
-        holder.hexColorView.setBackgroundColor(mCategories.get(position).getHexColor());
+        holder.hexColorImageView.setBackgroundColor(mCategories.get(position).getHexColor());
     }
 
     @Override
@@ -59,7 +61,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     class CategoryHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name_textview) TextView nameTV;
-        @BindView(R.id.view_hex_color) View hexColorView;
+        @BindView(R.id.view_hex_color) ImageView hexColorImageView;
         @BindView(R.id.divider_vertical) View dividerVerticalView;
 
         public Category category;
@@ -71,7 +73,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         @OnClick(R.id.card_view)
         void OnItemClicked() {
-            if (mCallback != null) mCallback.onCategoryClicked(category.getId());
+            if (mCallback != null) {
+                mCallback.onCategoryClicked(category.getId());
+                hexColorImageView.setImageResource(R.drawable.ic_category_selected);
+                // Remove the previous selected ImageView drawable.
+                if (currentSelectedImage != null) currentSelectedImage.setImageResource(0);
+                currentSelectedImage = hexColorImageView;
+            }
         }
 
         public void setCategory(Category category) {
