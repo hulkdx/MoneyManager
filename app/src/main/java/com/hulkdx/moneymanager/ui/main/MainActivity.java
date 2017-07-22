@@ -6,6 +6,8 @@ package com.hulkdx.moneymanager.ui.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,25 +24,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
-import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnTouch;
 import timber.log.Timber;
 import java.text.DateFormatSymbols;
 
-public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener {
+public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener, CategoryDialogFragment.CategoryFragmentListener {
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -128,8 +126,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                 showCategoryLayout(true);
                 break;
             case R.id.button_cate_add:
-                // TODO
-                mMainPresenter.addCategory(new Category("test", ""));
+                // show CategoryDialogFragment Fragment.
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+                CategoryDialogFragment newFragment = CategoryDialogFragment.newInstance();
+                newFragment.show(ft, "dialog");
                 break;
             case R.id.button_cate_done:
                 showCategoryLayout(false);
@@ -216,6 +221,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mBottomLayout.setVisibility(showCategory ? View.GONE : View.VISIBLE);
         mCategoryBottomLayout.setVisibility(showCategory ? View.VISIBLE : View.GONE);
         showKeyboard(!showCategory);
+    }
+    /*
+     * It gets the Category data from @link CategoryDialogFragment
+     * and send it to MainPresenter.
+     */
+    @Override
+    public void onClickOkCategory(Category category) {
+        mMainPresenter.addCategory(category);
+
     }
 
     /***** MVP View methods implementation *****/
