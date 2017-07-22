@@ -200,7 +200,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @OnEditorAction(R.id.et_add_new_balance)
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            Timber.i("done pressed");
+            // Don't do transaction upon empty string.
+            if (mAddNewEditText.getText().toString().equals("")) {
+                changeIconsBottomBar(false);
+                return false;
+            }
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
             // TODO Category!
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
