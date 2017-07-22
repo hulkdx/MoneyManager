@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,6 +63,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
         holder.dateMonthTV.setText(mTransactions.get(position).getMonth());
         holder.dateDayTV.setText(mTransactions.get(position).getDay());
+        if (mTransactions.get(position).getCategory() != null ) {
+            holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
+            holder.hexColorIV.setBackgroundColor(mTransactions.get(position).getCategory().getHexColor());
+        }
     }
 
     @Override
@@ -75,6 +80,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         @BindView(R.id.balance_sign) TextView balanceSignTV;
         @BindView(R.id.date_month) TextView dateMonthTV;
         @BindView(R.id.date_day) TextView dateDayTV;
+        @BindView(R.id.category_name_textview) TextView categoryNameTV;
+        @BindView(R.id.view_hex_color) ImageView hexColorIV;
 
         public TransactionHolder(View itemView) {
             super(itemView);

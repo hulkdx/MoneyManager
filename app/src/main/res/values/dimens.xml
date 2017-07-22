@@ -4,7 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="transactions_text_size">15sp</dimen>
+    <dimen name="transactions_text_size">14sp</dimen>
     <dimen name="transactions_text_size_bigger">18sp</dimen>
     <dimen name="buttons_add_width">86dp</dimen>
     <dimen name="buttons_add_height">31dp</dimen>

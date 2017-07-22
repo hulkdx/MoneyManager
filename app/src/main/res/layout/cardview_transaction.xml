@@ -42,15 +42,16 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/category_name_textview"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="sans-serif"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:paddingTop="2dp"
             tools:text="category"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textColor="@color/black"
             android:textSize="@dimen/transactions_text_size" />
 
@@ -77,6 +78,13 @@
                 android:text="@string/euro"
                 android:textColor="@color/black"
                 android:textSize="@dimen/transactions_text_size" />
+
+            <ImageView
+                android:id="@+id/view_hex_color"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_gravity="end"
+                tools:background="@color/blue" />
 
         </LinearLayout>
 
