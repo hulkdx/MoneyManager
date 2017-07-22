@@ -67,6 +67,9 @@ public class DatabaseHelper {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm bgRealm) {
+                            Number currentIdNum = bgRealm.where(Category.class).max("id");
+                            int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
+                            newTransaction.setId(nextId);
                             Category c = bgRealm.where(Category.class).equalTo("id", CategoryId).findFirst();
                             newTransaction.setCategory(c);
                             bgRealm.copyToRealm(newTransaction);

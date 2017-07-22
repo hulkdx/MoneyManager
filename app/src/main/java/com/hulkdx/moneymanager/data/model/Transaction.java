@@ -2,13 +2,15 @@ package com.hulkdx.moneymanager.data.model;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 7/8/2017.
  */
 
 public class Transaction extends RealmObject {
-    
+
+    @PrimaryKey private long id;
     private String day;
     private String month;
     private String year;
@@ -70,5 +72,13 @@ public class Transaction extends RealmObject {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
