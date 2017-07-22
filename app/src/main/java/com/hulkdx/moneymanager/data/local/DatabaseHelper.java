@@ -57,7 +57,7 @@ public class DatabaseHelper {
         });
     }
 
-    public Observable<Transaction> addTransaction(final Transaction newTransaction) {
+    public Observable<Transaction> addTransaction(final Transaction newTransaction, final long CategoryId) {
         return Observable.create(new Observable.OnSubscribe<Transaction>() {
             @Override
             public void call(final Subscriber<? super Transaction> subscriber) {
@@ -67,6 +67,8 @@ public class DatabaseHelper {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm bgRealm) {
+                            Category c = bgRealm.where(Category.class).equalTo("id", CategoryId).findFirst();
+                            newTransaction.setCategory(c);
                             bgRealm.copyToRealm(newTransaction);
                         }
                     }, new Realm.Transaction.OnSuccess() {

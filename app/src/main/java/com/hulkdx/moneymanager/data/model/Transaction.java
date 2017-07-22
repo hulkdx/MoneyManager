@@ -15,12 +15,9 @@ public class Transaction extends RealmObject {
     private Category category;
     private float amount;
 
-    @Index
-    public long categoryId;
-
     public Transaction(){}
 
-    public Transaction(String day, String month, String year, Category category, float amount) {
+    public Transaction(String day, String month, String year, float amount) {
         this.day = day;
         this.month = month;
         this.year = year;

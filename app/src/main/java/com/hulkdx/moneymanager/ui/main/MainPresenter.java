@@ -79,9 +79,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     /*
     * Add a new Transaction.
      */
-    public void addTransaction(final Transaction newTransaction) {
+    public void addTransaction(final Transaction newTransaction, long CategoryId) {
         mSubscriptions.add(
-                mDataManager.addTransaction(newTransaction)
+                mDataManager.addTransaction(newTransaction, CategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Transaction>() {
                     @Override

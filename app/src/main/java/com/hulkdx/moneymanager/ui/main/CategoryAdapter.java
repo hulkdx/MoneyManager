@@ -4,30 +4,25 @@
 package com.hulkdx.moneymanager.ui.main;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
-import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.injection.ApplicationContext;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder> {
 
     private List<Category> mCategories;
+    private Callback mCallback;
 
     @Inject
     public CategoryAdapter(@ApplicationContext Context context) {
@@ -36,6 +31,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void setCategories(List<Category> categories) {
         mCategories = categories;
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
     }
 
     @Override
@@ -47,6 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(CategoryHolder holder, int position) {
+        holder.setCategory(mCategories.get(position));
         holder.dividerVerticalView.setVisibility((position % 2 == 0) ? View.GONE : View.VISIBLE);
         holder.nameTV.setText(mCategories.get(position).getName());
         holder.hexColorView.setBackgroundColor(mCategories.get(position).getHexColor());
@@ -62,9 +62,24 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         @BindView(R.id.view_hex_color) View hexColorView;
         @BindView(R.id.divider_vertical) View dividerVerticalView;
 
+        public Category category;
+
         public CategoryHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
+        @OnClick(R.id.card_view)
+        void OnItemClicked() {
+            if (mCallback != null) mCallback.onCategoryClicked(category.getId());
+        }
+
+        public void setCategory(Category category) {
+            this.category = category;
+        }
+    }
+
+    interface Callback {
+        void onCategoryClicked(long categoryId);
     }
 }

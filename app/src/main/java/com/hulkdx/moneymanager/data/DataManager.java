@@ -40,8 +40,8 @@ public class DataManager {
         return mDatabaseHelper.getTransactions().distinct();
     }
 
-    public Observable<Transaction> addTransaction(Transaction newTransaction) {
-        return mDatabaseHelper.addTransaction(newTransaction).distinct();
+    public Observable<Transaction> addTransaction(Transaction newTransaction, long CategoryId) {
+        return mDatabaseHelper.addTransaction(newTransaction, CategoryId).distinct();
     }
 
     public Observable<List<Category>> getCategories() {

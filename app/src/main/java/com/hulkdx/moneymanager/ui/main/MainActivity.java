@@ -38,7 +38,8 @@ import butterknife.OnTouch;
 import timber.log.Timber;
 import java.text.DateFormatSymbols;
 
-public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener, CategoryDialogFragment.CategoryFragmentListener {
+public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener,
+        CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback {
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -61,6 +62,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.button_cate_add) Button mCatAddButton;
     @BindView(R.id.button_cate_done) Button mCatDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
+
+    private long selectedCategoryId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mTranscationsRecyclerView.setAdapter(mTransactionAdapter);
         mTranscationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
+        mCategoryAdapter.setCallback(this);
         mCategoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
@@ -210,8 +214,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
                     String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
                     String.valueOf(mDatePicker.getYear()),
-                    new Category(), mPlusTextView.getText().equals("+") ? amount : -1 * amount);
-            mMainPresenter.addTransaction(newTransaction);
+                    mPlusTextView.getText().equals("+") ? amount : -1 * amount);
+            mMainPresenter.addTransaction(newTransaction, selectedCategoryId);
             changeIconsBottomBar(false);
             mEmptyListTextView.setVisibility(View.GONE);
             mAddNewEditText.setText("");
@@ -228,6 +232,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mCategoryBottomLayout.setVisibility(showCategory ? View.VISIBLE : View.GONE);
         showKeyboard(!showCategory);
     }
+
+    /***** Callback methods implementation *****/
+
     /*
      * It gets the Category data from @link CategoryDialogFragment
      * and send it to MainPresenter.
@@ -235,7 +242,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void onClickOkCategory(Category category) {
         mMainPresenter.addCategory(category);
-
+    }
+    /*
+     * on clicking category items in categoryAdapter.
+     */
+    @Override
+    public void onCategoryClicked(long categoryId) {
+        selectedCategoryId = categoryId;
     }
 
     /***** MVP View methods implementation *****/
