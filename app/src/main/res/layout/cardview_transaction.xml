@@ -24,10 +24,10 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                tools:text="JUL"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size" />
+                android:textSize="@dimen/transactions_text_size"
+                tools:text="JUL" />
 
             <TextView
                 android:id="@+id/date_day"
@@ -35,9 +35,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
-                tools:text="06"
                 android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size_bigger" />
+                android:textSize="@dimen/transactions_text_size_bigger"
+                tools:text="06" />
 
         </LinearLayout>
 
@@ -47,13 +47,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:paddingTop="2dp"
-            tools:text="category"
-            android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="@dimen/transactions_category_text_size" />
+            android:textSize="@dimen/transactions_category_text_size"
+            tools:text="category" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -64,10 +64,10 @@
                 android:id="@+id/balance_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="- 21,00"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size_bigger" />
+                android:textSize="@dimen/transactions_text_size_bigger"
+                tools:text="- 21,00" />
 
             <TextView
                 android:id="@+id/balance_sign"

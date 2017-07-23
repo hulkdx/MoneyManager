@@ -29,6 +29,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     private List<Transaction> mTransactions;
     private Context mContext;
+    private String currencyName;
 
     @Inject
     public TransactionAdapter(@ApplicationContext Context context) {
@@ -56,11 +57,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_positive,
                     mTransactions.get(position).getAmount()));
             holder.balanceNumberTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
-            holder.balanceSignTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
+            holder.balanceCurrencyTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
         } else {
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_negative,
                      mTransactions.get(position).getAmount() * -1));
         }
+        holder.balanceCurrencyTV.setText(currencyName);
         holder.dateMonthTV.setText(mTransactions.get(position).getMonth());
         holder.dateDayTV.setText(mTransactions.get(position).getDay());
         if (mTransactions.get(position).getCategory() != null ) {
@@ -74,10 +76,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         return mTransactions.size();
     }
 
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
     class TransactionHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.root_layout) LinearLayout rootLayout;
         @BindView(R.id.balance_number) TextView balanceNumberTV;
-        @BindView(R.id.balance_sign) TextView balanceSignTV;
+        @BindView(R.id.balance_sign) TextView balanceCurrencyTV;
         @BindView(R.id.date_month) TextView dateMonthTV;
         @BindView(R.id.date_day) TextView dateDayTV;
         @BindView(R.id.category_name_textview) TextView categoryNameTV;
