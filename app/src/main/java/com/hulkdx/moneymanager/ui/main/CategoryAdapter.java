@@ -77,7 +77,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 mCallback.onCategoryClicked(category.getId());
                 hexColorImageView.setImageResource(R.drawable.ic_category_selected);
                 // Remove the previous selected ImageView drawable.
-                if (currentSelectedImage != null) currentSelectedImage.setImageResource(0);
+                if (currentSelectedImage != null && currentSelectedImage != hexColorImageView) {
+                    currentSelectedImage.setImageResource(0);
+                }
                 currentSelectedImage = hexColorImageView;
             }
         }
