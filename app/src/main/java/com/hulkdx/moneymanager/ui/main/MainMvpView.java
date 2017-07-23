@@ -21,4 +21,6 @@ public interface MainMvpView extends MvpView {
     void showCategories(List<Category> categories);
 
     void addCategoryDataSet(Category newCategory);
+
+    void showError(String functionName, Throwable error);
 }

@@ -61,7 +61,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.i("onError"  + e.toString());
+                        getMvpView().showError("loadTransactions", e);
                     }
 
                     @Override
@@ -93,7 +93,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.i("addTransaction onError"  + e.toString()) ;
+                        getMvpView().showError("addTransaction", e);
                     }
 
                     @Override
@@ -116,13 +116,12 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.i("onError" + e.toString());
+                        getMvpView().showError("loadCategories", e);
                     }
 
                     @Override
                     public void onNext(List<Category> categories) {
                         getMvpView().showCategories(categories);
-                        Timber.i("size = " + categories.size());
                     }
                 })
         );
@@ -141,7 +140,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Timber.i("addCategory onError" + e.toString());
+                        getMvpView().showError("addCategory", e);
                     }
 
                     @Override

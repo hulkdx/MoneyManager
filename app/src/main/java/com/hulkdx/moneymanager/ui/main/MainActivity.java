@@ -27,6 +27,7 @@ import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
+import com.hulkdx.moneymanager.util.DialogFactory;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -281,6 +282,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void addCategoryDataSet(Category newCategory) {
         mCategoryAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showError(String functionName, Throwable error) {
+        Timber.i("onError %s : %s", functionName, error.toString());
+        DialogFactory.createGenericErrorDialog(this, error.toString());
     }
 
 }
