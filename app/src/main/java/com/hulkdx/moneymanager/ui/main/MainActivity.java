@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
 
     @BindView(R.id.tv_balance) TextView mBalanceTextView;
     @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
-    @BindView(R.id.tv_plus) TextView mPlusTextView;
+    @BindView(R.id.tv_plus) TextView mPlusEuroTextView;
     @BindView(R.id.tv_currency_bottom) TextView mCurrencyBottomTextView;
     @BindView(R.id.tv_currency) TextView mCurrencyTextView;
     @BindView(R.id.transaction_recycler_view) RecyclerView mTranscationsRecyclerView;
@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mAddNewEditText.setOnClickListener(this);
         mPlusAndDateImageView.setOnClickListener(this);
         mDateDoneButton.setOnClickListener(this);
-        mPlusTextView.setOnClickListener(this);
+        mPlusEuroTextView.setOnClickListener(this);
         mCurrencyBottomTextView.setOnClickListener(this);
         mCategoryImageView.setOnClickListener(this);
         mCatAddButton.setOnClickListener(this);
@@ -153,8 +153,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
      * Toggle plus text view to minus.
      */
     private void togglePlusTextView() {
-        if (mPlusTextView.getText().equals("+")) { mPlusTextView.setText("-"); }
-        else { mPlusTextView.setText("+"); }
+        if (mPlusEuroTextView.getText().equals("+")) { mPlusEuroTextView.setText("-"); }
+        else { mPlusEuroTextView.setText("+"); }
     }
     /*
      * Show/hide date Layout when the button is clicked
@@ -173,6 +173,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         // Icons
         mCategoryImageView.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mPlusAndDateImageView.setImageResource(isShown ? R.drawable.ic_date : R.drawable.ic_plus);
+        mPlusEuroTextView.setVisibility(isShown ? View.VISIBLE : View.GONE);
+        mCurrencyBottomTextView.setVisibility(isShown ? View.VISIBLE : View.GONE);
         // Set the EditText focusable and show/hide the keyboad
         mAddNewEditText.setFocusable(isShown);
         mAddNewEditText.setFocusableInTouchMode(isShown);
@@ -215,7 +217,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
                     String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
                     String.valueOf(mDatePicker.getYear()),
-                    mPlusTextView.getText().equals("+") ? amount : -1 * amount);
+                    mPlusEuroTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction, selectedCategoryId);
             changeIconsBottomBar(false);
             mEmptyListTextView.setVisibility(View.GONE);

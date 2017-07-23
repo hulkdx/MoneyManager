@@ -82,15 +82,14 @@
             android:id="@+id/imageview_plus"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:src="@drawable/ic_plus"/>
+            android:src="@drawable/ic_date"/>
 
         <ImageView
             android:id="@+id/imageview_category"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/ic_categories"
-            android:layout_marginStart="5dp"
-            android:visibility="gone"/>
+            android:layout_marginStart="5dp"/>
 
         <EditText
             android:id="@+id/et_add_new_balance"
@@ -113,7 +112,8 @@
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:text="@string/minus"/>
+            android:text="@string/minus"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_currency_bottom"
@@ -121,7 +121,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:text="@string/euro"/>
+            android:text="@string/euro"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
