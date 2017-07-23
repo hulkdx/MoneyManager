@@ -4,6 +4,7 @@ apply plugin: 'com.github.triplet.play'
 //TODO uncomment line below after adding fabric api secret and key to fabric.properties
 //apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
@@ -21,9 +22,7 @@ android {
     }
 
     signingConfigs {
-        // You must set up an environment var before release signing
-        // Run: export APP_KEY={password}
-        // TODO Add your release keystore in /keystore folder
+        // TODO Add release keystore.
         release {
             storeFile file('keystore/release.keystore')
             keyAlias 'alias'
@@ -71,8 +70,8 @@ android {
         warning 'InvalidPackage'
     }
     compileOptions {
-        targetCompatibility 1.7
-        sourceCompatibility 1.7
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
@@ -108,9 +107,6 @@ dependencies {
     compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
 
-    compile ("com.squareup.sqlbrite:sqlbrite:1.1.1") {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
     compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"

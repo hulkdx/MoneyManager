@@ -47,25 +47,17 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
         RxUtil.unsubscribe(mSubscription);
         mSubscription = Observable.combineLatest(
                 nameObservable, initialMoneyObservable,
-                new Func2<CharSequence, CharSequence, Boolean>() {
-                    @Override
-                    public Boolean call(CharSequence newName, CharSequence newInitialMoney) {
-                        boolean nameValid = !TextUtils.isEmpty(newName);
-                        if (!nameValid) { getMvpView().showNameError(); }
-                        else { getMvpView().hideNameError(); }
-                        boolean initialValid = !TextUtils.isEmpty(newInitialMoney);
-                        if (!initialValid) { getMvpView().showInitialError(); }
-                        else { getMvpView().hideInitialError(); }
-                        return nameValid && initialValid;
-                    }
+                (newName, newInitialMoney) -> {
+                    boolean nameValid = !TextUtils.isEmpty(newName);
+                    if (!nameValid) { getMvpView().showNameError(); }
+                    else { getMvpView().hideNameError(); }
+                    boolean initialValid = !TextUtils.isEmpty(newInitialMoney);
+                    if (!initialValid) { getMvpView().showInitialError(); }
+                    else { getMvpView().hideInitialError(); }
+                    return nameValid && initialValid;
                 })
                 .distinctUntilChanged()
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean isValid) {
-                        getMvpView().setEnabledButton(isValid);
-                    }
-                });
+                .subscribe(isValid -> getMvpView().setEnabledButton(isValid));
 
     }
     /*
