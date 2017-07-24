@@ -149,6 +149,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public boolean onTouchRecycleView(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
             expandButtomLayout(false);
+            mCategoryAdapter.resetSelectedCategories();
         }
         return false;
     }

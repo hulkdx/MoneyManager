@@ -70,6 +70,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return mCategories.size() + 1;
     }
 
+    public void resetSelectedCategories() {
+        currentSelectedImage.setImageResource(0);
+    }
+
     class CategoryHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name_textview) TextView nameTV;
         @BindView(R.id.view_hex_color) ImageView hexColorImageView;
