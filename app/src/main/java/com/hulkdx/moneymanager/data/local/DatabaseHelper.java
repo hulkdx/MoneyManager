@@ -49,7 +49,7 @@ public class DatabaseHelper {
                 realm = mRealmProvider.get();
                 realm.executeTransactionAsync(
                         bgRealm -> {
-                            Number currentIdNum = bgRealm.where(Category.class).max("id");
+                            Number currentIdNum = bgRealm.where(Transaction.class).max("id");
                             int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
                             newTransaction.setId(nextId);
                             Category c = bgRealm.where(Category.class).equalTo("id", CategoryId).findFirst();
