@@ -141,7 +141,7 @@
                 android:inputType="numberDecimal" />
 
             <TextView
-                android:id="@+id/tv_plus"
+                android:id="@+id/tv_currency_plus"
                 android:layout_width="15dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

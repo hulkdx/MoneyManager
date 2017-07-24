@@ -34,12 +34,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnTouch;
 import timber.log.Timber;
 import java.text.DateFormatSymbols;
 
-public class MainActivity extends BaseActivity implements MainMvpView, View.OnClickListener,
+public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback {
 
     @Inject MainPresenter mMainPresenter;
@@ -48,16 +49,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
 
     @BindView(R.id.tv_balance) TextView mBalanceTextView;
     @BindView(R.id.tv_empty_list) TextView mEmptyListTextView;
-    @BindView(R.id.tv_plus) TextView mPlusEuroTextView;
+    @BindView(R.id.tv_currency_plus) TextView mCurrencyPlusTextView;
     @BindView(R.id.tv_currency_bottom) TextView mCurrencyBottomTextView;
     @BindView(R.id.tv_currency) TextView mCurrencyTextView;
-    @BindView(R.id.transaction_recycler_view) RecyclerView mTranscationsRecyclerView;
+    @BindView(R.id.transaction_recycler_view) RecyclerView mTransactionsRecyclerView;
     @BindView(R.id.category_recycler_view) RecyclerView mCategoryRecyclerView;
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.bottom_layout_expanded) LinearLayout mBottomExpandedLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
-    @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView; //TODO Remove
     @BindView(R.id.button_date_done) Button mDateDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
 
@@ -73,20 +73,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     }
 
     private void SetupUI() {
-        mBottomLayout.setOnClickListener(this);
-        mAddNewEditText.setOnClickListener(this);
-//        mPlusAndDateImageView.setOnClickListener(this);
-        mDateDoneButton.setOnClickListener(this);
-        mPlusEuroTextView.setOnClickListener(this);
-        mCurrencyBottomTextView.setOnClickListener(this);
-
         String currencyName = mMainPresenter.getCurrencyName();
         mCurrencyBottomTextView.setText(currencyName);
         mCurrencyTextView.setText(currencyName);
         mTransactionAdapter.setCurrencyName(currencyName);
 
-        mTranscationsRecyclerView.setAdapter(mTransactionAdapter);
-        mTranscationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTransactionsRecyclerView.setAdapter(mTransactionAdapter);
+        mTransactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
         mCategoryAdapter.setCallback(this);
         mMainPresenter.attachView(this);
@@ -107,36 +100,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         expandButtomLayout(false);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-//            case R.id.tv_plus:
-//            case R.id.tv_currency_bottom:
-//                // Toggle plus to minus
-//                if (mAddNewEditText.isFocused()) { togglePlusTextView(); }
-            case R.id.bottom_layout:
-                if (!mAddNewEditText.isFocused()) { expandButtomLayout(true); }
-//            case R.id.et_add_new_balance:
-//                // Change the icons of bottom bar.
-//                if (!mAddNewEditText.isFocused()) { changeIconsBottomBar(true); }
-                break;
-//            case R.id.imageview_plus:
-//                if (mAddNewEditText.isFocused()) { showDateLayout(true); }
-//                else { changeIconsBottomBar(true); }
-//                break;
-            case R.id.button_date_done:
-                showDateLayout(false);
-                break;
-            default:
-                break;
-        }
-    }
     /*
      * Toggle plus text view to minus.
      */
     private void togglePlusTextView() {
-        if (mPlusEuroTextView.getText().equals("+")) { mPlusEuroTextView.setText("-"); }
-        else { mPlusEuroTextView.setText("+"); }
+        if (mCurrencyPlusTextView.getText().equals("+")) { mCurrencyPlusTextView.setText("-"); }
+        else { mCurrencyPlusTextView.setText("+"); }
     }
     /*
      * Show/hide date Layout when the button is clicked
@@ -197,7 +166,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
                     String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
                     String.valueOf(mDatePicker.getYear()),
-                    mPlusEuroTextView.getText().equals("+") ? amount : -1 * amount);
+                    mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction, selectedCategoryId);
             expandButtomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
@@ -205,6 +174,28 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
             return false;
         }
         return true;
+    }
+
+    /***** On Click implementation *****/
+
+    @OnClick(R.id.tv_currency_plus)
+    public void onClickCurrencyPlusTV() {
+        togglePlusTextView();
+    }
+
+    @OnClick(R.id.tv_currency_bottom)
+    public void onClickCurrencyBottomTV() {
+        togglePlusTextView();
+    }
+
+    @OnClick(R.id.bottom_layout)
+    public void onClickBottomLayout() {
+        if (!mAddNewEditText.isFocused()) { expandButtomLayout(true); }
+    }
+
+    @OnClick(R.id.button_date_done)
+    public void onClickDateDoneBtn() {
+        showDateLayout(false);
     }
 
     /***** Callback methods implementation *****/
