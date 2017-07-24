@@ -54,14 +54,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @BindView(R.id.transaction_recycler_view) RecyclerView mTranscationsRecyclerView;
     @BindView(R.id.category_recycler_view) RecyclerView mCategoryRecyclerView;
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
+    @BindView(R.id.bottom_layout_expanded) LinearLayout mBottomExpandedLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
-    @BindView(R.id.bottom_layout_category) LinearLayout mCategoryBottomLayout;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
-    @BindView(R.id.imageview_category) ImageView mCategoryImageView;
-    @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView;
+    @BindView(R.id.imageview_plus) ImageView mPlusAndDateImageView; //TODO Remove
     @BindView(R.id.button_date_done) Button mDateDoneButton;
-    @BindView(R.id.button_cate_add) Button mCatAddButton;
-    @BindView(R.id.button_cate_done) Button mCatDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
 
     private long selectedCategoryId = -1;
@@ -72,15 +69,16 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         activityComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        SetupUI();
+    }
+
+    private void SetupUI() {
         mBottomLayout.setOnClickListener(this);
         mAddNewEditText.setOnClickListener(this);
-        mPlusAndDateImageView.setOnClickListener(this);
+//        mPlusAndDateImageView.setOnClickListener(this);
         mDateDoneButton.setOnClickListener(this);
         mPlusEuroTextView.setOnClickListener(this);
         mCurrencyBottomTextView.setOnClickListener(this);
-        mCategoryImageView.setOnClickListener(this);
-        mCatAddButton.setOnClickListener(this);
-        mCatDoneButton.setOnClickListener(this);
 
         String currencyName = mMainPresenter.getCurrencyName();
         mCurrencyBottomTextView.setText(currencyName);
@@ -91,7 +89,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         mTranscationsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
         mCategoryAdapter.setCallback(this);
-        mCategoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
         mMainPresenter.loadCategories();
@@ -107,44 +104,28 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     protected void onPause() {
         super.onPause();
         // Hide the keyboard if it is still open.
-        changeIconsBottomBar(false);
+        expandButtomLayout(false);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_plus:
-            case R.id.tv_currency_bottom:
-                // Toggle plus to minus
-                if (mAddNewEditText.isFocused()) { togglePlusTextView(); }
+//            case R.id.tv_plus:
+//            case R.id.tv_currency_bottom:
+//                // Toggle plus to minus
+//                if (mAddNewEditText.isFocused()) { togglePlusTextView(); }
             case R.id.bottom_layout:
-            case R.id.et_add_new_balance:
-                // Change the icons of bottom bar.
-                if (!mAddNewEditText.isFocused()) { changeIconsBottomBar(true); }
+                if (!mAddNewEditText.isFocused()) { expandButtomLayout(true); }
+//            case R.id.et_add_new_balance:
+//                // Change the icons of bottom bar.
+//                if (!mAddNewEditText.isFocused()) { changeIconsBottomBar(true); }
                 break;
-            case R.id.imageview_plus:
-                if (mAddNewEditText.isFocused()) { showDateLayout(true); }
-                else { changeIconsBottomBar(true); }
-                break;
+//            case R.id.imageview_plus:
+//                if (mAddNewEditText.isFocused()) { showDateLayout(true); }
+//                else { changeIconsBottomBar(true); }
+//                break;
             case R.id.button_date_done:
                 showDateLayout(false);
-                break;
-            case R.id.imageview_category:
-                showCategoryLayout(true);
-                break;
-            case R.id.button_cate_add:
-                // show CategoryDialogFragment Fragment.
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
-                CategoryDialogFragment newFragment = CategoryDialogFragment.newInstance();
-                newFragment.show(ft, "dialog");
-                break;
-            case R.id.button_cate_done:
-                showCategoryLayout(false);
                 break;
             default:
                 break;
@@ -170,12 +151,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
      * Change the bottom bar icons and make the EditText focusable.
      * @param isShown : when it is true the EditText should be focus.
      */
-    private void changeIconsBottomBar(boolean isShown) {
+    private void expandButtomLayout(boolean isShown) {
         // Icons
-        mCategoryImageView.setVisibility(isShown ? View.VISIBLE : View.GONE);
-        mPlusAndDateImageView.setImageResource(isShown ? R.drawable.ic_date : R.drawable.ic_plus);
-        mPlusEuroTextView.setVisibility(isShown ? View.VISIBLE : View.GONE);
-        mCurrencyBottomTextView.setVisibility(isShown ? View.VISIBLE : View.GONE);
+        mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
+        mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
         // Set the EditText focusable and show/hide the keyboad
         mAddNewEditText.setFocusable(isShown);
         mAddNewEditText.setFocusableInTouchMode(isShown);
@@ -200,7 +179,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @OnTouch(R.id.transaction_recycler_view)
     public boolean onTouchRecycleView(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
-            changeIconsBottomBar(false);
+            expandButtomLayout(false);
         }
         return false;
     }
@@ -210,7 +189,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             // Don't do transaction upon empty string.
             if (mAddNewEditText.getText().toString().equals("")) {
-                changeIconsBottomBar(false);
+                expandButtomLayout(false);
                 return false;
             }
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
@@ -220,21 +199,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
                     String.valueOf(mDatePicker.getYear()),
                     mPlusEuroTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction, selectedCategoryId);
-            changeIconsBottomBar(false);
+            expandButtomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
             mAddNewEditText.setText("");
             return false;
         }
         return true;
-    }
-    /*
-     * Show/hide category Layout when the button is clicked
-     * @param showCategory : true => show the layout, false => don't show it.
-     */
-    private void showCategoryLayout(boolean showCategory) {
-        mBottomLayout.setVisibility(showCategory ? View.GONE : View.VISIBLE);
-        mCategoryBottomLayout.setVisibility(showCategory ? View.VISIBLE : View.GONE);
-        showKeyboard(!showCategory);
     }
 
     /***** Callback methods implementation *****/
@@ -253,6 +223,20 @@ public class MainActivity extends BaseActivity implements MainMvpView, View.OnCl
     @Override
     public void onCategoryClicked(long categoryId) {
         selectedCategoryId = categoryId;
+    }
+    /*
+     * Show add category dialog
+     */
+    @Override
+    public void showAddCategoryDialogFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        CategoryDialogFragment newFragment = CategoryDialogFragment.newInstance();
+        newFragment.show(ft, "dialog");
     }
 
     /***** MVP View methods implementation *****/
