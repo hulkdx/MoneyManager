@@ -82,47 +82,83 @@
             android:id="@+id/imageview_plus"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:src="@drawable/ic_date"/>
+            android:src="@drawable/ic_plus"/>
 
-        <ImageView
-            android:id="@+id/imageview_category"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_categories"
-            android:layout_marginStart="5dp"/>
+    </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_add_new_balance"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:background="@android:color/transparent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:inputType="numberDecimal"/>
+    <!-- bottom layout when its expanded -->
+    <LinearLayout
+        android:id="@+id/bottom_layout_expanded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/main_activity_border_transparant"
+        android:padding="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tv_plus"
-            android:layout_width="15dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:text="@string/minus"
-            android:visibility="gone"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_currency_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@color/black"
-            android:text="@string/euro"
-            android:visibility="gone"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/category_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                tools:listitem="@layout/cardview_category"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imageview_date"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_date"/>
+
+            <EditText
+                android:id="@+id/et_add_new_balance"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="end"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/tv_plus"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="@string/minus"/>
+
+            <TextView
+                android:id="@+id/tv_currency_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:text="@string/euro"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -172,48 +208,6 @@
             android:layout_height="@dimen/buttons_add_height"
             android:layout_gravity="center"
             android:background="@drawable/selector_btn_done"/>
-
-    </LinearLayout>
-
-    <!-- The Category Section, appears when category icon clicked. -->
-    <LinearLayout
-        android:id="@+id/bottom_layout_category"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-        android:background="@drawable/main_activity_border"
-        android:padding="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:visibility="gone">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/category_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="5dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button_cate_add"
-                android:layout_width="@dimen/buttons_add_width"
-                android:layout_height="@dimen/buttons_add_height"
-                android:background="@drawable/selector_btn_add"
-                android:layout_marginRight="5dp"/>
-
-            <Button
-                android:id="@+id/button_cate_done"
-                android:layout_width="@dimen/buttons_add_width"
-                android:layout_height="@dimen/buttons_add_height"
-                android:background="@drawable/selector_btn_done"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
