@@ -80,7 +80,6 @@
         android:visibility="visible">
 
         <ImageView
-            android:id="@+id/imageview_plus"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:src="@drawable/ic_plus"/>

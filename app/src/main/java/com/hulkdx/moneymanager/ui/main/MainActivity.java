@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -19,10 +18,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
@@ -124,6 +122,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mTransactionsRecyclerView.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.ABOVE, isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
         // Set the EditText focusable and show/hide the keyboad
         mAddNewEditText.setFocusable(isShown);
         mAddNewEditText.setFocusableInTouchMode(isShown);
@@ -162,7 +162,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 return false;
             }
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
-            // TODO Category!
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
                     String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
                     String.valueOf(mDatePicker.getYear()),
@@ -191,6 +190,11 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnClick(R.id.bottom_layout)
     public void onClickBottomLayout() {
         if (!mAddNewEditText.isFocused()) { expandButtomLayout(true); }
+    }
+
+    @OnClick(R.id.imageview_date)
+    public void onClickDateIV() {
+        if (mAddNewEditText.isFocused()) { showDateLayout(true); }
     }
 
     @OnClick(R.id.button_date_done)
