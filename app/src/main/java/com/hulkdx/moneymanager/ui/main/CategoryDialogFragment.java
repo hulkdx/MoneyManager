@@ -93,7 +93,7 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-        if (nameEditText.getText().toString().isEmpty()) {
+        if (nameEditText.getText().toString().isEmpty() || catColorsSelectedImageViews == -1) {
             return;
         }
         int[] colorsArray = getActivity().getResources().getIntArray(R.array.category_colors);
