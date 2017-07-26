@@ -5,21 +5,16 @@ package com.hulkdx.moneymanager.ui.login;
 
 import android.text.TextUtils;
 import javax.inject.Inject;
-import rx.Observable;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func2;
-
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import com.hulkdx.moneymanager.data.DataManager;
-import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
-import com.hulkdx.moneymanager.util.RxUtil;
 
 @ConfigPersistent
 public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
-    private Subscription mSubscription;
+    private Disposable mDisposable;
     private DataManager mDataManager;
 
     @Inject
@@ -35,7 +30,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mSubscription != null) mSubscription.unsubscribe();
+        if (mDisposable != null) mDisposable.dispose();
     }
 
 /*
@@ -43,9 +38,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
     the button.
  */
     public void validation(Observable<CharSequence> nameObservable, Observable<CharSequence> initialMoneyObservable) {
-        checkViewAttached();
-        RxUtil.unsubscribe(mSubscription);
-        mSubscription = Observable.combineLatest(
+        mDisposable = Observable.combineLatest(
                 nameObservable, initialMoneyObservable,
                 (newName, newInitialMoney) -> {
                     boolean nameValid = !TextUtils.isEmpty(newName);

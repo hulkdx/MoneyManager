@@ -10,17 +10,15 @@ import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
+import io.reactivex.Observable;
 import com.hulkdx.moneymanager.R;
-import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
-import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 public class LoginActivity extends BaseActivity implements LoginMvpView {
 
