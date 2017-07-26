@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
 import javax.inject.Inject;
-import rx.Subscription;
 import timber.log.Timber;
 import com.hulkdx.moneymanager.HulkApplication;
 import com.hulkdx.moneymanager.util.AndroidComponentUtil;
@@ -20,7 +19,7 @@ import com.hulkdx.moneymanager.util.NetworkUtil;
 public class SyncService extends Service {
 
     @Inject DataManager mDataManager;
-    private Subscription mSubscription;
+//    private Subscription mSubscription;
 
     public static Intent getStartIntent(Context context) {
         return new Intent(context, SyncService.class);
@@ -52,7 +51,7 @@ public class SyncService extends Service {
 
     @Override
     public void onDestroy() {
-        if (mSubscription != null) mSubscription.unsubscribe();
+//        if (mSubscription != null) mSubscription.unsubscribe();
         super.onDestroy();
     }
 

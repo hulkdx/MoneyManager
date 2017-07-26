@@ -3,9 +3,8 @@ package com.hulkdx.moneymanager.util;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 /**
  * A simple event bus built with RxJava
  */
