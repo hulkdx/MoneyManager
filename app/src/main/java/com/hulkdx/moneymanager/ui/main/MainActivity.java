@@ -124,7 +124,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mTransactionsRecyclerView.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ABOVE, isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
-        // Set the EditText focusable and show/hide the keyboad
+        // Set the EditText focusable and show/hide the keyboard
+        // there is a bug in this code @link: https://issuetracker.google.com/issues/37055966
+        // Possible solution is by making a customEditText and @Override public boolean onKeyPreIme
+        // @link https://stackoverflow.com/questions/15317157/android-adjustpan-not-working-after-the-first-time
         showKeyboard(isShown);
     }
     /*
@@ -134,7 +137,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (show) {
             mAddNewEditText.requestFocus();
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else {
             mAddNewEditText.clearFocus();
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
