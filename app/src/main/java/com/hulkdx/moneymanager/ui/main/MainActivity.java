@@ -125,8 +125,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mTransactionsRecyclerView.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ABOVE, isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
         // Set the EditText focusable and show/hide the keyboad
-        mAddNewEditText.setFocusable(isShown);
-        mAddNewEditText.setFocusableInTouchMode(isShown);
         showKeyboard(isShown);
     }
     /*

@@ -134,8 +134,6 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 android:gravity="end"
                 android:inputType="numberDecimal" />
 
