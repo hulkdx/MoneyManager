@@ -71,7 +71,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void resetSelectedCategories() {
-        currentSelectedImage.setImageResource(0);
+        if (currentSelectedImage != null) currentSelectedImage.setImageResource(0);
     }
 
     class CategoryHolder extends RecyclerView.ViewHolder {
