@@ -6,15 +6,12 @@ package com.hulkdx.moneymanager.data;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import com.hulkdx.moneymanager.data.local.DatabaseHelper;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
-
 import java.util.List;
-
-import rx.Observable;
+import io.reactivex.Flowable;
 
 @Singleton
 public class DataManager {
@@ -36,19 +33,19 @@ public class DataManager {
         return !mPreferencesHelper.getUserName().equals("");
     }
 
-    public Observable<List<Transaction>> getTransactions() {
+    public Flowable<List<Transaction>> getTransactions() {
         return mDatabaseHelper.getTransactions().distinct();
     }
 
-    public Observable<Transaction> addTransaction(Transaction newTransaction, long CategoryId) {
+    public Flowable<Transaction> addTransaction(Transaction newTransaction, long CategoryId) {
         return mDatabaseHelper.addTransaction(newTransaction, CategoryId).distinct();
     }
 
-    public Observable<List<Category>> getCategories() {
+    public Flowable<List<Category>> getCategories() {
         return mDatabaseHelper.getCategories();
     }
 
-    public Observable<Category> addCategory(Category newCategory) {
+    public Flowable<Category> addCategory(Category newCategory) {
         return mDatabaseHelper.addCategory(newCategory);
     }
 }

@@ -9,26 +9,21 @@ import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
-import com.hulkdx.moneymanager.util.RxUtil;
-import java.util.List;
 import javax.inject.Inject;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mDisposables;
     private DataManager mDataManager;
 
     @Inject
     public MainPresenter(DataManager dataManager) {
         mDataManager = dataManager;
-        mSubscriptions = new CompositeSubscription();
+        mDisposables = new CompositeDisposable();
     }
 
     @Override
@@ -39,7 +34,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mSubscriptions != null) mSubscriptions.unsubscribe();
+        if (mDisposables != null) mDisposables.clear();
     }
 
     public String getCurrencyName() {
@@ -50,29 +45,20 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
      */
     public void loadTransactions() {
         getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper().getUserMoney());
-        mSubscriptions.add(
+        mDisposables.add(
                 mDataManager.getTransactions()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Transaction>>() {
-                    @Override
-                    public void onCompleted() {
-                        Timber.i("onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showError("loadTransactions", e);
-                    }
-
-                    @Override
-                    public void onNext(List<Transaction> transactions) {
-                        if (transactions.isEmpty()) {
+                .subscribe(
+                        transactions -> {
+                            if (transactions.isEmpty()) {
                             getMvpView().showEmptyTransactions(transactions);
-                        } else {
+                            } else {
                             getMvpView().showTransactions(transactions);
-                        }
-                    }
-                })
+                            }
+                        },
+                        error -> getMvpView().showError("loadTransactions", error),
+                        () -> Timber.i("onCompleted")
+                )
         );
     }
 
@@ -80,74 +66,45 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     * Add a new Transaction.
      */
     public void addTransaction(final Transaction newTransaction, long CategoryId) {
-        mSubscriptions.add(
+        mDisposables.add(
                 mDataManager.addTransaction(newTransaction, CategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Transaction>() {
-                    @Override
-                    public void onCompleted() {
-                        getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper()
+                .subscribe(
+                        val -> Timber.e("addTransaction onNext"),
+                        error -> getMvpView().showError("addTransaction", error),
+                        () -> {
+                            getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper()
                                                 .updateBalance(newTransaction.getAmount()));
-                        Timber.i("addTransaction onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showError("addTransaction", e);
-                    }
-
-                    @Override
-                    public void onNext(Transaction transaction) {
-                        Timber.e("addTransaction onNext");
-                    }
-                })
+                            Timber.i("addTransaction onCompleted");
+                        }
+                )
         );
     }
 
     public void loadCategories() {
-        mSubscriptions.add(
+        mDisposables.add(
                 mDataManager.getCategories()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Category>>() {
-                    @Override
-                    public void onCompleted() {
-                        Timber.i("onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showError("loadCategories", e);
-                    }
-
-                    @Override
-                    public void onNext(List<Category> categories) {
-                        getMvpView().showCategories(categories);
-                    }
-                })
+                .subscribe(
+                        categories -> getMvpView().showCategories(categories),
+                        error -> getMvpView().showError("loadCategories", error),
+                        () -> Timber.i("addTransaction onCompleted")
+                )
         );
     }
 
     public void addCategory(final Category newCategory) {
-        mSubscriptions.add(
+        mDisposables.add(
                 mDataManager.addCategory(newCategory)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Category>() {
-                    @Override
-                    public void onCompleted() {
-                        Timber.i("addCategory onCompleted");
-                        getMvpView().addCategoryDataSet(newCategory);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().showError("addCategory", e);
-                    }
-
-                    @Override
-                    public void onNext(Category category) {
-                        Timber.e("addCategory onNext");
-                    }
-                })
+                .subscribe(
+                        val -> Timber.e("addCategory onNext"),
+                        error -> getMvpView().showError("addCategory", error),
+                        () -> {
+                            Timber.i("addCategory onCompleted");
+                            getMvpView().addCategoryDataSet(newCategory);
+                        }
+                )
         );
     }
 }

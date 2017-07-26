@@ -5,15 +5,15 @@ package com.hulkdx.moneymanager.data.local;
 
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
+import com.hulkdx.moneymanager.util.RxUtil;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
 
 @Singleton
 public class DatabaseHelper {
@@ -25,25 +25,23 @@ public class DatabaseHelper {
         mRealmProvider = realmProvider;
     }
 
-    /*
-     * Transactions Section
-     */
-    public Observable<List<Transaction>> getTransactions(){
+    // Helper Function to remove all data
+    public void removeAllTransactions(){
         Realm realm = mRealmProvider.get();
+        realm.executeTransaction(realm1 -> realm1.deleteAll());
+    }
 
-        return realm.where(Transaction.class).findAllAsync().asObservable()
+    /************************* Transactions Section *************************/
+    public Flowable<List<Transaction>> getTransactions(){
+        Realm realm = mRealmProvider.get();
+        RealmResults<Transaction> results = realm.where(Transaction.class).findAllAsync();
+        return RxUtil.createObservableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
     }
 
-    public void removeAllTransactions(){
-        Realm realm = mRealmProvider.get();
-
-        realm.executeTransaction(realm1 -> realm1.deleteAll());
-    }
-
-    public Observable<Transaction> addTransaction(final Transaction newTransaction, final long CategoryId) {
-        return Observable.create(subscriber -> {
+    public Flowable<Transaction> addTransaction(final Transaction newTransaction, final long CategoryId) {
+        return Flowable.create(subscriber -> {
             Realm realm = null;
             try {
                 realm = mRealmProvider.get();
@@ -56,29 +54,27 @@ public class DatabaseHelper {
                             newTransaction.setCategory(c);
                             bgRealm.copyToRealm(newTransaction);
                         },
-                        subscriber::onCompleted,
+                        subscriber::onComplete,
                         subscriber::onError);
             } finally {
                 if (realm != null) {
                     realm.close();
                 }
             }
-        });
+        }, BackpressureStrategy.LATEST);
     }
 
-    /*
-     * Category Section
-     */
-    public Observable<List<Category>> getCategories(){
+    /************************* Category Section *************************/
+    public Flowable<List<Category>> getCategories(){
         Realm realm = mRealmProvider.get();
-
-        return realm.where(Category.class).findAllAsync().asObservable()
+        RealmResults<Category> results = realm.where(Category.class).findAllAsync();
+        return RxUtil.createObservableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(category -> category);
     }
 
-    public Observable<Category> addCategory(final Category newCategory) {
-        return Observable.create(subscriber -> {
+    public Flowable<Category> addCategory(final Category newCategory) {
+        return Flowable.create(subscriber -> {
             Realm realm = null;
             try {
                 realm = mRealmProvider.get();
@@ -90,7 +86,7 @@ public class DatabaseHelper {
                             newCategory.setId(nextId);
                             bgRealm.insert(newCategory);
                         },
-                        subscriber::onCompleted,
+                        subscriber::onComplete,
                         subscriber::onError);
             }
             finally {
@@ -98,6 +94,6 @@ public class DatabaseHelper {
                     realm.close();
                 }
             }
-        });
+        }, BackpressureStrategy.LATEST);
     }
 }
