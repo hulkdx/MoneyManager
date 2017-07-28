@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Transaction;
-import com.hulkdx.moneymanager.injection.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +31,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private String currencyName;
 
     @Inject
-    public TransactionAdapter(@ApplicationContext Context context) {
-        mContext = context;
+    public TransactionAdapter() {
         mTransactions = new ArrayList<>();
     }
 
     public void setTransactions(List<Transaction> transactions) {
         mTransactions = transactions;
+    }
+
+    public void setContext(Context mContext) {
+        this.mContext = mContext;
     }
 
     @Override

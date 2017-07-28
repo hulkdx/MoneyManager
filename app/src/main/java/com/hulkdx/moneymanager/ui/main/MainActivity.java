@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mCurrencyTextView.setText(currencyName);
         mTransactionAdapter.setCurrencyName(currencyName);
 
+        mTransactionAdapter.setContext(this);
         mTransactionsRecyclerView.setAdapter(mTransactionAdapter);
         mTransactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
