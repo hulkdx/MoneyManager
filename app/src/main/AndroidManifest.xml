@@ -31,7 +31,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.main.MainActivity"></activity>
+        <activity android:name=".ui.main.MainActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
