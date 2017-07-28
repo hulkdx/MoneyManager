@@ -12,7 +12,15 @@
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="8dp"
+        android:orientation="horizontal" >
+        <!-- The first item in the list. -->
+        <!--<SearchView-->
+            <!--android:id="@+id/searchView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:iconifiedByDefault="false"-->
+            <!--android:queryHint="Search" />-->
 
         <LinearLayout
             android:layout_width="wrap_content"
