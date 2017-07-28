@@ -44,15 +44,42 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/transaction_recycler_view"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        android:background="@drawable/main_activity_border_transparent"
+        android:orientation="vertical"
         android:layout_below="@+id/linearLayout3"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/bottom_layout" />
+        android:layout_above="@+id/bottom_layout"
+        android:background="@drawable/main_activity_border_transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/linearLayout3"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/bottom_layout"
+            android:background="@drawable/main_activity_border_transparent" >
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:iconifiedByDefault="false"
+                android:queryHint="Search" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/transaction_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
 
     <TextView
         android:id="@+id/tv_empty_list"
