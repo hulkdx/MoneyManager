@@ -47,7 +47,6 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_below="@+id/linearLayout3"
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/bottom_layout"
@@ -56,11 +55,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_below="@+id/linearLayout3"
-            android:layout_alignParentEnd="true"
-            android:layout_above="@+id/bottom_layout"
-            android:background="@drawable/main_activity_border_transparent" >
+            android:orientation="vertical" >
 
             <SearchView
                 android:id="@+id/searchView"
