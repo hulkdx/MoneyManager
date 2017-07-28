@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -20,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
@@ -58,6 +60,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
     @BindView(R.id.button_date_done) Button mDateDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
+    @BindView(R.id.searchView) SearchView mSearchView;
+    @BindView(R.id.nestedScrollView) NestedScrollView mScrollView;
 
     private long selectedCategoryId = -1;
 
@@ -68,6 +72,12 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         SetupUI();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mScrollView.post(() -> mScrollView.scrollTo(0, mSearchView.getBottom()));
     }
 
     private void SetupUI() {
@@ -123,7 +133,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mTransactionsRecyclerView.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ABOVE, isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
         // Set the EditText focusable and show/hide the keyboard
         // there is a bug in this code @link: https://issuetracker.google.com/issues/37055966
