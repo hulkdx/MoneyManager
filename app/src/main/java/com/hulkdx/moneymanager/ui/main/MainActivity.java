@@ -41,7 +41,8 @@ import timber.log.Timber;
 import java.text.DateFormatSymbols;
 
 public class MainActivity extends BaseActivity implements MainMvpView,
-        CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback {
+        CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
+        SearchView.OnQueryTextListener {
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -85,6 +86,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mCurrencyBottomTextView.setText(currencyName);
         mCurrencyTextView.setText(currencyName);
         mTransactionAdapter.setCurrencyName(currencyName);
+        mSearchView.setOnQueryTextListener(this);
 
         mTransactionAdapter.setContext(this);
         mTransactionsRecyclerView.setAdapter(mTransactionAdapter);
@@ -186,6 +188,16 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             return false;
         }
         return true;
+    }
+    // related to SearchView
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+    // SearchView upon textChange search the model.
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 
     /***** On Click implementation *****/
