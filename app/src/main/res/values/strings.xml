@@ -35,6 +35,12 @@
     <string name="empty_list">The list is empty.</string>
     <string name="date">Date</string>
     <string name="minus">-</string>
+    <string-array name="transaction_spinner_value">
+        <item>Total</item>
+        <item>Daily</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
 
     <!-- CardView Transaction -->
     <string name="balance_value_positive">+ %1$.2f</string>
