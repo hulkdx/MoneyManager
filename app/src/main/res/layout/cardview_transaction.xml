@@ -74,7 +74,7 @@
                 android:id="@+id/balance_sign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="end"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/black"
                 android:textSize="@dimen/transactions_text_size"
@@ -85,6 +85,7 @@
                 android:layout_width="7dp"
                 android:layout_height="7dp"
                 android:layout_gravity="end"
+                android:layout_marginTop="3dp"
                 tools:background="@color/blue" />
 
         </LinearLayout>
