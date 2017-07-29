@@ -35,7 +35,7 @@ public class DatabaseHelper {
     public Flowable<List<Transaction>> getTransactions(){
         Realm realm = mRealmProvider.get();
         RealmResults<Transaction> results = realm.where(Transaction.class).findAllAsync();
-        return RxUtil.createObservableFromRealmResult(realm, results)
+        return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
     }
@@ -68,7 +68,7 @@ public class DatabaseHelper {
     public Flowable<List<Category>> getCategories(){
         Realm realm = mRealmProvider.get();
         RealmResults<Category> results = realm.where(Category.class).findAllAsync();
-        return RxUtil.createObservableFromRealmResult(realm, results)
+        return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(category -> category);
     }

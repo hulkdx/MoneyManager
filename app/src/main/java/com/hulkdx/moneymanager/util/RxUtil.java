@@ -12,7 +12,7 @@ import io.realm.RealmResults;
 public class RxUtil {
     // Create Observable because realm doesn't work with Rxjava 2 from source code
     // @link : https://github.com/realm/realm-java/blob/master/realm/realm-library/src/main/java/io/realm/rx/RealmObservableFactory.java
-    public static <E extends RealmModel> Flowable<RealmResults<E>> createObservableFromRealmResult(final Realm realm, final RealmResults<E> results) {
+    public static <E extends RealmModel> Flowable<RealmResults<E>> createFlowableFromRealmResult(final Realm realm, final RealmResults<E> results) {
         final RealmConfiguration realmConfig = realm.getConfiguration();
         return Flowable.create(emitter -> {
             // Gets instance to make sure that the Realm is open for as long as the
