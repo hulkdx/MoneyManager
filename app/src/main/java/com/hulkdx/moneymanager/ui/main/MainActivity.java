@@ -197,6 +197,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     // SearchView upon textChange search the model.
     @Override
     public boolean onQueryTextChange(String s) {
+        mTransactionAdapter.filter(s);
         return false;
     }
 

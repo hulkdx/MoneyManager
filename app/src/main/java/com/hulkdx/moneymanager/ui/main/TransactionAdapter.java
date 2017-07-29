@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hulkdx.moneymanager.R;
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 
 import java.util.ArrayList;
@@ -25,18 +26,22 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
-
+    // This can be all transactions or filteredTransactions (searched transaction)
     private List<Transaction> mTransactions;
+    // All transactions
+    private List<Transaction> mAllTransactions;
     private Context mContext;
     private String currencyName;
 
     @Inject
     public TransactionAdapter() {
         mTransactions = new ArrayList<>();
+        mAllTransactions = new ArrayList<>();
     }
 
     public void setTransactions(List<Transaction> transactions) {
         mTransactions = transactions;
+        mAllTransactions = transactions;
     }
 
     public void setContext(Context mContext) {
@@ -80,6 +85,23 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public void setCurrencyName(String currencyName) {
         this.currencyName = currencyName;
+    }
+
+    public void filter(String text) {
+        List<Transaction> filterTransaction = new ArrayList<>();
+        if(text.isEmpty()){
+            mTransactions = mAllTransactions;
+        } else {
+            text = text.toLowerCase();
+            for(Transaction transaction: mAllTransactions) {
+                if (transaction.getCategory() == null) continue;
+                if(transaction.getCategory().getName().toLowerCase().contains(text)){
+                    filterTransaction.add(transaction);
+                }
+            }
+            mTransactions = filterTransaction;
+        }
+        notifyDataSetChanged();
     }
 
     class TransactionHolder extends RecyclerView.ViewHolder {
