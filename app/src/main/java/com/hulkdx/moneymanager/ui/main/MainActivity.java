@@ -161,6 +161,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
             expandButtomLayout(false);
             mCategoryAdapter.resetSelectedCategories();
+            mAddNewEditText.setText("");
         }
         return false;
     }
