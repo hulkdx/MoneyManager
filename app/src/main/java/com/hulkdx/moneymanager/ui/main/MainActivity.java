@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -67,6 +68,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.date_picker) DatePicker mDatePicker;
     @BindView(R.id.searchView) SearchView mSearchView;
     @BindView(R.id.nestedScrollView) NestedScrollView mScrollView;
+    @BindView(R.id.current_selected_date_textview) TextView mCurrentSelectedDateTV;
+    @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
+    @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
 
     private long selectedCategoryId = -1;
 
@@ -158,6 +162,15 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         }
     }
     /*
+     * Show top layout with arrows.
+     * @param show : show layout when its true. or hide it when its false.
+     */
+    private void showTopLayout(boolean show) {
+        mPreviousArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
+        mNextArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
+        mCurrentSelectedDateTV.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+    /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
      */
     @OnTouch(R.id.transaction_recycler_view)
@@ -207,17 +220,22 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnItemSelected(R.id.spinner_chooserList)
     void chooserListSelectedItem(AdapterView<?> parentView, View selectedItemView, int position, long id){
         switch (position) {
-            // Total Screen
+            // TODO Total Screen
             case 0:
+                showTopLayout(false);
                 break;
-            // Daily Screen
+            // TODO Daily Screen
             case 1:
+                showTopLayout(true);
+                mCurrentSelectedDateTV.setText("Today");
                 break;
-            // Monthly Screen
+            // TODO Monthly Screen
             case 2:
+                showTopLayout(true);
                 break;
-            // Yearly Screen
+            // TODO Yearly Screen
             case 3:
+                showTopLayout(true);
                 break;
         }
     }
