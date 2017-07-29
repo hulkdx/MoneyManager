@@ -93,8 +93,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             mTransactions = mAllTransactions;
         } else {
             text = text.toLowerCase();
+            boolean isNumber = text.matches("^-?\\d+.?(\\d+)?$");
             for(Transaction transaction: mAllTransactions) {
-                if (transaction.getCategory() == null) continue;
+                // if text is numeric, search the balance
+                if (isNumber) {
+                    Timber.i(String.valueOf(transaction.getAmount()));
+                    if (String.valueOf(transaction.getAmount()).toLowerCase().contains(text)){
+                        filterTransaction.add(transaction);
+                    }
+                    continue;
+                }
+                // else search category.
+                if (transaction.getCategory() == null) { continue; }
                 if(transaction.getCategory().getName().toLowerCase().contains(text)){
                     filterTransaction.add(transaction);
                 }

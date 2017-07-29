@@ -183,6 +183,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             expandButtomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
             mAddNewEditText.setText("");
+            mSearchView.setQuery("", false);
             return false;
         }
         return true;
