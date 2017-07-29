@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.bottom_layout_expanded) LinearLayout mBottomExpandedLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
+    @BindView(R.id.rootListView) LinearLayout mRootListView;
+    @BindView(R.id.topBarDate) LinearLayout mRootTopBar;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
     @BindView(R.id.button_date_done) Button mDateDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
@@ -143,7 +145,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mScrollView.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRootListView.getLayoutParams();
         layoutParams.addRule(RelativeLayout.ABOVE, isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
         // Set the EditText focusable and show/hide the keyboard
         showKeyboard(isShown);
@@ -166,9 +168,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      * @param show : show layout when its true. or hide it when its false.
      */
     private void showTopLayout(boolean show) {
-        mPreviousArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
-        mNextArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
-        mCurrentSelectedDateTV.setVisibility(show ? View.VISIBLE : View.GONE);
+        mRootTopBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
     /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
