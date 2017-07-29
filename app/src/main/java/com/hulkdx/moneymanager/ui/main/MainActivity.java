@@ -16,12 +16,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
@@ -36,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
+import butterknife.OnItemSelected;
 import butterknife.OnTouch;
 import timber.log.Timber;
 import java.text.DateFormatSymbols;
@@ -198,6 +202,24 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public boolean onQueryTextChange(String s) {
         mTransactionAdapter.filter(s);
         return false;
+    }
+    // Spinner Chooser
+    @OnItemSelected(R.id.spinner_chooserList)
+    void chooserListSelectedItem(AdapterView<?> parentView, View selectedItemView, int position, long id){
+        switch (position) {
+            // Total Screen
+            case 0:
+                break;
+            // Daily Screen
+            case 1:
+                break;
+            // Monthly Screen
+            case 2:
+                break;
+            // Yearly Screen
+            case 3:
+                break;
+        }
     }
 
     /***** On Click implementation *****/

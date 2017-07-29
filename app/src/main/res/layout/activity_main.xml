@@ -55,6 +55,7 @@
         android:padding="10dp">
 
         <Spinner
+            android:id="@+id/spinner_chooserList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:entries="@array/transaction_spinner_value"
