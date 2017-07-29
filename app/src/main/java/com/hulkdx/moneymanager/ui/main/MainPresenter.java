@@ -70,7 +70,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 mDataManager.addTransaction(newTransaction, CategoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        val -> Timber.e("addTransaction onNext"),
+                        val -> Timber.i("addTransaction onNext"),
                         error -> getMvpView().showError("addTransaction", error),
                         () -> {
                             getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper()
@@ -98,7 +98,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 mDataManager.addCategory(newCategory)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        val -> Timber.e("addCategory onNext"),
+                        val -> Timber.i("addCategory onNext"),
                         error -> getMvpView().showError("addCategory", error),
                         () -> {
                             Timber.i("addCategory onCompleted");
