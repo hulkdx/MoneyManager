@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
 
-    private long selectedCategoryId = -1;
+    private long mSelectedCategoryId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +196,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                     String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
                     String.valueOf(mDatePicker.getYear()),
                     mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount);
-            mMainPresenter.addTransaction(newTransaction, selectedCategoryId);
+            mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
             expandButtomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
             mAddNewEditText.setText("");
@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      */
     @Override
     public void onCategoryClicked(long categoryId) {
-        selectedCategoryId = categoryId;
+        mSelectedCategoryId = categoryId;
     }
     /*
      * Show add category dialog
