@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else {
             mAddNewEditText.clearFocus();
-            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            imm.hideSoftInputFromWindow(mAddNewEditText.getWindowToken(), 0);
         }
     }
     /*
