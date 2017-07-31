@@ -177,22 +177,15 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:visibility="gone">
-
-        <LinearLayout
+        
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/category_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/category_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                tools:listitem="@layout/cardview_category"/>
-
-        </LinearLayout>
+            android:padding="5dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/cardview_category"/>
 
         <LinearLayout
             android:layout_width="match_parent"
