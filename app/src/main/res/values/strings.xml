@@ -41,6 +41,16 @@
         <item>Monthly</item>
         <item>Yearly</item>
     </string-array>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="this_month">This Month</string>
+    <string name="this_year">This Year</string>
+    <string name="next_month">Next Month</string>
+    <string name="next_year">Next Year</string>
+    <string name="pre_month">Last Month</string>
+    <string name="pre_year">Last Year</string>
+    <string name="setDate">%1$d/%2$d/%3$d</string>
 
     <!-- CardView Transaction -->
     <string name="balance_value_positive">+ %1$.2f</string>

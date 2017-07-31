@@ -107,4 +107,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
+
+    public void searchTransactionWithDate(String s, String s1, String s2) {
+    }
 }

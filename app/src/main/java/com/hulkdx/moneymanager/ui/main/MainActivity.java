@@ -33,6 +33,7 @@ import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.util.DialogFactory;
 
+import java.util.Calendar;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -71,10 +72,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.searchView) SearchView mSearchView;
     @BindView(R.id.nestedScrollView) NestedScrollView mScrollView;
     @BindView(R.id.current_selected_date_textview) TextView mCurrentSelectedDateTV;
+    @BindView(R.id.spinner_chooserList) Spinner mChooserDateSpinner;
     @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
 
     private long mSelectedCategoryId = -1;
+    // For searching date in database.
+    private Calendar mCurrentDateCalendar;
+    private Calendar mSelectedCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +111,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mMainPresenter.attachView(this);
         mMainPresenter.loadTransactions();
         mMainPresenter.loadCategories();
+        mCurrentDateCalendar = Calendar.getInstance();
     }
 
     @Override
@@ -227,17 +233,38 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             // TODO Daily Screen
             case 1:
                 showTopLayout(true);
-                mCurrentSelectedDateTV.setText("Today");
+                // get today date
+                mSelectedCalendar = Calendar.getInstance();
+                mCurrentSelectedDateTV.setText(getString(R.string.today));
+                // Update the list with today transactions
+                updateTransactionList();
                 break;
             // TODO Monthly Screen
             case 2:
+                // get today date
+                mSelectedCalendar = Calendar.getInstance();
+                mCurrentSelectedDateTV.setText(getString(R.string.this_month));
+                // Update the list with today transactions
+                updateTransactionList();
                 showTopLayout(true);
                 break;
             // TODO Yearly Screen
             case 3:
+                // get today date
+                mSelectedCalendar = Calendar.getInstance();
+                mCurrentSelectedDateTV.setText(getString(R.string.this_year));
+                // Update the list with today transactions
+                updateTransactionList();
                 showTopLayout(true);
                 break;
         }
+    }
+
+    private void updateTransactionList() {
+        mMainPresenter.searchTransactionWithDate(
+                String.valueOf(mSelectedCalendar.get(Calendar.DATE)),
+                String.valueOf(mSelectedCalendar.get(Calendar.MONTH)),
+                String.valueOf(mSelectedCalendar.get(Calendar.YEAR)));
     }
 
     /***** On Click implementation *****/
@@ -265,6 +292,102 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnClick(R.id.button_date_done)
     public void onClickDateDoneBtn() {
         showDateLayout(false);
+    }
+
+    @OnClick(R.id.previous_arrow_ImageView)
+    public void onClickPrevArrowIV() {
+        onClickedArrows(false);
+        updateTransactionList();
+    }
+
+    @OnClick(R.id.next_arrow_ImageView)
+    public void onClickNextArrowIV() {
+        onClickedArrows(true);
+        updateTransactionList();
+    }
+    // @param arrowDirection: false -> previous arrow, true -> next arrow.
+    private void onClickedArrows(boolean arrowDirection) {
+        boolean isCurrentDateTextSet = false;
+        // Daily is selected
+        if (mChooserDateSpinner.getSelectedItemPosition() == 1) {
+            mSelectedCalendar.add(Calendar.DATE, arrowDirection ? 1 : -1);
+            // checking for today.
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
+                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH) &&
+                    mSelectedCalendar.get(Calendar.DATE) == mCurrentDateCalendar.get(Calendar.DATE)) {
+
+                mCurrentSelectedDateTV.setText(getString(R.string.today));
+                isCurrentDateTextSet = true;
+            }
+            // Note: tomorrow or yesterday can be in another months/year
+            // Check for tomorrow
+            mCurrentDateCalendar.add(Calendar.DATE, 1);
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
+                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH) &&
+                    mSelectedCalendar.get(Calendar.DATE) == mCurrentDateCalendar.get(Calendar.DATE)) {
+
+                mCurrentSelectedDateTV.setText(getString(R.string.tomorrow));
+                isCurrentDateTextSet = true;
+            }
+            // Yesterday
+            mCurrentDateCalendar.add(Calendar.DATE, -2);
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
+                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH) &&
+                    mSelectedCalendar.get(Calendar.DATE) == mCurrentDateCalendar.get(Calendar.DATE)) {
+
+                mCurrentSelectedDateTV.setText(getString(R.string.yesterday));
+                isCurrentDateTextSet = true;
+            }
+            // Set it back to today's date.
+            mCurrentDateCalendar.add(Calendar.DATE, 1);
+        }
+        // Monthly is selected.
+        else if (mChooserDateSpinner.getSelectedItemPosition() == 2) {
+            mSelectedCalendar.add(Calendar.MONTH, arrowDirection ? 1 : -1);
+            // This month
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
+                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH)){
+                mCurrentSelectedDateTV.setText(getString(R.string.this_month));
+                isCurrentDateTextSet = true;
+            }
+            // Next month
+            mCurrentDateCalendar.add(Calendar.MONTH, 1);
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
+                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH)){
+                mCurrentSelectedDateTV.setText(getString(R.string.next_month));
+                isCurrentDateTextSet = true;
+            }
+            // Prev month
+            mCurrentDateCalendar.add(Calendar.MONTH, -2);
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
+                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH)){
+                mCurrentSelectedDateTV.setText(getString(R.string.pre_month));
+                isCurrentDateTextSet = true;
+            }
+            // Set the month back
+            mCurrentDateCalendar.add(Calendar.MONTH, 1);
+        }
+        // Yearly is selected.
+        else if (mChooserDateSpinner.getSelectedItemPosition() == 3) {
+            mSelectedCalendar.add(Calendar.YEAR, arrowDirection ? 1 : -1);
+            // This month
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR)){
+                mCurrentSelectedDateTV.setText(getString(R.string.this_year));
+                isCurrentDateTextSet = true;
+            }
+            else if ((mSelectedCalendar.get(Calendar.YEAR)) == mCurrentDateCalendar.get(Calendar.YEAR) + 1){
+                mCurrentSelectedDateTV.setText(getString(R.string.next_year));
+                isCurrentDateTextSet = true;
+            }
+            else if ((mSelectedCalendar.get(Calendar.YEAR)) == mCurrentDateCalendar.get(Calendar.YEAR) - 1){
+                mCurrentSelectedDateTV.setText(getString(R.string.pre_year));
+                isCurrentDateTextSet = true;
+            }
+        }
+
+        if (!isCurrentDateTextSet) mCurrentSelectedDateTV.setText(getString(R.string.setDate,
+                mSelectedCalendar.get(Calendar.DATE), mSelectedCalendar.get(Calendar.MONTH),
+                mSelectedCalendar.get(Calendar.YEAR)));
     }
 
     /***** Callback methods implementation *****/
