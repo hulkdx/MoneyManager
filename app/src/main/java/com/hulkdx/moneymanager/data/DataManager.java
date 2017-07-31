@@ -48,4 +48,9 @@ public class DataManager {
     public Flowable<Category> addCategory(Category newCategory) {
         return mDatabaseHelper.addCategory(newCategory);
     }
+
+    public Flowable<List<Transaction>> searchTransactionWithDate(String day, String month, String year,
+                                                                 int isDailyOrMonthlyOrYearly) {
+        return mDatabaseHelper.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly);
+    }
 }

@@ -226,45 +226,50 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnItemSelected(R.id.spinner_chooserList)
     void chooserListSelectedItem(AdapterView<?> parentView, View selectedItemView, int position, long id){
         switch (position) {
-            // TODO Total Screen
+            // Total Screen
             case 0:
                 showTopLayout(false);
+                mMainPresenter.loadTransactions();
                 break;
-            // TODO Daily Screen
+            // Daily Screen
             case 1:
                 showTopLayout(true);
                 // get today date
                 mSelectedCalendar = Calendar.getInstance();
                 mCurrentSelectedDateTV.setText(getString(R.string.today));
                 // Update the list with today transactions
-                updateTransactionList();
+                updateTransactionList(0);
                 break;
-            // TODO Monthly Screen
+            // Monthly Screen
             case 2:
                 // get today date
                 mSelectedCalendar = Calendar.getInstance();
                 mCurrentSelectedDateTV.setText(getString(R.string.this_month));
                 // Update the list with today transactions
-                updateTransactionList();
+                updateTransactionList(1);
                 showTopLayout(true);
                 break;
-            // TODO Yearly Screen
+            // Yearly Screen
             case 3:
                 // get today date
                 mSelectedCalendar = Calendar.getInstance();
                 mCurrentSelectedDateTV.setText(getString(R.string.this_year));
                 // Update the list with today transactions
-                updateTransactionList();
+                updateTransactionList(2);
                 showTopLayout(true);
                 break;
         }
     }
-
-    private void updateTransactionList() {
+    /*
+     * Search data from the db.
+     * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
+     */
+    private void updateTransactionList(int isDailyOrMonthlyOrYearly) {
         mMainPresenter.searchTransactionWithDate(
                 String.valueOf(mSelectedCalendar.get(Calendar.DATE)),
-                String.valueOf(mSelectedCalendar.get(Calendar.MONTH)),
-                String.valueOf(mSelectedCalendar.get(Calendar.YEAR)));
+                String.valueOf(new DateFormatSymbols().getMonths()[mSelectedCalendar.get(Calendar.MONTH)]),
+                String.valueOf(mSelectedCalendar.get(Calendar.YEAR)),
+                isDailyOrMonthlyOrYearly);
     }
 
     /***** On Click implementation *****/
@@ -297,13 +302,11 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnClick(R.id.previous_arrow_ImageView)
     public void onClickPrevArrowIV() {
         onClickedArrows(false);
-        updateTransactionList();
     }
 
     @OnClick(R.id.next_arrow_ImageView)
     public void onClickNextArrowIV() {
         onClickedArrows(true);
-        updateTransactionList();
     }
     // @param arrowDirection: false -> previous arrow, true -> next arrow.
     private void onClickedArrows(boolean arrowDirection) {
@@ -388,6 +391,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         if (!isCurrentDateTextSet) mCurrentSelectedDateTV.setText(getString(R.string.setDate,
                 mSelectedCalendar.get(Calendar.DATE), mSelectedCalendar.get(Calendar.MONTH),
                 mSelectedCalendar.get(Calendar.YEAR)));
+        // isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
+        int isDailyOrMonthlyOrYearly = mChooserDateSpinner.getSelectedItemPosition()-1;
+        updateTransactionList(isDailyOrMonthlyOrYearly);
     }
 
     /***** Callback methods implementation *****/

@@ -108,6 +108,22 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         );
     }
 
-    public void searchTransactionWithDate(String s, String s1, String s2) {
+    /*
+     * Search the db for the specify date.
+     * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
+     */
+    public void searchTransactionWithDate(String day, String month, String year, int isDailyOrMonthlyOrYearly) {
+        mDisposables.add(
+                mDataManager.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        transactions -> {
+                            getMvpView().showTransactions(transactions);
+                        },
+                        error -> getMvpView().showError("searchTransactionWithDate", error),
+                        () -> Timber.i("searchTransactionWithDate onCompleted")
+                )
+        );
+
     }
 }
