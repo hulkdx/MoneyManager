@@ -96,7 +96,7 @@
                         android:id="@+id/next_arrow_ImageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_skip_next_black_24dp"/>
+                        android:src="@drawable/selector_ic_skip_next"/>
 
                 </LinearLayout>
 
@@ -177,7 +177,12 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:visibility="gone">
-        
+
+        <!-- TODO -->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/category_recycler_view"
             android:layout_width="match_parent"
