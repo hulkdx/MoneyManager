@@ -16,14 +16,16 @@ public class Transaction extends RealmObject {
     private String year;
     private Category category;
     private float amount;
+    private String attachment;
 
     public Transaction(){}
 
-    public Transaction(String day, String month, String year, float amount) {
+    public Transaction(String day, String month, String year, float amount, String attachment) {
         this.day = day;
         this.month = month;
         this.year = year;
         this.amount = amount;
+        this.attachment = attachment;
     }
 
     public String getDay() {
@@ -80,5 +82,13 @@ public class Transaction extends RealmObject {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 }

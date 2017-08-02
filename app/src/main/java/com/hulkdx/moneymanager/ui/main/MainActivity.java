@@ -4,7 +4,9 @@
 
 package com.hulkdx.moneymanager.ui.main;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -25,18 +27,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.util.DialogFactory;
-
 import java.util.Calendar;
 import java.util.List;
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +48,8 @@ import java.text.DateFormatSymbols;
 public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
         SearchView.OnQueryTextListener {
+
+    private static final int PICKED_IMAGE = 1;
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -77,6 +78,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
 
     private long mSelectedCategoryId = -1;
+    private String mSelectedAttachment = null;
     // For searching date in database.
     private Calendar mCurrentDateCalendar;
     private Calendar mSelectedCalendar;
@@ -123,8 +125,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @Override
     protected void onPause() {
         super.onPause();
-        // Hide the keyboard if it is still open.
-        expandBottomLayout(false);
     }
 
     /*
@@ -201,7 +201,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
                     String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
                     String.valueOf(mDatePicker.getYear()),
-                    mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount);
+                    mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount,
+                    mSelectedAttachment);
             mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
             expandBottomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
@@ -394,6 +395,22 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         // isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
         int isDailyOrMonthlyOrYearly = mChooserDateSpinner.getSelectedItemPosition()-1;
         updateTransactionList(isDailyOrMonthlyOrYearly);
+    }
+
+    /***** attachment section *****/
+    @OnClick(R.id.imageview_add_attachment)
+    public void onClickAddAttachment(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICKED_IMAGE);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICKED_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data == null) { return; }
+            mSelectedAttachment = data.getData().toString();
+        }
     }
 
     /***** Callback methods implementation *****/
