@@ -198,6 +198,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         return false;
     }
 
+    @OnTouch(R.id.nestedScrollView)
+    public boolean onTouchNestedScrollView(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
+            expandBottomLayout(false);
+        }
+        return false;
+    }
+
     private void addTransaction(){
         // Don't do transaction upon empty string.
         if (mAddNewEditText.getText().toString().equals("")) {
