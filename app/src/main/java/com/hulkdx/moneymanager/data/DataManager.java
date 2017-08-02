@@ -37,8 +37,8 @@ public class DataManager {
         return mDatabaseHelper.getTransactions().distinct();
     }
 
-    public Flowable<Transaction> addTransaction(Transaction newTransaction, long CategoryId) {
-        return mDatabaseHelper.addTransaction(newTransaction, CategoryId).distinct();
+    public Flowable<Transaction> addTransaction(Transaction newTransaction, long categoryId) {
+        return mDatabaseHelper.addTransaction(newTransaction, categoryId).distinct();
     }
 
     public Flowable<List<Category>> getCategories() {

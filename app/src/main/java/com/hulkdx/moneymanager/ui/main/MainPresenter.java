@@ -65,9 +65,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     /*
     * Add a new Transaction.
      */
-    public void addTransaction(final Transaction newTransaction, long CategoryId) {
+    public void addTransaction(final Transaction newTransaction, long categoryId) {
         mDisposables.add(
-                mDataManager.addTransaction(newTransaction, CategoryId)
+                mDataManager.addTransaction(newTransaction, categoryId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         val -> Timber.i("addTransaction onNext"),

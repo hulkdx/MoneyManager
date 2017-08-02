@@ -41,7 +41,7 @@ public class DatabaseHelper {
                 .map(transactions -> transactions);
     }
 
-    public Flowable<Transaction> addTransaction(final Transaction newTransaction, final long CategoryId) {
+    public Flowable<Transaction> addTransaction(final Transaction newTransaction, final long categoryId) {
         return Flowable.create(subscriber -> {
             Realm realm = null;
             try {
@@ -51,7 +51,7 @@ public class DatabaseHelper {
                             Number currentIdNum = bgRealm.where(Transaction.class).max("id");
                             int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
                             newTransaction.setId(nextId);
-                            Category c = bgRealm.where(Category.class).equalTo("id", CategoryId).findFirst();
+                            Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
                             newTransaction.setCategory(c);
                             bgRealm.copyToRealm(newTransaction);
                         },
