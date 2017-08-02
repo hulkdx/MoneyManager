@@ -112,7 +112,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
      * Search the db for the specify date.
      * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
      */
-    public void searchTransactionWithDate(String day, String month, String year, int isDailyOrMonthlyOrYearly) {
+    public void searchTransactionWithDate(int day, int month, int year, int isDailyOrMonthlyOrYearly) {
         mDisposables.add(
                 mDataManager.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly)
                 .observeOn(AndroidSchedulers.mainThread())

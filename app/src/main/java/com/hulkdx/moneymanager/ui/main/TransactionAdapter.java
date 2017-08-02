@@ -12,15 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.hulkdx.moneymanager.R;
-import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
-
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
@@ -70,8 +67,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                      mTransactions.get(position).getAmount() * -1));
         }
         holder.balanceCurrencyTV.setText(currencyName);
-        holder.dateMonthTV.setText(mTransactions.get(position).getMonth());
-        holder.dateDayTV.setText(mTransactions.get(position).getDay());
+        holder.dateMonthTV.setText(new DateFormatSymbols().getShortMonths()[mTransactions.get(position).getMonth()]);
+        holder.dateDayTV.setText(String.valueOf(mTransactions.get(position).getDay()));
         if (mTransactions.get(position).getCategory() != null ) {
             holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
             holder.hexColorIV.setBackgroundColor(mTransactions.get(position).getCategory().getHexColor());

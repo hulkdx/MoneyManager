@@ -43,7 +43,6 @@ import butterknife.OnEditorAction;
 import butterknife.OnItemSelected;
 import butterknife.OnTouch;
 import timber.log.Timber;
-import java.text.DateFormatSymbols;
 
 public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
@@ -198,9 +197,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 return false;
             }
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
-            Transaction newTransaction = new Transaction(String.valueOf(mDatePicker.getDayOfMonth()),
-                    String.valueOf(new DateFormatSymbols().getMonths()[mDatePicker.getMonth()]),
-                    String.valueOf(mDatePicker.getYear()),
+            Transaction newTransaction = new Transaction(
+                    mDatePicker.getDayOfMonth(), mDatePicker.getMonth(), mDatePicker.getYear(),
                     mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount,
                     mSelectedAttachment);
             mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
@@ -267,9 +265,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      */
     private void updateTransactionList(int isDailyOrMonthlyOrYearly) {
         mMainPresenter.searchTransactionWithDate(
-                String.valueOf(mSelectedCalendar.get(Calendar.DATE)),
-                String.valueOf(new DateFormatSymbols().getMonths()[mSelectedCalendar.get(Calendar.MONTH)]),
-                String.valueOf(mSelectedCalendar.get(Calendar.YEAR)),
+                mSelectedCalendar.get(Calendar.DATE),
+                mSelectedCalendar.get(Calendar.MONTH),
+                mSelectedCalendar.get(Calendar.YEAR),
                 isDailyOrMonthlyOrYearly);
     }
 

@@ -11,16 +11,16 @@ import io.realm.annotations.PrimaryKey;
 public class Transaction extends RealmObject {
 
     @PrimaryKey private long id;
-    private String day;
-    private String month;
-    private String year;
+    private int day;
+    private int month;
+    private int year;
     private Category category;
     private float amount;
     private String attachment;
 
     public Transaction(){}
 
-    public Transaction(String day, String month, String year, float amount, String attachment) {
+    public Transaction(int day, int month, int year, float amount, String attachment) {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -28,19 +28,19 @@ public class Transaction extends RealmObject {
         this.attachment = attachment;
     }
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public String getMonth() {
+    public int getMonth() {
         return month;
     }
 
-    public void setMonth(String month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
@@ -60,11 +60,11 @@ public class Transaction extends RealmObject {
         this.amount = amount;
     }
 
-    public String getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(int year) {
         this.year = year;
     }
 

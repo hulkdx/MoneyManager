@@ -12,7 +12,6 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -70,13 +69,13 @@ public class DatabaseHelper {
      * @param day, @param months, @param year is the date to search.
      * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
      */
-    public Flowable<List<Transaction>> searchTransactionWithDate(String day, String month, String year,
+    public Flowable<List<Transaction>> searchTransactionWithDate(int day, int month, int year,
                                                                  int isDailyOrMonthlyOrYearly) {
         Realm realm = mRealmProvider.get();
         RealmQuery<Transaction> query = realm.where(Transaction.class)
-                .contains("year", year, Case.INSENSITIVE);
-        if (isDailyOrMonthlyOrYearly == 1) { query.contains("month", month, Case.INSENSITIVE); }
-        if (isDailyOrMonthlyOrYearly == 0) { query.contains("day", day, Case.INSENSITIVE); }
+                .equalTo("year", year);
+        if (isDailyOrMonthlyOrYearly == 1) { query.equalTo("month", month); }
+        if (isDailyOrMonthlyOrYearly == 0) { query.equalTo("day", day); }
         RealmResults<Transaction> results = query.findAllAsync();
         return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)

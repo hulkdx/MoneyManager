@@ -49,7 +49,7 @@ public class DataManager {
         return mDatabaseHelper.addCategory(newCategory);
     }
 
-    public Flowable<List<Transaction>> searchTransactionWithDate(String day, String month, String year,
+    public Flowable<List<Transaction>> searchTransactionWithDate(int day, int month, int year,
                                                                  int isDailyOrMonthlyOrYearly) {
         return mDatabaseHelper.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly);
     }
