@@ -153,6 +153,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      * @param isShown : true -> show bottomLayout / false -> hide it.
      */
     private void expandBottomLayout(boolean isShown) {
+        if (isShown) { mAddNewEditText.setText(""); }
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
@@ -189,7 +190,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
             expandBottomLayout(false);
             mCategoryAdapter.resetSelectedCategories();
-            mAddNewEditText.setText("");
         }
         return false;
     }
@@ -210,7 +210,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
             expandBottomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
-            mAddNewEditText.setText("");
             mSearchView.setQuery("", false);
             return false;
         }
