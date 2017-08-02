@@ -40,7 +40,11 @@ public class DatabaseHelper {
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
     }
-
+    /*
+     * Add a new Transaction into database.
+     * @param newTransaction : the new transaction to be added in database.
+     * @param categoryId : the id of selected category. -1 means category is not selected.
+     */
     public Flowable<Transaction> addTransaction(final Transaction newTransaction, final long categoryId) {
         return Flowable.create(subscriber -> {
             Realm realm = null;
@@ -51,8 +55,10 @@ public class DatabaseHelper {
                             Number currentIdNum = bgRealm.where(Transaction.class).max("id");
                             int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
                             newTransaction.setId(nextId);
-                            Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
-                            newTransaction.setCategory(c);
+                            if (categoryId != -1) {
+                                Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
+                                newTransaction.setCategory(c);
+                            }
                             bgRealm.copyToRealm(newTransaction);
                         },
                         subscriber::onComplete,
