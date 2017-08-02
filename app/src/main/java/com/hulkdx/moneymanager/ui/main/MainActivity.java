@@ -153,7 +153,12 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      * @param isShown : true -> show bottomLayout / false -> hide it.
      */
     private void expandBottomLayout(boolean isShown) {
-        if (isShown) { mAddNewEditText.setText(""); }
+        if (isShown) {
+            mAddNewEditText.setText("");
+            mCategoryAdapter.resetSelectedCategories();
+            mSelectedCategoryId = -1;
+            mSelectedAttachment = null;
+        }
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
@@ -189,28 +194,28 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public boolean onTouchRecycleView(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
             expandBottomLayout(false);
-            mCategoryAdapter.resetSelectedCategories();
         }
         return false;
+    }
+
+    private void addTransaction(){
+        // Don't do transaction upon empty string.
+        if (mAddNewEditText.getText().toString().equals("")) {
+            expandBottomLayout(false);
+            return;
+        }
+        float amount = Float.parseFloat(mAddNewEditText.getText().toString());
+        Transaction newTransaction = new Transaction(
+                mDatePicker.getDayOfMonth(), mDatePicker.getMonth(), mDatePicker.getYear(),
+                mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount,
+                mSelectedAttachment);
+        mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
     }
 
     @OnEditorAction(R.id.et_add_new_balance)
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            // Don't do transaction upon empty string.
-            if (mAddNewEditText.getText().toString().equals("")) {
-                expandBottomLayout(false);
-                return false;
-            }
-            float amount = Float.parseFloat(mAddNewEditText.getText().toString());
-            Transaction newTransaction = new Transaction(
-                    mDatePicker.getDayOfMonth(), mDatePicker.getMonth(), mDatePicker.getYear(),
-                    mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount,
-                    mSelectedAttachment);
-            mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
-            expandBottomLayout(false);
-            mEmptyListTextView.setVisibility(View.GONE);
-            mSearchView.setQuery("", false);
+            addTransaction();
             return false;
         }
         return true;
@@ -484,6 +489,12 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public void showError(String functionName, Throwable error) {
         Timber.i("onError %s : %s", functionName, error.toString());
         DialogFactory.createGenericErrorDialog(this, error.toString());
+    }
+
+    @Override
+    public void onCompleteAddTransations() {
+        mEmptyListTextView.setVisibility(View.GONE);
+        mSearchView.setQuery("", false);
     }
 
 }

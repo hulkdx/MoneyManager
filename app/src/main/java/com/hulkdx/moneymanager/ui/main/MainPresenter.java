@@ -75,6 +75,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         () -> {
                             getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper()
                                                 .updateBalance(newTransaction.getAmount()));
+                            getMvpView().onCompleteAddTransations();
                             Timber.i("addTransaction onCompleted");
                         }
                 )

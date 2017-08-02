@@ -23,4 +23,6 @@ public interface MainMvpView extends MvpView {
     void addCategoryDataSet(Category newCategory);
 
     void showError(String functionName, Throwable error);
+
+    void onCompleteAddTransations();
 }
