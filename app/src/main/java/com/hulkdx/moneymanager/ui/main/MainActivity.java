@@ -122,8 +122,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onResume() {
+        super.onResume();
+        if (mAddNewEditText.isFocused()) {
+            // It needs to post to show the keyboard onResume function.
+            mAddNewEditText.post(
+                    () -> showKeyboard(true)
+            );
+        }
     }
 
     /*
@@ -162,7 +168,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (show) {
             mAddNewEditText.requestFocus();
-            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            imm.showSoftInput(mAddNewEditText, 0);
         } else {
             mAddNewEditText.clearFocus();
             imm.hideSoftInputFromWindow(mAddNewEditText.getWindowToken(), 0);
