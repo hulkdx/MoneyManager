@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     protected void onPause() {
         super.onPause();
         // Hide the keyboard if it is still open.
-        expandButtomLayout(false);
+        expandBottomLayout(false);
     }
 
     /*
@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      * Change the bottom bar icons and make the EditText focusable.
      * @param isShown : when it is true the EditText should be focus.
      */
-    private void expandButtomLayout(boolean isShown) {
+    private void expandBottomLayout(boolean isShown) {
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
@@ -182,7 +182,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnTouch(R.id.transaction_recycler_view)
     public boolean onTouchRecycleView(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN && mAddNewEditText.isFocused()) {
-            expandButtomLayout(false);
+            expandBottomLayout(false);
             mCategoryAdapter.resetSelectedCategories();
             mAddNewEditText.setText("");
         }
@@ -194,7 +194,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             // Don't do transaction upon empty string.
             if (mAddNewEditText.getText().toString().equals("")) {
-                expandButtomLayout(false);
+                expandBottomLayout(false);
                 return false;
             }
             float amount = Float.parseFloat(mAddNewEditText.getText().toString());
@@ -203,7 +203,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                     String.valueOf(mDatePicker.getYear()),
                     mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount);
             mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
-            expandButtomLayout(false);
+            expandBottomLayout(false);
             mEmptyListTextView.setVisibility(View.GONE);
             mAddNewEditText.setText("");
             mSearchView.setQuery("", false);
@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
     @OnClick(R.id.bottom_layout)
     public void onClickBottomLayout() {
-        if (!mAddNewEditText.isFocused()) { expandButtomLayout(true); }
+        if (!mAddNewEditText.isFocused()) { expandBottomLayout(true); }
     }
 
     @OnClick(R.id.imageview_date)
