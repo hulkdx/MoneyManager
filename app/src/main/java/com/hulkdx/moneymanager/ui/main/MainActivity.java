@@ -150,7 +150,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
     /*
      * Change the bottom bar icons and make the EditText focusable.
-     * @param isShown : when it is true the EditText should be focus.
+     * @param isShown : true -> show bottomLayout / false -> hide it.
      */
     private void expandBottomLayout(boolean isShown) {
         // Icons
