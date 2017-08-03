@@ -105,7 +105,8 @@
             android:layout_height="15dp"
             android:background="@drawable/ic_attachment_black_24dp"
             android:layout_below="@+id/description_textview"
-            android:layout_alignEnd="@+id/description_textview" />
+            android:layout_alignEnd="@+id/description_textview"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

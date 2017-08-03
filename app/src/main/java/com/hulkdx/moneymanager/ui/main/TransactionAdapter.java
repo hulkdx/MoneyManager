@@ -4,13 +4,15 @@
 package com.hulkdx.moneymanager.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Transaction;
@@ -73,6 +75,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
             holder.hexColorIV.setBackgroundColor(mTransactions.get(position).getCategory().getHexColor());
         }
+        if (mTransactions.get(position).getAttachment() != null ) {
+            holder.attachmentView.setVisibility(View.VISIBLE);
+            // TODO Replace this click listener maybe with detail view of the list.
+            holder.attachmentView.setOnClickListener(view ->
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(mTransactions.get(position).getAttachment()))));
+        }
     }
 
     @Override
@@ -112,13 +121,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     class TransactionHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.root_layout) LinearLayout rootLayout;
+        @BindView(R.id.root_layout) RelativeLayout rootLayout;
         @BindView(R.id.balance_number) TextView balanceNumberTV;
         @BindView(R.id.balance_sign) TextView balanceCurrencyTV;
         @BindView(R.id.date_month) TextView dateMonthTV;
         @BindView(R.id.date_day) TextView dateDayTV;
         @BindView(R.id.category_name_textview) TextView categoryNameTV;
         @BindView(R.id.view_hex_color) ImageView hexColorIV;
+        @BindView(R.id.attachment_view) View attachmentView;
 
         public TransactionHolder(View itemView) {
             super(itemView);
