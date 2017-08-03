@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO: remove the text string of this file! -->
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,88 +7,106 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="2dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/date_month"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/transactions_text_size"
+            tools:text="JUL" />
+
+        <TextView
+            android:id="@+id/date_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_alignEnd="@+id/date_month"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/date_month"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/transactions_text_size_bigger"
+            tools:text="06" />
+        <TextView
+            android:id="@+id/description_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignBottom="@+id/date_day"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/balance_number"
+            android:layout_toEndOf="@+id/date_month"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:layout_margin="4dp"
+            android:textColor="@color/black"
+            tools:text="Description" />
 
-            <TextView
-                android:id="@+id/date_month"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size"
-                tools:text="JUL" />
+        <TextView
+            android:id="@+id/balance_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/black"
+            android:textSize="@dimen/transactions_text_size_bigger"
+            tools:text="- 21,00" />
 
-            <TextView
-                android:id="@+id/date_day"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size_bigger"
-                tools:text="06" />
+        <TextView
+            android:id="@+id/balance_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/balance_number"
+            android:layout_gravity="end"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/black"
+            android:textSize="@dimen/transactions_text_size"
+            tools:text="@string/euro" />
 
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/view_hex_color"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="6dp"
+            tools:background="@color/blue"
+            android:layout_below="@id/description_textview"
+            android:layout_alignStart="@+id/description_textview" />
 
         <TextView
             android:id="@+id/category_name_textview"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
+            android:layout_marginStart="3dp"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:paddingTop="2dp"
-            android:textColor="@color/black"
             android:textSize="@dimen/transactions_category_text_size"
-            tools:text="category" />
+            tools:text="Category"
+            android:layout_below="@+id/description_textview"
+            android:layout_toEndOf="@+id/view_hex_color"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <View
+            android:id="@+id/attachment_view"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/ic_attachment_black_24dp"
+            android:layout_below="@+id/description_textview"
+            android:layout_alignEnd="@+id/description_textview" />
 
-            <TextView
-                android:id="@+id/balance_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size_bigger"
-                tools:text="- 21,00" />
-
-            <TextView
-                android:id="@+id/balance_sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/black"
-                android:textSize="@dimen/transactions_text_size"
-                tools:text="@string/euro"/>
-
-            <ImageView
-                android:id="@+id/view_hex_color"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
-                android:layout_gravity="end"
-                android:layout_marginTop="3dp"
-                tools:background="@color/blue" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>
