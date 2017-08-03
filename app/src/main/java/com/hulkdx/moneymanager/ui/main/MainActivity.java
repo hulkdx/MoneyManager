@@ -218,6 +218,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount,
                 mSelectedAttachment);
         mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
+        expandBottomLayout(false);
     }
 
     @OnEditorAction(R.id.et_add_new_balance)
