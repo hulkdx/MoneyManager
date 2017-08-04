@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
@@ -60,13 +61,23 @@ public final class DialogFactory {
         popup.getMenuInflater()
                 .inflate(R.menu.popup_menu_select_pictures, popup.getMenu());
         popup.setOnMenuItemClickListener(item -> {
+            Intent intent;
             switch (item.getItemId()) {
                 case R.id.take_new_picture:
-                    // TODO
+                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // This check is required according to google.
+                    // @link: https://developer.android.com/training/camera/photobasics.html
+                    if (intent.resolveActivity(activity.getPackageManager()) == null) {
+                        break;
+                    }
+                    activity.startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
                     break;
                 case R.id.choose_gallery:
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
+                    if (intent.resolveActivity(activity.getPackageManager()) == null) {
+                        break;
+                    }
                     activity.startActivityForResult(intent, MainActivity.PICKED_IMAGE);
                     break;
             }

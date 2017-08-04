@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         SearchView.OnQueryTextListener {
 
     public static final int PICKED_IMAGE = 1;
+    public static final int CAPTURED_IMAGE = 2;
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -422,9 +423,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKED_IMAGE && resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (data == null) { return; }
-            mSelectedAttachment = data.getData().toString();
+            if (requestCode == PICKED_IMAGE ) {
+                mSelectedAttachment = data.getData().toString();
+            } else if (requestCode == CAPTURED_IMAGE) {
+                // TODO TEST
+                mSelectedAttachment = data.getData().toString();
+            }
         }
     }
 
