@@ -502,6 +502,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public void onCompleteAddTransactions() {
         mEmptyListTextView.setVisibility(View.GONE);
         mSearchView.setQuery("", false);
+        // Scroll to end of the list.
+        mScrollView.fullScroll(View.FOCUS_DOWN);
     }
 
 }
