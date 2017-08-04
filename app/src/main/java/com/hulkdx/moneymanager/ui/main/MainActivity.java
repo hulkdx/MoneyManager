@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
         SearchView.OnQueryTextListener {
 
-    private static final int PICKED_IMAGE = 1;
+    public static final int PICKED_IMAGE = 1;
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -416,10 +416,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
     /***** attachment section *****/
     @OnClick(R.id.imageview_add_attachment)
-    public void onClickAddAttachment(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICKED_IMAGE);
+    public void onClickAddAttachment(View view){
+        DialogFactory.createPicturePopup(this, view).show();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

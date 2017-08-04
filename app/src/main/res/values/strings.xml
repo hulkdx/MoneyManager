@@ -59,4 +59,8 @@
     <!-- CardView Category -->
     <string name="add_new_category">Add</string>
 
+    <!-- Popup Menu Select Pictures-->
+    <string name="take_new_picture">Take a new picture</string>
+    <string name="choose_gallery">Choose from Gallery</string>
+
 </resources>
