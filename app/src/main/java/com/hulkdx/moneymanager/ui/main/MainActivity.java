@@ -499,7 +499,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
 
     @Override
-    public void onCompleteAddTransations() {
+    public void onCompleteAddTransactions() {
         mEmptyListTextView.setVisibility(View.GONE);
         mSearchView.setQuery("", false);
     }
