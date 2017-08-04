@@ -501,7 +501,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @Override
     public void showError(String functionName, Throwable error) {
         Timber.i("onError %s : %s", functionName, error.toString());
-        DialogFactory.createGenericErrorDialog(this, error.toString());
+        DialogFactory.createGenericErrorDialog(this, error.toString()).show();
     }
 
     @Override
