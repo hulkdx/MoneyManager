@@ -19,6 +19,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -58,7 +59,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
-        SearchView.OnQueryTextListener {
+        SearchView.OnQueryTextListener, PopupMenu.OnMenuItemClickListener {
 
     public static final int PICKED_IMAGE = 1;
     public static final int CAPTURED_IMAGE = 2;
@@ -88,6 +89,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.spinner_chooserList) Spinner mChooserDateSpinner;
     @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
+    @BindView(R.id.imageview_add_attachment) ImageView mAddAttachmentIV;
+    PopupMenu popup;
 
     private long mSelectedCategoryId = -1;
     // The uri string of selected attachment.
@@ -129,6 +132,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mMainPresenter.loadTransactions();
         mMainPresenter.loadCategories();
         mCurrentDateCalendar = Calendar.getInstance();
+
+        popup = new PopupMenu(this, mAddAttachmentIV);
+        popup.getMenuInflater().inflate(R.menu.popup_menu_select_pictures, popup.getMenu());
+        popup.setOnMenuItemClickListener(this);
     }
 
     @Override
@@ -443,48 +450,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     /***** attachment section *****/
     @OnClick(R.id.imageview_add_attachment)
     public void onClickAddAttachment(View view){
-        PopupMenu popup = new PopupMenu(this, view);
-        popup.getMenuInflater().inflate(R.menu.popup_menu_select_pictures, popup.getMenu());
-        popup.setOnMenuItemClickListener(item -> {
-            Intent intent;
-            switch (item.getItemId()) {
-                // Taking a new Picture
-                case R.id.take_new_picture:
-                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    // This check is required to prevent crashing.
-                    if (intent.resolveActivity(getPackageManager()) == null) {
-                        break;
-                    }
-                    // Create an image file for captured image.
-                    File imageFile = null;
-                    if (!PermissionChecker.verifyStoragePermissions(this)) { break; }
-                    try {
-                        imageFile = createImageFile();
-                    } catch (IOException e) {
-                        DialogFactory.createGenericErrorDialog(this,
-                                "Cannot create a file,\nReason: " + e.getMessage()).show();
-                    }
-                    if (imageFile == null) { break; }
-                    Uri imageURI = FileProvider.getUriForFile(this,
-                            "com.hulkdx.moneymanager.fileprovider", imageFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
-                    startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
-                    // Save the image Uri to later get it from onActivityResult, because
-                    // OnActivityResult return empty intent by putting EXTRA_OUTPUT.
-                    mCapturedImagePath = imageURI.toString();
-                    break;
-                // Select from galary
-                case R.id.choose_gallery:
-                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    if (intent.resolveActivity(getPackageManager()) == null) {
-                        break;
-                    }
-                    startActivityForResult(intent, MainActivity.PICKED_IMAGE);
-                    break;
-            }
-            return true;
-        });
         popup.show();
     }
     @Override
@@ -498,6 +463,50 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 mSelectedAttachment = mCapturedImagePath;
             }
         }
+    }
+    /*
+     * Popup Menu (@link popup) Item clicks
+     */
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            // Taking a new Picture
+            case R.id.take_new_picture:
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // This check is required to prevent crashing.
+                if (intent.resolveActivity(getPackageManager()) == null) {
+                    break;
+                }
+                // Create an image file for captured image.
+                File imageFile = null;
+                if (!PermissionChecker.verifyStoragePermissions(this)) { break; }
+                try {
+                    imageFile = createImageFile();
+                } catch (IOException e) {
+                    DialogFactory.createGenericErrorDialog(this,
+                            "Cannot create a file,\nReason: " + e.getMessage()).show();
+                }
+                if (imageFile == null) { break; }
+                Uri imageURI = FileProvider.getUriForFile(this,
+                        "com.hulkdx.moneymanager.fileprovider", imageFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
+                // Save the image Uri to later get it from onActivityResult, because
+                // OnActivityResult return empty intent by putting EXTRA_OUTPUT.
+                mCapturedImagePath = imageURI.toString();
+                break;
+            // Select from galary
+            case R.id.choose_gallery:
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                if (intent.resolveActivity(getPackageManager()) == null) {
+                    break;
+                }
+                startActivityForResult(intent, MainActivity.PICKED_IMAGE);
+                break;
+        }
+        return true;
     }
 
     /***** Callback methods implementation *****/
