@@ -78,9 +78,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (mTransactions.get(position).getAttachment() != null ) {
             holder.attachmentView.setVisibility(View.VISIBLE);
             // TODO Replace this click listener maybe with detail view of the list.
-            holder.attachmentView.setOnClickListener(view ->
-                    mContext.startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(mTransactions.get(position).getAttachment()))));
+            holder.attachmentView.setOnClickListener(view -> {
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(mTransactions.get(position).getAttachment()));
+                // According to FileProvider docs this flag is required.
+                // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                mContext.startActivity(intent);
+            });
+
         }
     }
 

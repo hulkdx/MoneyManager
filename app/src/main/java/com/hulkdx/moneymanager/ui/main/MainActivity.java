@@ -7,11 +7,16 @@ package com.hulkdx.moneymanager.ui.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -33,8 +38,14 @@ import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.util.DialogFactory;
+import com.hulkdx.moneymanager.util.PermissionChecker;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +54,7 @@ import butterknife.OnEditorAction;
 import butterknife.OnItemSelected;
 import butterknife.OnTouch;
 import timber.log.Timber;
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
@@ -78,7 +90,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
 
     private long mSelectedCategoryId = -1;
+    // The uri string of selected attachment.
     private String mSelectedAttachment = null;
+    // The uri string of captured image.
+    private String mCapturedImagePath = null;
     // For searching date in database.
     private Calendar mCurrentDateCalendar;
     private Calendar mSelectedCalendar;
@@ -229,6 +244,16 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             return false;
         }
         return true;
+    }
+    /*
+     * Create Image file for Capturing a picture from Camera.
+     */
+    private File createImageFile() throws IOException {
+        // Create an image file for captured image.
+        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "MoneyManager_" + timeStamp;
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
     // related to SearchView
     @Override
@@ -418,7 +443,49 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     /***** attachment section *****/
     @OnClick(R.id.imageview_add_attachment)
     public void onClickAddAttachment(View view){
-        DialogFactory.createPicturePopup(this, view).show();
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.getMenuInflater().inflate(R.menu.popup_menu_select_pictures, popup.getMenu());
+        popup.setOnMenuItemClickListener(item -> {
+            Intent intent;
+            switch (item.getItemId()) {
+                // Taking a new Picture
+                case R.id.take_new_picture:
+                    intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // This check is required to prevent crashing.
+                    if (intent.resolveActivity(getPackageManager()) == null) {
+                        break;
+                    }
+                    // Create an image file for captured image.
+                    File imageFile = null;
+                    if (!PermissionChecker.verifyStoragePermissions(this)) { break; }
+                    try {
+                        imageFile = createImageFile();
+                    } catch (IOException e) {
+                        DialogFactory.createGenericErrorDialog(this,
+                                "Cannot create a file,\nReason: " + e.getMessage()).show();
+                    }
+                    if (imageFile == null) { break; }
+                    Uri imageURI = FileProvider.getUriForFile(this,
+                            "com.hulkdx.moneymanager.fileprovider", imageFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                    startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
+                    // Save the image Uri to later get it from onActivityResult, because
+                    // OnActivityResult return empty intent by putting EXTRA_OUTPUT.
+                    mCapturedImagePath = imageURI.toString();
+                    break;
+                // Select from galary
+                case R.id.choose_gallery:
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    if (intent.resolveActivity(getPackageManager()) == null) {
+                        break;
+                    }
+                    startActivityForResult(intent, MainActivity.PICKED_IMAGE);
+                    break;
+            }
+            return true;
+        });
+        popup.show();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -428,8 +495,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             if (requestCode == PICKED_IMAGE ) {
                 mSelectedAttachment = data.getData().toString();
             } else if (requestCode == CAPTURED_IMAGE) {
-                // TODO TEST
-                mSelectedAttachment = data.getData().toString();
+                mSelectedAttachment = mCapturedImagePath;
             }
         }
     }
