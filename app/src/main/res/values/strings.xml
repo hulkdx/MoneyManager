@@ -25,6 +25,11 @@
         <item>JPY</item>
         <item>CNY</item>
     </string-array>
+    <string name="sync_desc">You can use this application by syncing the data to a server or without
+        syncing and saving the data locally on the device.\n\nDo you want to sync your data?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="enter">Enter</string>
 
 
     <!-- Main Activity -->

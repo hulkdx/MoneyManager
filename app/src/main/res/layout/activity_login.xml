@@ -47,9 +47,15 @@
 
     <Button
         android:id="@+id/enterBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/selector_btn_enter"/>
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/selector_btn_blue"
+        android:text="@string/enter"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif" />
 
 </LinearLayout>
