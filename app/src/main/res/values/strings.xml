@@ -10,7 +10,7 @@
     <!-- Login Activity -->
     <string name="error_invalid_name">Name cannot be empty</string>
     <string name="error_invalid_initial">Initial money cannot be empty</string>
-    <string name="login_your_name">Name</string>
+    <string name="login_your_name">Username</string>
     <string name="login_init_money">Initial Money</string>
     <string-array name="currency">
         <item>EUR</item>
@@ -30,6 +30,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enter">Enter</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Create an account</string>
 
 
     <!-- Main Activity -->

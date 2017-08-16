@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.ui.login.LoginActivity;
+import com.hulkdx.moneymanager.ui.login_sync.LoginSyncActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,7 +25,8 @@ public class ChooserActivity extends BaseActivity {
 
     @OnClick(R.id.btn_yes)
     void onClickYes() {
-
+        Intent intent = new Intent(this, LoginSyncActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.btn_no)
