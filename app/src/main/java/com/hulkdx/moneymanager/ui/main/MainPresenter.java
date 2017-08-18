@@ -18,7 +18,7 @@ import timber.log.Timber;
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private CompositeDisposable mDisposables;
-    private DataManager mDataManager;
+    private final DataManager mDataManager;
 
     @Inject
     public MainPresenter(DataManager dataManager) {

@@ -15,7 +15,7 @@ import com.hulkdx.moneymanager.ui.base.BasePresenter;
 public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     private Disposable mDisposable;
-    private DataManager mDataManager;
+    private final DataManager mDataManager;
 
     @Inject
     public LoginPresenter(DataManager dataManager) {
