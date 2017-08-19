@@ -15,6 +15,7 @@ import io.realm.Realm;
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
+import com.hulkdx.moneymanager.data.remote.HulkService;
 import com.hulkdx.moneymanager.injection.ApplicationContext;
 import com.hulkdx.moneymanager.injection.module.ApplicationModule;
 import com.hulkdx.moneymanager.util.RxEventBus;
@@ -31,5 +32,6 @@ public interface ApplicationComponent {
     DataManager dataManager();
     RxEventBus eventBus();
     Realm realm();
+    HulkService hulkService();
 
 }

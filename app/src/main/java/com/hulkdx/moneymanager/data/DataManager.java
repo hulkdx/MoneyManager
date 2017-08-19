@@ -10,19 +10,26 @@ import com.hulkdx.moneymanager.data.local.DatabaseHelper;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
+import com.hulkdx.moneymanager.data.model.User;
+import com.hulkdx.moneymanager.data.remote.HulkService;
+
 import java.util.List;
 import io.reactivex.Flowable;
+import retrofit2.Response;
 
 @Singleton
 public class DataManager {
 
     private final PreferencesHelper mPreferencesHelper;
     private final DatabaseHelper mDatabaseHelper;
+    private final HulkService mHulkService;
 
     @Inject
-    public DataManager(PreferencesHelper preferencesHelper, DatabaseHelper databaseHelper) {
+    public DataManager(PreferencesHelper preferencesHelper, DatabaseHelper databaseHelper,
+                       HulkService hulkService) {
         mPreferencesHelper = preferencesHelper;
         mDatabaseHelper = databaseHelper;
+        mHulkService = hulkService;
     }
 
     public PreferencesHelper getPreferencesHelper() {
@@ -52,5 +59,9 @@ public class DataManager {
     public Flowable<List<Transaction>> searchTransactionWithDate(int day, int month, int year,
                                                                  int isDailyOrMonthlyOrYearly) {
         return mDatabaseHelper.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly);
+    }
+
+    public Flowable<User> login(String username, String password) {
+        return mHulkService.postLogin(username, password);
     }
 }

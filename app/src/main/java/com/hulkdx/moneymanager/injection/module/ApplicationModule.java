@@ -11,6 +11,7 @@ import dagger.Provides;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+import com.hulkdx.moneymanager.data.remote.HulkService;
 import com.hulkdx.moneymanager.injection.ApplicationContext;
 
 import javax.inject.Singleton;
@@ -53,4 +54,9 @@ public class ApplicationModule {
         return Realm.getInstance(realmConfiguration);
     }
 
+    @Provides
+    @Singleton
+    HulkService provideRecrumoService() {
+        return HulkService.Creator.newService();
+    }
 }

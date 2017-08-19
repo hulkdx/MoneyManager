@@ -5,14 +5,29 @@
 package com.hulkdx.moneymanager.ui.login_sync;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import javax.inject.Inject;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.reactivex.Observable;
 
 public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView {
 
     @Inject LoginSyncPresenter mPresenter;
+
+    @BindView(R.id.et_username) EditText mUsernameET;
+    @BindView(R.id.et_password) EditText mPasswordET;
+    @BindView(R.id.login) Button mLoginBtn;
+    @BindView(R.id.username_input_layout) TextInputLayout mUsernameInputLayout;
+    @BindView(R.id.password_input_layout) TextInputLayout mPasswordInputLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +36,55 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
         setContentView(R.layout.activity_login_sync);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
+
+        //  validation
+        Observable<CharSequence> usernameObservable = RxTextView.textChanges(mUsernameET);
+        Observable<CharSequence> passwordObservable = RxTextView.textChanges(mPasswordET);
+        mPresenter.validation(usernameObservable, passwordObservable);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mPresenter.detachView();
     }
 
+    @OnClick(R.id.login)
+    void onClickLogin(){
+        mPresenter.login(mUsernameET.getText().toString(), mPasswordET.getText().toString());
+    }
+
+    /***** MVP View methods implementation *****/
+
+    @Override
+    public void showUserNameError() {
+        mUsernameInputLayout.setError(getString(R.string.error_invalid_username));
+        mUsernameInputLayout.setErrorEnabled(true);
+    }
+
+    @Override
+    public void hideUserNameError() {
+        mUsernameInputLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void showPasswordError() {
+        mPasswordInputLayout.setError(getString(R.string.error_invalid_username));
+        mPasswordInputLayout.setErrorEnabled(true);
+    }
+
+    @Override
+    public void hidePasswordError() {
+        mPasswordInputLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void setEnableLoginBtn(Boolean isValid) {
+        mLoginBtn.setEnabled(isValid);
+    }
+
+    @Override
+    public void showLoginError(String errorMessage) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
 }

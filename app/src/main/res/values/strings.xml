@@ -8,6 +8,8 @@
     <string name="dialog_error_title">Sorry</string>
 
     <!-- Login Activity -->
+    <string name="error_invalid_username">Username cannot be empty</string>
+    <string name="error_invalid_password">Password cannot be empty</string>
     <string name="error_invalid_name">Name cannot be empty</string>
     <string name="error_invalid_initial">Initial money cannot be empty</string>
     <string name="login_your_name">Username</string>
