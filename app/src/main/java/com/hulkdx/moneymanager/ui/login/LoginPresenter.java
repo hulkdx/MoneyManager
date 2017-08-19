@@ -53,12 +53,6 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
                 .subscribe(isValid -> getMvpView().setEnabledButton(isValid));
 
     }
-    /*
-    Check if the user logged in.
-     */
-    public boolean checkLoggedIn() {
-        return mDataManager.checkLoggedIn();
-    }
 
     public void saveUserInformation(String name, int initialMoney, String currency) {
         mDataManager.getPreferencesHelper().saveUserInformation(name, initialMoney, currency);

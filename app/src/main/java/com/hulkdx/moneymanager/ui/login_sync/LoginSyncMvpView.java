@@ -18,4 +18,6 @@ public interface LoginSyncMvpView extends MvpView {
 
 
     void showLoginError(String errorMessage);
+
+    void successfullyLoggedIn();
 }

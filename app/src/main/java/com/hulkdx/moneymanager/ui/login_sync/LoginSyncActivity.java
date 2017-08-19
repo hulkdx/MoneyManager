@@ -4,6 +4,7 @@
 
 package com.hulkdx.moneymanager.ui.login_sync;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
+import com.hulkdx.moneymanager.ui.main.MainActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -86,5 +88,12 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
     @Override
     public void showLoginError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successfullyLoggedIn() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

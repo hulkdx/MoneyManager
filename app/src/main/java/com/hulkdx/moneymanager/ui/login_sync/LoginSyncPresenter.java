@@ -78,8 +78,12 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(
-                            userResponse -> {
-                                Timber.i("Login onNext");
+                            user -> {
+                                // TODO! get the money and currency from api! SAVE TOKEN AND OTHER INFO
+                                mDataManager.getPreferencesHelper().saveUserInformation(
+                                        user.getUsername(), 0, "EUR");
+                                // Redirect to new screen.
+                                getMvpView().successfullyLoggedIn();
                             },
                             error -> {
                                 if (error instanceof HttpException){
