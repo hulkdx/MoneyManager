@@ -12,10 +12,8 @@ import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.data.model.User;
 import com.hulkdx.moneymanager.data.remote.HulkService;
-
 import java.util.List;
 import io.reactivex.Flowable;
-import retrofit2.Response;
 
 @Singleton
 public class DataManager {
