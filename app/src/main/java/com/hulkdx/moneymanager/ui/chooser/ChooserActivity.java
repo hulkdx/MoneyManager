@@ -25,6 +25,7 @@ public class ChooserActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chooser);
+        activityComponent().inject(this);
         ButterKnife.bind(this);
 
         if (mDataManager.checkLoggedIn()) {

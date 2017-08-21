@@ -7,6 +7,7 @@ package com.hulkdx.moneymanager.injection.component;
 import dagger.Subcomponent;
 import com.hulkdx.moneymanager.injection.PerActivity;
 import com.hulkdx.moneymanager.injection.module.ActivityModule;
+import com.hulkdx.moneymanager.ui.chooser.ChooserActivity;
 import com.hulkdx.moneymanager.ui.login.LoginActivity;
 import com.hulkdx.moneymanager.ui.login_sync.LoginSyncActivity;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
@@ -23,4 +24,6 @@ public interface ActivityComponent {
     void inject(MainActivity mainActivity);
 
     void inject(LoginSyncActivity loginSyncActivity);
+
+    void inject(ChooserActivity chooserActivity);
 }
