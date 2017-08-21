@@ -34,7 +34,10 @@
     <string name="enter">Enter</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="create_account">Create an account</string>
+    <string name="email">Email</string>
+    <string name="confirm_email">Confirm Email</string>
 
 
     <!-- Main Activity -->

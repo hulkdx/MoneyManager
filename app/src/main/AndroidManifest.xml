@@ -54,6 +54,9 @@
 
         <activity android:name=".ui.login_sync.LoginSyncActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
+
+        <activity android:name=".ui.register.RegisterActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
     </application>
 
 </manifest>

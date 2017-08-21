@@ -1,8 +1,8 @@
 /**
- * Created by Mohammad Jafarzadeh Rezvan on 8/14/2017.
+ * Created by Mohammad Jafarzadeh Rezvan on 8/21/2017.
  */
 
-package com.hulkdx.moneymanager.ui.login_sync;
+package com.hulkdx.moneymanager.ui.register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,34 +13,41 @@ import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
+import com.hulkdx.moneymanager.ui.login_sync.LoginSyncMvpView;
+import com.hulkdx.moneymanager.ui.login_sync.LoginSyncPresenter;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
-import com.hulkdx.moneymanager.ui.register.RegisterActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 
-public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView {
+public class RegisterActivity extends BaseActivity implements RegisterMvpView {
 
-    @Inject LoginSyncPresenter mPresenter;
+    @Inject RegisterPresenter mPresenter;
 
     @BindView(R.id.et_username) EditText mUsernameET;
-    @BindView(R.id.et_password) EditText mPasswordET;
-    @BindView(R.id.login) Button mLoginBtn;
     @BindView(R.id.username_input_layout) TextInputLayout mUsernameInputLayout;
+    @BindView(R.id.et_email) EditText mEmailET;
+    @BindView(R.id.email_input_layout) TextInputLayout mEmailInputLayout;
+    @BindView(R.id.et_confirm_email) EditText mConfirmEmailET;
+    @BindView(R.id.confirm_email_input_layout) TextInputLayout mConfirmEmailInputLayout;
+    @BindView(R.id.et_password) EditText mPasswordET;
     @BindView(R.id.password_input_layout) TextInputLayout mPasswordInputLayout;
+    @BindView(R.id.register) Button mRegisterBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponent().inject(this);
-        setContentView(R.layout.activity_login_sync);
+        setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
-        //  validation
+        // TODO validation
         Observable<CharSequence> usernameObservable = RxTextView.textChanges(mUsernameET);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mPasswordET);
         mPresenter.validation(usernameObservable, passwordObservable);
@@ -52,15 +59,10 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
         mPresenter.detachView();
     }
 
-    @OnClick(R.id.login)
-    void onClickLogin(){
-        mPresenter.login(mUsernameET.getText().toString(), mPasswordET.getText().toString());
-    }
-
     @OnClick(R.id.register)
     void onClickRegister(){
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        // TODO
+//        mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString());
     }
 
     /***** MVP View methods implementation *****/
@@ -89,18 +91,6 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
 
     @Override
     public void setEnableLoginBtn(Boolean isValid) {
-        mLoginBtn.setEnabled(isValid);
-    }
-
-    @Override
-    public void showLoginError(String errorMessage) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void successfullyLoggedIn() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        mRegisterBtn.setEnabled(isValid);
     }
 }

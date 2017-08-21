@@ -11,6 +11,7 @@ import com.hulkdx.moneymanager.ui.chooser.ChooserActivity;
 import com.hulkdx.moneymanager.ui.login.LoginActivity;
 import com.hulkdx.moneymanager.ui.login_sync.LoginSyncActivity;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
+import com.hulkdx.moneymanager.ui.register.RegisterActivity;
 
 /**
  * This component inject dependencies to all Activities across the application
@@ -26,4 +27,6 @@ public interface ActivityComponent {
     void inject(LoginSyncActivity loginSyncActivity);
 
     void inject(ChooserActivity chooserActivity);
+
+    void inject(RegisterActivity registerActivity);
 }
