@@ -48,14 +48,14 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
         mDisposables.add(
                 Observable.combineLatest(
                         username, password,
-                        (newName, newInitialMoney) -> {
+                        (newName, newPassword) -> {
                             boolean nameValid = !TextUtils.isEmpty(newName);
                             if (!nameValid) { getMvpView().showUserNameError(); }
                             else { getMvpView().hideUserNameError(); }
-                            boolean initialValid = !TextUtils.isEmpty(newInitialMoney);
-                            if (!initialValid) { getMvpView().showPasswordError(); }
+                            boolean passwordValid = !TextUtils.isEmpty(newPassword);
+                            if (!passwordValid) { getMvpView().showPasswordError(); }
                             else { getMvpView().hidePasswordError(); }
-                            return nameValid && initialValid;
+                            return nameValid && passwordValid;
                         })
                         .distinctUntilChanged()
                         .subscribe(isValid -> getMvpView().setEnableLoginBtn(isValid))
