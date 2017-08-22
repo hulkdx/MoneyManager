@@ -23,4 +23,8 @@ public interface RegisterMvpView extends MvpView {
     void showConfirmEmailError(int errorNumber);
 
     void hideConfirmEmailError();
+
+    void successfullyRegistered();
+
+    void showRegisterError(String errorMessage);
 }

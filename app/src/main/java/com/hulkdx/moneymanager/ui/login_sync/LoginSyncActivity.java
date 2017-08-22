@@ -94,6 +94,7 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
 
     @Override
     public void showLoginError(String errorMessage) {
+        // TODO show it in a better way!
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 

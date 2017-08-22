@@ -13,13 +13,9 @@ import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
-import com.hulkdx.moneymanager.ui.login_sync.LoginSyncMvpView;
-import com.hulkdx.moneymanager.ui.login_sync.LoginSyncPresenter;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -64,7 +60,8 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     @OnClick(R.id.register)
     void onClickRegister(){
         // TODO
-//        mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString());
+        mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString(),
+                mEmailET.getText().toString());
     }
 
     /***** MVP View methods implementation *****/
@@ -126,5 +123,18 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     @Override
     public void hideConfirmEmailError() {
         mConfirmEmailInputLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void successfullyRegistered() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showRegisterError(String errorMessage) {
+        // TODO show it in a better way!
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 }

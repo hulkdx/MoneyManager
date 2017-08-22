@@ -22,6 +22,13 @@ public interface HulkService {
     @POST("login")
     Flowable<User> postLogin(@Field("username") String username, @Field("password") String password);
 
+    @FormUrlEncoded
+    @POST("register")
+    Flowable<User> postRegister(@Field("username") String username,
+                                @Field("password") String password,
+                                @Field("email") String email,
+                                @Field("email2") String email2);
+
     class Creator {
         public static HulkService newService() {
             Gson gson = new GsonBuilder()

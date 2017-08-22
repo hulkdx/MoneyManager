@@ -62,4 +62,8 @@ public class DataManager {
     public Flowable<User> login(String username, String password) {
         return mHulkService.postLogin(username, password);
     }
+
+    public Flowable<User> register(String username, String password, String email) {
+        return mHulkService.postRegister(username, password, email, email);
+    }
 }

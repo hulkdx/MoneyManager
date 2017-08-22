@@ -4,23 +4,18 @@
 package com.hulkdx.moneymanager.ui.register;
 
 import android.text.TextUtils;
-
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
-import com.hulkdx.moneymanager.ui.login_sync.LoginSyncMvpView;
-
-import org.json.JSONObject;
-
+import com.hulkdx.moneymanager.util.JsonReader;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 import retrofit2.HttpException;
+import timber.log.Timber;
 
 @ConfigPersistent
 public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
@@ -85,32 +80,33 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
 
     }
 
-    public void register(String username, String password) {
-//  TODO       mDisposables.add(
-//            mDataManager.login(username, password)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe(
-//                            user -> {
-//                                // TODO! get the money and currency from api! SAVE TOKEN AND OTHER INFO
-//                                mDataManager.getPreferencesHelper().saveUserInformation(
-//                                        user.getUsername(), 0, "EUR");
+    public void register(String username, String password, String email) {
+         mDisposables.add(
+            mDataManager.register(username, password, email)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                            user -> {
+                                Timber.i("onNext");
+                                // TODO! get the money and currency from api! SAVE TOKEN AND OTHER INFO
+                                mDataManager.getPreferencesHelper().saveUserInformation(
+                                        user.getUsername(), 0, "EUR");
 //                                // Redirect to new screen.
-//                                getMvpView().successfullyLoggedIn();
-//                            },
-//                            error -> {
-//                                if (error instanceof HttpException){
-//                                    // Username and password is invalid!
-//                                    if (((HttpException) error).code() == 500) {
-//                                        getMvpView().showLoginError(getErrorMessage(
-//                                                ((HttpException) error).response().errorBody()
-//                                        ));
-//                                    }
-//                                } else {
-//                                    getMvpView().showLoginError(error.toString());
-//                                }
-//                            }
-//                    )
-//        );
+                                getMvpView().successfullyRegistered();
+                            },
+                            error -> {
+                                Timber.i("onError");
+                                if (error instanceof HttpException){
+                                    if (((HttpException) error).code() == 500) {
+                                        getMvpView().showRegisterError( JsonReader.getErrorMessage(
+                                                ((HttpException) error).response().errorBody()));
+                                    }
+                                } else {
+                                    getMvpView().showRegisterError(error.toString());
+                                }
+                            },
+                            () -> Timber.i("onComplete")
+                    )
+        );
     }
 }

@@ -7,19 +7,13 @@ import android.text.TextUtils;
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
-import com.hulkdx.moneymanager.ui.login.LoginMvpView;
-
-import org.json.JSONObject;
-
+import com.hulkdx.moneymanager.util.JsonReader;
 import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 import retrofit2.HttpException;
-import timber.log.Timber;
 
 @ConfigPersistent
 public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
@@ -42,15 +36,6 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
     public void detachView() {
         super.detachView();
         if (mDisposables != null) mDisposables.clear();
-    }
-
-    private String getErrorMessage(ResponseBody responseBody) {
-        try {
-            JSONObject jsonObject = new JSONObject(responseBody.string());
-            return jsonObject.getString("error");
-        } catch (Exception e) {
-            return e.getMessage();
-        }
     }
 
     public void validation(Observable<CharSequence> username, Observable<CharSequence> password) {
@@ -89,9 +74,8 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                                 if (error instanceof HttpException){
                                     // Username and password is invalid!
                                     if (((HttpException) error).code() == 500) {
-                                        getMvpView().showLoginError(getErrorMessage(
-                                                ((HttpException) error).response().errorBody()
-                                        ));
+                                        getMvpView().showLoginError( JsonReader.getErrorMessage(
+                                                ((HttpException) error).response().errorBody()));
                                     }
                                 } else {
                                     getMvpView().showLoginError(error.toString());
