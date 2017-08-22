@@ -16,4 +16,11 @@ public interface RegisterMvpView extends MvpView {
 
     void setEnableLoginBtn(Boolean isValid);
 
+    void hideEmailError();
+
+    void showEmailError(int errorNumber);
+
+    void showConfirmEmailError(int errorNumber);
+
+    void hideConfirmEmailError();
 }

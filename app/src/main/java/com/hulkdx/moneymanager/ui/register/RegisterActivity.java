@@ -50,7 +50,9 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
         // TODO validation
         Observable<CharSequence> usernameObservable = RxTextView.textChanges(mUsernameET);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mPasswordET);
-        mPresenter.validation(usernameObservable, passwordObservable);
+        Observable<CharSequence> emailObservable = RxTextView.textChanges(mEmailET);
+        Observable<CharSequence> confirmRmailObservable = RxTextView.textChanges(mConfirmEmailET);
+        mPresenter.validation(usernameObservable, passwordObservable, emailObservable, confirmRmailObservable);
     }
 
     @Override
@@ -92,5 +94,37 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     @Override
     public void setEnableLoginBtn(Boolean isValid) {
         mRegisterBtn.setEnabled(isValid);
+    }
+
+    @Override
+    public void hideEmailError() {
+        mEmailInputLayout.setErrorEnabled(false);
+    }
+
+    @Override
+    public void showEmailError(int errorNumber) {
+        mEmailInputLayout.setErrorEnabled(true);
+        if (errorNumber == 0) {
+            mEmailInputLayout.setError(getString(R.string.error_invalid_email));
+        } else if (errorNumber == 1) {
+            mEmailInputLayout.setError(getString(R.string.error_is_not_valid_email));
+        }
+    }
+
+    @Override
+    public void showConfirmEmailError(int errorNumber) {
+        mConfirmEmailInputLayout.setErrorEnabled(true);
+        if (errorNumber == 0) {
+            mConfirmEmailInputLayout.setError(getString(R.string.error_invalid_email));
+        } else if (errorNumber==1) {
+            mConfirmEmailInputLayout.setError(getString(R.string.error_is_not_valid_email));
+        } else if (errorNumber==2) {
+            mConfirmEmailInputLayout.setError(getString(R.string.error_not_equal_email_and_confirm));
+        }
+    }
+
+    @Override
+    public void hideConfirmEmailError() {
+        mConfirmEmailInputLayout.setErrorEnabled(false);
     }
 }

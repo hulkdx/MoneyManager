@@ -10,6 +10,9 @@
     <!-- Login Activity -->
     <string name="error_invalid_username">Username cannot be empty</string>
     <string name="error_invalid_password">Password cannot be empty</string>
+    <string name="error_invalid_email">Email cannot be empty</string>
+    <string name="error_not_equal_email_and_confirm">Is not equals to email!</string>
+    <string name="error_is_not_valid_email">Is not a valid email!</string>
     <string name="error_invalid_name">Name cannot be empty</string>
     <string name="error_invalid_initial">Initial money cannot be empty</string>
     <string name="login_your_name">Username</string>
