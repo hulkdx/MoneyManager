@@ -40,10 +40,17 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
-        //  validation
+        // Validation
         Observable<CharSequence> usernameObservable = RxTextView.textChanges(mUsernameET);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mPasswordET);
         mPresenter.validation(usernameObservable, passwordObservable);
+
+        // Checking if it is redirected from @link RegisterActivity.class:successfullyRegistered
+        if (getIntent().getExtras() != null){
+            mUsernameET.setText(
+                    getIntent().getExtras().getString(RegisterActivity.REGISTERED_USERNAME, ""));
+            mPasswordET.requestFocus();
+        }
     }
 
     @Override
@@ -54,6 +61,7 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
 
     @OnClick(R.id.login)
     void onClickLogin(){
+        mLoginBtn.setEnabled(false);
         mPresenter.login(mUsernameET.getText().toString(), mPasswordET.getText().toString());
     }
 

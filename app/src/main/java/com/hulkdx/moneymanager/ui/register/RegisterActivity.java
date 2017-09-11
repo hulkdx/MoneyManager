@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
-import com.hulkdx.moneymanager.ui.main.MainActivity;
+import com.hulkdx.moneymanager.ui.login_sync.LoginSyncActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -22,6 +22,8 @@ import butterknife.OnClick;
 import io.reactivex.Observable;
 
 public class RegisterActivity extends BaseActivity implements RegisterMvpView {
+
+    public static final String REGISTERED_USERNAME = "username_registered";
 
     @Inject RegisterPresenter mPresenter;
 
@@ -43,7 +45,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
-        // TODO validation
+        // Validation
         Observable<CharSequence> usernameObservable = RxTextView.textChanges(mUsernameET);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mPasswordET);
         Observable<CharSequence> emailObservable = RxTextView.textChanges(mEmailET);
@@ -59,6 +61,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
 
     @OnClick(R.id.register)
     void onClickRegister(){
+        mRegisterBtn.setEnabled(false);
         // TODO
         mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString(),
                 mEmailET.getText().toString());
@@ -89,7 +92,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     }
 
     @Override
-    public void setEnableLoginBtn(Boolean isValid) {
+    public void setEnableRegisterBtn(Boolean isValid) {
         mRegisterBtn.setEnabled(isValid);
     }
 
@@ -126,15 +129,16 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     }
 
     @Override
-    public void successfullyRegistered() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    public void successfullyRegistered(String username) {
+        Toast.makeText(this, "Register completed, please login now.", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, LoginSyncActivity.class);
+        intent.putExtra(REGISTERED_USERNAME, username);
         startActivity(intent);
     }
 
     @Override
     public void showRegisterError(String errorMessage) {
         // TODO show it in a better way!
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
     }
 }

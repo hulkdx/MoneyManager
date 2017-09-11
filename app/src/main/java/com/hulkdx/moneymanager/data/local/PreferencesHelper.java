@@ -17,6 +17,7 @@ public class PreferencesHelper {
     public static final String USER_NAME = "name";
     public static final String USER_MONEY = "totalMoney";
     public static final String SAVED_CURRENCY = "saved_currency";
+    public static final String SYNC = "sync";
 
     private final SharedPreferences mPref;
 
@@ -42,12 +43,19 @@ public class PreferencesHelper {
     }
 
     public void saveUserInformation(String name, float initialMoney, String currency){
-        mPref.edit().putString(USER_NAME, name).putFloat(USER_MONEY, initialMoney).putString(SAVED_CURRENCY, currency).apply();
+        mPref.edit()
+                .putString(USER_NAME, name)
+                .putFloat(USER_MONEY, initialMoney)
+                .putString(SAVED_CURRENCY, currency).apply();
     }
 
     public float updateBalance(float amount) {
         float newAmount = getUserMoney() + amount;
         mPref.edit().putFloat(USER_MONEY, newAmount).apply();
         return newAmount;
+    }
+
+    public void saveSync(boolean isSynced) {
+        mPref.edit().putBoolean(SYNC, isSynced).apply();
     }
 }

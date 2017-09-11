@@ -56,6 +56,7 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
     public void saveUserInformation(String name, int initialMoney, String currency) {
         mDataManager.getPreferencesHelper().saveUserInformation(name, initialMoney, currency);
+        mDataManager.getPreferencesHelper().saveSync(false);
 
     }
 }

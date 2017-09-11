@@ -14,7 +14,7 @@ public interface RegisterMvpView extends MvpView {
 
     void hidePasswordError();
 
-    void setEnableLoginBtn(Boolean isValid);
+    void setEnableRegisterBtn(Boolean isValid);
 
     void hideEmailError();
 
@@ -24,7 +24,7 @@ public interface RegisterMvpView extends MvpView {
 
     void hideConfirmEmailError();
 
-    void successfullyRegistered();
+    void successfullyRegistered(String username);
 
     void showRegisterError(String errorMessage);
 }

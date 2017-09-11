@@ -67,6 +67,7 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                                 // TODO! get the money and currency from api! SAVE TOKEN AND OTHER INFO
                                 mDataManager.getPreferencesHelper().saveUserInformation(
                                         user.getUsername(), 0, "EUR");
+                                mDataManager.getPreferencesHelper().saveSync(true);
                                 // Redirect to new screen.
                                 getMvpView().successfullyLoggedIn();
                             },
@@ -80,6 +81,7 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                                 } else {
                                     getMvpView().showLoginError(error.toString());
                                 }
+                                getMvpView().setEnableLoginBtn(true);
                             }
                     )
         );

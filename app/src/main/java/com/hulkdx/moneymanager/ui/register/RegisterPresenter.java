@@ -75,7 +75,7 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
                                     emailEquals && isNewEmailAnEmail && isNewConfEmailAnEmail;
                         })
                         .distinctUntilChanged()
-                        .subscribe(isValid -> getMvpView().setEnableLoginBtn(isValid))
+                        .subscribe(isValid -> getMvpView().setEnableRegisterBtn(isValid))
         );
 
     }
@@ -88,22 +88,25 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
                     .subscribe(
                             user -> {
                                 Timber.i("onNext");
-                                // TODO! get the money and currency from api! SAVE TOKEN AND OTHER INFO
-                                mDataManager.getPreferencesHelper().saveUserInformation(
-                                        user.getUsername(), 0, "EUR");
-//                                // Redirect to new screen.
-                                getMvpView().successfullyRegistered();
+                                // Show Register is complete, login now.
+                                getMvpView().successfullyRegistered(user.getUsername());
+                                getMvpView().setEnableRegisterBtn(true);
                             },
                             error -> {
                                 Timber.i("onError");
                                 if (error instanceof HttpException){
-                                    if (((HttpException) error).code() == 500) {
+                                    int errorCode = ((HttpException) error).code();
+
+                                    if (errorCode == 500 || errorCode == 400) {
                                         getMvpView().showRegisterError( JsonReader.getErrorMessage(
                                                 ((HttpException) error).response().errorBody()));
+                                    } else {
+                                        getMvpView().showRegisterError(error.toString());
                                     }
                                 } else {
                                     getMvpView().showRegisterError(error.toString());
                                 }
+                                getMvpView().setEnableRegisterBtn(true);
                             },
                             () -> Timber.i("onComplete")
                     )
