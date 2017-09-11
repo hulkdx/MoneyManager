@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mMainPresenter.loadTransactions();
         mMainPresenter.loadCategories();
         mCurrentDateCalendar = Calendar.getInstance();
-
+        // PopupMenu for attachment (take a new picture, or choose from gallery)
         popup = new PopupMenu(this, mAddAttachmentIV);
         popup.getMenuInflater().inflate(R.menu.popup_menu_select_pictures, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
