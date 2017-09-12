@@ -18,6 +18,7 @@ public class PreferencesHelper {
     public static final String USER_MONEY = "totalMoney";
     public static final String SAVED_CURRENCY = "saved_currency";
     public static final String SYNC = "sync";
+    public static final String USER_TOKEN = "user_token";
 
     private final SharedPreferences mPref;
 
@@ -57,5 +58,13 @@ public class PreferencesHelper {
 
     public void saveSync(boolean isSynced) {
         mPref.edit().putBoolean(SYNC, isSynced).apply();
+    }
+
+    public boolean getSync(){
+        return mPref.getBoolean(SYNC, false);
+    }
+
+    public void saveToken(String token) {
+        mPref.edit().putString(USER_TOKEN, token).apply();
     }
 }
