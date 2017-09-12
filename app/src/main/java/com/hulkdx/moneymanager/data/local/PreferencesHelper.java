@@ -67,4 +67,8 @@ public class PreferencesHelper {
     public void saveToken(String token) {
         mPref.edit().putString(USER_TOKEN, token).apply();
     }
+
+    public String getToken(){
+        return mPref.getString(USER_TOKEN, "");
+    }
 }

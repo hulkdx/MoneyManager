@@ -10,6 +10,7 @@ import com.hulkdx.moneymanager.data.local.DatabaseHelper;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
+import com.hulkdx.moneymanager.data.model.TransactionResponse;
 import com.hulkdx.moneymanager.data.model.User;
 import com.hulkdx.moneymanager.data.remote.HulkService;
 import java.util.List;
@@ -65,5 +66,9 @@ public class DataManager {
 
     public Flowable<User> register(String username, String password, String email) {
         return mHulkService.postRegister(username, password, email, email);
+    }
+
+    public Flowable<TransactionResponse> syncTransactions(String token) {
+        return mHulkService.getTransactions("JWT " + token);
     }
 }

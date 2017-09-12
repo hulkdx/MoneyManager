@@ -15,11 +15,13 @@ import timber.log.Timber;
 import com.hulkdx.moneymanager.HulkApplication;
 import com.hulkdx.moneymanager.util.AndroidComponentUtil;
 import com.hulkdx.moneymanager.util.NetworkUtil;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SyncService extends Service {
 
     @Inject DataManager mDataManager;
-//    private Subscription mSubscription;
+    private Disposable mDisposable;
 
     public static Intent getStartIntent(Context context) {
         return new Intent(context, SyncService.class);
@@ -37,8 +39,6 @@ public class SyncService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
-        Timber.i("Starting sync...");
-
         if (!NetworkUtil.isNetworkConnected(this)) {
             Timber.i("Sync canceled, connection not available");
             AndroidComponentUtil.toggleComponent(this, SyncOnConnectionAvailable.class, true);
@@ -46,12 +46,32 @@ public class SyncService extends Service {
             return START_NOT_STICKY;
         }
 
+        Timber.i("Sync started...");
+        if (mDisposable != null) mDisposable.dispose();
+        mDisposable =
+                mDataManager.syncTransactions(mDataManager.getPreferencesHelper().getToken())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(
+                                transactions -> {
+                                    Timber.i("onNext, amountCount=" + transactions.getAmountCount());
+                                    stopSelf();
+                                },
+                                throwable -> {
+                                    Timber.i("onError");
+                                    stopSelf();
+                                },
+                                () -> {
+                                    Timber.i("onComplete");
+                                    stopSelf();
+                                }
+                        );
+
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-//        if (mSubscription != null) mSubscription.unsubscribe();
+        if (mDisposable != null) mDisposable.dispose();
         super.onDestroy();
     }
 

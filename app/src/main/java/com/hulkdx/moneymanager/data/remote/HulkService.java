@@ -2,6 +2,7 @@ package com.hulkdx.moneymanager.data.remote;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hulkdx.moneymanager.data.model.TransactionResponse;
 import com.hulkdx.moneymanager.data.model.User;
 import io.reactivex.Flowable;
 import retrofit2.Retrofit;
@@ -9,6 +10,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -28,6 +31,9 @@ public interface HulkService {
                                 @Field("password") String password,
                                 @Field("email") String email,
                                 @Field("email2") String email2);
+
+    @GET("transactions/get")
+    Flowable<TransactionResponse> getTransactions(@Header("Authorization") String auth);
 
     class Creator {
         public static HulkService newService() {
