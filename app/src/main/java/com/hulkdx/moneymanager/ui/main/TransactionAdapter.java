@@ -69,8 +69,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                      mTransactions.get(position).getAmount() * -1));
         }
         holder.balanceCurrencyTV.setText(currencyName);
-        holder.dateMonthTV.setText(new DateFormatSymbols().getShortMonths()[mTransactions.get(position).getMonth()]);
-        holder.dateDayTV.setText(String.valueOf(mTransactions.get(position).getDay()));
+
+        // Date format = year-month-day
+        String date = mTransactions.get(position).getDate();
+//        String year = date.split("-")[0];
+        String month = new DateFormatSymbols().getShortMonths()[Integer.valueOf(date.split("-")[1])-1];
+        String day = date.split("-")[2];
+        holder.dateMonthTV.setText(month);
+        holder.dateDayTV.setText(day);
+
         if (mTransactions.get(position).getCategory() != null ) {
             holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
             holder.hexColorIV.setBackgroundColor(mTransactions.get(position).getCategory().getHexColor());

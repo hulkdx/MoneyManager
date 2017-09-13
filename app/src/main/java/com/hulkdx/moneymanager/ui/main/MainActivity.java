@@ -244,8 +244,11 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             return;
         }
         float amount = Float.parseFloat(mAddNewEditText.getText().toString());
+        String dateFormat = mDatePicker.getYear() + "-" +
+                (mDatePicker.getMonth()+1) + "-" + mDatePicker.getDayOfMonth();
+
         Transaction newTransaction = new Transaction(
-                mDatePicker.getDayOfMonth(), mDatePicker.getMonth(), mDatePicker.getYear(),
+                dateFormat,
                 mCurrencyPlusTextView.getText().equals("+") ? amount : -1 * amount,
                 mSelectedAttachment);
         mMainPresenter.addTransaction(newTransaction, mSelectedCategoryId);
