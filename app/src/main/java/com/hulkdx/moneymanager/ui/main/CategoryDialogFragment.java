@@ -25,6 +25,7 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
     private LinearLayout colorsLinearLayout;
     private CategoryFragmentListener mListener;
     private static int catColorsSelectedImageViews = -1;
+    int[] colorsArray = null;
 
 	public CategoryDialogFragment() { }
 
@@ -77,12 +78,15 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof CategoryFragmentListener) {
             mListener = (CategoryFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+        colorsArray = getActivity().getResources().getIntArray(R.array.category_colors);
     }
 
     @Override
@@ -97,8 +101,9 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
         if (nameEditText.getText().toString().isEmpty() || catColorsSelectedImageViews == -1) {
             return;
         }
-        int[] colorsArray = getActivity().getResources().getIntArray(R.array.category_colors);
-        mListener.onClickOkCategory(new Category(nameEditText.getText().toString(), colorsArray[catColorsSelectedImageViews] ));
+
+        String hexColor = String.format("#%06X", (0xFFFFFF & colorsArray[catColorsSelectedImageViews]));
+        mListener.onClickOkCategory(new Category(nameEditText.getText().toString(), hexColor));
     }
 
     /**

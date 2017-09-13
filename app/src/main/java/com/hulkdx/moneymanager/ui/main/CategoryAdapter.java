@@ -4,6 +4,7 @@
 package com.hulkdx.moneymanager.ui.main;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +63,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.setCategory(mCategories.get(position));
         holder.nameTV.setText(mCategories.get(position).getName());
         holder.hexColorImageView.setVisibility(View.VISIBLE);
-        holder.hexColorImageView.setBackgroundColor(mCategories.get(position).getHexColor());
+
+        holder.hexColorImageView.setBackgroundColor(Color.parseColor(mCategories.get(position).getHexColor()));
     }
 
     @Override

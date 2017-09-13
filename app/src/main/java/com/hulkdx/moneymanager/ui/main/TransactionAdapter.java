@@ -5,6 +5,7 @@ package com.hulkdx.moneymanager.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -80,7 +81,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         if (mTransactions.get(position).getCategory() != null ) {
             holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
-            holder.hexColorIV.setBackgroundColor(mTransactions.get(position).getCategory().getHexColor());
+
+            holder.hexColorIV.setBackgroundColor(Color.parseColor(mTransactions.get(position).getCategory().getHexColor()));
         }
         if (mTransactions.get(position).getAttachment() != null ) {
             holder.attachmentView.setVisibility(View.VISIBLE);

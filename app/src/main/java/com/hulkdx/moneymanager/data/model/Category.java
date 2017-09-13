@@ -12,14 +12,14 @@ public class Category extends RealmObject {
     @PrimaryKey
     private long id;
     private String name;
-    private int colorIdInResource;
+    private String hexColor;
 
     public Category() {
     }
 
-    public Category(String name, int colorIdInResource) {
+    public Category(String name, String hexColor) {
         this.name = name;
-        this.colorIdInResource = colorIdInResource;
+        this.hexColor = hexColor;
     }
 
     public String getName() {
@@ -30,15 +30,15 @@ public class Category extends RealmObject {
         this.name = name;
     }
 
-    public int getHexColor() {
-        return colorIdInResource;
-    }
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getHexColor() {
+        return hexColor;
     }
 }
