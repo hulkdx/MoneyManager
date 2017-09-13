@@ -91,6 +91,7 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
         mListener = null;
     }
 
+    // On Clicking Ok button in dialog
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         if (nameEditText.getText().toString().isEmpty() || catColorsSelectedImageViews == -1) {
