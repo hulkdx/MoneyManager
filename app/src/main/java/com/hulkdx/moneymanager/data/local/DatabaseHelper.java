@@ -5,6 +5,7 @@ package com.hulkdx.moneymanager.data.local;
 
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
+import com.hulkdx.moneymanager.data.model.TransactionResponse;
 import com.hulkdx.moneymanager.util.RxUtil;
 import java.util.List;
 import javax.inject.Inject;
@@ -86,6 +87,27 @@ public class DatabaseHelper {
         return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
+    }
+    /*
+     * Add a list of Transactions into database.
+     * @param response : @link TransactionResponse from DataManager:syncTransactions
+     */
+    public Flowable<TransactionResponse> addTransactions(TransactionResponse response) {
+        return Flowable.create(subscriber -> {
+            Realm realm = null;
+            try {
+                realm = mRealmProvider.get();
+                realm.executeTransaction(
+                        bgRealm -> {
+                            bgRealm.copyToRealmOrUpdate(response.getResponse());
+                        });
+            } finally {
+                subscriber.onNext(response);
+                if (realm != null) {
+                    realm.close();
+                }
+            }
+        }, BackpressureStrategy.LATEST);
     }
 
     /************************* Category Section *************************/
