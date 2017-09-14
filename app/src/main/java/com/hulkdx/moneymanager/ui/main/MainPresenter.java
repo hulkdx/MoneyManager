@@ -122,15 +122,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 mDataManager.syncCategories(mDataManager.getPreferencesHelper().getToken())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                categories -> {
-                                    Timber.i("onNext syncCategories");
-                                },
-                                throwable -> {
-                                    Timber.i("onError syncCategories");
-                                },
-                                () -> {
-                                    Timber.i("onComplete syncCategories");
-                                }
+                                categories -> Timber.i("onNext syncCategories"),
+                                error -> getMvpView().showError("syncCategories", error),
+                                () -> Timber.i("onComplete syncCategories")
                         )
         );
     }
