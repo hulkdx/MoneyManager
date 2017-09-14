@@ -62,6 +62,26 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         );
     }
 
+    public void syncTransactions() {
+        mDisposables.add(
+                mDataManager.syncTransactions(mDataManager.getPreferencesHelper().getToken())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                transactions -> {
+                                    Timber.i("onNext, amountCount=" + transactions.getAmountCount());
+                                },
+                                throwable -> {
+                                    Timber.i("onError");
+                                },
+                                () -> {
+                                    Timber.i("onComplete");
+                                }
+                        )
+        );
+    }
+
+
+
     /*
     * Add a new Transaction.
      */

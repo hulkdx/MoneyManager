@@ -35,7 +35,6 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
-import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
@@ -112,8 +111,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         ButterKnife.bind(this);
         SetupUI();
 
+
         if (mPreferencesHelper.getSync()) {
-            startService(SyncService.getStartIntent(this));
+            mMainPresenter.syncTransactions();
         }
 
     }
