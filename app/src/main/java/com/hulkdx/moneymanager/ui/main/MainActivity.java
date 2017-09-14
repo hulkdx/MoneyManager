@@ -92,7 +92,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
     @BindView(R.id.imageview_add_attachment) ImageView mAddAttachmentIV;
-    PopupMenu popup;
+    private PopupMenu popup;
 
     private long mSelectedCategoryId = -1;
     // The uri string of selected attachment.
@@ -114,6 +114,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
         if (mPreferencesHelper.getSync()) {
             mMainPresenter.syncTransactions();
+            mMainPresenter.syncCategories();
         }
 
     }

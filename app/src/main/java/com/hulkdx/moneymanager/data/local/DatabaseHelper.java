@@ -89,7 +89,7 @@ public class DatabaseHelper {
                 .map(transactions -> transactions);
     }
     /*
-     * Add a list of Transactions into database.
+     * Add a list of Transactions from the api into database.
      * @param response : @link TransactionResponse from DataManager:syncTransactions
      */
     public Flowable<TransactionResponse> addTransactions(TransactionResponse response) {
@@ -97,10 +97,12 @@ public class DatabaseHelper {
             Realm realm = null;
             try {
                 realm = mRealmProvider.get();
-                realm.executeTransaction(
+                realm.executeTransactionAsync(
                         bgRealm -> {
                             bgRealm.copyToRealmOrUpdate(response.getResponse());
-                        });
+                        },
+                        subscriber::onComplete,
+                        subscriber::onError);
             } finally {
                 subscriber.onNext(response);
                 if (realm != null) {
@@ -111,6 +113,9 @@ public class DatabaseHelper {
     }
 
     /************************* Category Section *************************/
+    /*
+     * Get all categories from db.
+     */
     public Flowable<List<Category>> getCategories(){
         Realm realm = mRealmProvider.get();
         RealmResults<Category> results = realm.where(Category.class).findAllAsync();
@@ -118,7 +123,10 @@ public class DatabaseHelper {
                 .filter(RealmResults::isLoaded)
                 .map(category -> category);
     }
-
+    /*
+     * Add a new Category into database.
+     * @param newCategory : the new category to be added in database.
+     */
     public Flowable<Category> addCategory(final Category newCategory) {
         return Flowable.create(subscriber -> {
             Realm realm = null;
@@ -131,6 +139,29 @@ public class DatabaseHelper {
                             int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
                             newCategory.setId(nextId);
                             bgRealm.insert(newCategory);
+                        },
+                        subscriber::onComplete,
+                        subscriber::onError);
+            }
+            finally {
+                if (realm != null) {
+                    realm.close();
+                }
+            }
+        }, BackpressureStrategy.LATEST);
+    }
+    /*
+     * Add a list of categories from the api into database.
+     * @param categories : the list of categories
+     */
+    public Flowable<List<Category>> addCategories(List<Category> categories) {
+        return Flowable.create(subscriber -> {
+            Realm realm = null;
+            try {
+                realm = mRealmProvider.get();
+                realm.executeTransactionAsync(
+                        bgRealm -> {
+                            bgRealm.copyToRealmOrUpdate(categories);
                         },
                         subscriber::onComplete,
                         subscriber::onError);

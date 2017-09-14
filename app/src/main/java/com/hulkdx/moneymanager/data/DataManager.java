@@ -15,6 +15,7 @@ import com.hulkdx.moneymanager.data.model.User;
 import com.hulkdx.moneymanager.data.remote.HulkService;
 import java.util.List;
 import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 @Singleton
@@ -72,6 +73,14 @@ public class DataManager {
     public Flowable<TransactionResponse> syncTransactions(String token) {
         return mHulkService.getTransactions("JWT " + token)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .concatMap(mDatabaseHelper::addTransactions);
+    }
+
+    public Flowable<List<Category>> syncCategories(String token) {
+        return mHulkService.getCategories("JWT " + token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .concatMap(mDatabaseHelper::addCategories);
     }
 }

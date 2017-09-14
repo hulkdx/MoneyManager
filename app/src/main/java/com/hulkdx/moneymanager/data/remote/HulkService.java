@@ -2,8 +2,10 @@ package com.hulkdx.moneymanager.data.remote;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.TransactionResponse;
 import com.hulkdx.moneymanager.data.model.User;
+import java.util.List;
 import io.reactivex.Flowable;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -34,6 +36,9 @@ public interface HulkService {
 
     @GET("transactions/get")
     Flowable<TransactionResponse> getTransactions(@Header("Authorization") String auth);
+
+    @GET("categories/get")
+    Flowable<List<Category>> getCategories(@Header("Authorization") String auth);
 
     class Creator {
         public static HulkService newService() {

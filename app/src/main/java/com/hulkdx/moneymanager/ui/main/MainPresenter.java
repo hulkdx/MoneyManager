@@ -12,6 +12,7 @@ import com.hulkdx.moneymanager.ui.base.BasePresenter;
 import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 @ConfigPersistent
@@ -81,6 +82,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     }
     /*
      * Add a new Transaction.
+     * TODO check for isSync
      */
     public void addTransaction(final Transaction newTransaction, long categoryId) {
         mDisposables.add(
@@ -113,7 +115,28 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         );
     }
     /*
+     * Get categories from the api and put it in database.
+     */
+    public void syncCategories() {
+        mDisposables.add(
+                mDataManager.syncCategories(mDataManager.getPreferencesHelper().getToken())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                categories -> {
+                                    Timber.i("onNext syncCategories");
+                                },
+                                throwable -> {
+                                    Timber.i("onError syncCategories");
+                                },
+                                () -> {
+                                    Timber.i("onComplete syncCategories");
+                                }
+                        )
+        );
+    }
+    /*
      * Add a new category.
+     * TODO check for isSync
      */
     public void addCategory(final Category newCategory) {
         mDisposables.add(
