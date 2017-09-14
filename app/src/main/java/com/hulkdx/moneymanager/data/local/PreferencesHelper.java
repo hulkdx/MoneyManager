@@ -50,6 +50,11 @@ public class PreferencesHelper {
                 .putString(SAVED_CURRENCY, currency).apply();
     }
 
+    public void setUserMoney(float userMoney) {
+        mPref.edit().putFloat(USER_MONEY, userMoney).apply();
+    }
+
+    // Add amount to existing amount.
     public float updateBalance(float amount) {
         float newAmount = getUserMoney() + amount;
         mPref.edit().putFloat(USER_MONEY, newAmount).apply();

@@ -44,12 +44,12 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     * Load transactions from DataManager.
      */
     public void loadTransactions() {
-        getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper().getUserMoney());
         mDisposables.add(
                 mDataManager.getTransactions()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactions -> {
+                            getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper().getUserMoney());
                             if (transactions.isEmpty()) {
                             getMvpView().showEmptyTransactions(transactions);
                             } else {
@@ -68,13 +68,15 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 transactions -> {
-                                    Timber.i("onNext, amountCount=" + transactions.getAmountCount());
+                                    Timber.i("onNext syncTransactions");
+                                    mDataManager.getPreferencesHelper().setUserMoney(
+                                            transactions.getAmountCount());
                                 },
                                 throwable -> {
-                                    Timber.i("onError");
+                                    Timber.i("onError syncTransactions");
                                 },
                                 () -> {
-                                    Timber.i("onComplete");
+                                    Timber.i("onComplete syncTransactions");
                                 }
                         )
         );
