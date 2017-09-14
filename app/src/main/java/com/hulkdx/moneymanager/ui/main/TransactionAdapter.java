@@ -84,9 +84,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
             holder.hexColorIV.setBackgroundColor(Color.parseColor(mTransactions.get(position).getCategory().getHexColor()));
         }
-        if (mTransactions.get(position).getAttachment() != null ) {
+        if (mTransactions.get(position).getAttachment() != null &&
+                !mTransactions.get(position).getAttachment().equals("") )
+        {
             holder.attachmentView.setVisibility(View.VISIBLE);
-            // TODO Replace this click listener maybe with detail view of the list.
+            // It will open the picture taken.
+            // TODO Replace the click listener with the detail view of the item.
             holder.attachmentView.setOnClickListener(view -> {
                 Intent intent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(mTransactions.get(position).getAttachment()));
