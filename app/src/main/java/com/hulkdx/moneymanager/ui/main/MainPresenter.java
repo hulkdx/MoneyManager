@@ -57,7 +57,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                             }
                         },
                         error -> getMvpView().showError("loadTransactions", error),
-                        () -> Timber.i("onCompleted")
+                        () -> Timber.i("onCompleted loadTransactions")
                 )
         );
     }
@@ -74,12 +74,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                     mDataManager.getPreferencesHelper().setUserMoney(
                                             transactions.getAmountCount());
                                 },
-                                throwable -> {
-                                    Timber.i("onError syncTransactions");
-                                },
-                                () -> {
-                                    Timber.i("onComplete syncTransactions");
-                                }
+                                error -> getMvpView().showError("syncTransactions", error),
+                                () -> Timber.i("onComplete syncTransactions")
                         )
         );
     }
