@@ -82,7 +82,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     }
     /*
      * Add a new Transaction.
-     * TODO check for isSync
      */
     public void addTransaction(final Transaction newTransaction, long categoryId) {
         mDisposables.add(
@@ -130,7 +129,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     }
     /*
      * Add a new category.
-     * TODO check for isSync
      */
     public void addCategory(final Category newCategory) {
         mDisposables.add(

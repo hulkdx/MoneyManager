@@ -37,8 +37,22 @@ public interface HulkService {
     @GET("transactions/get")
     Flowable<TransactionResponse> getTransactions(@Header("Authorization") String auth);
 
+    @FormUrlEncoded
+    @POST("transactions/create")
+    Flowable<Transaction> createTransaction(@Header("Authorization") String auth,
+                                            @Field("amount") float amount,
+                                            @Field("date") String date,
+                                            @Field("attachment") String attachment,
+                                            @Field("category") String categoryId);
+
     @GET("categories/get")
     Flowable<List<Category>> getCategories(@Header("Authorization") String auth);
+
+    @FormUrlEncoded
+    @POST("categories/create")
+    Flowable<Category> createCategory(@Header("Authorization") String auth,
+                                      @Field("name") String name,
+                                      @Field("hexColor") String hexColor);
 
     class Creator {
         public static HulkService newService() {

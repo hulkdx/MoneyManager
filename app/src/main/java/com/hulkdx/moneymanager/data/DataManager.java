@@ -46,6 +46,19 @@ public class DataManager {
     }
 
     public Flowable<Transaction> addTransaction(Transaction newTransaction, long categoryId) {
+
+        if (getPreferencesHelper().getSync()) {
+            return mHulkService
+                    .createTransaction("JWT " + getPreferencesHelper().getToken(),
+                                      newTransaction.getAmount(),
+                                      newTransaction.getDate(),
+                                      newTransaction.getAttachment(),
+                                      categoryId == -1 ? null : String.valueOf(categoryId))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .concatMap(transaction -> mDatabaseHelper.addTransaction(newTransaction, categoryId));
+        }
+
         return mDatabaseHelper.addTransaction(newTransaction, categoryId).distinct();
     }
 
@@ -54,6 +67,17 @@ public class DataManager {
     }
 
     public Flowable<Category> addCategory(Category newCategory) {
+
+        if (getPreferencesHelper().getSync()) {
+            return mHulkService
+                    .createCategory("JWT " + getPreferencesHelper().getToken(),
+                                    newCategory.getName(),
+                                    newCategory.getHexColor())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .concatMap(transaction -> mDatabaseHelper.addCategory(newCategory));
+        }
+
         return mDatabaseHelper.addCategory(newCategory);
     }
 
