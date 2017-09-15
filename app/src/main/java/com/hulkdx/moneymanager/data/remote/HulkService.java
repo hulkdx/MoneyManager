@@ -3,6 +3,7 @@ package com.hulkdx.moneymanager.data.remote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hulkdx.moneymanager.data.model.Category;
+import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.data.model.TransactionResponse;
 import com.hulkdx.moneymanager.data.model.User;
 import java.util.List;
