@@ -44,7 +44,7 @@ public class ApplicationModule {
         Realm.init(context);
         RealmConfiguration.Builder builder = new RealmConfiguration.Builder();
         builder.deleteRealmIfMigrationNeeded();
-        builder.name("boilerplate.realm");
+        builder.name("realm-db");
         builder.deleteRealmIfMigrationNeeded();
         return builder.build();
     }
