@@ -13,7 +13,7 @@ import com.hulkdx.moneymanager.injection.ApplicationContext;
 @Singleton
 public class PreferencesHelper {
 
-    public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
+    public static final String PREF_FILE_NAME = "android_hulkdx_pref";
     public static final String USER_NAME = "name";
     public static final String USER_MONEY = "totalMoney";
     public static final String SAVED_CURRENCY = "saved_currency";
