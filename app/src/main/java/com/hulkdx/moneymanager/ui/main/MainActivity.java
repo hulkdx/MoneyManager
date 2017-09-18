@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
@@ -131,6 +133,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mCurrencyTextView.setText(currencyName);
         mTransactionAdapter.setCurrencyName(currencyName);
         mSearchView.setOnQueryTextListener(this);
+
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_currency_item,
+                getResources().getStringArray(R.array.transaction_spinner_value));
+        mChooserDateSpinner.setAdapter(spinnerAdapter);
 
         mTransactionAdapter.setContext(this);
         mTransactionsRecyclerView.setAdapter(mTransactionAdapter);

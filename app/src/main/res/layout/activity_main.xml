@@ -67,7 +67,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/main_activity_border_transparent"
-                    android:entries="@array/transaction_spinner_value"
                     android:gravity="center_horizontal"
                     android:padding="4dp" />
 
