@@ -12,6 +12,7 @@ public class User {
     private String last_name;
     private String email;
     private String token;
+    private String currency;
 
     public User() {
     }
@@ -54,5 +55,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

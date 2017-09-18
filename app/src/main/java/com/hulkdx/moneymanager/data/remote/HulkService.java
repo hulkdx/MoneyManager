@@ -33,7 +33,8 @@ public interface HulkService {
     Flowable<User> postRegister(@Field("username") String username,
                                 @Field("password") String password,
                                 @Field("email") String email,
-                                @Field("email2") String email2);
+                                @Field("email2") String email2,
+                                @Field("currency") String currency);
 
     @GET("transactions/get")
     Flowable<TransactionResponse> getTransactions(@Header("Authorization") String auth);

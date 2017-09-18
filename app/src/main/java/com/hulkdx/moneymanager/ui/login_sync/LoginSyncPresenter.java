@@ -64,10 +64,9 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                             user -> {
-                                // TODO! get total money and currency from api!
                                 mDataManager.getPreferencesHelper().saveUserInformation(
                                         user.getUsername(),
-                                        0, "EUR");
+                                        0, user.getCurrency());
                                 mDataManager.getPreferencesHelper().saveToken(user.getToken());
                                 mDataManager.getPreferencesHelper().saveSync(true);
                                 // Redirect to new screen.

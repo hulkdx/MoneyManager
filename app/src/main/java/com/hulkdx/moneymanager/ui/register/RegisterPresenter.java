@@ -80,9 +80,9 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
 
     }
 
-    public void register(String username, String password, String email) {
+    public void register(String username, String password, String email, String currency) {
          mDisposables.add(
-            mDataManager.register(username, password, email)
+            mDataManager.register(username, password, email, currency)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(

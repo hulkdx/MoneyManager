@@ -57,6 +57,15 @@
             android:hint="@string/password"/>
     </android.support.design.widget.TextInputLayout>
 
+
+    <Spinner
+        android:id="@+id/spinner_currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
+        android:entries="@array/currency" />
+
     <Button
         android:id="@+id/register"
         android:layout_width="100dp"

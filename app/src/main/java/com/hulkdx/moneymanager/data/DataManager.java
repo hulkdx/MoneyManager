@@ -90,8 +90,8 @@ public class DataManager {
         return mHulkService.postLogin(username, password);
     }
 
-    public Flowable<User> register(String username, String password, String email) {
-        return mHulkService.postRegister(username, password, email, email);
+    public Flowable<User> register(String username, String password, String email, String currency) {
+        return mHulkService.postRegister(username, password, email, email, currency);
     }
 
     public Flowable<TransactionResponse> syncTransactions(String token) {

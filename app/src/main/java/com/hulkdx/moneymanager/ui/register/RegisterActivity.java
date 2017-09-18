@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
@@ -36,6 +37,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     @BindView(R.id.et_password) EditText mPasswordET;
     @BindView(R.id.password_input_layout) TextInputLayout mPasswordInputLayout;
     @BindView(R.id.register) Button mRegisterBtn;
+    @BindView(R.id.spinner_currency) Spinner mCurrencySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +64,8 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     @OnClick(R.id.register)
     void onClickRegister(){
         mRegisterBtn.setEnabled(false);
-        // TODO
         mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString(),
-                mEmailET.getText().toString());
+                mEmailET.getText().toString(), mCurrencySpinner.getSelectedItem().toString());
     }
 
     /***** MVP View methods implementation *****/
