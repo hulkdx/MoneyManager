@@ -330,7 +330,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private void updateTransactionList(int isDailyOrMonthlyOrYearly) {
         mMainPresenter.searchTransactionWithDate(
                 mSelectedCalendar.get(Calendar.DATE),
-                mSelectedCalendar.get(Calendar.MONTH),
+                mSelectedCalendar.get(Calendar.MONTH) + 1,
                 mSelectedCalendar.get(Calendar.YEAR),
                 isDailyOrMonthlyOrYearly);
     }
@@ -452,7 +452,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         }
 
         if (!isCurrentDateTextSet) mCurrentSelectedDateTV.setText(getString(R.string.setDate,
-                mSelectedCalendar.get(Calendar.DATE), mSelectedCalendar.get(Calendar.MONTH),
+                mSelectedCalendar.get(Calendar.DATE), mSelectedCalendar.get(Calendar.MONTH) + 1,
                 mSelectedCalendar.get(Calendar.YEAR)));
         // isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
         int isDailyOrMonthlyOrYearly = mChooserDateSpinner.getSelectedItemPosition()-1;

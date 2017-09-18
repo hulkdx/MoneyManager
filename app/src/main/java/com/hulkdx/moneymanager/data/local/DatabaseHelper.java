@@ -8,6 +8,7 @@ import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.data.model.TransactionResponse;
 import com.hulkdx.moneymanager.util.RxUtil;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -16,6 +17,7 @@ import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import timber.log.Timber;
 
 @Singleton
 public class DatabaseHelper {
@@ -79,10 +81,17 @@ public class DatabaseHelper {
     public Flowable<List<Transaction>> searchTransactionWithDate(int day, int month, int year,
                                                                  int isDailyOrMonthlyOrYearly) {
         Realm realm = mRealmProvider.get();
-        RealmQuery<Transaction> query = realm.where(Transaction.class)
-                .equalTo("year", year);
-        if (isDailyOrMonthlyOrYearly == 1) { query.equalTo("month", month); }
-        if (isDailyOrMonthlyOrYearly == 0) { query.equalTo("day", day); }
+
+        RealmQuery<Transaction> query = realm.where(Transaction.class);
+
+        if (isDailyOrMonthlyOrYearly == 2) {
+            query.beginsWith("date", String.valueOf(year) + "-");
+        } else if (isDailyOrMonthlyOrYearly == 1) {
+            query.beginsWith("date", String.format(Locale.ENGLISH, "%d-%02d", year, month));
+        } else if (isDailyOrMonthlyOrYearly == 0) {
+            query.equalTo("date", String.format(Locale.ENGLISH, "%d-%02d-%02d", year, month, day));
+        }
+
         RealmResults<Transaction> results = query.findAllAsync();
         return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
