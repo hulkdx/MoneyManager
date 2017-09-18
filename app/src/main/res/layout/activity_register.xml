@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_margin="10dp">
@@ -65,6 +66,13 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="50dp"
         android:entries="@array/currency" />
+
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        tools:text="Error: user exist!"/>
 
     <Button
         android:id="@+id/register"

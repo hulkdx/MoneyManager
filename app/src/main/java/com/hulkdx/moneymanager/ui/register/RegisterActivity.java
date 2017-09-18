@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
@@ -38,6 +39,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
     @BindView(R.id.password_input_layout) TextInputLayout mPasswordInputLayout;
     @BindView(R.id.register) Button mRegisterBtn;
     @BindView(R.id.spinner_currency) Spinner mCurrencySpinner;
+    @BindView(R.id.error_tv) TextView mErrorTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
 
     @OnClick(R.id.register)
     void onClickRegister(){
+        mErrorTextView.setText("");
         mRegisterBtn.setEnabled(false);
         mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString(),
                 mEmailET.getText().toString(), mCurrencySpinner.getSelectedItem().toString());
@@ -139,7 +142,6 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
 
     @Override
     public void showRegisterError(String errorMessage) {
-        // TODO show it in a better way!
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        mErrorTextView.setText(errorMessage);
     }
 }
