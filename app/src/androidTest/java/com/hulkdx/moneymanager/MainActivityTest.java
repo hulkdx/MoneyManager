@@ -29,7 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static com.hulkdx.moneymanager.TestDataFactory.makeListTransactions;
+import static com.hulkdx.moneymanager.common.TestDataFactory.makeListTransactions;
 import static org.mockito.Mockito.when;
 
 /**

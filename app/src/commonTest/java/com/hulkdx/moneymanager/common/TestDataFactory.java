@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanager;
+package com.hulkdx.moneymanager.common;
 
 import com.hulkdx.moneymanager.data.model.Transaction;
 
