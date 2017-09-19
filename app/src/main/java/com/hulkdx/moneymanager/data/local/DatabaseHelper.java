@@ -58,6 +58,7 @@ public class DatabaseHelper {
                             // If the id equals to zero that means the id is not set and
                             // it is not synced ( the id is not from the api).
                             if (newTransaction.getId() == 0) {
+                                // Auto Incremental Id
                                 Number currentIdNum = bgRealm.where(Transaction.class).max("id");
                                 int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
                                 newTransaction.setId(nextId);
@@ -147,10 +148,12 @@ public class DatabaseHelper {
                 realm = mRealmProvider.get();
                 realm.executeTransactionAsync(
                         bgRealm -> {
-                            // Auto Increment Id
-                            Number currentIdNum = bgRealm.where(Category.class).max("id");
-                            int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
-                            newCategory.setId(nextId);
+                            if (newCategory.getId() == 0) {
+                                // Auto Incremental Id
+                                Number currentIdNum = bgRealm.where(Category.class).max("id");
+                                int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
+                                newCategory.setId(nextId);
+                            }
                             bgRealm.insert(newCategory);
                         },
                         subscriber::onComplete,
