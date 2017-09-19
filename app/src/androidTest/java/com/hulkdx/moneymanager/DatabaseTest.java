@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 19/09/2017.
@@ -38,18 +39,30 @@ public class DatabaseTest extends TestCase {
 
     @Test
     public void testAddTransaction(){
-        Transaction newTransaction = new Transaction();
+
+        Transaction newTransaction = new Transaction("1999-9-9", 0f, "test");
         int categoryId = -1;
         mRealm.executeTransactionAsync(
                 bgRealm -> {
-                    Number currentIdNum = bgRealm.where(Transaction.class).max("id");
-                    int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
-                    newTransaction.setId(nextId);
+                    bgRealm.deleteAll();
+
+                    if (newTransaction.getId() == 0) {
+                        // Auto Incremental Id
+                        Number currentIdNum = bgRealm.where(Transaction.class).max("id");
+                        int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
+                        newTransaction.setId(nextId);
+                    }
                     if (categoryId != -1) {
                         Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
                         newTransaction.setCategory(c);
                     }
                     bgRealm.copyToRealm(newTransaction);
+
+                    // Test the result.
+                    Transaction result = mRealm.where(Transaction.class).findFirst();
+                    assertEquals(result.getAmount(), 0f);
+                    assertEquals(result.getDate(), "1999-9-9");
+                    assertEquals(result.getAttachment(), "test");
                 });
     }
 }
