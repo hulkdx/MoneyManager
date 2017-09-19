@@ -55,9 +55,13 @@ public class DatabaseHelper {
                 realm = mRealmProvider.get();
                 realm.executeTransactionAsync(
                         bgRealm -> {
-                            Number currentIdNum = bgRealm.where(Transaction.class).max("id");
-                            int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
-                            newTransaction.setId(nextId);
+                            // If the id equals to zero that means the id is not set and
+                            // it is not synced ( the id is not from the api).
+                            if (newTransaction.getId() == 0) {
+                                Number currentIdNum = bgRealm.where(Transaction.class).max("id");
+                                int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
+                                newTransaction.setId(nextId);
+                            }
                             if (categoryId != -1) {
                                 Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
                                 newTransaction.setCategory(c);
