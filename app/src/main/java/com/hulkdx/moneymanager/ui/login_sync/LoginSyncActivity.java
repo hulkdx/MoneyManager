@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hulkdx.moneymanager.R;
@@ -31,6 +32,8 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
     @BindView(R.id.login) Button mLoginBtn;
     @BindView(R.id.username_input_layout) TextInputLayout mUsernameInputLayout;
     @BindView(R.id.password_input_layout) TextInputLayout mPasswordInputLayout;
+    @BindView(R.id.error_tv) TextView mErrorTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
 
     @OnClick(R.id.login)
     void onClickLogin(){
+        mErrorTextView.setText(getString(R.string.loading));
         mLoginBtn.setEnabled(false);
         mPresenter.login(mUsernameET.getText().toString(), mPasswordET.getText().toString());
     }
@@ -102,8 +106,7 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
 
     @Override
     public void showLoginError(String errorMessage) {
-        // TODO show it in a better way!
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        mErrorTextView.setText(errorMessage);
     }
 
     @Override

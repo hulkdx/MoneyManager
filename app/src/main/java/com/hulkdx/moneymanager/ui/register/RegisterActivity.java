@@ -65,7 +65,7 @@ public class RegisterActivity extends BaseActivity implements RegisterMvpView {
 
     @OnClick(R.id.register)
     void onClickRegister(){
-        mErrorTextView.setText("");
+        mErrorTextView.setText(getString(R.string.loading));
         mRegisterBtn.setEnabled(false);
         mPresenter.register(mUsernameET.getText().toString(), mPasswordET.getText().toString(),
                 mEmailET.getText().toString(), mCurrencySpinner.getSelectedItem().toString());

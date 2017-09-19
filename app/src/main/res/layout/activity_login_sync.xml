@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
@@ -31,11 +32,19 @@
             android:hint="@string/password"/>
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/red"
+        tools:text="Error: user exist!"/>
+
     <Button
         android:id="@+id/login"
         android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/selector_btn_blue"
         android:text="@string/login"

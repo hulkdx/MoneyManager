@@ -41,6 +41,7 @@
     <string name="create_account">Create an account</string>
     <string name="email">Email</string>
     <string name="confirm_email">Confirm Email</string>
+    <string name="loading">Loading…</string>
 
 
     <!-- Main Activity -->
