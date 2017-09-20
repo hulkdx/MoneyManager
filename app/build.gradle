@@ -93,7 +93,6 @@ dependencies {
     final RETROFIT_VERSION = '2.3.0'
     final DAGGER_VERSION = '2.5'
     final MOCKITO_VERSION = '2.6.2'
-    final HAMCREST_VERSION = '1.3'
     final ESPRESSO_VERSION = '2.2.1'
     final RUNNER_VERSION = '0.4'
     final BUTTERKNIFE_VERSION = '8.4.0'
@@ -150,9 +149,6 @@ dependencies {
     testCompile jUnit
     testCompile mockito
     testCompile 'org.robolectric:robolectric:3.4.2'
-    testCompile "org.hamcrest:hamcrest-core:$HAMCREST_VERSION"
-    testCompile "org.hamcrest:hamcrest-library:$HAMCREST_VERSION"
-    testCompile "org.hamcrest:hamcrest-integration:$HAMCREST_VERSION"
 }
 
 // Log out test results to console
