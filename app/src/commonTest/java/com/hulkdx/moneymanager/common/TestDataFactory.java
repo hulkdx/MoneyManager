@@ -24,7 +24,7 @@ public class TestDataFactory {
         return transactions;
     }
 
-    private static Transaction makeTransactionWithoutCategory(int i) {
+    public static Transaction makeTransactionWithoutCategory(int i) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date todayDate = new Date();
         Date plusDate = new Date(todayDate.getTime() + TimeUnit.DAYS.toMillis( i ));
