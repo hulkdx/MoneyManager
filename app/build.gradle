@@ -15,7 +15,7 @@ android {
         targetSdkVersion 24
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionCode 2
-        versionName '0.1.0'
+        versionName '2.0.0'
 
     }
 
