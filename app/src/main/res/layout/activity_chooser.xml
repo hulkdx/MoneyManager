@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_margin="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sync_desc"
+        android:fontFamily="sans-serif"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/btn_yes"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/selector_btn_blue"
+        android:text="@string/yes"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif" />
+
+    <Button
+        android:id="@+id/btn_no"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:background="@drawable/selector_btn_blue"
+        android:text="@string/no"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif" />
+
+</LinearLayout>
