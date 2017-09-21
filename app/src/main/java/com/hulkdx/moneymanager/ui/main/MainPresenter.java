@@ -63,24 +63,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         );
     }
     /*
-     * Get transactions from the api and put it in database.
-     */
-    public void syncTransactions() {
-        mDisposables.add(
-                mDataManager.syncTransactions(mDataManager.getPreferencesHelper().getToken())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                transactions -> {
-                                    Timber.i("onNext syncTransactions");
-                                    mDataManager.getPreferencesHelper().setUserMoney(
-                                            transactions.getAmountCount());
-                                },
-                                error -> getMvpView().showError("syncTransactions", error),
-                                () -> Timber.i("onComplete syncTransactions")
-                        )
-        );
-    }
-    /*
      * Add a new Transaction.
      */
     public void addTransaction(final Transaction newTransaction, long categoryId) {
@@ -111,20 +93,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         error -> getMvpView().showError("loadCategories", error),
                         () -> Timber.i("addTransaction onCompleted")
                 )
-        );
-    }
-    /*
-     * Get categories from the api and put it in database.
-     */
-    public void syncCategories() {
-        mDisposables.add(
-                mDataManager.syncCategories(mDataManager.getPreferencesHelper().getToken())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                categories -> Timber.i("onNext syncCategories"),
-                                error -> getMvpView().showError("syncCategories", error),
-                                () -> Timber.i("onComplete syncCategories")
-                        )
         );
     }
     /*

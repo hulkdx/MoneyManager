@@ -13,6 +13,7 @@ import dagger.Component;
 import io.realm.Realm;
 
 import com.hulkdx.moneymanager.data.DataManager;
+import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.remote.HulkService;
 import com.hulkdx.moneymanager.injection.ApplicationContext;
@@ -22,6 +23,8 @@ import com.hulkdx.moneymanager.util.RxEventBus;
 @Singleton
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
+
+    void inject(SyncService syncService);
 
     @ApplicationContext Context context();
     Application application();

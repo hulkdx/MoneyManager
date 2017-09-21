@@ -47,6 +47,9 @@
 
         <activity android:name=".ui.register.RegisterActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
+
+        <service android:name=".data.SyncService"/>
+
     </application>
 
 </manifest>

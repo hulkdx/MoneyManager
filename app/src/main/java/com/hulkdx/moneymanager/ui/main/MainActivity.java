@@ -5,8 +5,11 @@
 package com.hulkdx.moneymanager.ui.main;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +40,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import com.hulkdx.moneymanager.R;
+import com.hulkdx.moneymanager.data.SyncService;
 import com.hulkdx.moneymanager.data.local.PreferencesHelper;
 import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
@@ -105,6 +109,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private Calendar mCurrentDateCalendar;
     private Calendar mSelectedCalendar;
 
+    private BroadcastReceiver mBroadcastReceiver = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +119,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         ButterKnife.bind(this);
         SetupUI();
 
-
         if (mPreferencesHelper.getSync()) {
-            mMainPresenter.syncTransactions();
-            mMainPresenter.syncCategories();
+            // Start the sync service
+            startService(new Intent(this, SyncService.class));
         }
 
     }
@@ -154,12 +159,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mMainPresenter.detachView();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         if (mAddNewEditText.isFocused()) {
@@ -168,6 +167,32 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                     () -> showKeyboard(true)
             );
         }
+
+        // Register the broadcast from SyncService manually onResume
+        if (mPreferencesHelper.getSync()) {
+            if (mBroadcastReceiver == null) {
+                mBroadcastReceiver = new SyncService.CheckConnectivity();
+            }
+            // @link : https://developer.android.com/guide/components/broadcasts.html#context-registered_receivers
+            registerReceiver(mBroadcastReceiver,
+                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Unregister the broadcast (it improves performance).
+        if (mBroadcastReceiver != null) {
+            unregisterReceiver(mBroadcastReceiver);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMainPresenter.detachView();
     }
 
     /*
