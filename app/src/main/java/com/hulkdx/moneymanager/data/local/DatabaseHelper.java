@@ -17,7 +17,6 @@ import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import timber.log.Timber;
 
 @Singleton
 public class DatabaseHelper {
@@ -90,7 +89,7 @@ public class DatabaseHelper {
         RealmQuery<Transaction> query = realm.where(Transaction.class);
 
         if (isDailyOrMonthlyOrYearly == 2) {
-            query.beginsWith("date", String.valueOf(year) + "-");
+            query.beginsWith("date", year + "-");
         } else if (isDailyOrMonthlyOrYearly == 1) {
             query.beginsWith("date", String.format(Locale.ENGLISH, "%d-%02d", year, month));
         } else if (isDailyOrMonthlyOrYearly == 0) {

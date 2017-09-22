@@ -117,9 +117,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         activityComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        SetupUI();
 
-        if (mPreferencesHelper.getSync()) {
+        setupUI();
+
+        if (mPreferencesHelper.isSync()) {
             // Start the sync service
             startService(new Intent(this, SyncService.class));
         }
@@ -132,7 +133,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mScrollView.post(() -> mScrollView.scrollTo(0, mSearchView.getBottom()));
     }
 
-    private void SetupUI() {
+    private void setupUI() {
         String currencyName = mMainPresenter.getCurrencyName();
         mCurrencyBottomTextView.setText(currencyName);
         mCurrencyTextView.setText(currencyName);
@@ -169,7 +170,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         }
 
         // Register the broadcast from SyncService manually onResume
-        if (mPreferencesHelper.getSync()) {
+        if (mPreferencesHelper.isSync()) {
             if (mBroadcastReceiver == null) {
                 mBroadcastReceiver = new SyncService.CheckConnectivity();
             }

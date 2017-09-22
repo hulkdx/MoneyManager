@@ -47,7 +47,7 @@ public class DataManager {
 
     public Flowable<Transaction> addTransaction(Transaction newTransaction, long categoryId) {
 
-        if (getPreferencesHelper().getSync()) {
+        if (getPreferencesHelper().isSync()) {
             return mHulkService
                     .createTransaction("JWT " + getPreferencesHelper().getToken(),
                                       newTransaction.getAmount(),
@@ -68,7 +68,7 @@ public class DataManager {
 
     public Flowable<Category> addCategory(Category newCategory) {
 
-        if (getPreferencesHelper().getSync()) {
+        if (getPreferencesHelper().isSync()) {
             return mHulkService
                     .createCategory("JWT " + getPreferencesHelper().getToken(),
                                     newCategory.getName(),

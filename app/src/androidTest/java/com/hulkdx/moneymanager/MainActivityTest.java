@@ -8,7 +8,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import com.hulkdx.moneymanager.Injections.TestComponentRule;
+import com.hulkdx.moneymanager.injections.TestComponentRule;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
 import org.hamcrest.Description;

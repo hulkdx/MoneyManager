@@ -65,7 +65,7 @@ public class PreferencesHelper {
         mPref.edit().putBoolean(SYNC, isSynced).apply();
     }
 
-    public boolean getSync(){
+    public boolean isSync() {
         return mPref.getBoolean(SYNC, false);
     }
 

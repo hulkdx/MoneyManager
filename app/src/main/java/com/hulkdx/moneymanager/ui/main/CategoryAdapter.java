@@ -26,7 +26,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private List<Category> mCategories;
     private Context mContext;
     private Callback mCallback;
-    private ImageView currentSelectedImage = null;
+    private ImageView mCurrentSelectedImage = null;
 
     @Inject
     public CategoryAdapter(@ApplicationContext Context context) {
@@ -73,7 +73,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public void resetSelectedCategories() {
-        if (currentSelectedImage != null) currentSelectedImage.setImageResource(0);
+        if (mCurrentSelectedImage != null) mCurrentSelectedImage.setImageResource(0);
     }
 
     class CategoryHolder extends RecyclerView.ViewHolder {
@@ -89,7 +89,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
 
         @OnClick(R.id.card_view)
-        void OnItemClicked() {
+        void onItemClicked() {
             if (mCallback != null) {
                 // Add button clicked
                 if (isAddbtn) {
@@ -100,13 +100,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 mCallback.onCategoryClicked(category.getId());
                 hexColorImageView.setImageResource(R.drawable.ic_category_selected);
                 // Remove the previous selected ImageView drawable.
-                if (currentSelectedImage != null) {
-                    currentSelectedImage.setImageResource(0);
+                if (mCurrentSelectedImage != null) {
+                    mCurrentSelectedImage.setImageResource(0);
                 }
-                if (currentSelectedImage == hexColorImageView) {
-                    currentSelectedImage = null;
+                if (mCurrentSelectedImage == hexColorImageView) {
+                    mCurrentSelectedImage = null;
                 } else {
-                    currentSelectedImage = hexColorImageView;
+                    mCurrentSelectedImage = hexColorImageView;
                 }
             }
         }

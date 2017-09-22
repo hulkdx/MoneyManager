@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanager.Injections;
+package com.hulkdx.moneymanager.injections;
 
 import com.hulkdx.moneymanager.injection.component.ApplicationComponent;
 import javax.inject.Singleton;

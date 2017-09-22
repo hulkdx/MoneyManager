@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanager.Injections;
+package com.hulkdx.moneymanager.injections;
 
 import android.app.Application;
 import android.content.Context;

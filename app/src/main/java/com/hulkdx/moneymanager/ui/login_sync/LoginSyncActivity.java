@@ -10,8 +10,6 @@ import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
