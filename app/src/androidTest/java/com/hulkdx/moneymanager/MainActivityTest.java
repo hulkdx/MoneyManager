@@ -45,7 +45,8 @@ public class MainActivityTest {
             new ActivityTestRule<MainActivity>(MainActivity.class, false, false) {
                 @Override
                 protected Intent getActivityIntent() {
-                    return new Intent(InstrumentationRegistry.getTargetContext(), MainActivity.class);
+                    return new Intent(InstrumentationRegistry.getTargetContext(),
+                            MainActivity.class);
                 }
             };
 
@@ -72,7 +73,8 @@ public class MainActivityTest {
         for (Transaction transaction : testData) {
             // It shows month and day.
             String date = transaction.getDate();
-            String month = new DateFormatSymbols().getShortMonths()[Integer.valueOf(date.split("-")[1])-1];
+            String month = new DateFormatSymbols()
+                    .getShortMonths()[ Integer.valueOf(date.split("-")[1]) - 1 ];
             String day = date.split("-")[2];
             // it shows amount
             String amount = String.format(Locale.ENGLISH, "+ %.2f", transaction.getAmount());
@@ -96,7 +98,9 @@ public class MainActivityTest {
         }
     }
 
-    public static Matcher<View> atPosition(final int position, @NonNull final Matcher<View> itemMatcher) {
+    public static Matcher<View> atPosition(final int position,
+                                           @NonNull final Matcher<View> itemMatcher) {
+
         checkNotNull(itemMatcher);
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
@@ -107,7 +111,8 @@ public class MainActivityTest {
 
             @Override
             protected boolean matchesSafely(final RecyclerView view) {
-                RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
+                RecyclerView.ViewHolder viewHolder =
+                        view.findViewHolderForAdapterPosition(position);
                 if (viewHolder == null) {
                     // has no item on such position
                     return false;

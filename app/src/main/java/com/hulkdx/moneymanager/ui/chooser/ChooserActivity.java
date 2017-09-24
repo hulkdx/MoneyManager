@@ -10,7 +10,7 @@ import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.ui.base.BaseActivity;
 import com.hulkdx.moneymanager.ui.login.LoginActivity;
-import com.hulkdx.moneymanager.ui.login_sync.LoginSyncActivity;
+import com.hulkdx.moneymanager.ui.loginsync.LoginSyncActivity;
 import com.hulkdx.moneymanager.ui.main.MainActivity;
 import javax.inject.Inject;
 

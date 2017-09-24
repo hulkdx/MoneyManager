@@ -43,7 +43,7 @@ public class PreferencesHelper {
         return mPref.getString(SAVED_CURRENCY, "EUR");
     }
 
-    public void saveUserInformation(String name, float initialMoney, String currency){
+    public void saveUserInformation(String name, float initialMoney, String currency) {
         mPref.edit()
                 .putString(USER_NAME, name)
                 .putFloat(USER_MONEY, initialMoney)
@@ -73,7 +73,7 @@ public class PreferencesHelper {
         mPref.edit().putString(USER_TOKEN, token).apply();
     }
 
-    public String getToken(){
+    public String getToken() {
         return mPref.getString(USER_TOKEN, "");
     }
 }

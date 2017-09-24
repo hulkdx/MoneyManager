@@ -71,7 +71,8 @@ public class MainPresenterTest {
         mMainPresenter.loadTransactions();
         verify(mMockMainMvpView).showEmptyTransactions(new ArrayList<>());
         verify(mMockMainMvpView, never()).showTransactions(ArgumentMatchers.anyList());
-        verify(mMockMainMvpView, never()).showError(ArgumentMatchers.anyString(), ArgumentMatchers.any());
+        verify(mMockMainMvpView, never()).showError(
+                ArgumentMatchers.anyString(), ArgumentMatchers.any());
     }
 
     @Test

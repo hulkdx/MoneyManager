@@ -5,10 +5,12 @@
  */
 package com.hulkdx.moneymanager.ui.main;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -19,44 +21,54 @@ import android.widget.LinearLayout;
 import com.hulkdx.moneymanager.R;
 import com.hulkdx.moneymanager.data.model.Category;
 
-public class CategoryDialogFragment extends DialogFragment implements DialogInterface.OnClickListener {
+public class CategoryDialogFragment extends DialogFragment
+        implements DialogInterface.OnClickListener {
 
-    private EditText nameEditText;
-    private LinearLayout colorsLinearLayout;
+    private EditText mNameEditText;
+    private LinearLayout mColorsLinearLayout;
     private CategoryFragmentListener mListener;
     private static int catColorsSelectedImageViews = -1;
     int[] colorsArray = null;
 
-	public CategoryDialogFragment() { }
+    public CategoryDialogFragment() { }
 
 
-	public static CategoryDialogFragment newInstance() {
-		return new CategoryDialogFragment();
-	}
+    public static CategoryDialogFragment newInstance() {
+        return new CategoryDialogFragment();
+    }
 
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // The root of a dialog shall be null.
+        // @link: https://stackoverflow.com/a/26596481/3996989`
+        @SuppressLint("InflateParams")
         View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_category, null);
-        nameEditText = (EditText) mView.findViewById(R.id.et_name);
-        colorsLinearLayout = (LinearLayout) mView.findViewById(R.id.colors_linearLayout);
+
+        mNameEditText = (EditText) mView.findViewById(R.id.et_name);
+        mColorsLinearLayout = (LinearLayout) mView.findViewById(R.id.colors_linearLayout);
         createColorImageView();
         return new android.support.v7.app.AlertDialog.Builder(getActivity())
                 .setNeutralButton(R.string.dialog_action_ok, this)
                 .setView(mView)
                 .create();
-	}
+    }
 
     // Create colors view for each string array
     private void createColorImageView() {
         int[] colorsArray = getActivity().getResources().getIntArray(R.array.category_colors);
-        // ImageView is defined as final so we can use them in OnClick method to remove the ImageResource
+        // ImageView is defined as final so we can use them in OnClick method to remove
+        // the ImageResource.
         // Note: is there a better way for doing it?!
         final ImageView[] catColorsImageViews = new ImageView[colorsArray.length];
         for (int i = 0, count = colorsArray.length; i < count; i++) {
             catColorsImageViews[i] = new ImageView(getActivity());
             // Convert 50 dx to 50 dp
             DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-            catColorsImageViews[i].setLayoutParams(new LinearLayout.LayoutParams((int) (50 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)),(int) (50 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))));
+            catColorsImageViews[i].setLayoutParams(new LinearLayout.LayoutParams(
+                    (int) (50 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)),
+                    (int) (50 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))));
+
             catColorsImageViews[i].setBackgroundColor(colorsArray[i]);
             // Set id to i so we can retrieve it from OnClick method.
             catColorsImageViews[i].setId(i);
@@ -71,7 +83,7 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
                     catColorsSelectedImageViews = view.getId();
                 }
             });
-            colorsLinearLayout.addView(catColorsImageViews[i]);
+            mColorsLinearLayout.addView(catColorsImageViews[i]);
         }
     }
 
@@ -98,12 +110,14 @@ public class CategoryDialogFragment extends DialogFragment implements DialogInte
     // On Clicking Ok button in dialog
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-        if (nameEditText.getText().toString().isEmpty() || catColorsSelectedImageViews == -1) {
+        if (mNameEditText.getText().toString().isEmpty() || catColorsSelectedImageViews == -1) {
             return;
         }
+        // Set int hexColor to String #000000
+        String hexColor = String.format("#%06X",
+                (0xFFFFFF & colorsArray[catColorsSelectedImageViews]));
 
-        String hexColor = String.format("#%06X", (0xFFFFFF & colorsArray[catColorsSelectedImageViews]));
-        mListener.onClickOkCategory(new Category(nameEditText.getText().toString(), hexColor));
+        mListener.onClickOkCategory(new Category(mNameEditText.getText().toString(), hexColor));
     }
 
     /**

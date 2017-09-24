@@ -41,10 +41,10 @@ public class DatabaseTest extends TestCase {
 
 
     @Test
-    public void testAddTransaction(){
+    public void testAddTransaction() {
 
         Transaction newTransaction = new Transaction("1999-9-9", 0f, "test");
-        int categoryId = -1;
+//        int categoryId = -1;
         mRealm.executeTransactionAsync(
                 bgRealm -> {
                     bgRealm.deleteAll();
@@ -54,10 +54,6 @@ public class DatabaseTest extends TestCase {
                         Number currentIdNum = bgRealm.where(Transaction.class).max("id");
                         int nextId = currentIdNum == null ? 1 : currentIdNum.intValue() + 1;
                         newTransaction.setId(nextId);
-                    }
-                    if (categoryId != -1) {
-                        Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
-                        newTransaction.setCategory(c);
                     }
                     bgRealm.copyToRealm(newTransaction);
 
@@ -70,7 +66,7 @@ public class DatabaseTest extends TestCase {
     }
 
     @Test
-    public void testGetTransactions(){
+    public void testGetTransactions() {
         mRealm.executeTransactionAsync(
                 bgRealm -> {
                     List<Transaction> transactions = makeListTransactions(10);
@@ -93,7 +89,7 @@ public class DatabaseTest extends TestCase {
 
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                         Date todayDate = new Date();
-                        Date plusDate = new Date(todayDate.getTime() + TimeUnit.DAYS.toMillis( pos ));
+                        Date plusDate = new Date(todayDate.getTime() + TimeUnit.DAYS.toMillis(pos));
 
                         assertEquals(resultTransaction.getDate(), dateFormat.format(plusDate));
                         pos++;

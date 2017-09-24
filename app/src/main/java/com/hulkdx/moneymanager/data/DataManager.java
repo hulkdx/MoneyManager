@@ -56,7 +56,8 @@ public class DataManager {
                                       categoryId == -1 ? null : String.valueOf(categoryId))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .concatMap(transaction -> mDatabaseHelper.addTransaction(newTransaction, categoryId));
+                    .concatMap(transaction ->
+                            mDatabaseHelper.addTransaction(newTransaction, categoryId));
         }
 
         return mDatabaseHelper.addTransaction(newTransaction, categoryId).distinct();
@@ -83,14 +84,20 @@ public class DataManager {
 
     public Flowable<List<Transaction>> searchTransactionWithDate(int day, int month, int year,
                                                                  int isDailyOrMonthlyOrYearly) {
-        return mDatabaseHelper.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly);
+
+        return mDatabaseHelper.searchTransactionWithDate(day, month, year,
+                isDailyOrMonthlyOrYearly);
     }
 
     public Flowable<User> login(String username, String password) {
         return mHulkService.postLogin(username, password);
     }
 
-    public Flowable<User> register(String username, String password, String email, String currency) {
+    public Flowable<User> register(String username,
+                                   String password,
+                                   String email,
+                                   String currency) {
+
         return mHulkService.postRegister(username, password, email, email, currency);
     }
 

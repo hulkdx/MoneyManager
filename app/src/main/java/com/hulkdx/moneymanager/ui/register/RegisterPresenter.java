@@ -20,9 +20,6 @@ import timber.log.Timber;
 @ConfigPersistent
 public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
 
-    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
-            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
     private final DataManager mDataManager;
     private CompositeDisposable mDisposables;
 
@@ -43,46 +40,9 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
         if (mDisposables != null) mDisposables.clear();
     }
 
-    public void validation(Observable<CharSequence> username, Observable<CharSequence> password,
-                           Observable<CharSequence> email, Observable<CharSequence> confirmEmail) {
-        mDisposables.add(
-                Observable.combineLatest(
-                        username, password, email, confirmEmail,
-                        (newName, newPassword, newEmail, newConfrimEmail) -> {
-                            boolean nameValid = !TextUtils.isEmpty(newName);
-                            if (!nameValid) { getMvpView().showUserNameError(); }
-                            else { getMvpView().hideUserNameError(); }
-
-                            boolean passwordValid = !TextUtils.isEmpty(newPassword);
-                            if (!passwordValid) { getMvpView().showPasswordError(); }
-                            else { getMvpView().hidePasswordError(); }
-
-                            boolean emailValid = !TextUtils.isEmpty(newEmail);
-                            boolean isNewEmailAnEmail = VALID_EMAIL_ADDRESS_REGEX.matcher(newEmail).find();
-                            if (!emailValid) { getMvpView().showEmailError(0); }
-                            else if (!isNewEmailAnEmail) { getMvpView().showEmailError(1); }
-                            else { getMvpView().hideEmailError(); }
-
-                            boolean confirmEmailValid = !TextUtils.isEmpty(newConfrimEmail);
-                            boolean isNewConfEmailAnEmail = VALID_EMAIL_ADDRESS_REGEX.matcher(newEmail).find();
-                            boolean emailEquals = newEmail.toString().equals(newConfrimEmail.toString());
-                            if (!confirmEmailValid) { getMvpView().showConfirmEmailError(0); }
-                            else if (!isNewEmailAnEmail) { getMvpView().showConfirmEmailError(1); }
-                            else if (!emailEquals) { getMvpView().showConfirmEmailError(2); }
-                            else { getMvpView().hideConfirmEmailError(); }
-
-                            return nameValid && passwordValid && emailValid && confirmEmailValid &&
-                                    emailEquals && isNewEmailAnEmail && isNewConfEmailAnEmail;
-                        })
-                        .distinctUntilChanged()
-                        .subscribe(isValid -> getMvpView().setEnableRegisterBtn(isValid))
-        );
-
-    }
-
     public void register(String username, String password, String email, String currency) {
-         mDisposables.add(
-            mDataManager.register(username, password, email, currency)
+        mDisposables.add(
+                mDataManager.register(username, password, email, currency)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(
@@ -94,7 +54,7 @@ public class RegisterPresenter extends BasePresenter<RegisterMvpView> {
                             },
                             error -> {
                                 Timber.i("onError");
-                                if (error instanceof HttpException){
+                                if (error instanceof HttpException) {
                                     int errorCode = ((HttpException) error).code();
 
                                     if (errorCode == 500 || errorCode == 400) {

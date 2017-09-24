@@ -31,7 +31,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     // All transactions
     private List<Transaction> mAllTransactions;
     private Context mContext;
-    private String currencyName;
+    private String mCurrencyName;
 
     @Inject
     public TransactionAdapter() {
@@ -59,22 +59,25 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public void onBindViewHolder(TransactionHolder holder, int position) {
         // Set background of the layout on odd position to white
         holder.rootLayout.setBackgroundColor(ContextCompat
-                .getColor(mContext, (position%2 == 0) ? R.color.white : R.color.grey));
+                .getColor(mContext, (position % 2 == 0) ? R.color.white : R.color.grey));
         if (mTransactions.get(position).isAmountPositive()) {
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_positive,
                     mTransactions.get(position).getAmount()));
-            holder.balanceNumberTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
-            holder.balanceCurrencyTV.setTextColor(ContextCompat.getColor(mContext, R.color.darkgreen));
+            holder.balanceNumberTV.setTextColor(
+                    ContextCompat.getColor(mContext, R.color.darkgreen));
+            holder.balanceCurrencyTV.setTextColor(
+                    ContextCompat.getColor(mContext, R.color.darkgreen));
         } else {
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_negative,
                      mTransactions.get(position).getAmount() * -1));
         }
-        holder.balanceCurrencyTV.setText(currencyName);
+        holder.balanceCurrencyTV.setText(mCurrencyName);
 
-        // Date format = year-month-day
+        // Date format equals to year-month-day
         String date = mTransactions.get(position).getDate();
-//        String year = date.split("-")[0];
-        String month = new DateFormatSymbols().getShortMonths()[Integer.valueOf(date.split("-")[1])-1];
+        // Show Year?! String year = date.split("-")[0];
+        String month =
+                new DateFormatSymbols().getShortMonths()[ Integer.valueOf(date.split("-")[1]) - 1 ];
         String day = date.split("-")[2];
         holder.dateMonthTV.setText(month);
         holder.dateDayTV.setText(day);
@@ -82,11 +85,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         if (mTransactions.get(position).getCategory() != null ) {
             holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
 
-            holder.hexColorIV.setBackgroundColor(Color.parseColor(mTransactions.get(position).getCategory().getHexColor()));
+            holder.hexColorIV.setBackgroundColor(
+                    Color.parseColor(mTransactions.get(position).getCategory().getHexColor()));
         }
         if (mTransactions.get(position).getAttachment() != null &&
-                !mTransactions.get(position).getAttachment().equals("") )
-        {
+                !mTransactions.get(position).getAttachment().equals("") ) {
+
             holder.attachmentView.setVisibility(View.VISIBLE);
             // It will open the picture taken.
             // TODO Replace the click listener with the detail view of the item.
@@ -108,28 +112,31 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+        mCurrencyName = currencyName;
     }
 
     public void filter(String text) {
         List<Transaction> filterTransaction = new ArrayList<>();
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             mTransactions = mAllTransactions;
         } else {
             text = text.toLowerCase();
             boolean isNumber = text.matches("^-?\\d+.?(\\d+)?$");
-            for(Transaction transaction: mAllTransactions) {
+            for (Transaction transaction: mAllTransactions) {
                 // if text is numeric, search the balance
                 if (isNumber) {
                     Timber.i(String.valueOf(transaction.getAmount()));
-                    if (String.valueOf(transaction.getAmount()).toLowerCase().contains(text)){
+                    if (String.valueOf(transaction.getAmount()).toLowerCase().contains(text)) {
                         filterTransaction.add(transaction);
                     }
                     continue;
                 }
                 // else search category.
-                if (transaction.getCategory() == null) { continue; }
-                if(transaction.getCategory().getName().toLowerCase().contains(text)){
+                if (transaction.getCategory() == null) {
+                    continue;
+                }
+
+                if (transaction.getCategory().getName().toLowerCase().contains(text)) {
                     filterTransaction.add(transaction);
                 }
             }

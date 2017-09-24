@@ -22,8 +22,8 @@ public class SyncService extends Service {
     @Inject DataManager mDataManager;
     private CompositeDisposable mDisposables;
 
-    private boolean syncTransactionsComplete = false;
-    private boolean syncCategoriesComplete = false;
+    private boolean mSyncTransactionsComplete = false;
+    private boolean mSyncCategoriesComplete = false;
 
     @Override
     public void onCreate() {
@@ -97,14 +97,14 @@ public class SyncService extends Service {
     // otherwise syncCategories
     private void stopService(boolean isSyncTransaction) {
         if (isSyncTransaction) {
-            syncTransactionsComplete = true;
-            if (syncCategoriesComplete) {
+            mSyncTransactionsComplete = true;
+            if (mSyncCategoriesComplete) {
                 Timber.i("sync stopped...");
                 stopSelf();
             }
         } else {
-            syncCategoriesComplete = true;
-            if (syncTransactionsComplete) {
+            mSyncCategoriesComplete = true;
+            if (mSyncTransactionsComplete) {
                 Timber.i("sync stopped...");
                 stopSelf();
             }

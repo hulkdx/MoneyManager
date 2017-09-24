@@ -1,15 +1,14 @@
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 8/14/2017.
  */
-package com.hulkdx.moneymanager.ui.login_sync;
+package com.hulkdx.moneymanager.ui.loginsync;
 
-import android.text.TextUtils;
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
 import com.hulkdx.moneymanager.util.JsonReader;
 import javax.inject.Inject;
-import io.reactivex.Observable;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -38,28 +37,9 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
         if (mDisposables != null) mDisposables.clear();
     }
 
-    public void validation(Observable<CharSequence> username, Observable<CharSequence> password) {
-        mDisposables.add(
-            Observable.combineLatest(
-                    username, password,
-                    (newName, newPassword) -> {
-                        boolean nameValid = !TextUtils.isEmpty(newName);
-                        if (!nameValid) { getMvpView().showUserNameError(); }
-                        else { getMvpView().hideUserNameError(); }
-                        boolean passwordValid = !TextUtils.isEmpty(newPassword);
-                        if (!passwordValid) { getMvpView().showPasswordError(); }
-                        else { getMvpView().hidePasswordError(); }
-                        return nameValid && passwordValid;
-                    })
-                    .distinctUntilChanged()
-                    .subscribe(isValid -> getMvpView().setEnableLoginBtn(isValid))
-        );
-
-    }
-
     public void login(String username, String password) {
         mDisposables.add(
-            mDataManager.login(username, password)
+                mDataManager.login(username, password)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(
@@ -73,7 +53,7 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                                 getMvpView().successfullyLoggedIn();
                             },
                             error -> {
-                                if (error instanceof HttpException){
+                                if (error instanceof HttpException) {
                                     // Username and password is invalid!
                                     if (((HttpException) error).code() == 500) {
                                         getMvpView().showLoginError( JsonReader.getErrorMessage(

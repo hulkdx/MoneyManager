@@ -15,7 +15,7 @@ public class JsonReader {
         try {
             JSONObject jsonObject = new JSONObject(responseBody.string());
 
-            if (jsonObject.has("error")){
+            if (jsonObject.has("error")) {
                 return jsonObject.getString("error");
             } else if (jsonObject.has("username")) {
                 // The server returns json array.

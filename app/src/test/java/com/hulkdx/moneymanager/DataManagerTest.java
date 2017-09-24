@@ -46,7 +46,8 @@ public class DataManagerTest {
 
     @Test
     public void syncTransactionEmits() {
-        List<Transaction> transactions = Arrays.asList(TestDataFactory.makeTransactionWithoutCategory(1),
+        List<Transaction> transactions = Arrays.asList(
+                TestDataFactory.makeTransactionWithoutCategory(1),
                 TestDataFactory.makeTransactionWithoutCategory(1));
 
         TransactionResponse response = new TransactionResponse();
@@ -63,7 +64,8 @@ public class DataManagerTest {
 
     @Test
     public void syncTransactionCallsApiAndDatabase() {
-        List<Transaction> transactions = Arrays.asList(TestDataFactory.makeTransactionWithoutCategory(1),
+        List<Transaction> transactions = Arrays.asList(
+                TestDataFactory.makeTransactionWithoutCategory(1),
                 TestDataFactory.makeTransactionWithoutCategory(1));
 
         TransactionResponse response = new TransactionResponse();

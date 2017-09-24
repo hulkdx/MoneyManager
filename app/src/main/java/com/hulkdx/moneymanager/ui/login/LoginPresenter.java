@@ -14,7 +14,6 @@ import com.hulkdx.moneymanager.ui.base.BasePresenter;
 @ConfigPersistent
 public class LoginPresenter extends BasePresenter<LoginMvpView> {
 
-    private Disposable mDisposable;
     private final DataManager mDataManager;
 
     @Inject
@@ -30,28 +29,6 @@ public class LoginPresenter extends BasePresenter<LoginMvpView> {
     @Override
     public void detachView() {
         super.detachView();
-        if (mDisposable != null) mDisposable.dispose();
-    }
-
-/*
-    Validating name EditText and Initial Money EditText, it shows error if its not validate and hide
-    the button.
- */
-    public void validation(Observable<CharSequence> nameObservable, Observable<CharSequence> initialMoneyObservable) {
-        mDisposable = Observable.combineLatest(
-                nameObservable, initialMoneyObservable,
-                (newName, newInitialMoney) -> {
-                    boolean nameValid = !TextUtils.isEmpty(newName);
-                    if (!nameValid) { getMvpView().showNameError(); }
-                    else { getMvpView().hideNameError(); }
-                    boolean initialValid = !TextUtils.isEmpty(newInitialMoney);
-                    if (!initialValid) { getMvpView().showInitialError(); }
-                    else { getMvpView().hideInitialError(); }
-                    return nameValid && initialValid;
-                })
-                .distinctUntilChanged()
-                .subscribe(isValid -> getMvpView().setEnabledButton(isValid));
-
     }
 
     public void saveUserInformation(String name, int initialMoney, String currency) {

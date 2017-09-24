@@ -28,6 +28,6 @@ public class TestDataFactory {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date todayDate = new Date();
         Date plusDate = new Date(todayDate.getTime() + TimeUnit.DAYS.toMillis( i ));
-        return new Transaction(dateFormat.format(plusDate), i+1, "");
+        return new Transaction(dateFormat.format(plusDate), i + 1, "");
     }
 }

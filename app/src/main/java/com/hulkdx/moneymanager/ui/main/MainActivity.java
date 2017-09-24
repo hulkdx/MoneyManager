@@ -98,7 +98,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
     @BindView(R.id.imageview_add_attachment) ImageView mAddAttachmentIV;
-    private PopupMenu popup;
+
+    private PopupMenu mAttachmentPopupMenu;
 
     private long mSelectedCategoryId = -1;
     // The uri string of selected attachment.
@@ -154,9 +155,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mMainPresenter.loadCategories();
         mCurrentDateCalendar = Calendar.getInstance();
         // PopupMenu for attachment (take a new picture, or choose from gallery)
-        popup = new PopupMenu(this, mAddAttachmentIV);
-        popup.getMenuInflater().inflate(R.menu.popup_menu_select_pictures, popup.getMenu());
-        popup.setOnMenuItemClickListener(this);
+        mAttachmentPopupMenu = new PopupMenu(this, mAddAttachmentIV);
+        mAttachmentPopupMenu.getMenuInflater().inflate(R.menu.popup_menu_select_pictures,
+                mAttachmentPopupMenu.getMenu());
+        mAttachmentPopupMenu.setOnMenuItemClickListener(this);
     }
 
     @Override
@@ -196,14 +198,17 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mMainPresenter.detachView();
     }
 
-    /*
+    /**
      * Toggle plus text view to minus.
      */
     private void togglePlusTextView() {
-        if (mCurrencyPlusTextView.getText().equals("+")) { mCurrencyPlusTextView.setText("-"); }
-        else { mCurrencyPlusTextView.setText("+"); }
+        if (mCurrencyPlusTextView.getText().equals("+")) {
+            mCurrencyPlusTextView.setText("-");
+        } else {
+            mCurrencyPlusTextView.setText("+");
+        }
     }
-    /*
+    /**
      * Show/hide date Layout when the button is clicked
      * @param showDate : true => show the date layout, false => don't show it.
      */
@@ -212,7 +217,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mDateBottomLayout.setVisibility(showDate ? View.VISIBLE : View.GONE);
         showKeyboard(!showDate);
     }
-    /*
+    /**
      * Change the bottom bar icons and make the EditText focusable.
      * @param isShown : true -> show bottomLayout / false -> hide it.
      */
@@ -226,8 +231,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         // Icons
         mBottomExpandedLayout.setVisibility(isShown ? View.VISIBLE : View.GONE);
         mBottomLayout.setVisibility(isShown ? View.GONE : View.VISIBLE);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRootListView.getLayoutParams();
-        layoutParams.addRule(RelativeLayout.ABOVE, isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
+        RelativeLayout.LayoutParams layoutParams =
+                (RelativeLayout.LayoutParams) mRootListView.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.ABOVE,
+                isShown ? R.id.bottom_layout_expanded : R.id.bottom_layout);
         // Set the EditText focusable and show/hide the keyboard
         showKeyboard(isShown);
     }
@@ -235,7 +242,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      * @param show: show or hide the keyboard
      */
     private void showKeyboard(boolean show) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (show) {
             mAddNewEditText.requestFocus();
             imm.showSoftInput(mAddNewEditText, 0);
@@ -270,7 +278,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         return false;
     }
 
-    private void addTransaction(){
+    private void addTransaction() {
         // Don't do transaction upon empty string.
         if (mAddNewEditText.getText().toString().equals("")) {
             expandBottomLayout(false);
@@ -278,7 +286,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         }
         float amount = Float.parseFloat(mAddNewEditText.getText().toString());
         String dateFormat = mDatePicker.getYear() + "-" +
-                (mDatePicker.getMonth()+1) + "-" + mDatePicker.getDayOfMonth();
+                (mDatePicker.getMonth() + 1) + "-" + mDatePicker.getDayOfMonth();
 
         Transaction newTransaction = new Transaction(
                 dateFormat,
@@ -302,7 +310,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private File createImageFile() throws IOException {
         // Create an image file for captured image.
         File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "MoneyManager_" + timeStamp;
         return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
@@ -319,7 +328,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
     // Spinner Chooser
     @OnItemSelected(R.id.spinner_chooserList)
-    void chooserListSelectedItem(AdapterView<?> parentView, View selectedItemView, int position, long id){
+    void chooserListSelectedItem(AdapterView<?> parentView,
+                                 View selectedItemView, int position, long id) {
         switch (position) {
             // Total Screen
             case 0:
@@ -381,12 +391,16 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
     @OnClick(R.id.bottom_layout)
     public void onClickBottomLayout() {
-        if (!mAddNewEditText.isFocused()) { expandBottomLayout(true); }
+        if (!mAddNewEditText.isFocused()) {
+            expandBottomLayout(true);
+        }
     }
 
     @OnClick(R.id.imageview_date)
     public void onClickDateIV() {
-        if (mAddNewEditText.isFocused()) { showDateLayout(true); }
+        if (mAddNewEditText.isFocused()) {
+            showDateLayout(true);
+        }
     }
 
     @OnClick(R.id.button_date_done)
@@ -403,16 +417,25 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public void onClickNextArrowIV() {
         onClickedArrows(true);
     }
-    // @param arrowDirection: false -> previous arrow, true -> next arrow.
+
+    /***
+     *
+     * @param arrowDirection false -> previous arrow, true -> next arrow.
+     */
     private void onClickedArrows(boolean arrowDirection) {
+
         boolean isCurrentDateTextSet = false;
+
         // Daily is selected
         if (mChooserDateSpinner.getSelectedItemPosition() == 1) {
+
             mSelectedCalendar.add(Calendar.DATE, arrowDirection ? 1 : -1);
             // checking for today.
             if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
-                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH) &&
-                    mSelectedCalendar.get(Calendar.DATE) == mCurrentDateCalendar.get(Calendar.DATE)) {
+                    mCurrentDateCalendar.get(Calendar.MONTH) ==
+                            mSelectedCalendar.get(Calendar.MONTH) &&
+                    mSelectedCalendar.get(Calendar.DATE) ==
+                            mCurrentDateCalendar.get(Calendar.DATE)) {
 
                 mCurrentSelectedDateTV.setText(getString(R.string.today));
                 isCurrentDateTextSet = true;
@@ -420,64 +443,87 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             // Note: tomorrow or yesterday can be in another months/year
             // Check for tomorrow
             mCurrentDateCalendar.add(Calendar.DATE, 1);
+
             if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
-                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH) &&
-                    mSelectedCalendar.get(Calendar.DATE) == mCurrentDateCalendar.get(Calendar.DATE)) {
+                    mCurrentDateCalendar.get(Calendar.MONTH) ==
+                            mSelectedCalendar.get(Calendar.MONTH) &&
+                    mSelectedCalendar.get(Calendar.DATE) ==
+                            mCurrentDateCalendar.get(Calendar.DATE)) {
 
                 mCurrentSelectedDateTV.setText(getString(R.string.tomorrow));
                 isCurrentDateTextSet = true;
             }
+
             // Yesterday
             mCurrentDateCalendar.add(Calendar.DATE, -2);
+
             if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
-                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH) &&
-                    mSelectedCalendar.get(Calendar.DATE) == mCurrentDateCalendar.get(Calendar.DATE)) {
+                    mCurrentDateCalendar.get(Calendar.MONTH) ==
+                            mSelectedCalendar.get(Calendar.MONTH) &&
+                    mSelectedCalendar.get(Calendar.DATE) ==
+                            mCurrentDateCalendar.get(Calendar.DATE)) {
 
                 mCurrentSelectedDateTV.setText(getString(R.string.yesterday));
                 isCurrentDateTextSet = true;
             }
+
             // Set it back to today's date.
             mCurrentDateCalendar.add(Calendar.DATE, 1);
-        }
+
         // Monthly is selected.
-        else if (mChooserDateSpinner.getSelectedItemPosition() == 2) {
+        } else if (mChooserDateSpinner.getSelectedItemPosition() == 2) {
+
             mSelectedCalendar.add(Calendar.MONTH, arrowDirection ? 1 : -1);
+
             // This month
             if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
-                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH)){
+                    mCurrentDateCalendar.get(Calendar.MONTH) ==
+                            mSelectedCalendar.get(Calendar.MONTH)) {
+
                 mCurrentSelectedDateTV.setText(getString(R.string.this_month));
                 isCurrentDateTextSet = true;
             }
             // Next month
             mCurrentDateCalendar.add(Calendar.MONTH, 1);
             if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
-                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH)){
+                    mCurrentDateCalendar.get(Calendar.MONTH) ==
+                            mSelectedCalendar.get(Calendar.MONTH)) {
+
                 mCurrentSelectedDateTV.setText(getString(R.string.next_month));
                 isCurrentDateTextSet = true;
             }
             // Prev month
             mCurrentDateCalendar.add(Calendar.MONTH, -2);
             if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR) &&
-                    mCurrentDateCalendar.get(Calendar.MONTH) == mSelectedCalendar.get(Calendar.MONTH)){
+                    mCurrentDateCalendar.get(Calendar.MONTH) ==
+                            mSelectedCalendar.get(Calendar.MONTH)) {
+
                 mCurrentSelectedDateTV.setText(getString(R.string.pre_month));
                 isCurrentDateTextSet = true;
             }
             // Set the month back
             mCurrentDateCalendar.add(Calendar.MONTH, 1);
-        }
+
         // Yearly is selected.
-        else if (mChooserDateSpinner.getSelectedItemPosition() == 3) {
+        } else if (mChooserDateSpinner.getSelectedItemPosition() == 3) {
+
             mSelectedCalendar.add(Calendar.YEAR, arrowDirection ? 1 : -1);
+
             // This month
-            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR)){
+            if (mCurrentDateCalendar.get(Calendar.YEAR) == mSelectedCalendar.get(Calendar.YEAR)) {
+
                 mCurrentSelectedDateTV.setText(getString(R.string.this_year));
                 isCurrentDateTextSet = true;
-            }
-            else if ((mSelectedCalendar.get(Calendar.YEAR)) == mCurrentDateCalendar.get(Calendar.YEAR) + 1){
+
+            } else if ((mSelectedCalendar.get(Calendar.YEAR)) ==
+                    mCurrentDateCalendar.get(Calendar.YEAR) + 1) {
+
                 mCurrentSelectedDateTV.setText(getString(R.string.next_year));
                 isCurrentDateTextSet = true;
-            }
-            else if ((mSelectedCalendar.get(Calendar.YEAR)) == mCurrentDateCalendar.get(Calendar.YEAR) - 1){
+
+            } else if ((mSelectedCalendar.get(Calendar.YEAR)) ==
+                    mCurrentDateCalendar.get(Calendar.YEAR) - 1) {
+
                 mCurrentSelectedDateTV.setText(getString(R.string.pre_year));
                 isCurrentDateTextSet = true;
             }
@@ -487,20 +533,24 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 mSelectedCalendar.get(Calendar.DATE), mSelectedCalendar.get(Calendar.MONTH) + 1,
                 mSelectedCalendar.get(Calendar.YEAR)));
         // isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
-        int isDailyOrMonthlyOrYearly = mChooserDateSpinner.getSelectedItemPosition()-1;
+        int isDailyOrMonthlyOrYearly = mChooserDateSpinner.getSelectedItemPosition() - 1;
         updateTransactionList(isDailyOrMonthlyOrYearly);
     }
 
     /***** attachment section *****/
     @OnClick(R.id.imageview_add_attachment)
-    public void onClickAddAttachment(View view){
-        popup.show();
+    public void onClickAddAttachment(View view) {
+        mAttachmentPopupMenu.show();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (data == null) { return; }
+
+            if (data == null) {
+                return;
+            }
+
             if (requestCode == PICKED_IMAGE ) {
                 mSelectedAttachment = data.getData().toString();
             } else if (requestCode == CAPTURED_IMAGE) {
@@ -524,14 +574,21 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 }
                 // Create an image file for captured image.
                 File imageFile = null;
-                if (!PermissionChecker.verifyStoragePermissions(this)) { break; }
+                if (!PermissionChecker.verifyStoragePermissions(this)) {
+                    break;
+                }
+
                 try {
                     imageFile = createImageFile();
                 } catch (IOException e) {
                     DialogFactory.createGenericErrorDialog(this,
                             "Cannot create a file,\nReason: " + e.getMessage()).show();
                 }
-                if (imageFile == null) { break; }
+
+                if (imageFile == null) {
+                    break;
+                }
+
                 Uri imageURI = FileProvider.getUriForFile(this,
                         "com.hulkdx.moneymanager.fileprovider", imageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);

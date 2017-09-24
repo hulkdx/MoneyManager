@@ -2,11 +2,12 @@
  * Created by Mohammad Jafarzadeh Rezvan on 8/14/2017.
  */
 
-package com.hulkdx.moneymanager.ui.login_sync;
+package com.hulkdx.moneymanager.ui.loginsync;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView {
 
@@ -32,6 +34,7 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
     @BindView(R.id.password_input_layout) TextInputLayout mPasswordInputLayout;
     @BindView(R.id.error_tv) TextView mErrorTextView;
 
+    private Disposable mDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +44,11 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
-        // Validation
-        Observable<CharSequence> usernameObservable = RxTextView.textChanges(mUsernameET);
-        Observable<CharSequence> passwordObservable = RxTextView.textChanges(mPasswordET);
-        mPresenter.validation(usernameObservable, passwordObservable);
+        // Validate the fields
+        validation();
 
         // Checking if it is redirected from @link RegisterActivity.class:successfullyRegistered
-        if (getIntent().getExtras() != null){
+        if (getIntent().getExtras() != null) {
             mUsernameET.setText(
                     getIntent().getExtras().getString(RegisterActivity.REGISTERED_USERNAME, ""));
             mPasswordET.requestFocus();
@@ -58,44 +59,73 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+        if (mDisposable != null) mDisposable.dispose();
     }
 
     @OnClick(R.id.login)
-    void onClickLogin(){
+    void onClickLogin() {
         mErrorTextView.setText(getString(R.string.loading));
         mLoginBtn.setEnabled(false);
         mPresenter.login(mUsernameET.getText().toString(), mPasswordET.getText().toString());
     }
 
     @OnClick(R.id.register)
-    void onClickRegister(){
+    void onClickRegister() {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 
-    /***** MVP View methods implementation *****/
+    private void validation() {
+        Observable<CharSequence> username = RxTextView.textChanges(mUsernameET);
+        Observable<CharSequence> password = RxTextView.textChanges(mPasswordET);
 
-    @Override
+        if (mDisposable != null) mDisposable.dispose();
+        mDisposable =
+                Observable.combineLatest(
+                        username, password,
+                        (newName, newPassword) -> {
+                            boolean nameValid = !TextUtils.isEmpty(newName);
+
+                            if (!nameValid) {
+                                showUserNameError();
+                            } else {
+                                hideUserNameError();
+                            }
+
+                            boolean passwordValid = !TextUtils.isEmpty(newPassword);
+
+                            if (!passwordValid) {
+                                showPasswordError();
+                            } else {
+                                hidePasswordError();
+                            }
+
+                            return nameValid && passwordValid;
+                        })
+                        .distinctUntilChanged()
+                        .subscribe(this::setEnableLoginBtn);
+
+    }
+
     public void showUserNameError() {
         mUsernameInputLayout.setError(getString(R.string.error_invalid_username));
         mUsernameInputLayout.setErrorEnabled(true);
     }
 
-    @Override
     public void hideUserNameError() {
         mUsernameInputLayout.setErrorEnabled(false);
     }
 
-    @Override
     public void showPasswordError() {
         mPasswordInputLayout.setError(getString(R.string.error_invalid_username));
         mPasswordInputLayout.setErrorEnabled(true);
     }
 
-    @Override
     public void hidePasswordError() {
         mPasswordInputLayout.setErrorEnabled(false);
     }
+
+    /***** MVP View methods implementation *****/
 
     @Override
     public void setEnableLoginBtn(Boolean isValid) {

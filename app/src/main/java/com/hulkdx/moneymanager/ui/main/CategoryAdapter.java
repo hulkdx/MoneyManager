@@ -52,19 +52,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(CategoryHolder holder, int position) {
         // The add button
-        if (position == mCategories.size())
-        {
+        if (position == mCategories.size()) {
             holder.nameTV.setText(mContext.getResources().getString(R.string.add_new_category));
             holder.hexColorImageView.setVisibility(View.GONE);
-            holder.setAddbtn(true);
+            holder.setAddBtn(true);
             return;
         }
-        holder.setAddbtn(false);
+        holder.setAddBtn(false);
         holder.setCategory(mCategories.get(position));
         holder.nameTV.setText(mCategories.get(position).getName());
         holder.hexColorImageView.setVisibility(View.VISIBLE);
 
-        holder.hexColorImageView.setBackgroundColor(Color.parseColor(mCategories.get(position).getHexColor()));
+        holder.hexColorImageView.setBackgroundColor(
+                Color.parseColor(mCategories.get(position).getHexColor()));
     }
 
     @Override
@@ -80,8 +80,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         @BindView(R.id.name_textview) TextView nameTV;
         @BindView(R.id.view_hex_color) ImageView hexColorImageView;
 
-        public Category category;
-        private boolean isAddbtn;
+        private Category mCategory;
+        private boolean mIsAddBtn = false;
 
         public CategoryHolder(View itemView) {
             super(itemView);
@@ -92,12 +92,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         void onItemClicked() {
             if (mCallback != null) {
                 // Add button clicked
-                if (isAddbtn) {
+                if (mIsAddBtn) {
                     mCallback.showAddCategoryDialogFragment();
                     return;
                 }
 
-                mCallback.onCategoryClicked(category.getId());
+                mCallback.onCategoryClicked(mCategory.getId());
                 hexColorImageView.setImageResource(R.drawable.ic_category_selected);
                 // Remove the previous selected ImageView drawable.
                 if (mCurrentSelectedImage != null) {
@@ -112,11 +112,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
 
         public void setCategory(Category category) {
-            this.category = category;
+            mCategory = category;
         }
 
-        public void setAddbtn(boolean addbtn) {
-            isAddbtn = addbtn;
+        public void setAddBtn(boolean addBtn) {
+            mIsAddBtn = addBtn;
         }
     }
 

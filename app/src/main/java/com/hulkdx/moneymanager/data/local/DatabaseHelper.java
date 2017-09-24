@@ -29,13 +29,13 @@ public class DatabaseHelper {
     }
 
     // Helper Function to remove all data
-    public void removeAllTransactions(){
+    public void removeAllTransactions() {
         Realm realm = mRealmProvider.get();
         realm.executeTransaction(realm1 -> realm1.deleteAll());
     }
 
     /************************* Transactions Section *************************/
-    public Flowable<List<Transaction>> getTransactions(){
+    public Flowable<List<Transaction>> getTransactions() {
         Realm realm = mRealmProvider.get();
         RealmResults<Transaction> results = realm.where(Transaction.class).findAllAsync();
         return RxUtil.createFlowableFromRealmResult(realm, results)
@@ -47,7 +47,9 @@ public class DatabaseHelper {
      * @param newTransaction : the new transaction to be added in database.
      * @param categoryId : the id of selected category. -1 means category is not selected.
      */
-    public Flowable<Transaction> addTransaction(final Transaction newTransaction, final long categoryId) {
+    public Flowable<Transaction> addTransaction(final Transaction newTransaction,
+                                                final long categoryId) {
+
         return Flowable.create(subscriber -> {
             Realm realm = null;
             try {
@@ -63,7 +65,8 @@ public class DatabaseHelper {
                                 newTransaction.setId(nextId);
                             }
                             if (categoryId != -1) {
-                                Category c = bgRealm.where(Category.class).equalTo("id", categoryId).findFirst();
+                                Category c = bgRealm.where(Category.class)
+                                                    .equalTo("id", categoryId).findFirst();
                                 newTransaction.setCategory(c);
                             }
                             bgRealm.copyToRealm(newTransaction);
@@ -129,7 +132,7 @@ public class DatabaseHelper {
     /*
      * Get all categories from db.
      */
-    public Flowable<List<Category>> getCategories(){
+    public Flowable<List<Category>> getCategories() {
         Realm realm = mRealmProvider.get();
         RealmResults<Category> results = realm.where(Category.class).findAllAsync();
         return RxUtil.createFlowableFromRealmResult(realm, results)
@@ -157,8 +160,7 @@ public class DatabaseHelper {
                         },
                         subscriber::onComplete,
                         subscriber::onError);
-            }
-            finally {
+            } finally {
                 if (realm != null) {
                     realm.close();
                 }
@@ -180,8 +182,7 @@ public class DatabaseHelper {
                         },
                         subscriber::onComplete,
                         subscriber::onError);
-            }
-            finally {
+            } finally {
                 if (realm != null) {
                     realm.close();
                 }

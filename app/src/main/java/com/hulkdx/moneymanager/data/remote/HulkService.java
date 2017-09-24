@@ -26,7 +26,8 @@ public interface HulkService {
 
     @FormUrlEncoded
     @POST("login")
-    Flowable<User> postLogin(@Field("username") String username, @Field("password") String password);
+    Flowable<User> postLogin(@Field("username") String username,
+                             @Field("password") String password);
 
     @FormUrlEncoded
     @POST("register")
