@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    tools:context="com.hulkdx.moneymanager.ui.main.MainActivity"
+    tools:context="com.hulkdx.moneymanagerv2.ui.main.MainActivity"
     android:background="@drawable/main_background">
 
     <LinearLayout

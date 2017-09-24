@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Simple Money Manager</string>
+    <string name="app_name">Money Manager Version 2</string>
 
     <!-- Dialog Factory -->
     <string name="dialog_action_ok">OK</string>
