@@ -2,7 +2,6 @@ package com.hulkdx.moneymanager;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.hulkdx.moneymanager.data.model.Category;
 import com.hulkdx.moneymanager.data.model.Transaction;
 import junit.framework.TestCase;
 import org.junit.Before;

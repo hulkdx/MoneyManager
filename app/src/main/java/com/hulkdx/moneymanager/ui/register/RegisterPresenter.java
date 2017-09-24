@@ -3,14 +3,11 @@
  */
 package com.hulkdx.moneymanager.ui.register;
 
-import android.text.TextUtils;
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
 import com.hulkdx.moneymanager.util.JsonReader;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;

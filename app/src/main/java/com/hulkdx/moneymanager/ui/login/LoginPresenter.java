@@ -3,10 +3,7 @@
  */
 package com.hulkdx.moneymanager.ui.login;
 
-import android.text.TextUtils;
 import javax.inject.Inject;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
 import com.hulkdx.moneymanager.data.DataManager;
 import com.hulkdx.moneymanager.injection.ConfigPersistent;
 import com.hulkdx.moneymanager.ui.base.BasePresenter;
