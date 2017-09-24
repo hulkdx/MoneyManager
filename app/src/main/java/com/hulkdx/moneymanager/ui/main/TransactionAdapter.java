@@ -76,8 +76,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Date format equals to year-month-day
         String date = mTransactions.get(position).getDate();
         // Show Year?! String year = date.split("-")[0];
-        String month =
-                new DateFormatSymbols().getShortMonths()[ Integer.parseInt(date.split("-")[1]) - 1 ];
+        String month = new DateFormatSymbols()
+                        .getShortMonths()[ Integer.parseInt(date.split("-")[1]) - 1 ];
         String day = date.split("-")[2];
         holder.dateMonthTV.setText(month);
         holder.dateDayTV.setText(day);
