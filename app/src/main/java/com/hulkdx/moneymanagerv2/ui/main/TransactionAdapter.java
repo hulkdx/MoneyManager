@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseLongArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +36,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private String mCurrencyName;
 
     private boolean mShowCheckBox = false;
+    private SparseLongArray mSelectedTransactions;
 
     @Inject
     TransactionAdapter() {
         mTransactions = new ArrayList<>();
         mAllTransactions = new ArrayList<>();
+        mSelectedTransactions = new SparseLongArray();
     }
 
     public void setTransactions(List<Transaction> transactions) {
@@ -118,6 +121,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.getDateDayLayoutParams().removeRule(RelativeLayout.ALIGN_PARENT_START);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.END_OF, R.id.checkBox);
+            holder.checkBox.setOnCheckedChangeListener((compoundButton, check) -> {
+                if (check) {
+                    mSelectedTransactions.append(position, transaction.getId());
+                } else {
+                    mSelectedTransactions.delete(position);
+                }
+            });
         } else {
             holder.checkBox.setVisibility(View.GONE);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.ALIGN_PARENT_START);
@@ -165,6 +175,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     void showCheckbox(boolean show) {
         mShowCheckBox = show;
+    }
+
+    /***
+     * Send only the value of mSelectedTransactions to the MainActivity.
+     * 
+     * @return an array of (long) id selected.
+     */
+    public long[] getSelectedItems() {
+        int selectedItemsSize = mSelectedTransactions.size();
+        long[] arraySelectedTransactionsId = new long[selectedItemsSize];
+        for (int i = 0; i<selectedItemsSize; i++) {
+            arraySelectedTransactionsId[i] = mSelectedTransactions.valueAt(i);
+        }
+        return arraySelectedTransactionsId;
     }
 
     class TransactionHolder extends RecyclerView.ViewHolder {

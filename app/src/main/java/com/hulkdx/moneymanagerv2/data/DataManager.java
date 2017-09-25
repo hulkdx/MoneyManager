@@ -9,14 +9,17 @@ import javax.inject.Singleton;
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper;
 import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.model.Category;
+import com.hulkdx.moneymanagerv2.data.model.DeleteTransactionsRequestBody;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
 import com.hulkdx.moneymanagerv2.data.model.User;
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
+import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 @Singleton
 public class DataManager {
@@ -113,5 +116,12 @@ public class DataManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .concatMap(mDatabaseHelper::addCategories);
+    }
+
+    public Flowable<ResponseBody> deleteTransactions(long[] selectedIds) {
+        return mHulkService.deleteTransaction("JWT " + getPreferencesHelper().getToken(),
+                new DeleteTransactionsRequestBody(selectedIds))
+                .subscribeOn(Schedulers.io());
+        // TODO remove from database as well.
     }
 }

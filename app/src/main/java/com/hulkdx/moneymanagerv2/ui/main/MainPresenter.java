@@ -131,4 +131,25 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         );
 
     }
+
+    /**
+     *
+     * @param selectedIds : ids selected to be removed from db or the api.
+     */
+    public void deleteTransactions(long[] selectedIds) {
+
+        mDisposables.add(
+                mDataManager
+                        .deleteTransactions(selectedIds)
+                        .subscribe(
+                                transactions -> {
+                                    Timber.i("searchTransactionWithDate onCompleted");
+                                },
+                                error -> {
+                                    Timber.i("searchTransactionWithDate onCompleted");
+                                },
+                                () -> Timber.i("searchTransactionWithDate onCompleted")
+                        )
+        );
+    }
 }
