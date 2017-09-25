@@ -17,6 +17,7 @@ import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 @Singleton
 public class DatabaseHelper {
@@ -37,7 +38,9 @@ public class DatabaseHelper {
     /************************* Transactions Section *************************/
     public Flowable<List<Transaction>> getTransactions() {
         Realm realm = mRealmProvider.get();
-        RealmResults<Transaction> results = realm.where(Transaction.class).findAllAsync();
+        RealmResults<Transaction> results = realm.where(Transaction.class).
+                findAllSortedAsync("date", Sort.DESCENDING);
+        
         return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
