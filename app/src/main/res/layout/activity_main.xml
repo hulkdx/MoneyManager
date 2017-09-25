@@ -107,26 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:focusableInTouchMode="true">
-
-                <SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:iconifiedByDefault="false"
-                    android:queryHint="Search"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/transaction_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="4dp"/>
-
-            </LinearLayout>
+            <include layout="@layout/main_listviews" />
 
         </android.support.v4.widget.NestedScrollView>
 
