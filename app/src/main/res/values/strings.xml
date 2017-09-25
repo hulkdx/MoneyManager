@@ -69,6 +69,9 @@
     <string name="pre_year">Last Year</string>
     <string name="setDate">%1$d/%2$d/%3$d</string>
 
+    <!-- main_listviews-->
+    <string name="delete_image_view_desc">Delete an item</string>
+
     <!-- CardView Transaction -->
     <string name="balance_value_positive">+ %1$.2f</string>
     <string name="balance_value_negative">- %1$.2f</string>

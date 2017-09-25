@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -98,6 +99,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.previous_arrow_ImageView) ImageView mPreviousArrowIV;
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
     @BindView(R.id.imageview_add_attachment) ImageView mAddAttachmentIV;
+    @BindView(R.id.delete_imageView) ImageView mDeleteImageView;
 
     private PopupMenu mAttachmentPopupMenu;
 
@@ -111,6 +113,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private Calendar mSelectedCalendar;
 
     private BroadcastReceiver mBroadcastReceiver = null;
+    private boolean mIsDeleteSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -416,6 +419,20 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @OnClick(R.id.next_arrow_ImageView)
     public void onClickNextArrowIV() {
         onClickedArrows(true);
+    }
+
+    @OnClick(R.id.delete_imageView)
+    public void onClickDeleteImageView() {
+        mIsDeleteSelected = !mIsDeleteSelected;
+
+        if (mIsDeleteSelected) {
+            mDeleteImageView.setColorFilter(ContextCompat.getColor(this, R.color.red),
+                    android.graphics.PorterDuff.Mode.MULTIPLY);
+            // TODO show checkbox in the list view.
+        } else {
+            mDeleteImageView.setColorFilter(null);
+            // TODO the remove selected items.
+        }
     }
 
     /***
