@@ -22,8 +22,9 @@ public class HulkApplication extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+        } else {
+            Fabric.with(this, new Crashlytics());
         }
-        Fabric.with(this, new Crashlytics());
     }
 
     public static HulkApplication get(Context context) {
