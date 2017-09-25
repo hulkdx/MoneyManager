@@ -56,7 +56,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    HulkService provideRecrumoService() {
+    HulkService provideHulkService() {
         return HulkService.Creator.newService();
     }
 }
