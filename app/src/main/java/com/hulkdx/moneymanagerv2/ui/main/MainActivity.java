@@ -115,6 +115,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private BroadcastReceiver mBroadcastReceiver = null;
     private boolean mIsDeleteSelected = false;
 
+    private boolean mIsFirstTimeLoadingTransactions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +156,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);
         mCategoryAdapter.setCallback(this);
         mMainPresenter.attachView(this);
+        mIsFirstTimeLoadingTransactions = true;
         mMainPresenter.loadTransactions();
         mMainPresenter.loadCategories();
         mCurrentDateCalendar = Calendar.getInstance();
@@ -337,6 +340,12 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             // Total Screen
             case 0:
                 showTopLayout(false);
+                // Do not load Transactions on First Time running the application. only
+                // load it when Spinner is selected.
+                if (mIsFirstTimeLoadingTransactions) {
+                    mIsFirstTimeLoadingTransactions = false;
+                    break;
+                }
                 mMainPresenter.loadTransactions();
                 break;
             // Daily Screen
