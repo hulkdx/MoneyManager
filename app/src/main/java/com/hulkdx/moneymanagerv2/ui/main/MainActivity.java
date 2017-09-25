@@ -726,4 +726,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mScrollView.fullScroll(View.FOCUS_DOWN);
     }
 
+    @Override
+    public void showEmptyDeleteTransactions() {
+        DialogFactory.createGenericErrorDialog(this, getString(R.string.error_delete_transactions))
+                .show();
+    }
+
 }

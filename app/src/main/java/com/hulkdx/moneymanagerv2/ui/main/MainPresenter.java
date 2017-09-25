@@ -9,9 +9,12 @@ import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
 import com.hulkdx.moneymanagerv2.ui.base.BasePresenter;
+import com.hulkdx.moneymanagerv2.util.JsonReader;
+
 import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.HttpException;
 import timber.log.Timber;
 
 @ConfigPersistent
@@ -143,12 +146,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         .deleteTransactions(selectedIds)
                         .subscribe(
                                 transactions -> {
-                                    Timber.i("searchTransactionWithDate onCompleted");
                                 },
-                                error -> {
-                                    Timber.i("searchTransactionWithDate onCompleted");
-                                },
-                                () -> Timber.i("searchTransactionWithDate onCompleted")
+                                error -> getMvpView().showEmptyDeleteTransactions(),
+                                () -> Timber.i("deleteTransactions onCompleted")
                         )
         );
     }
