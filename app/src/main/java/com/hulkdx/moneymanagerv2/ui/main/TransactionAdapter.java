@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,8 +34,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private Context mContext;
     private String mCurrencyName;
 
+    private boolean mShowCheckBox = false;
+
     @Inject
-    public TransactionAdapter() {
+    TransactionAdapter() {
         mTransactions = new ArrayList<>();
         mAllTransactions = new ArrayList<>();
     }
@@ -57,9 +60,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(TransactionHolder holder, int position) {
-        // Set background of the layout on odd position to white
+
+        Transaction transaction  = mTransactions.get(position);
+
+        // Set background of the layout on odd position to white and grey on even.
         holder.rootLayout.setBackgroundColor(ContextCompat
                 .getColor(mContext, (position % 2 == 0) ? R.color.white : R.color.grey));
+        // Set balance text and colors
         if (mTransactions.get(position).isAmountPositive()) {
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_positive,
                     mTransactions.get(position).getAmount()));
@@ -71,38 +78,49 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_negative,
                      mTransactions.get(position).getAmount() * -1));
         }
+        // Set Currency
         holder.balanceCurrencyTV.setText(mCurrencyName);
 
         // Date format equals to year-month-day
-        String date = mTransactions.get(position).getDate();
+        String date = transaction.getDate();
         // Show Year?! String year = date.split("-")[0];
         String month = new DateFormatSymbols()
                         .getShortMonths()[ Integer.parseInt(date.split("-")[1]) - 1 ];
         String day = date.split("-")[2];
         holder.dateMonthTV.setText(month);
         holder.dateDayTV.setText(day);
-
-        if (mTransactions.get(position).getCategory() != null ) {
-            holder.categoryNameTV.setText(mTransactions.get(position).getCategory().getName());
+        // Category
+        if (transaction.getCategory() != null ) {
+            holder.categoryNameTV.setText(transaction.getCategory().getName());
 
             holder.hexColorIV.setBackgroundColor(
-                    Color.parseColor(mTransactions.get(position).getCategory().getHexColor()));
+                    Color.parseColor(transaction.getCategory().getHexColor()));
         }
-        if (mTransactions.get(position).getAttachment() != null &&
-                !mTransactions.get(position).getAttachment().equals("") ) {
+        // Attachment
+        if (transaction.getAttachment() != null &&
+                !transaction.getAttachment().equals("") ) {
 
             holder.attachmentView.setVisibility(View.VISIBLE);
             // It will open the picture taken.
             // TODO Replace the click listener with the detail view of the item.
             holder.attachmentView.setOnClickListener(view -> {
                 Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(mTransactions.get(position).getAttachment()));
+                        Uri.parse(transaction.getAttachment()));
                 // According to FileProvider docs this flag is required.
                 // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 mContext.startActivity(intent);
             });
 
+        }
+
+        if (mShowCheckBox) {
+            holder.checkBox.setVisibility(View.VISIBLE);
+            holder.getDateDayLayoutParams().removeRule(RelativeLayout.ALIGN_PARENT_START);
+            holder.getDateDayLayoutParams().addRule(RelativeLayout.END_OF, R.id.checkBox);
+        } else {
+            holder.checkBox.setVisibility(View.GONE);
+            holder.getDateDayLayoutParams().addRule(RelativeLayout.ALIGN_PARENT_START);
         }
     }
 
@@ -111,11 +129,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         return mTransactions.size();
     }
 
-    public void setCurrencyName(String currencyName) {
+    void setCurrencyName(String currencyName) {
         mCurrencyName = currencyName;
     }
 
-    public void filter(String text) {
+    void filter(String text) {
         List<Transaction> filterTransaction = new ArrayList<>();
         if (text.isEmpty()) {
             mTransactions = mAllTransactions;
@@ -145,6 +163,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         notifyDataSetChanged();
     }
 
+    void showCheckbox(boolean show) {
+        mShowCheckBox = show;
+    }
+
     class TransactionHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.root_layout) RelativeLayout rootLayout;
         @BindView(R.id.balance_number) TextView balanceNumberTV;
@@ -154,10 +176,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         @BindView(R.id.category_name_textview) TextView categoryNameTV;
         @BindView(R.id.view_hex_color) ImageView hexColorIV;
         @BindView(R.id.attachment_view) View attachmentView;
+        @BindView(R.id.checkBox) CheckBox checkBox;
 
-        public TransactionHolder(View itemView) {
+        // For performances: set LayoutParams on the constructor.
+        private RelativeLayout.LayoutParams dateDayLayoutParams;
+
+        TransactionHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            dateDayLayoutParams = (RelativeLayout.LayoutParams) dateDayTV.getLayoutParams();
+        }
+
+        RelativeLayout.LayoutParams getDateDayLayoutParams() {
+            return dateDayLayoutParams;
         }
     }
 }
