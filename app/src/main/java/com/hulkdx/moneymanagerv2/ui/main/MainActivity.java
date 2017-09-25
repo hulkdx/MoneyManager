@@ -444,8 +444,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             mDeleteImageView.setColorFilter(null);
             mTransactionAdapter.showCheckbox(false);
 
+
+            // check if selected items are empty
+            long[] selectedItem = mTransactionAdapter.getSelectedItems();
+            if (selectedItem.length == 0) {
+                return;
+            }
             // Delete transactions from db and api.
-            mMainPresenter.deleteTransactions(mTransactionAdapter.getSelectedItems());
+            mMainPresenter.deleteTransactions(selectedItem);
             mTransactionAdapter.notifyDataSetChanged();
         }
     }
