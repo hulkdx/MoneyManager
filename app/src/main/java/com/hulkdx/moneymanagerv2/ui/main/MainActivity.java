@@ -428,9 +428,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         if (mIsDeleteSelected) {
             mDeleteImageView.setColorFilter(ContextCompat.getColor(this, R.color.red),
                     android.graphics.PorterDuff.Mode.MULTIPLY);
-            // TODO show checkbox in the list view.
+            // Show checkboxes in the list view.
+            mTransactionAdapter.showCheckbox(true);
+            mTransactionAdapter.notifyDataSetChanged();
         } else {
             mDeleteImageView.setColorFilter(null);
+            mTransactionAdapter.showCheckbox(false);
+            mTransactionAdapter.notifyDataSetChanged();
+
             // TODO the remove selected items.
         }
     }
