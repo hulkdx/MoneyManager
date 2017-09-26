@@ -144,10 +144,11 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         mDisposables.add(
                 mDataManager
                         .deleteTransactions(selectedIds)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 transactions -> {
                                 },
-                                error -> getMvpView().showEmptyDeleteTransactions(),
+                                error -> getMvpView().showErrorDeleteTransactions(),
                                 () -> Timber.i("deleteTransactions onCompleted")
                         )
         );
