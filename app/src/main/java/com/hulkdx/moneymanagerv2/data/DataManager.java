@@ -14,12 +14,10 @@ import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
 import com.hulkdx.moneymanagerv2.data.model.User;
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
-import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 @Singleton
 public class DataManager {
@@ -118,10 +116,21 @@ public class DataManager {
                 .concatMap(mDatabaseHelper::addCategories);
     }
 
-    public Flowable<ResponseBody> deleteTransactions(long[] selectedIds) {
-        return mHulkService.deleteTransaction("JWT " + getPreferencesHelper().getToken(),
-                new DeleteTransactionsRequestBody(selectedIds))
-                .subscribeOn(Schedulers.io());
-        // TODO remove from database as well.
+    public Flowable<TransactionResponse> deleteTransactions(long[] selectedIds) {
+
+        if (getPreferencesHelper().isSync()) {
+            return mHulkService.deleteTransaction("JWT " + getPreferencesHelper().getToken(),
+                    new DeleteTransactionsRequestBody(selectedIds))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .concatMap(transactionResponse -> {
+                        // TODO: There might be a bug happens here when a data deleted from the api
+                        // but not from the database.
+                        return mDatabaseHelper.removeTransactions(selectedIds, transactionResponse);
+                    });
+        }
+
+        return mDatabaseHelper.removeTransactions(selectedIds, null);
+
     }
 }

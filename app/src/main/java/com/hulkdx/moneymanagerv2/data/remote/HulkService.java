@@ -9,7 +9,6 @@ import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
 import com.hulkdx.moneymanagerv2.data.model.User;
 import java.util.List;
 import io.reactivex.Flowable;
-import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -55,8 +54,8 @@ public interface HulkService {
 
 
     @HTTP(method = "DELETE", path = "transactions/delete", hasBody = true)
-    Flowable<ResponseBody> deleteTransaction(@Header("Authorization") String auth,
-                                             @Body DeleteTransactionsRequestBody deleteRequestBody);
+    Flowable<TransactionResponse> deleteTransaction(@Header("Authorization") String auth,
+                                                    @Body DeleteTransactionsRequestBody request);
 
     @GET("categories/get")
     Flowable<List<Category>> getCategories(@Header("Authorization") String auth);

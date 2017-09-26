@@ -18,6 +18,7 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import timber.log.Timber;
 
 @Singleton
 public class DatabaseHelper {
@@ -124,6 +125,59 @@ public class DatabaseHelper {
                         subscriber::onError);
             } finally {
                 subscriber.onNext(response);
+                if (realm != null) {
+                    realm.close();
+                }
+            }
+        }, BackpressureStrategy.LATEST);
+    }
+
+    public Flowable<TransactionResponse> removeTransactions(long[] selectedIds,
+                                                               TransactionResponse response) {
+        return Flowable.create(subscriber -> {
+            Timber.i("DatabaseHelper:removeTransactions");
+            Realm realm = null;
+            try {
+                realm = mRealmProvider.get();
+
+                realm.executeTransactionAsync(
+                        bgRealm -> {
+                            RealmQuery<Transaction> query = bgRealm.where(Transaction.class);
+
+                            for (int i = 0; i < selectedIds.length; i++) {
+                                if (i > 0) {
+                                    query.or();
+                                }
+                                query.equalTo("id", selectedIds[i]);
+                            }
+                            boolean isDeletedAll = query.findAll().deleteAllFromRealm();
+
+                            if (isDeletedAll) {
+
+                                // Calculate the amount manually for the not sync.
+                                if (response == null) {
+                                    TransactionResponse notSyncResponse = new TransactionResponse();
+                                    RealmResults<Transaction> queryResponse =
+                                            bgRealm.where(Transaction.class).findAll();
+                                    float count = 0;
+                                    for (Transaction t : queryResponse) {
+                                        count += t.getAmount();
+                                    }
+                                    notSyncResponse.setAmountCount(count);
+                                    subscriber.onNext(notSyncResponse);
+                                } else {
+                                    subscriber.onNext(response);
+                                }
+
+
+                            } else {
+                                subscriber.onError(
+                                        new Throwable("could not delete all transactions"));
+                            }
+                        },
+                        () -> {},
+                        subscriber::onError);
+            } finally {
                 if (realm != null) {
                     realm.close();
                 }
