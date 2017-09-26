@@ -27,4 +27,6 @@ public interface MainMvpView extends MvpView {
     void onCompleteAddTransactions();
 
     void showErrorDeleteTransactions();
+
+    void deleteTransactionsComplete();
 }

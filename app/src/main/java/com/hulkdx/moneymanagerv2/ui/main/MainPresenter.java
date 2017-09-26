@@ -149,7 +149,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                 transactions -> {
                                 },
                                 error -> getMvpView().showErrorDeleteTransactions(),
-                                () -> Timber.i("deleteTransactions onCompleted")
+                                () -> getMvpView().deleteTransactionsComplete()
                         )
         );
     }

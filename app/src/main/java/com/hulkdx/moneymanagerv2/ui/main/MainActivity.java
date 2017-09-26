@@ -443,7 +443,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         } else {
             mDeleteImageView.setColorFilter(null);
             mTransactionAdapter.showCheckbox(false);
-
+            mTransactionAdapter.notifyDataSetChanged();
 
             // check if selected items are empty
             long[] selectedItem = mTransactionAdapter.getSelectedItems();
@@ -452,7 +452,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             }
             // Delete transactions from db and api.
             mMainPresenter.deleteTransactions(selectedItem);
-            mTransactionAdapter.notifyDataSetChanged();
         }
     }
 
