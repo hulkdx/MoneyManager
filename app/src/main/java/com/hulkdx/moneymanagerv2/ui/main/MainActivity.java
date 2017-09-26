@@ -731,4 +731,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 .show();
     }
 
+    @Override
+    public void deleteTransactionsComplete() {
+        mTransactionAdapter.notifyDataSetChanged();
+    }
+
 }
