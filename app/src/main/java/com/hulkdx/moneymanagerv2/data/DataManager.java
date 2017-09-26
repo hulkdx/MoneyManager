@@ -60,7 +60,7 @@ public class DataManager {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .concatMap(transaction ->
-                            mDatabaseHelper.addTransaction(newTransaction, categoryId));
+                            mDatabaseHelper.addTransaction(transaction, categoryId));
         }
 
         return mDatabaseHelper.addTransaction(newTransaction, categoryId).distinct();
@@ -79,7 +79,7 @@ public class DataManager {
                                     newCategory.getHexColor())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .concatMap(transaction -> mDatabaseHelper.addCategory(newCategory));
+                    .concatMap(mDatabaseHelper::addCategory);
         }
 
         return mDatabaseHelper.addCategory(newCategory);
