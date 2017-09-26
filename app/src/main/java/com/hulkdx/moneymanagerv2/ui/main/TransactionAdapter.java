@@ -133,6 +133,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 }
             });
         } else {
+            holder.checkBox.setChecked(false);
             holder.checkBox.setVisibility(View.GONE);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.ALIGN_PARENT_START);
         }
