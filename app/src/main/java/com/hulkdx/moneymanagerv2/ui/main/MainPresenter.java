@@ -146,8 +146,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         .deleteTransactions(selectedIds)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                transactions -> {
-                                },
+                                transactions -> {},
                                 error -> getMvpView().showErrorDeleteTransactions(),
                                 () -> getMvpView().deleteTransactionsComplete()
                         )
