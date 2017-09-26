@@ -80,6 +80,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         } else {
             holder.balanceNumberTV.setText(mContext.getString(R.string.balance_value_negative,
                      mTransactions.get(position).getAmount() * -1));
+            holder.balanceNumberTV.setTextColor(
+                    ContextCompat.getColor(mContext, R.color.black));
+            holder.balanceCurrencyTV.setTextColor(
+                    ContextCompat.getColor(mContext, R.color.black));
         }
         // Set Currency
         holder.balanceCurrencyTV.setText(mCurrencyName);

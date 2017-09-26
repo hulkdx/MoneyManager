@@ -60,7 +60,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:fontFamily="sans-serif"
-            android:textColor="@color/black"
             android:textSize="@dimen/transactions_text_size_bigger"
             tools:text="- 21,00" />
 
@@ -72,7 +71,6 @@
             android:layout_below="@+id/balance_number"
             android:layout_gravity="end"
             android:fontFamily="sans-serif"
-            android:textColor="@color/black"
             android:textSize="@dimen/transactions_text_size"
             tools:text="@string/euro" />
 
