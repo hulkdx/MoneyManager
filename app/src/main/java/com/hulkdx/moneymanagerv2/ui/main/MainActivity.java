@@ -87,8 +87,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.bottom_layout) LinearLayout mBottomLayout;
     @BindView(R.id.bottom_layout_expanded) LinearLayout mBottomExpandedLayout;
     @BindView(R.id.bottom_layout_date) LinearLayout mDateBottomLayout;
-    @BindView(R.id.rootListView) LinearLayout mRootListView;
-    @BindView(R.id.topBarDate) LinearLayout mRootTopBar;
+    @BindView(R.id.rootListView) RelativeLayout mRootListView;
     @BindView(R.id.et_add_new_balance) EditText mAddNewEditText;
     @BindView(R.id.button_date_done) Button mDateDoneButton;
     @BindView(R.id.date_picker) DatePicker mDatePicker;
@@ -263,7 +262,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
      * @param show : show layout when its true. or hide it when its false.
      */
     private void showTopLayout(boolean show) {
-        mRootTopBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mPreviousArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
+        mNextArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
+        // I do not setVisibility for mCurrentSelectedDateTV because NestedScrollView is
+        // layout_below of it.
     }
     /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
@@ -346,6 +348,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                     mIsFirstTimeLoadingTransactions = false;
                     break;
                 }
+                mCurrentSelectedDateTV.setText("");
                 mMainPresenter.loadTransactions();
                 break;
             // Daily Screen
