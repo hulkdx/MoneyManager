@@ -264,8 +264,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private void showTopLayout(boolean show) {
         mPreviousArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
         mNextArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
-        // I do not setVisibility for mCurrentSelectedDateTV because NestedScrollView is
-        // layout_below of it.
+        mCurrentSelectedDateTV.setVisibility(show ? View.VISIBLE : View.GONE);
     }
     /*
      * on touch recycler view make the edit text focus off and hide the keyboard.
