@@ -119,18 +119,17 @@ public class DataManager {
     public Flowable<TransactionResponse> deleteTransactions(long[] selectedIds) {
 
         if (getPreferencesHelper().isSync()) {
-            return mHulkService.deleteTransaction("JWT " + getPreferencesHelper().getToken(),
-                    new DeleteTransactionsRequestBody(selectedIds))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .concatMap(transactionResponse -> {
-                        // TODO: There might be a bug happens here when a data deleted from the api
-                        // but not from the database.
-                        return mDatabaseHelper.removeTransactions(selectedIds, transactionResponse);
-                    });
+            return mDatabaseHelper.removeTransactions(selectedIds, true)
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .concatMap(
+                            transactionResponse ->
+                                    mHulkService.deleteTransaction(
+                                            "JWT " + getPreferencesHelper().getToken(),
+                                            new DeleteTransactionsRequestBody(selectedIds))
+                    );
         }
 
-        return mDatabaseHelper.removeTransactions(selectedIds, null);
+        return mDatabaseHelper.removeTransactions(selectedIds, false);
 
     }
 }

@@ -12,6 +12,7 @@ import com.hulkdx.moneymanagerv2.ui.base.BasePresenter;
 import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 @ConfigPersistent
@@ -141,6 +142,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         mDisposables.add(
                 mDataManager
                         .deleteTransactions(selectedIds)
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 transactionResponse -> {

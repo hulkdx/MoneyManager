@@ -134,7 +134,7 @@ public class DatabaseHelper {
     }
 
     public Flowable<TransactionResponse> removeTransactions(long[] selectedIds,
-                                                               TransactionResponse response) {
+                                                            boolean isSync) {
         return Flowable.create(subscriber -> {
             Timber.i("DatabaseHelper:removeTransactions");
             Realm realm = null;
@@ -156,16 +156,16 @@ public class DatabaseHelper {
                             if (isDeletedAll) {
 
                                 // Calculate the amount manually for the not sync.
-                                if (response == null) {
-                                    TransactionResponse notSyncResponse = new TransactionResponse();
+                                TransactionResponse response = new TransactionResponse();
+                                if (!isSync) {
                                     RealmResults<Transaction> queryResponse =
                                             bgRealm.where(Transaction.class).findAll();
                                     float count = 0;
                                     for (Transaction t : queryResponse) {
                                         count += t.getAmount();
                                     }
-                                    notSyncResponse.setAmountCount(count);
-                                    subscriber.onNext(notSyncResponse);
+                                    response.setAmountCount(count);
+                                    subscriber.onNext(response);
                                 } else {
                                     subscriber.onNext(response);
                                 }
