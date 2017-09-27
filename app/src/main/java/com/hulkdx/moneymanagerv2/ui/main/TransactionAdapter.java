@@ -39,6 +39,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private String mCurrencyName;
 
     private boolean mShowCheckBox = false;
+    private boolean isCheckBoxHidden = false;
     private SparseLongArray mSelectedTransactions;
 
     private boolean mCheckAllCheckBox = false;
@@ -137,10 +138,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.getDateDayLayoutParams().removeRule(RelativeLayout.ALIGN_PARENT_START);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.END_OF, R.id.checkBox);
-        } else {
+        } else if (!isCheckBoxHidden) {
             holder.checkBox.setChecked(false);
             holder.checkBox.setVisibility(View.GONE);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.ALIGN_PARENT_START);
+            isCheckBoxHidden = true;
         }
     }
 
