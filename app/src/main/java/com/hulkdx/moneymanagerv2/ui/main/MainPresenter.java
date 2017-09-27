@@ -50,13 +50,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactions -> {
+                            Timber.i("loadTransactions");
                             getMvpView().setBalanceTextView(
                                     mDataManager.getPreferencesHelper().getUserMoney());
-                            if (transactions.isEmpty()) {
-                                getMvpView().showEmptyTransactions();
-                            } else {
-                                getMvpView().showTransactions(transactions);
-                            }
+                            getMvpView().showTransactions(transactions);
                         },
                         error -> getMvpView().showError("loadTransactions", error),
                         () -> Timber.i("onCompleted loadTransactions")

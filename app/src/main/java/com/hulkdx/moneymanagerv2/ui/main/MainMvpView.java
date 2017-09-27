@@ -7,12 +7,9 @@ package com.hulkdx.moneymanagerv2.ui.main;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.ui.base.MvpView;
-
 import java.util.List;
 
 public interface MainMvpView extends MvpView {
-
-    void showEmptyTransactions();
 
     void showTransactions(List<Transaction> transactions);
 
