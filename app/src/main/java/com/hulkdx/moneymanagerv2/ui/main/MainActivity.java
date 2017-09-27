@@ -31,6 +31,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -99,6 +100,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     @BindView(R.id.next_arrow_ImageView) ImageView mNextArrowIV;
     @BindView(R.id.imageview_add_attachment) ImageView mAddAttachmentIV;
     @BindView(R.id.delete_imageView) ImageView mDeleteImageView;
+    @BindView(R.id.select_all_check_box) CheckBox mSelectAllCheckBox;
 
     private PopupMenu mAttachmentPopupMenu;
 
@@ -437,12 +439,17 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mIsDeleteSelected = !mIsDeleteSelected;
 
         if (mIsDeleteSelected) {
+            // Show the 'select all checkbox'
+            mSelectAllCheckBox.setVisibility(View.VISIBLE);
+
+
             mDeleteImageView.setColorFilter(ContextCompat.getColor(this, R.color.red),
                     android.graphics.PorterDuff.Mode.MULTIPLY);
             // Show checkboxes in the list view.
             mTransactionAdapter.showCheckbox(true);
             mTransactionAdapter.notifyDataSetChanged();
         } else {
+            mSelectAllCheckBox.setVisibility(View.GONE);
             mDeleteImageView.setColorFilter(null);
             mTransactionAdapter.showCheckbox(false);
             mTransactionAdapter.notifyDataSetChanged();
