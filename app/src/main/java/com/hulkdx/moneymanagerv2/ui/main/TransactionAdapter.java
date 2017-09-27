@@ -256,7 +256,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             // According to FileProvider docs this flag is required.
             // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            mContext.startActivity(intent);
+
+            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                mContext.startActivity(intent);
+            }
         }
 
     }
