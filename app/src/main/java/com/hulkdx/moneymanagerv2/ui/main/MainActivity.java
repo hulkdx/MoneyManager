@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -59,6 +60,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnItemSelected;
@@ -391,6 +393,18 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 mSelectedCalendar.get(Calendar.MONTH) + 1,
                 mSelectedCalendar.get(Calendar.YEAR),
                 isDailyOrMonthlyOrYearly);
+    }
+
+    @OnCheckedChanged(R.id.select_all_check_box)
+    void SelectAllOnChange(CompoundButton compoundButton, boolean check){
+        if (check) {
+            // select all items
+            mTransactionAdapter.checkAllCheckBoxes();
+        } else {
+            // select non
+            mTransactionAdapter.checkNonCheckBoxes();
+        }
+        mTransactionAdapter.notifyDataSetChanged();
     }
 
     /***** On Click implementation *****/

@@ -38,6 +38,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private boolean mShowCheckBox = false;
     private SparseLongArray mSelectedTransactions;
 
+    private boolean mCheckAllCheckBox = false;
+    private boolean mCheckNoneCheckBox = false;
+
     @Inject
     TransactionAdapter() {
         mTransactions = new ArrayList<>();
@@ -63,6 +66,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     @Override
     public void onBindViewHolder(TransactionHolder holder, int position) {
+
+        if (mCheckAllCheckBox) {
+            holder.checkBox.setChecked(true);
+            if (position + 1 == mTransactions.size()) {
+                mCheckAllCheckBox = false;
+            }
+            return;
+        } else if (mCheckNoneCheckBox) {
+            holder.checkBox.setChecked(false);
+            if (position + 1 == mTransactions.size()) {
+                mCheckNoneCheckBox = false;
+            }
+            return;
+        }
 
         Transaction transaction  = mTransactions.get(position);
 
@@ -187,13 +204,21 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
      * 
      * @return an array of (long) id selected.
      */
-    public long[] getSelectedItems() {
+    long[] getSelectedItems() {
         int selectedItemsSize = mSelectedTransactions.size();
         long[] arraySelectedTransactionsId = new long[selectedItemsSize];
         for (int i = 0; i<selectedItemsSize; i++) {
             arraySelectedTransactionsId[i] = mSelectedTransactions.valueAt(i);
         }
         return arraySelectedTransactionsId;
+    }
+
+    void checkAllCheckBoxes() {
+        mCheckAllCheckBox = true;
+    }
+
+    void checkNonCheckBoxes() {
+        mCheckNoneCheckBox = true;
     }
 
     class TransactionHolder extends RecyclerView.ViewHolder {
