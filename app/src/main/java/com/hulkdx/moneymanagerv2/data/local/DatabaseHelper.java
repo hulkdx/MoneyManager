@@ -40,7 +40,8 @@ public class DatabaseHelper {
     public Flowable<List<Transaction>> getTransactions() {
         Realm realm = mRealmProvider.get();
         RealmResults<Transaction> results = realm.where(Transaction.class).
-                findAllSortedAsync("date", Sort.DESCENDING);
+                findAllSortedAsync(new String[] {"date", "id"} ,
+                        new Sort[] {Sort.DESCENDING, Sort.DESCENDING});
         
         return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
