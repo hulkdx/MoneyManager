@@ -50,7 +50,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactions -> {
-                            Timber.i("loadTransactions");
+                            Timber.i("onNext loadTransactions");
                             getMvpView().setBalanceTextView(
                                     mDataManager.getPreferencesHelper().getUserMoney());
                             getMvpView().showTransactions(transactions);
@@ -144,11 +144,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         .subscribe(
                                 transactionResponse -> {
                                     Timber.i("deleteTransactions onNext");
-                                    mDataManager.getPreferencesHelper()
-                                            .setUserMoney(transactionResponse.getAmountCount());
-                                    getMvpView().setBalanceTextView(
-                                            transactionResponse.getAmountCount());
-                                    getMvpView().deleteTransactionsComplete();
+                                    float amount = transactionResponse.getAmountCount();
+                                    mDataManager.getPreferencesHelper().setUserMoney(amount);
+                                    getMvpView().setBalanceTextView(amount);
+                                    getMvpView().deleteTransactionsComplete(amount==0);
                                 },
                                 error -> {
                                     Timber.i("deleteTransactions onError");

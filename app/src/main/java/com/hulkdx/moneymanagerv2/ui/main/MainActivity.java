@@ -727,7 +727,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
 
     @Override
-    public void deleteTransactionsComplete() {
+    public void deleteTransactionsComplete(boolean isEmpty) {
+        mEmptyListTextView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         mTransactionAdapter.notifyDataSetChanged();
     }
 
