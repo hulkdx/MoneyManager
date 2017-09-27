@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ import java.util.List;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
@@ -83,6 +86,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         Transaction transaction  = mTransactions.get(position);
 
+        // Only set item position for the first time.
+        holder.setItemPosition(position);
+
         // Set background of the layout on odd position to white and grey on even.
         holder.rootLayout.setBackgroundColor(ContextCompat
                 .getColor(mContext, (position % 2 == 0) ? R.color.white : R.color.grey));
@@ -125,30 +131,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 !transaction.getAttachment().equals("") ) {
 
             holder.attachmentView.setVisibility(View.VISIBLE);
-            // It will open the picture taken.
-            // TODO Replace the click listener with the detail view of the item.
-            holder.attachmentView.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(transaction.getAttachment()));
-                // According to FileProvider docs this flag is required.
-                // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                mContext.startActivity(intent);
-            });
-
         }
 
         if (mShowCheckBox) {
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.getDateDayLayoutParams().removeRule(RelativeLayout.ALIGN_PARENT_START);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.END_OF, R.id.checkBox);
-            holder.checkBox.setOnCheckedChangeListener((compoundButton, check) -> {
-                if (check) {
-                    mSelectedTransactions.append(position, transaction.getId());
-                } else {
-                    mSelectedTransactions.delete(position);
-                }
-            });
         } else {
             holder.checkBox.setChecked(false);
             holder.checkBox.setVisibility(View.GONE);
@@ -234,6 +222,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         // For performances: set LayoutParams on the constructor.
         private RelativeLayout.LayoutParams dateDayLayoutParams;
+        private int itemPosition;
 
         TransactionHolder(View itemView) {
             super(itemView);
@@ -245,5 +234,30 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         RelativeLayout.LayoutParams getDateDayLayoutParams() {
             return dateDayLayoutParams;
         }
+
+        void setItemPosition(int itemPosition) {
+            this.itemPosition = itemPosition;
+        }
+
+        @OnCheckedChanged(R.id.checkBox)
+        void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+            if (check) {
+                mSelectedTransactions.append(itemPosition, mTransactions.get(itemPosition).getId());
+            } else {
+                mSelectedTransactions.delete(itemPosition);
+            }
+        }
+
+        // Open the attachment picture.
+        @OnClick(R.id.attachment_view)
+        void onClickAttachment() {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(mTransactions.get(itemPosition).getAttachment()));
+            // According to FileProvider docs this flag is required.
+            // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            mContext.startActivity(intent);
+        }
+
     }
 }
