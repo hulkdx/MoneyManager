@@ -649,10 +649,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         return true;
     }
 
-    /***** Callback methods implementation *****/
+    /***** Callback methods implementation *****
 
-    /*
-     * It gets the Category data from @link CategoryDialogFragment
+     **
+     * It gets the Category data from {@link CategoryDialogFragment}
      * and send it to MainPresenter.
      */
     @Override
