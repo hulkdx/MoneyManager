@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface MainMvpView extends MvpView {
 
-    void showEmptyTransactions(List<Transaction> transactions);
+    void showEmptyTransactions();
 
     void showTransactions(List<Transaction> transactions);
 

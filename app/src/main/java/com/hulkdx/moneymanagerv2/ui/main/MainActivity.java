@@ -51,6 +51,7 @@ import com.hulkdx.moneymanagerv2.util.PermissionChecker;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -684,9 +685,9 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     /***** MVP View methods implementation *****/
 
     @Override
-    public void showEmptyTransactions(List<Transaction> transactions) {
+    public void showEmptyTransactions() {
         mEmptyListTextView.setVisibility(View.VISIBLE);
-        mTransactionAdapter.setTransactions(transactions);
+        mTransactionAdapter.setTransactions(new ArrayList<>());
         mTransactionAdapter.notifyDataSetChanged();
     }
 

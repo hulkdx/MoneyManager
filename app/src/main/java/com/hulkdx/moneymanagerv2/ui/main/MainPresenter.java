@@ -53,9 +53,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                             getMvpView().setBalanceTextView(
                                     mDataManager.getPreferencesHelper().getUserMoney());
                             if (transactions.isEmpty()) {
-                            getMvpView().showEmptyTransactions(transactions);
+                                getMvpView().showEmptyTransactions();
                             } else {
-                            getMvpView().showTransactions(transactions);
+                                getMvpView().showTransactions(transactions);
                             }
                         },
                         error -> getMvpView().showError("loadTransactions", error),
