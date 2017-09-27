@@ -44,6 +44,7 @@
 
     </LinearLayout>
 
+    <!-- This relative layout is required for transparent background -->
     <LinearLayout
         android:id="@+id/rootListView"
         android:layout_width="match_parent"
@@ -68,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/main_activity_border_transparent"
                     android:gravity="center_horizontal"
-                    android:padding="4dp" />
+                    android:padding="4dp"
+                    tools:entries="@array/transaction_spinner_value"/>
 
                 <LinearLayout
                     android:id="@+id/topBarDate"
