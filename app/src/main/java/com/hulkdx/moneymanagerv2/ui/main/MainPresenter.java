@@ -41,7 +41,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     public String getCurrencyName() {
         return mDataManager.getPreferencesHelper().getCurrencyName();
     }
-    /*
+    /**
      * Load transactions from Database.
      */
     public void loadTransactions() {
@@ -60,7 +60,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
-    /*
+    /**
      * Add a new Transaction.
      */
     public void addTransaction(final Transaction newTransaction, long categoryId) {
@@ -79,7 +79,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
-    /*
+    /**
      * Load categories from Database.
      */
     public void loadCategories() {
@@ -93,7 +93,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
-    /*
+    /**
      * Add a new category.
      */
     public void addCategory(final Category newCategory) {
@@ -110,7 +110,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
-    /*
+    /**
      * Search the db for the specify date.
      * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
      */
