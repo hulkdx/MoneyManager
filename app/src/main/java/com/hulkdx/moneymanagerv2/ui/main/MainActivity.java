@@ -243,7 +243,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         // Set the EditText focusable and show/hide the keyboard
         showKeyboard(isShown);
     }
-    /*
+    /**
      * @param show: show or hide the keyboard
      */
     private void showKeyboard(boolean show) {
@@ -257,7 +257,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             imm.hideSoftInputFromWindow(mAddNewEditText.getWindowToken(), 0);
         }
     }
-    /*
+    /**
      * Show top layout with arrows.
      * @param show : show layout when its true. or hide it when its false.
      */
@@ -266,7 +266,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mNextArrowIV.setVisibility(show ? View.VISIBLE : View.GONE);
         mCurrentSelectedDateTV.setVisibility(show ? View.VISIBLE : View.GONE);
     }
-    /*
+    /**
      * on touch recycler view make the edit text focus off and hide the keyboard.
      */
     @OnTouch(R.id.transaction_recycler_view)
@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         }
         return true;
     }
-    /*
+    /**
      * Create Image file for Capturing a picture from Camera.
      */
     private File createImageFile() throws IOException {
@@ -379,7 +379,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 break;
         }
     }
-    /*
+    /**
      * Search data from the db.
      * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
      */
@@ -457,7 +457,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         }
     }
 
-    /***
+    /**
      *
      * @param arrowDirection false -> previous arrow, true -> next arrow.
      */
@@ -597,8 +597,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             }
         }
     }
-    /*
-     * Popup Menu (@link popup) Item clicks
+    /**
+     * Popup Menu {@link #mAttachmentPopupMenu} Item clicks
      */
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -659,14 +659,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     public void onClickOkCategory(Category category) {
         mMainPresenter.addCategory(category);
     }
-    /*
+    /**
      * on clicking category items in categoryAdapter.
      */
     @Override
     public void onCategoryClicked(long categoryId) {
         mSelectedCategoryId = categoryId;
     }
-    /*
+    /**
      * Show add category dialog
      */
     @Override
