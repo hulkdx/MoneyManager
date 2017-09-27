@@ -650,7 +650,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 }
 
                 Uri imageURI = FileProvider.getUriForFile(this,
-                        "com.hulkdx.moneymanager.fileprovider", imageFile);
+                        "com.hulkdx.moneymanagerv2.fileprovider", imageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
                 startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
                 // Save the image Uri to later get it from onActivityResult, because
