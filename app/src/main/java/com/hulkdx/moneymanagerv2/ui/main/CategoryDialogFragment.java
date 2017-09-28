@@ -45,8 +45,8 @@ public class CategoryDialogFragment extends DialogFragment
         @SuppressLint("InflateParams")
         View mView = getActivity().getLayoutInflater().inflate(R.layout.dialog_category, null);
 
-        mNameEditText = (EditText) mView.findViewById(R.id.et_name);
-        mColorsLinearLayout = (LinearLayout) mView.findViewById(R.id.colors_linearLayout);
+        mNameEditText = mView.findViewById(R.id.et_name);
+        mColorsLinearLayout = mView.findViewById(R.id.colors_linearLayout);
         createColorImageView();
         return new android.support.v7.app.AlertDialog.Builder(getActivity())
                 .setNeutralButton(R.string.dialog_action_ok, this)
