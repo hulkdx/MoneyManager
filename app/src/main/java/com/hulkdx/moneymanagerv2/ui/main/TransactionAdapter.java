@@ -142,7 +142,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             holder.checkBox.setChecked(false);
             holder.checkBox.setVisibility(View.GONE);
             holder.getDateDayLayoutParams().addRule(RelativeLayout.ALIGN_PARENT_START);
-            isCheckBoxHidden = true;
+            if (position + 1 == mTransactions.size()) {
+                isCheckBoxHidden = true;
+            }
         }
     }
 
@@ -187,6 +189,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     void showCheckbox(boolean show) {
         mShowCheckBox = show;
+        isCheckBoxHidden = false;
     }
 
     /***
