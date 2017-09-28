@@ -28,7 +28,7 @@ public class CategoryDialogFragment extends DialogFragment
     private LinearLayout mColorsLinearLayout;
     private CategoryFragmentListener mListener;
     private static int catColorsSelectedImageViews = -1;
-    int[] colorsArray = null;
+    private int[] colorsArray = null;
 
     public CategoryDialogFragment() { }
 
