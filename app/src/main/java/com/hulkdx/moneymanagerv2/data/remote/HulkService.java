@@ -19,7 +19,6 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 8/18/2017.
