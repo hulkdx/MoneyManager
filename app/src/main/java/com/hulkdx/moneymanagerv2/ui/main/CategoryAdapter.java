@@ -24,7 +24,7 @@ import butterknife.OnClick;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryHolder> {
 
     private List<Category> mCategories;
-    private Context mContext;
+    private final Context mContext;
     private Callback mCallback;
     private ImageView mCurrentSelectedImage = null;
 
