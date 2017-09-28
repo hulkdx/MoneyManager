@@ -62,9 +62,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.setCategory(mCategories.get(position));
         holder.nameTV.setText(mCategories.get(position).getName());
         holder.hexColorImageView.setVisibility(View.VISIBLE);
-
-        holder.hexColorImageView.setBackgroundColor(
-                Color.parseColor(mCategories.get(position).getHexColor()));
+        
+        if (mCategories.get(position).getHexColor() != null) {
+            holder.hexColorImageView.setBackgroundColor(
+                    Color.parseColor(mCategories.get(position).getHexColor()));
+        }
     }
 
     @Override
