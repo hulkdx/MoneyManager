@@ -27,10 +27,6 @@ public class Transaction extends RealmObject {
         return amount;
     }
 
-    public String getAmountString() {
-        return String.valueOf(amount);
-    }
-
     public boolean isAmountPositive() {
         return amount > 0;
     }
