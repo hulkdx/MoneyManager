@@ -105,7 +105,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         error -> getMvpView().showError("addCategory", error),
                         () -> {
                             Timber.i("addCategory onCompleted");
-                            getMvpView().addCategoryDataSet(newCategory);
+                            getMvpView().addCategoryCompleted();
                         }
                 )
         );

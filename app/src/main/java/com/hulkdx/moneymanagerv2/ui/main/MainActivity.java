@@ -723,7 +723,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     }
 
     @Override
-    public void addCategoryDataSet(Category newCategory) {
+    public void addCategoryCompleted() {
         mCategoryAdapter.notifyDataSetChanged();
     }
 
