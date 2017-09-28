@@ -33,20 +33,20 @@ public class ChooserActivity extends BaseActivity {
         }
     }
 
-    void redirectToMainActivity() {
+    private void redirectToMainActivity() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
     }
 
     @OnClick(R.id.btn_yes)
-    void onClickYes() {
+    public void onClickYes() {
         Intent intent = new Intent(this, LoginSyncActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_no)
-    void onClickNo() {
+    public void onClickNo() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
