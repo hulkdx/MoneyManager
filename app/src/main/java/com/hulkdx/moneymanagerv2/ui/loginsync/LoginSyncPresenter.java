@@ -44,6 +44,10 @@ public class LoginSyncPresenter extends BasePresenter<LoginSyncMvpView> {
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                             user -> {
+                                if (user.getToken() == null) {
+                                    getMvpView().showLoginError("Cannot Login");
+                                    return;
+                                }
                                 mDataManager.getPreferencesHelper().saveUserInformation(
                                         user.getUsername(),
                                         0, user.getCurrency());
