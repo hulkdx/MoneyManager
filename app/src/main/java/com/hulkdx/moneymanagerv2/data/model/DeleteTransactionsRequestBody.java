@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName;
  * Created by Mohammad Jafarzadeh Rezvan on 25/09/2017.
  *
  * This class is needed since passing an array to retrofit interface is not possible to do with
- * @Field annotation.
+ * annotation.
  *
- * @link: https://stackoverflow.com/a/37699931/3996989\
+ * https://stackoverflow.com/a/37699931/3996989
  * Note @Field(id[]) does not worked as well.
  */
 
