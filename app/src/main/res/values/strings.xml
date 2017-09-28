@@ -4,7 +4,6 @@
 
     <!-- Dialog Factory -->
     <string name="dialog_action_ok">OK</string>
-    <string name="dialog_action_cancel">Cancel</string>
     <string name="dialog_error_title">Sorry</string>
 
     <!-- Login Activity -->

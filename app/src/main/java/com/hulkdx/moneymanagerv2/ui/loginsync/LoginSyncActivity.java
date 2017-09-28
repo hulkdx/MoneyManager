@@ -117,7 +117,7 @@ public class LoginSyncActivity extends BaseActivity implements LoginSyncMvpView 
     }
 
     public void showPasswordError() {
-        mPasswordInputLayout.setError(getString(R.string.error_invalid_username));
+        mPasswordInputLayout.setError(getString(R.string.error_invalid_password));
         mPasswordInputLayout.setErrorEnabled(true);
     }
 
