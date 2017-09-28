@@ -13,12 +13,12 @@ import com.hulkdx.moneymanagerv2.injection.ApplicationContext;
 @Singleton
 public class PreferencesHelper {
 
-    public static final String PREF_FILE_NAME = "android_hulkdx_pref";
-    public static final String USER_NAME = "name";
-    public static final String USER_MONEY = "totalMoney";
-    public static final String SAVED_CURRENCY = "saved_currency";
-    public static final String SYNC = "sync";
-    public static final String USER_TOKEN = "user_token";
+    private static final String PREF_FILE_NAME = "android_hulkdx_pref";
+    private static final String USER_NAME = "name";
+    private static final String USER_MONEY = "totalMoney";
+    private static final String SAVED_CURRENCY = "saved_currency";
+    private static final String SYNC = "sync";
+    private static final String USER_TOKEN = "user_token";
 
     private final SharedPreferences mPref;
 

@@ -72,8 +72,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
         SearchView.OnQueryTextListener, PopupMenu.OnMenuItemClickListener {
 
-    public static final int PICKED_IMAGE = 1;
-    public static final int CAPTURED_IMAGE = 2;
+    private static final int PICKED_IMAGE = 1;
+    private static final int CAPTURED_IMAGE = 2;
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;

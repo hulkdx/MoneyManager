@@ -106,25 +106,25 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     }
 
-    public void showNameError() {
+    private void showNameError() {
         nameInputLayout.setError(getString(R.string.error_invalid_name));
         nameInputLayout.setErrorEnabled(true);
     }
 
-    public void hideNameError() {
+    private void hideNameError() {
         nameInputLayout.setErrorEnabled(false);
     }
 
-    public void showInitialError() {
+    private void showInitialError() {
         initialInputLayout.setError(getString(R.string.error_invalid_initial));
         initialInputLayout.setErrorEnabled(true);
     }
 
-    public void setEnabledButton(Boolean isValid) {
+    private void setEnabledButton(Boolean isValid) {
         enterBtn.setEnabled(isValid);
     }
 
-    public void hideInitialError() {
+    private void hideInitialError() {
         initialInputLayout.setErrorEnabled(false);
     }
 

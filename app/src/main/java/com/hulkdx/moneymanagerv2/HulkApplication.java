@@ -14,7 +14,7 @@ import com.hulkdx.moneymanagerv2.injection.component.DaggerApplicationComponent;
 import com.hulkdx.moneymanagerv2.injection.module.ApplicationModule;
 
 public class HulkApplication extends Application {
-    ApplicationComponent mApplicationComponent;
+    private ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
