@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
     private static final int PICKED_IMAGE = 1;
     private static final int CAPTURED_IMAGE = 2;
+    public static final String FILE_PROVIDER_PATH = "com.hulkdx.moneymanagerv2.fileprovider";
 
     @Inject MainPresenter mMainPresenter;
     @Inject TransactionAdapter mTransactionAdapter;
@@ -314,17 +315,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             return false;
         }
         return true;
-    }
-    /**
-     * Create Image file for Capturing a picture from Camera.
-     */
-    private File createImageFile() throws IOException {
-        // Create an image file for captured image.
-        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        String timeStamp =
-                new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "MoneyManager_" + timeStamp;
-        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
     // related to SearchView
     @Override
@@ -635,29 +625,43 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 // Create an image file for captured image.
                 File imageFile = null;
                 if (!PermissionChecker.verifyStoragePermissions(this)) {
+                    // TODO check if you can run this code again after the permission allowed.
                     break;
                 }
 
-                try {
-                    imageFile = createImageFile();
-                } catch (IOException e) {
-                    DialogFactory.createGenericErrorDialog(this,
-                            "Cannot create a file,\nReason: " + e.getMessage()).show();
+                String timeStamp = new SimpleDateFormat(
+                        "yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                String imageFileName = "MoneyManager_" + timeStamp + ".jpg";
+                imageFile = new File(
+                        getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
+                                File.separator + imageFileName);
+
+                if (!imageFile.exists()) {
+                    try {
+                        // Create an image file for captured image.
+                        boolean isFileCreated = imageFile.createNewFile();
+
+                        if (!isFileCreated) {
+                            DialogFactory.createGenericErrorDialog(this,
+                                    getString(R.string.cant_create)).show();
+                            break;
+                        }
+                    } catch (IOException e) {
+                        DialogFactory.createGenericErrorDialog(this,
+                                getString(R.string.cant_create_reason, e.getMessage())).show();
+                        break;
+                    }
                 }
 
-                if (imageFile == null) {
-                    break;
-                }
-
-                Uri imageURI = FileProvider.getUriForFile(this,
-                        "com.hulkdx.moneymanagerv2.fileprovider", imageFile);
+                Uri imageURI = FileProvider.getUriForFile(this, FILE_PROVIDER_PATH, imageFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
                 startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
-                // Save the image path and get it from onActivityResult,
+                // Save the image filename and get it from onActivityResult,
                 // OnActivityResult return empty intent by putting EXTRA_OUTPUT.
-                mCapturedImagePath = imageURI.toString();
+                mCapturedImagePath = imageFileName;
                 break;
-            // Select from galary
+
+            // Select a picture from the gallery
             case R.id.choose_gallery:
                 intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");

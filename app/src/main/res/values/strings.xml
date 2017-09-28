@@ -45,6 +45,9 @@
     <string name="email">Email</string>
     <string name="confirm_email">Confirm Email</string>
     <string name="loading">Loading…</string>
+    <string name="cant_open">Cannot open the file.\nDo you want to remove the attachment?</string>
+    <string name="cant_create">Cannot create the file.</string>
+    <string name="cant_create_reason">Cannot create the file.\nReason: %1$s</string>
 
 
     <!-- Main Activity -->

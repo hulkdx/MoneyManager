@@ -3,11 +3,14 @@
  */
 package com.hulkdx.moneymanagerv2.ui.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseLongArray;
 import android.view.LayoutInflater;
@@ -20,6 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
+import com.hulkdx.moneymanagerv2.util.DialogFactory;
+import com.hulkdx.moneymanagerv2.util.PermissionChecker;
+import java.io.File;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import timber.log.Timber;
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
     // This can be all transactions or filteredTransactions (searched transaction)
@@ -255,8 +262,26 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Open the attachment picture.
         @OnClick(R.id.attachment_view)
         void onClickAttachment() {
-            Intent intent = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(mTransactions.get(itemPosition).getAttachment()));
+
+            if (!PermissionChecker.verifyStoragePermissions((Activity) mContext)) {
+                // TODO check if you can run this code again after the permission allowed.
+                return;
+            }
+
+            File imageFile = new File(
+                    getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + File.separator + mTransactions.get(itemPosition).getAttachment());
+
+            if (!imageFile.exists()) {
+                // TODO change this dialog to yes and no.
+                DialogFactory.createGenericErrorDialog(mContext,
+                        mContext.getString(R.string.cant_open)).show();
+                return;
+            }
+
+            Uri imageURI = FileProvider.getUriForFile(mContext, MainActivity.FILE_PROVIDER_PATH,
+                    imageFile);
+            Intent intent = new Intent(Intent.ACTION_VIEW, imageURI);
             // According to FileProvider docs this flag is required.
             // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
