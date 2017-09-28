@@ -1,17 +1,32 @@
 package com.hulkdx.moneymanagerv2.data.model;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 8/18/2017.
  */
 
 public class User {
 
+    @SerializedName("username")
+    @Expose
     private String username;
+    @SerializedName("first_name")
+    @Expose
     private String first_name;
+    @SerializedName("last_name")
+    @Expose
     private String last_name;
+    @SerializedName("email")
+    @Expose
     private String email;
+    @SerializedName("token")
+    @Expose
     private String token;
+    @SerializedName("currency")
+    @Expose
     private String currency;
 
     public User() {

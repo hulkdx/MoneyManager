@@ -1,5 +1,7 @@
 package com.hulkdx.moneymanagerv2.data.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
@@ -8,15 +10,19 @@ import java.util.List;
  */
 
 public class TransactionResponse {
-    private float amount_count;
+    @SerializedName("amount_count")
+    @Expose
+    private float amountCount;
+    @SerializedName("response")
+    @Expose
     private List<Transaction> response = null;
 
     public float getAmountCount() {
-        return amount_count;
+        return amountCount;
     }
 
     public void setAmountCount(float amountCount) {
-        this.amount_count = amountCount;
+        this.amountCount = amountCount;
     }
 
     public List<Transaction> getResponse() {

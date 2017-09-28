@@ -1,5 +1,7 @@
 package com.hulkdx.moneymanagerv2.data.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -8,12 +10,21 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Transaction extends RealmObject {
-
-    @PrimaryKey private long id;
-    // date format: day month year
+    @SerializedName("id")
+    @Expose
+    @PrimaryKey
+    private long id;
+    @SerializedName("date")
+    @Expose
     private String date;
+    @SerializedName("category")
+    @Expose
     private Category category;
+    @SerializedName("amount")
+    @Expose
     private float amount;
+    @SerializedName("attachment")
+    @Expose
     private String attachment;
 
     public Transaction(){}
