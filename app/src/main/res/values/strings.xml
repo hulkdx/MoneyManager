@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Money Manager Version 2</string>
 
+    <!-- Commons -->
+    <string name="category">Category</string>
+    <string name="name">Name</string>
+
     <!-- Dialog Factory -->
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_error_title">Sorry</string>
