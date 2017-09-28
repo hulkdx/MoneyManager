@@ -122,11 +122,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Date format equals to year-month-day
         String date = transaction.getDate();
         // Show Year?! String year = date.split("-")[0];
-        String month = new DateFormatSymbols()
-                        .getShortMonths()[ Integer.parseInt(date.split("-")[1]) - 1 ];
-        String day = date.split("-")[2];
-        holder.dateMonthTV.setText(month);
-        holder.dateDayTV.setText(day);
+        String[] splitDate = date.split("-");
+        if (splitDate.length == 3) {
+            String month = new DateFormatSymbols()
+                    .getShortMonths()[ Integer.parseInt(splitDate[1]) - 1 ];
+            String day = splitDate[2];
+            holder.dateMonthTV.setText(month);
+            holder.dateDayTV.setText(day);
+        }
+
         // Category
         if (transaction.getCategory() != null ) {
             holder.categoryNameTV.setText(transaction.getCategory().getName());
