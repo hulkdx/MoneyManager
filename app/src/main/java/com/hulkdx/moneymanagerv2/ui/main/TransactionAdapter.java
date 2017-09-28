@@ -128,11 +128,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                     Color.parseColor(transaction.getCategory().getHexColor()));
         }
         // Attachment
-        if (transaction.getAttachment() != null &&
-                !transaction.getAttachment().equals("") ) {
+        holder.attachmentView.setVisibility(
+                transaction.getAttachment() != null && !transaction.getAttachment().equals("") ?
+                        View.VISIBLE : View.GONE);
 
-            holder.attachmentView.setVisibility(View.VISIBLE);
-        }
 
         if (mShowCheckBox) {
             holder.checkBox.setVisibility(View.VISIBLE);
