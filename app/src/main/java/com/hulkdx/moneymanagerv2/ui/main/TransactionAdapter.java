@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import timber.log.Timber;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
     // This can be all transactions or filteredTransactions (searched transaction)
@@ -272,9 +270,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 return;
             }
 
-            File imageFile = new File(
-                    getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                            + File.separator + mTransactions.get(itemPosition).getAttachment());
+            File imageFile = new File(mTransactions.get(itemPosition).getAttachment());
 
             if (!imageFile.exists()) {
                 // TODO change this dialog to yes and no.

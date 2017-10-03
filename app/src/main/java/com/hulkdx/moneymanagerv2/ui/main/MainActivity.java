@@ -49,9 +49,11 @@ import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
+import com.hulkdx.moneymanagerv2.util.PathUtil;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -601,7 +603,13 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 if (data == null) {
                     return;
                 }
-                mSelectedAttachment = data.getData().toString();
+                String filepath = null;
+                try {
+                    filepath = PathUtil.getPath(this, data.getData());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                mSelectedAttachment = filepath;
             } else if (requestCode == CAPTURED_IMAGE) {
                 mSelectedAttachment = mCapturedImagePath;
             }
@@ -631,9 +639,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 String timeStamp = new SimpleDateFormat(
                         "yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                 String imageFileName = "MoneyManager_" + timeStamp + ".jpg";
-                imageFile = new File(
-                        getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
-                                File.separator + imageFileName);
+                String filepath = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
+                        File.separator + imageFileName;
+
+                imageFile = new File(filepath);
 
                 if (!imageFile.exists()) {
                     try {
@@ -657,7 +666,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 startActivityForResult(intent, MainActivity.CAPTURED_IMAGE);
                 // Save the image filename and get it from onActivityResult,
                 // OnActivityResult return empty intent by putting EXTRA_OUTPUT.
-                mCapturedImagePath = imageFileName;
+                mCapturedImagePath = filepath;
                 break;
 
             // Select a picture from the gallery
