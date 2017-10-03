@@ -597,11 +597,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
 
-            if (data == null) {
-                return;
-            }
-
             if (requestCode == PICKED_IMAGE ) {
+                if (data == null) {
+                    return;
+                }
                 mSelectedAttachment = data.getData().toString();
             } else if (requestCode == CAPTURED_IMAGE) {
                 mSelectedAttachment = mCapturedImagePath;
