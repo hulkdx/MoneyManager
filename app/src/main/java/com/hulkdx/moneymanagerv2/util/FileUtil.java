@@ -16,7 +16,7 @@ import android.provider.MediaStore;
 
 import java.net.URISyntaxException;
 
-public class PathUtil {
+public class FileUtil {
     /*
      * Gets the file path of the given Uri.
      */
@@ -96,5 +96,13 @@ public class PathUtil {
      */
     private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     *  Checks if external storage is available for read and write
+     */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }

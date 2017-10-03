@@ -49,7 +49,7 @@ import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
-import com.hulkdx.moneymanagerv2.util.PathUtil;
+import com.hulkdx.moneymanagerv2.util.FileUtil;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
 import java.io.File;
 import java.io.IOException;
@@ -605,7 +605,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 }
                 String filepath = null;
                 try {
-                    filepath = PathUtil.getPath(this, data.getData());
+                    filepath = FileUtil.getPath(this, data.getData());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -639,8 +639,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 String timeStamp = new SimpleDateFormat(
                         "yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                 String imageFileName = "MoneyManager_" + timeStamp + ".jpg";
-                String filepath = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
-                        File.separator + imageFileName;
+                String filepath = null;
+                // Check if external storage is available
+                if (FileUtil.isExternalStorageWritable()) {
+                    filepath = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + File.separator + imageFileName;
+                } else {
+                    filepath = getFilesDir() + File.separator + imageFileName;
+                }
 
                 imageFile = new File(filepath);
 
