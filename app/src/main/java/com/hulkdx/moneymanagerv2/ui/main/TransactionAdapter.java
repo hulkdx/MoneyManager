@@ -5,6 +5,7 @@ package com.hulkdx.moneymanagerv2.ui.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -222,7 +223,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         mCheckNoneCheckBox = true;
     }
 
-    class TransactionHolder extends RecyclerView.ViewHolder {
+    // TODO maybe this Holder class leak some memory leaks, try to define it as static inner class
+    class TransactionHolder extends RecyclerView.ViewHolder implements DialogInterface.OnClickListener {
         @BindView(R.id.root_layout) RelativeLayout rootLayout;
         @BindView(R.id.balance_number) TextView balanceNumberTV;
         @BindView(R.id.balance_sign) TextView balanceCurrencyTV;
@@ -273,9 +275,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             File imageFile = new File(mTransactions.get(itemPosition).getAttachment());
 
             if (!imageFile.exists()) {
-                // TODO change this dialog to yes and no.
-                DialogFactory.createGenericErrorDialog(mContext,
-                        mContext.getString(R.string.cant_open)).show();
+                DialogFactory.createGenericYesDialog(mContext,
+                        mContext.getString(R.string.cant_open), this).show();
                 return;
             }
 
@@ -291,5 +292,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             }
         }
 
+        // OnClicking Attachment Dialog Yes Button
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            removeAttachmentFromDB();
+            dialog.dismiss();
+        }
+
+        // TODO
+        private void removeAttachmentFromDB() {
+        }
     }
 }

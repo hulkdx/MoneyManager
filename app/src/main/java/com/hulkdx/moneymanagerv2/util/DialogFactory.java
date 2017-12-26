@@ -15,5 +15,14 @@ public final class DialogFactory {
         return alertDialog.create();
     }
 
+    public static Dialog createGenericYesDialog(Context context, String message,
+                                                     AlertDialog.OnClickListener listener) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.dialog_error_title))
+                .setMessage(message)
+                .setPositiveButton(R.string.dialog_action_yes, listener)
+                .setNeutralButton(R.string.dialog_action_ok, null);
+        return alertDialog.create();
+    }
 
 }
