@@ -48,8 +48,10 @@ import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
+import com.hulkdx.moneymanagerv2.ui.chooser.ChooserActivity;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
 import com.hulkdx.moneymanagerv2.util.FileUtil;
+import com.hulkdx.moneymanagerv2.data.SyncServiceListener;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +74,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
-        SearchView.OnQueryTextListener, PopupMenu.OnMenuItemClickListener {
+        SearchView.OnQueryTextListener, PopupMenu.OnMenuItemClickListener, SyncServiceListener {
 
     private static final int PICKED_IMAGE = 1;
     private static final int CAPTURED_IMAGE = 2;
@@ -122,6 +124,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     private boolean mIsDeleteSelected = false;
 
     private boolean mIsFirstTimeLoadingTransactions;
+    private ServiceConnectionHolder serviceConnectionHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +137,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
         if (mPreferencesHelper.isSync()) {
             // Start the sync service
-            startService(new Intent(this, SyncService.class));
+            Intent serviceIntent = new Intent(this, SyncService.class);
+            serviceConnectionHolder = new ServiceConnectionHolder();
+            serviceConnectionHolder.registerListener(this);
+            bindService(serviceIntent, serviceConnectionHolder, Context.BIND_AUTO_CREATE);
         }
 
     }
@@ -208,6 +214,10 @@ public class MainActivity extends BaseActivity implements MainMvpView,
     protected void onDestroy() {
         super.onDestroy();
         mMainPresenter.detachView();
+        if (serviceConnectionHolder != null) {
+            serviceConnectionHolder.unregisterListener();
+            unbindService(serviceConnectionHolder);
+        }
     }
 
     /**
@@ -718,6 +728,14 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         ft.addToBackStack(null);
         CategoryDialogFragment newFragment = CategoryDialogFragment.newInstance();
         newFragment.show(ft, "dialog");
+    }
+
+    // SyncService Listener
+    @Override
+    public void finishAndStartChooser() {
+        Intent intent = new Intent(this, ChooserActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /***** MVP View methods implementation *****/

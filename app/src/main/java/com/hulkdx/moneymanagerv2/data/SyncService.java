@@ -5,11 +5,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.Binder;
 import android.os.IBinder;
 import com.hulkdx.moneymanagerv2.HulkApplication;
 import com.hulkdx.moneymanagerv2.util.NetworkUtil;
 import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.HttpException;
 import timber.log.Timber;
 
 /**
@@ -21,9 +23,14 @@ public class SyncService extends Service {
 
     @Inject DataManager mDataManager;
     private CompositeDisposable mDisposables;
+    private final IBinder mBinder = new LocalBinder();
+    private SyncServiceListener mMainActivityListener;
 
     private boolean mSyncTransactionsComplete = false;
     private boolean mSyncCategoriesComplete = false;
+
+    private boolean isRedirectingScreen;
+    private final Boolean LOCK = Boolean.TRUE;
 
     @Override
     public void onCreate() {
@@ -42,6 +49,7 @@ public class SyncService extends Service {
             return START_NOT_STICKY;
         }
 
+        isRedirectingScreen = false;
 
         if (mDisposables != null) mDisposables.clear();
         mDisposables.add(
@@ -54,7 +62,8 @@ public class SyncService extends Service {
                                     stopService(true);
                                 },
                                 error -> {
-                                    Timber.e("sync Transactions onError" + error.toString());
+                                    handlingRedirectUnauthorized(error);
+                                    Timber.e("sync Transactions onError " + error.toString());
                                     stopService(true);
                                 },
                                 () -> {
@@ -72,6 +81,7 @@ public class SyncService extends Service {
                                     stopService(false);
                                 },
                                 error -> {
+                                    handlingRedirectUnauthorized(error);
                                     Timber.e("sync Categories onError" + error.toString());
                                     stopService(false);
                                 },
@@ -87,7 +97,9 @@ public class SyncService extends Service {
 
     @Override
     public void onDestroy() {
+        // Avoiding memory leaks
         if (mDisposables != null) mDisposables.clear();
+        if (mMainActivityListener != null) mMainActivityListener = null;
         super.onDestroy();
     }
 
@@ -111,9 +123,41 @@ public class SyncService extends Service {
         }
     }
 
+    public class LocalBinder extends Binder {
+        public SyncService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return SyncService.this;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
+    }
+
+    private void handlingRedirectUnauthorized(Throwable error) {
+        if (error instanceof HttpException) {
+            // TODO maybe change this later to Switch case.
+            if (((HttpException) error).code() == 401) {
+                // this is here to not make the redirection two times.
+                // (calls are called from different thread)
+                synchronized (LOCK) {
+                    if (isRedirectingScreen) return;
+                }
+                isRedirectingScreen = true;
+                mDataManager.getPreferencesHelper().clear();
+                // Tell the MainActivity to finish and start ChooserActivity again...
+                if (mMainActivityListener != null) mMainActivityListener.finishAndStartChooser();
+            }
+        }
+    }
+
+    public void registerListener(SyncServiceListener listener) {
+        mMainActivityListener = listener;
+    }
+
+    public void unregisterListener() {
+        mMainActivityListener = null;
     }
 
     /*
