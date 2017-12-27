@@ -162,7 +162,6 @@ public class MainActivity extends BaseActivity implements MainMvpView,
                 getResources().getStringArray(R.array.transaction_spinner_value));
         mChooserDateSpinner.setAdapter(spinnerAdapter);
 
-        mTransactionAdapter.setContext(this);
         mTransactionsRecyclerView.setAdapter(mTransactionAdapter);
         mTransactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCategoryRecyclerView.setAdapter(mCategoryAdapter);

@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
+import com.hulkdx.moneymanagerv2.injection.ActivityContext;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
 import java.io.File;
@@ -52,19 +53,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private boolean mCheckNoneCheckBox = false;
 
     @Inject
-    TransactionAdapter() {
+    TransactionAdapter(@ActivityContext Context context) {
         mTransactions = new ArrayList<>();
         mAllTransactions = new ArrayList<>();
         mSelectedTransactions = new SparseLongArray();
+        mContext = context;
     }
 
     public void setTransactions(List<Transaction> transactions) {
         mTransactions = transactions;
         mAllTransactions = transactions;
-    }
-
-    public void setContext(Context mContext) {
-        this.mContext = mContext;
     }
 
     @Override
