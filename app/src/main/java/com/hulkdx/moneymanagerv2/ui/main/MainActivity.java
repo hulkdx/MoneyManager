@@ -786,4 +786,8 @@ public class MainActivity extends BaseActivity implements MainMvpView,
         mTransactionAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void updateTransactions() {
+        mTransactionAdapter.notifyDataSetChanged();
+    }
 }

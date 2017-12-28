@@ -23,6 +23,8 @@ import timber.log.Timber;
 @Singleton
 public class DatabaseHelper {
 
+    private final static BackpressureStrategy DEFAULT_STRATEGY = BackpressureStrategy.LATEST;
+    public enum Transaction_Fields { DATE, CATEGORY, AMOUNT, ATTACHMENT }
     private final Provider<Realm> mRealmProvider;
 
     @Inject
@@ -83,9 +85,9 @@ public class DatabaseHelper {
                     realm.close();
                 }
             }
-        }, BackpressureStrategy.LATEST);
+        }, DEFAULT_STRATEGY);
     }
-    /*
+    /**
      * Search the db for the specify date.
      * @param day, @param months, @param year is the date to search.
      * @param isDailyOrMonthlyOrYearly: 0 -> daily, 1 -> Monthly, 2 -> yearly.
@@ -109,7 +111,7 @@ public class DatabaseHelper {
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
     }
-    /*
+    /**
      * Add a list of Transactions from the api into database.
      * @param response : @link TransactionResponse from DataManager:syncTransactions
      */
@@ -130,7 +132,7 @@ public class DatabaseHelper {
                     realm.close();
                 }
             }
-        }, BackpressureStrategy.LATEST);
+        }, DEFAULT_STRATEGY);
     }
 
     public Flowable<TransactionResponse> removeTransactions(long[] selectedIds,
@@ -183,7 +185,60 @@ public class DatabaseHelper {
                     realm.close();
                 }
             }
-        }, BackpressureStrategy.LATEST);
+        }, DEFAULT_STRATEGY);
+    }
+
+    /**
+     *
+     * @param transactionId : The id to be updated
+     * @param keys Field names
+     * @param values values to be updated
+     */
+    public Flowable<Object> updateTransaction(long transactionId,
+                                              Transaction_Fields[] keys,
+                                              Object[] values) {
+        return Flowable.create(subscriber -> {
+            Realm realm = null;
+            try {
+                realm = mRealmProvider.get();
+
+                realm.executeTransactionAsync(
+                        bgRealm -> {
+                            Transaction transaction = bgRealm.where(Transaction.class).equalTo("id", transactionId).findFirst();
+                            if (transaction == null) {
+                                subscriber.onError(new Throwable("cannot update transaction, its not on db"));
+                                return;
+                            }
+                            for (int i=0, len=keys.length; i<len; i++) {
+                                switch (keys[i]) {
+                                    case DATE:
+                                        transaction.setDate((String) values[i]);
+                                        break;
+                                    case CATEGORY:
+                                        transaction.setCategory((Category) values[i]);
+                                        break;
+                                    case AMOUNT:
+                                        transaction.setAmount((float) values[i]);
+                                        break;
+                                    case ATTACHMENT:
+                                        transaction.setAttachment((String) values[i]);
+                                        break;
+                                    default:
+                                        subscriber.onError(new Throwable("unsupported transaction format"));
+                                        return;
+                                }
+                            }
+                            bgRealm.copyToRealmOrUpdate(transaction);
+                        },
+                        subscriber::onComplete,
+                        subscriber::onError);
+            } finally {
+
+                if (realm != null) {
+                    realm.close();
+                }
+            }
+        }, DEFAULT_STRATEGY);
     }
 
     /************************* Category Section *************************/
@@ -223,7 +278,7 @@ public class DatabaseHelper {
                     realm.close();
                 }
             }
-        }, BackpressureStrategy.LATEST);
+        }, DEFAULT_STRATEGY);
     }
     /*
      * Add a list of categories from the api into database.
@@ -245,6 +300,6 @@ public class DatabaseHelper {
                     realm.close();
                 }
             }
-        }, BackpressureStrategy.LATEST);
+        }, DEFAULT_STRATEGY);
     }
 }

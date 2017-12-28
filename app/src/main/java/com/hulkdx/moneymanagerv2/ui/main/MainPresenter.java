@@ -5,6 +5,7 @@
 package com.hulkdx.moneymanagerv2.ui.main;
 
 import com.hulkdx.moneymanagerv2.data.DataManager;
+import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
@@ -77,6 +78,22 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                             Timber.i("addTransaction onCompleted");
                         }
                 )
+        );
+    }
+    /**
+     * Update the Transaction with TransactionId.
+     */
+    public void updateTransaction(long TransactionId, Transaction_Fields[] key, Object[] value) {
+        mDisposables.add(
+                mDataManager.updateTransaction(TransactionId, key, value)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                val -> {},
+                                error -> getMvpView().showError("updateTransaction", error),
+                                () -> {
+                                    getMvpView().updateTransactions();
+                                }
+                        )
         );
     }
     /**
@@ -156,5 +173,16 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                 () -> {}
                         )
         );
+    }
+
+    public void removeAttachmentFromDB(long transactionId) {
+        if (!mDataManager.getPreferencesHelper().isSync()) {
+            Timber.i("removing attachment from local database");
+            Transaction_Fields[] key = new Transaction_Fields[]
+                    {Transaction_Fields.ATTACHMENT};
+            updateTransaction(transactionId, key, new Object[]{null});
+        } else {
+            Timber.i("removing attachment from database");
+        }
     }
 }

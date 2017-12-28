@@ -7,6 +7,7 @@ package com.hulkdx.moneymanagerv2.data;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper;
+import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.DeleteTransactionsRequestBody;
@@ -131,5 +132,11 @@ public class DataManager {
 
         return mDatabaseHelper.removeTransactions(selectedIds, false);
 
+    }
+
+    public Flowable<Object> updateTransaction(long transactionId,
+                                              Transaction_Fields[] key,
+                                              Object[] value) {
+        return mDatabaseHelper.updateTransaction(transactionId, key, value);
     }
 }

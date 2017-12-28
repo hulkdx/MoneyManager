@@ -38,6 +38,9 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionHolder> {
+
+    @Inject MainPresenter mMainPresenter;
+
     // This can be all transactions or filteredTransactions (searched transaction)
     private List<Transaction> mTransactions;
     // All transactions
@@ -293,12 +296,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // OnClicking Attachment Dialog Yes Button
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            removeAttachmentFromDB();
+            mMainPresenter.removeAttachmentFromDB(mTransactions.get(itemPosition).getId());
             dialog.dismiss();
-        }
-
-        // TODO
-        private void removeAttachmentFromDB() {
         }
     }
 }
