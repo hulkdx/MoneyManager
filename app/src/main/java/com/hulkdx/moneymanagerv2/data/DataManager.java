@@ -39,10 +39,25 @@ public class DataManager {
         return mPreferencesHelper;
     }
 
+    /************************* Auth Section *************************/
+
     public boolean checkLoggedIn() {
         return !mPreferencesHelper.getUserName().equals("");
     }
 
+    public Flowable<User> login(String username, String password) {
+        return mHulkService.postLogin(username, password);
+    }
+
+    public Flowable<User> register(String username,
+                                   String password,
+                                   String email,
+                                   String currency) {
+
+        return mHulkService.postRegister(username, password, email, email, currency);
+    }
+
+    /************************* Transactions Section *************************/
     public Flowable<List<Transaction>> getTransactions() {
         return mDatabaseHelper.getTransactions().distinct();
     }
@@ -65,56 +80,10 @@ public class DataManager {
         return mDatabaseHelper.addTransaction(newTransaction, categoryId).distinct();
     }
 
-    public Flowable<List<Category>> getCategories() {
-        return mDatabaseHelper.getCategories();
-    }
-
-    public Flowable<Category> addCategory(Category newCategory) {
-
-        if (getPreferencesHelper().isSync()) {
-            return mHulkService
-                    .createCategory("JWT " + getPreferencesHelper().getToken(),
-                                    newCategory.getName(),
-                                    newCategory.getHexColor())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .concatMap(mDatabaseHelper::addCategory);
-        }
-
-        return mDatabaseHelper.addCategory(newCategory);
-    }
-
     public Flowable<List<Transaction>> searchTransactionWithDate(int day, int month, int year,
                                                                  int isDailyOrMonthlyOrYearly) {
-
         return mDatabaseHelper.searchTransactionWithDate(day, month, year,
                 isDailyOrMonthlyOrYearly);
-    }
-
-    public Flowable<User> login(String username, String password) {
-        return mHulkService.postLogin(username, password);
-    }
-
-    public Flowable<User> register(String username,
-                                   String password,
-                                   String email,
-                                   String currency) {
-
-        return mHulkService.postRegister(username, password, email, email, currency);
-    }
-
-    public Flowable<TransactionResponse> syncTransactions(String token) {
-        return mHulkService.getTransactions("JWT " + token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMap(mDatabaseHelper::addTransactions);
-    }
-
-    public Flowable<List<Category>> syncCategories(String token) {
-        return mHulkService.getCategories("JWT " + token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMap(mDatabaseHelper::addCategories);
     }
 
     public Flowable<TransactionResponse> deleteTransactions(long[] selectedIds) {
@@ -139,4 +108,40 @@ public class DataManager {
                                               Object[] value) {
         return mDatabaseHelper.updateTransaction(transactionId, key, value);
     }
+
+    public Flowable<TransactionResponse> syncTransactions(String token) {
+        return mHulkService.getTransactions("JWT " + token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .concatMap(mDatabaseHelper::addTransactions);
+    }
+    /************************* Category Section *************************/
+    public Flowable<List<Category>> getCategories() {
+        return mDatabaseHelper.getCategories();
+    }
+
+    public Flowable<Category> addCategory(Category newCategory) {
+
+        if (getPreferencesHelper().isSync()) {
+            return mHulkService
+                    .createCategory("JWT " + getPreferencesHelper().getToken(),
+                                    newCategory.getName(),
+                                    newCategory.getHexColor())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .concatMap(mDatabaseHelper::addCategory);
+        }
+
+        return mDatabaseHelper.addCategory(newCategory);
+    }
+
+
+    public Flowable<List<Category>> syncCategories(String token) {
+        return mHulkService.getCategories("JWT " + token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .concatMap(mDatabaseHelper::addCategories);
+    }
+
+
 }
