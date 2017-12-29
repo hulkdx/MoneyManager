@@ -156,7 +156,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         mDisposables.add(
                 mDataManager
                         .deleteTransactions(selectedIds)
-                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 transactionResponse -> {

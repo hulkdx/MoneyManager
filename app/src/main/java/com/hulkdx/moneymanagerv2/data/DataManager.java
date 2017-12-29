@@ -96,7 +96,8 @@ public class DataManager {
                                     mHulkService.deleteTransaction(
                                             "JWT " + getPreferencesHelper().getToken(),
                                             new DeleteTransactionsRequestBody(selectedIds))
-                    );
+                    )
+                    .subscribeOn(Schedulers.io());
         }
 
         return mDatabaseHelper.removeTransactions(selectedIds, false);
