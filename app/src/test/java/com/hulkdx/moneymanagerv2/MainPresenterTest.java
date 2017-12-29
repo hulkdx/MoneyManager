@@ -69,7 +69,7 @@ public class MainPresenterTest {
                 .thenReturn(Flowable.just(Collections.emptyList()));
 
         mMainPresenter.loadTransactions();
-        verify(mMockMainMvpView).showEmptyTransactions(new ArrayList<>());
+//        verify(mMockMainMvpView).showEmptyTransactions(new ArrayList<>());
         verify(mMockMainMvpView, never()).showTransactions(ArgumentMatchers.anyList());
         verify(mMockMainMvpView, never()).showError(
                 ArgumentMatchers.anyString(), ArgumentMatchers.any());
@@ -83,7 +83,7 @@ public class MainPresenterTest {
 
         mMainPresenter.loadTransactions();
         verify(mMockMainMvpView).showError("loadTransactions", throwable);
-        verify(mMockMainMvpView, never()).showEmptyTransactions(new ArrayList<>());
+//        verify(mMockMainMvpView, never()).showEmptyTransactions(new ArrayList<>());
         verify(mMockMainMvpView, never()).showTransactions(ArgumentMatchers.anyList());
     }
 

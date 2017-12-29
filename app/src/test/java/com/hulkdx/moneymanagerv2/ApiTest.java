@@ -1,6 +1,7 @@
 package com.hulkdx.moneymanagerv2;
 
 
+import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper;
 import com.hulkdx.moneymanagerv2.data.model.requests.UpdateTransactionRequest;
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
 import org.junit.Before;
@@ -36,11 +37,8 @@ public class ApiTest {
     @Test
     public void UpdateTransactionTest() throws InterruptedException {
 
-        List<HashMap<String, Object>> list = new ArrayList<>();
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("amount", 666);
-        list.add(hashMap);
-        UpdateTransactionRequest request = new UpdateTransactionRequest(177, list);
+        UpdateTransactionRequest request = new UpdateTransactionRequest(177);
+        request.updateData(new DatabaseHelper.Transaction_Fields[]{DatabaseHelper.Transaction_Fields.ATTACHMENT}, new Object[]{null});
 
         mHulkService.updateTransaction(
                 token,

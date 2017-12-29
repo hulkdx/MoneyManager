@@ -24,6 +24,7 @@ import timber.log.Timber;
 public class DatabaseHelper {
 
     private final static BackpressureStrategy DEFAULT_STRATEGY = BackpressureStrategy.LATEST;
+    // TODO try to change this enum to String[] or get fields by reflection: {@link: https://stackoverflow.com/questions/2989560/how-to-get-the-fields-in-an-object-via-reflection}
     public enum Transaction_Fields { DATE, CATEGORY, AMOUNT, ATTACHMENT }
     private final Provider<Realm> mRealmProvider;
 

@@ -6,15 +6,18 @@ package com.hulkdx.moneymanagerv2.data;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper;
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.model.Category;
-import com.hulkdx.moneymanagerv2.data.model.DeleteTransactionsRequestBody;
+import com.hulkdx.moneymanagerv2.data.model.requests.DeleteTransactionsRequestBody;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
 import com.hulkdx.moneymanagerv2.data.model.User;
+import com.hulkdx.moneymanagerv2.data.model.requests.UpdateTransactionRequest;
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
+
 import java.util.List;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -107,6 +110,16 @@ public class DataManager {
     public Flowable<Object> updateTransaction(long transactionId,
                                               Transaction_Fields[] key,
                                               Object[] value) {
+
+        if (getPreferencesHelper().isSync()) {
+            UpdateTransactionRequest request = new UpdateTransactionRequest(transactionId);
+            request.updateData(key, value);
+            return mHulkService.updateTransaction("JWT " + getPreferencesHelper().getToken(),
+                    request)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap(o -> mDatabaseHelper.updateTransaction(transactionId, key, value));
+        }
         return mDatabaseHelper.updateTransaction(transactionId, key, value);
     }
 

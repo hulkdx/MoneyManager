@@ -174,14 +174,13 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         );
     }
 
-    public void removeAttachmentFromDB(long transactionId) {
-        if (!mDataManager.getPreferencesHelper().isSync()) {
-            Timber.i("removing attachment from local database");
-            Transaction_Fields[] key = new Transaction_Fields[]
-                    {Transaction_Fields.ATTACHMENT};
-            updateTransaction(transactionId, key, new Object[]{null});
-        } else {
-            Timber.i("removing attachment from database");
-        }
+    /**
+     * Remove the link of attachment to transaction
+     * In {@link DataManager} it checks for sync or non-sync
+     * @param transactionId: the id of transaction to remove the attachment.
+     */
+    void removeAttachmentFromDB(long transactionId) {
+        Transaction_Fields[] key = new Transaction_Fields[] {Transaction_Fields.ATTACHMENT};
+        updateTransaction(transactionId, key, new Object[] {null});
     }
 }
