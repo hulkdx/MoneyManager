@@ -10,7 +10,10 @@ import com.hulkdx.moneymanagerv2.data.model.User;
 import com.hulkdx.moneymanagerv2.data.model.requests.UpdateTransactionRequest;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Flowable;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -73,11 +76,15 @@ public interface HulkService {
 
     class Creator {
         public static HulkService newService() {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(100, TimeUnit.SECONDS)
+                    .readTimeout(100, TimeUnit.SECONDS).build();
             Gson gson = new GsonBuilder()
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                     .create();
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ENDPOINT)
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
