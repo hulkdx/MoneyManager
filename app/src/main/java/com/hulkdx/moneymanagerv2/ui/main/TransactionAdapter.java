@@ -211,19 +211,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         for (int i = 0; i<selectedItemsSize; i++) {
             arraySelectedTransactionsId[i] = mSelectedTransactions.valueAt(i);
         }
+        mSelectedTransactions.clear();
         return arraySelectedTransactionsId;
     }
 
-    void checkAllCheckBoxes() {
-        for (int i=0, count=mTransactions.size(); i<count; i++) {
-            mSelectedTransactions.append(i, mTransactions.get(i).getId());
+    void checkAllCheckBoxes(boolean check) {
+        Timber.d(mSelectedTransactions.toString());
+        
+        if (check) {
+            for (int i = 0, count = mTransactions.size(); i < count; i++) {
+                mSelectedTransactions.append(i, mTransactions.get(i).getId());
+            }
+            mCheckAllCheckBox = true;
+        } else {
+            mSelectedTransactions.clear();
+            mCheckNoneCheckBox = true;
         }
-        mCheckAllCheckBox = true;
-    }
-
-    void checkNonCheckBoxes() {
-        mSelectedTransactions.clear();
-        mCheckNoneCheckBox = true;
     }
 
     // TODO maybe this Holder class leak some memory leaks, try to define it as static inner class
@@ -280,29 +283,36 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Open the attachment picture.
         @OnClick(R.id.attachment_view)
         void onClickAttachment() {
+            Timber.i("onClick, item position: %d", itemPosition);
+            if (adapterWR == null) {
+                Timber.e("adapterWR is null");
+                return;
+            }
+            Context context = adapterWR.get().mContext;
+            List<Transaction> transactions = adapterWR.get().mTransactions;
 
-            if (!PermissionChecker.verifyStoragePermissions((Activity) mContext)) {
+            if (!PermissionChecker.verifyStoragePermissions((Activity) context)) {
                 // TODO check if you can run this code again after the permission allowed.
                 return;
             }
 
-            File imageFile = new File(mTransactions.get(itemPosition).getAttachment());
+            File imageFile = new File(transactions.get(itemPosition).getAttachment());
 
             if (!imageFile.exists()) {
-                DialogFactory.createGenericYesDialog(mContext,
-                        mContext.getString(R.string.cant_open), this).show();
+                DialogFactory.createGenericYesDialog(context,
+                        context.getString(R.string.cant_open), this).show();
                 return;
             }
 
-            Uri imageURI = FileProvider.getUriForFile(mContext, MainActivity.FILE_PROVIDER_PATH,
+            Uri imageURI = FileProvider.getUriForFile(context, MainActivity.FILE_PROVIDER_PATH,
                     imageFile);
             Intent intent = new Intent(Intent.ACTION_VIEW, imageURI);
             // According to FileProvider docs this flag is required.
             // @link https://developer.android.com/reference/android/support/v4/content/FileProvider.html
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                mContext.startActivity(intent);
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
             }
         }
 

@@ -399,13 +399,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
     @OnCheckedChanged(R.id.select_all_check_box)
     void SelectAllOnChange(CompoundButton compoundButton, boolean check) {
-        if (check) {
-            // select all items
-            mTransactionAdapter.checkAllCheckBoxes();
-        } else {
-            // select non
-            mTransactionAdapter.checkNonCheckBoxes();
-        }
+        mTransactionAdapter.checkAllCheckBoxes(check);
         mTransactionAdapter.notifyDataSetChanged();
     }
 
@@ -477,6 +471,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             }
             // Delete transactions from db and api.
             mMainPresenter.deleteTransactions(selectedItem);
+            mSelectAllCheckBox.setChecked(false);
         }
     }
 
