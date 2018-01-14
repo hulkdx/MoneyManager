@@ -455,7 +455,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
         if (mIsDeleteSelected) {
             // Show the 'select all checkbox'
-            mSelectAllCheckBox.setVisibility(View.VISIBLE);
+            mSelectAllCheckBox.setVisibility(View.GONE);
 
 
             mDeleteImageView.setColorFilter(ContextCompat.getColor(this, R.color.red),

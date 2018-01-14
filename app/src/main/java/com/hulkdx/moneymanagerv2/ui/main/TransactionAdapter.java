@@ -83,13 +83,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             if (position + 1 == mTransactions.size()) {
                 mCheckAllCheckBox = false;
             }
-            return;
         } else if (mCheckNoneCheckBox) {
             holder.checkBox.setChecked(false);
             if (position + 1 == mTransactions.size()) {
                 mCheckNoneCheckBox = false;
             }
-            return;
         }
 
         Transaction transaction  = mTransactions.get(position);
@@ -257,6 +255,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         @OnCheckedChanged(R.id.checkBox)
         void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+            Timber.i("checked, item position: %d", itemPosition);
             if (check) {
                 mSelectedTransactions.append(itemPosition, mTransactions.get(itemPosition).getId());
             } else {
