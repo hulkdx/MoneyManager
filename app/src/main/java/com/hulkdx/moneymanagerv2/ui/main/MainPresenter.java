@@ -56,7 +56,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                     mDataManager.getPreferencesHelper().getUserMoney());
                             getMvpView().showTransactions(transactions);
                         },
-                        error -> getMvpView().showError("loadTransactions", error),
+                        error -> {
+                            error.printStackTrace();
+                            getMvpView().showError("loadTransactions", error);
+                        },
                         () -> Timber.i("onCompleted loadTransactions")
                 )
         );
@@ -70,7 +73,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         val -> Timber.i("addTransaction onNext"),
-                        error -> getMvpView().showError("addTransaction", error),
+                        error -> {
+                            error.printStackTrace();
+                            getMvpView().showError("addTransaction", error);
+                        },
                         () -> {
                             getMvpView().setBalanceTextView(mDataManager.getPreferencesHelper()
                                                 .updateBalance(newTransaction.getAmount()));
@@ -89,10 +95,11 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 val -> {},
-                                error -> getMvpView().showError("updateTransaction", error),
-                                () -> {
-                                    getMvpView().updateTransactions();
-                                }
+                                error -> {
+                                    error.printStackTrace();
+                                    getMvpView().showError("updateTransaction", error);
+                                },
+                                () -> getMvpView().updateTransactions()
                         )
         );
     }
@@ -105,7 +112,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         categories -> getMvpView().showCategories(categories),
-                        error -> getMvpView().showError("loadCategories", error),
+                        error -> {
+                            error.printStackTrace();
+                            getMvpView().showError("loadCategories", error);
+                        },
                         () -> Timber.i("addTransaction onCompleted")
                 )
         );
@@ -119,7 +129,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         val -> Timber.i("addCategory onNext"),
-                        error -> getMvpView().showError("addCategory", error),
+                        error -> {
+                            error.printStackTrace();
+                            getMvpView().showError("addCategory", error);
+                        },
                         () -> {
                             Timber.i("addCategory onCompleted");
                             getMvpView().addCategoryCompleted();
@@ -140,7 +153,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         transactions -> {
                             getMvpView().showTransactions(transactions);
                         },
-                        error -> getMvpView().showError("searchTransactionWithDate", error),
+                        error -> {
+                            error.printStackTrace();
+                            getMvpView().showError("searchTransactionWithDate", error);
+                        },
                         () -> Timber.i("searchTransactionWithDate onCompleted")
                 )
         );
@@ -166,6 +182,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                     getMvpView().deleteTransactionsComplete(amount==0);
                                 },
                                 error -> {
+                                    error.printStackTrace();
                                     Timber.i("deleteTransactions onError");
                                     getMvpView().showErrorDeleteTransactions();
                                 },
