@@ -42,15 +42,15 @@ public class DatabaseHelper {
     /************************* Transactions Section *************************/
     public Flowable<List<Transaction>> getTransactions() {
         Realm realm = mRealmProvider.get();
-        RealmResults<Transaction> results = realm.where(Transaction.class).
-                findAllSortedAsync(new String[] {"date", "id"} ,
-                        new Sort[] {Sort.DESCENDING, Sort.DESCENDING});
+        RealmResults<Transaction> results = realm.where(Transaction.class)
+                .sort(new String[] {"date", "id"} , new Sort[] {Sort.DESCENDING, Sort.DESCENDING})
+                .findAllAsync();
         
         return RxUtil.createFlowableFromRealmResult(realm, results)
                 .filter(RealmResults::isLoaded)
                 .map(transactions -> transactions);
     }
-    /*
+    /**
      * Add a new Transaction into database.
      * @param newTransaction : the new transaction to be added in database.
      * @param categoryId : the id of selected category. -1 means category is not selected.
