@@ -27,6 +27,7 @@ import com.hulkdx.moneymanagerv2.injection.ActivityContext;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,24 +73,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public TransactionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.cardview_transaction, parent, false);
-        return new TransactionHolder(itemView);
+        return new TransactionHolder(itemView, this);
     }
 
     @Override
     public void onBindViewHolder(TransactionHolder holder, int position) {
-
-        if (mCheckAllCheckBox) {
-            holder.checkBox.setChecked(true);
-            if (position + 1 == mTransactions.size()) {
-                mCheckAllCheckBox = false;
-            }
-        } else if (mCheckNoneCheckBox) {
-            holder.checkBox.setChecked(false);
-            if (position + 1 == mTransactions.size()) {
-                mCheckNoneCheckBox = false;
-            }
-        }
-
         Transaction transaction  = mTransactions.get(position);
 
         // Only set item position for the first time.
@@ -154,6 +142,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 isCheckBoxHidden = true;
             }
         }
+
+        if (mCheckAllCheckBox) {
+            holder.checkBox.setChecked(true);
+            if (position + 1 == mTransactions.size()) {
+                mCheckAllCheckBox = false;
+            }
+        } else if (mCheckNoneCheckBox) {
+            holder.checkBox.setChecked(false);
+            if (position + 1 == mTransactions.size()) {
+                mCheckNoneCheckBox = false;
+            }
+        }
     }
 
     @Override
@@ -215,15 +215,19 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     void checkAllCheckBoxes() {
+        for (int i=0, count=mTransactions.size(); i<count; i++) {
+            mSelectedTransactions.append(i, mTransactions.get(i).getId());
+        }
         mCheckAllCheckBox = true;
     }
 
     void checkNonCheckBoxes() {
+        mSelectedTransactions.clear();
         mCheckNoneCheckBox = true;
     }
 
     // TODO maybe this Holder class leak some memory leaks, try to define it as static inner class
-    class TransactionHolder extends RecyclerView.ViewHolder implements DialogInterface.OnClickListener {
+    static class TransactionHolder extends RecyclerView.ViewHolder implements DialogInterface.OnClickListener {
         @BindView(R.id.root_layout) RelativeLayout rootLayout;
         @BindView(R.id.balance_number) TextView balanceNumberTV;
         @BindView(R.id.balance_sign) TextView balanceCurrencyTV;
@@ -237,12 +241,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // For performances: set LayoutParams on the constructor.
         private RelativeLayout.LayoutParams dateDayLayoutParams;
         private int itemPosition;
+        private WeakReference<TransactionAdapter> adapterWR;
 
-        TransactionHolder(View itemView) {
+        TransactionHolder(View itemView, TransactionAdapter transactionAdapter) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
             dateDayLayoutParams = (RelativeLayout.LayoutParams) dateDayTV.getLayoutParams();
+            adapterWR = new WeakReference<>(transactionAdapter);
         }
 
         RelativeLayout.LayoutParams getDateDayLayoutParams() {
@@ -253,14 +259,22 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             this.itemPosition = itemPosition;
         }
 
-        @OnCheckedChanged(R.id.checkBox)
-        void onCheckedChanged(CompoundButton compoundButton, boolean check) {
-            Timber.i("checked, item position: %d", itemPosition);
-            if (check) {
-                mSelectedTransactions.append(itemPosition, mTransactions.get(itemPosition).getId());
-            } else {
-                mSelectedTransactions.delete(itemPosition);
+        @OnClick(R.id.checkBox)
+        void OnClickCheckBox() {
+            Timber.i("onClick, item position: %d", itemPosition);
+            if (adapterWR == null) {
+                Timber.e("adapterWR is null");
+                return;
             }
+            SparseLongArray selectedTransactions = adapterWR.get().mSelectedTransactions;
+            List<Transaction> transactions = adapterWR.get().mTransactions;
+
+            if (checkBox.isChecked()) {
+                selectedTransactions.append(itemPosition, transactions.get(itemPosition).getId());
+            } else {
+                selectedTransactions.delete(itemPosition);
+            }
+            Timber.i("%s", selectedTransactions.toString());
         }
 
         // Open the attachment picture.
@@ -295,7 +309,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // OnClicking Attachment Dialog Yes Button
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            mMainPresenter.removeAttachmentFromDB(mTransactions.get(itemPosition).getId());
+            if (adapterWR == null) {
+                Timber.e("adapterWR is null");
+                return;
+            }
+            MainPresenter mainPresenter = adapterWR.get().mMainPresenter;
+            List<Transaction> transactions = adapterWR.get().mTransactions;
+
+            mainPresenter.removeAttachmentFromDB(transactions.get(itemPosition).getId());
             dialog.dismiss();
         }
     }

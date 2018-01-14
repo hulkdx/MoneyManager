@@ -57,6 +57,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -455,7 +456,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
 
         if (mIsDeleteSelected) {
             // Show the 'select all checkbox'
-            mSelectAllCheckBox.setVisibility(View.GONE);
+            mSelectAllCheckBox.setVisibility(View.VISIBLE);
 
 
             mDeleteImageView.setColorFilter(ContextCompat.getColor(this, R.color.red),
