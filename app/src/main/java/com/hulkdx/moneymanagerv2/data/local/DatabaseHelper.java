@@ -36,9 +36,10 @@ public class DatabaseHelper extends RealmHelper {
 
     /************************* Transactions Section *************************/
     public Flowable<List<Transaction>> getTransactions() {
-        return getData(Transaction.class, realmQuery -> realmQuery
-                .sort(new String[] {"date", "id"} , new Sort[] {Sort.DESCENDING, Sort.DESCENDING})
-                .findAllAsync());
+        return getData(Transaction.class,
+                       realmQuery -> realmQuery.sort(new String[] {"date", "id"} ,
+                                                     new Sort[] {Sort.DESCENDING, Sort.DESCENDING})
+                                                .findAllAsync());
     }
     /**
      * Add a new Transaction into database.
