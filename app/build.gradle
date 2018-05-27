@@ -5,7 +5,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.hulkdx.moneymanagerv2"
@@ -111,29 +111,29 @@ dependencies {
 
 
     implementation  "com.google.dagger:dagger:$DAGGER_VERSION"
-    provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
     annotationProcessor daggerCompiler
     testAnnotationProcessor daggerCompiler
     androidTestAnnotationProcessor daggerCompiler
 
     // Instrumentation test dependencies
-    androidTestCompile jUnit
-    androidTestCompile mockito
-    androidTestCompile "org.mockito:mockito-android:$MOCKITO_VERSION"
-    androidTestCompile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
-    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$ESPRESSO_VERSION") {
+    androidTestImplementation jUnit
+    androidTestImplementation mockito
+    androidTestImplementation "org.mockito:mockito-android:$MOCKITO_VERSION"
+    androidTestImplementation "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
+    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$ESPRESSO_VERSION") {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
     }
-    androidTestCompile "com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION"
-    androidTestCompile "com.android.support.test:runner:$RUNNER_VERSION"
-    androidTestCompile "com.android.support.test:rules:$RUNNER_VERSION"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION"
+    androidTestImplementation "com.android.support.test:runner:$RUNNER_VERSION"
+    androidTestImplementation "com.android.support.test:rules:$RUNNER_VERSION"
 
     // Unit tests dependencies
-    testCompile jUnit
-    testCompile mockito
-    testCompile 'org.robolectric:robolectric:3.4.2'
+    testImplementation jUnit
+    testImplementation mockito
+    testImplementation 'org.robolectric:robolectric:3.4.2'
 }
 
 // Log out test results to console
