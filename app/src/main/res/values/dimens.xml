@@ -6,4 +6,8 @@
     <dimen name="buttons_add_width">86dp</dimen>
     <dimen name="buttons_add_height">31dp</dimen>
 
+    <dimen name="category_dialog_margins">10dp</dimen>
+    <dimen name="category_dialog_images_width">50dp</dimen>
+    <dimen name="category_dialog_images_height">50dp</dimen>
+
 </resources>

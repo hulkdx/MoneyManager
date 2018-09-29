@@ -3,7 +3,7 @@
     <string name="app_name">Money Manager Version 2</string>
 
     <!-- Commons -->
-    <string name="category">Category</string>
+    <string name="category">Add Category</string>
     <string name="name">Name</string>
 
     <!-- Dialog Factory -->

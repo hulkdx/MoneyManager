@@ -24,11 +24,12 @@ import com.hulkdx.moneymanagerv2.data.model.Category;
 public class CategoryDialogFragment extends DialogFragment
         implements DialogInterface.OnClickListener {
 
-    private EditText mNameEditText;
+    private EditText     mNameEditText;
     private LinearLayout mColorsLinearLayout;
+
     private CategoryFragmentListener mListener;
-    private static int catColorsSelectedImageViews = -1;
-    private int[] colorsArray = null;
+
+    private int mCatColorsSelectedImageViews = -1;
 
     public CategoryDialogFragment() { }
 
@@ -56,18 +57,19 @@ public class CategoryDialogFragment extends DialogFragment
 
     // Create colors view for each string array
     private void createColorImageView() {
-        int[] colorsArray = getActivity().getResources().getIntArray(R.array.category_colors);
+        int[] colorsArray = getColors();
         // ImageView is defined as final so we can use them in OnClick method to remove
         // the ImageResource.
         // Note: is there a better way for doing it?!
         final ImageView[] catColorsImageViews = new ImageView[colorsArray.length];
+
+        int catImageWidthDp  = (int) getActivity().getResources().getDimension(R.dimen.category_dialog_images_width);
+        int catImageHeightDp = (int) getActivity().getResources().getDimension(R.dimen.category_dialog_images_height);
+
         for (int i = 0, count = colorsArray.length; i < count; i++) {
             catColorsImageViews[i] = new ImageView(getActivity());
-            // Convert 50 dx to 50 dp
-            DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-            catColorsImageViews[i].setLayoutParams(new LinearLayout.LayoutParams(
-                    (int) (50 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)),
-                    (int) (50 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT))));
+            catColorsImageViews[i].setLayoutParams(new LinearLayout.LayoutParams(catImageWidthDp,
+                                                                                 catImageHeightDp));
 
             catColorsImageViews[i].setBackgroundColor(colorsArray[i]);
             // Set id to i so we can retrieve it from OnClick method.
@@ -76,11 +78,11 @@ public class CategoryDialogFragment extends DialogFragment
                 @Override
                 public void onClick(View view) {
                     // Remove the image Resource from previous selected ImageViews
-                    if (catColorsSelectedImageViews != -1) {
-                        catColorsImageViews[catColorsSelectedImageViews].setImageResource(0);
+                    if (mCatColorsSelectedImageViews != -1) {
+                        catColorsImageViews[mCatColorsSelectedImageViews].setImageResource(0);
                     }
                     ((ImageView) view).setImageResource(R.drawable.ic_category_selected);
-                    catColorsSelectedImageViews = view.getId();
+                    mCatColorsSelectedImageViews = view.getId();
                 }
             });
             mColorsLinearLayout.addView(catColorsImageViews[i]);
@@ -97,8 +99,6 @@ public class CategoryDialogFragment extends DialogFragment
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
-        colorsArray = getActivity().getResources().getIntArray(R.array.category_colors);
     }
 
     @Override
@@ -110,14 +110,19 @@ public class CategoryDialogFragment extends DialogFragment
     // On Clicking Ok button in dialog
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-        if (mNameEditText.getText().toString().isEmpty() || catColorsSelectedImageViews == -1) {
+        if (mNameEditText.getText().toString().isEmpty() || mCatColorsSelectedImageViews == -1) {
             return;
         }
+        int[] colorsArray = getColors();
         // Set int hexColor to String #000000
         String hexColor = String.format("#%06X",
-                (0xFFFFFF & colorsArray[catColorsSelectedImageViews]));
+                (0xFFFFFF & colorsArray[mCatColorsSelectedImageViews]));
 
         mListener.onClickOkCategory(new Category(mNameEditText.getText().toString(), hexColor));
+    }
+
+    private int[] getColors() {
+        return getActivity().getResources().getIntArray(R.array.category_colors);
     }
 
     /**

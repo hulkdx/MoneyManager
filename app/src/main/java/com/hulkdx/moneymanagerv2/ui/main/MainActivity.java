@@ -218,6 +218,7 @@ public class MainActivity extends BaseActivity implements MainMvpView,
             serviceConnectionHolder.unregisterListener();
             unbindService(serviceConnectionHolder);
         }
+        mCategoryAdapter.setCallback(null);
     }
 
     /**
