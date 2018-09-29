@@ -62,7 +62,7 @@ public class DataManager {
 
     /************************* Transactions Section *************************/
     public Flowable<List<Transaction>> getTransactions() {
-        return mDatabaseHelper.getTransactions().distinct();
+        return mDatabaseHelper.getTransactions();
     }
 
     public Flowable<Transaction> addTransaction(Transaction newTransaction, long categoryId) {
@@ -99,8 +99,8 @@ public class DataManager {
                                     mHulkService.deleteTransaction(
                                             "JWT " + getPreferencesHelper().getToken(),
                                             new DeleteTransactionsRequestBody(selectedIds))
-                    )
-                    .subscribeOn(Schedulers.io());
+                                            .subscribeOn(Schedulers.io())
+                    );
         }
 
         return mDatabaseHelper.removeTransactions(selectedIds, false);
@@ -123,11 +123,13 @@ public class DataManager {
         return mDatabaseHelper.updateTransaction(transactionId, key, value);
     }
 
-    public Flowable<TransactionResponse> syncTransactions(String token) {
-        return mHulkService.getTransactions("JWT " + token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .concatMap(mDatabaseHelper::addTransactions);
+    public Flowable<List<Transaction>> syncTransactions(String token) {
+        return mHulkService
+                .getTransactions("JWT " + token)
+                .concatMap( response -> {
+                    mPreferencesHelper.setUserMoney(response.getAmountCount());
+                    return mDatabaseHelper.addTransactions(response.getTransactions());
+                });
     }
     /************************* Category Section *************************/
     public Flowable<List<Category>> getCategories() {

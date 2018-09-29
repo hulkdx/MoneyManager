@@ -81,7 +81,7 @@ dependencies {
     final MOCKITO_VERSION = '2.6.2'
     final ESPRESSO_VERSION = '2.2.1'
     final RUNNER_VERSION = '0.4'
-    final BUTTERKNIFE_VERSION = '8.4.0'
+    final BUTTERKNIFE_VERSION = '8.8.1'
 
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     def jUnit = "junit:junit:4.12"
@@ -105,7 +105,7 @@ dependencies {
     }
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
-    implementation 'com.jakewharton.timber:timber:4.1.2'
+    implementation 'com.jakewharton.timber:timber:4.5.0'
     implementation "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     annotationProcessor "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
@@ -115,6 +115,12 @@ dependencies {
     annotationProcessor daggerCompiler
     testAnnotationProcessor daggerCompiler
     androidTestAnnotationProcessor daggerCompiler
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
+
 
     // Instrumentation test dependencies
     androidTestImplementation jUnit

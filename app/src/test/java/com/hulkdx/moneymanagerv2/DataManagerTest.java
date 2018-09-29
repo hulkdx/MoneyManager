@@ -52,13 +52,15 @@ public class DataManagerTest {
 
         TransactionResponse response = new TransactionResponse();
         response.setAmountCount(0);
-        response.setResponse(transactions);
+        response.setTransactions(transactions);
 
         beforeCalls(response);
 
-        TestSubscriber<TransactionResponse> result = new TestSubscriber<>();
+        TestSubscriber<List<Transaction>> result = new TestSubscriber<>();
 
-        mDataManager.syncTransactions("").subscribe(result);
+        mDataManager
+                .syncTransactions("")
+                .subscribe(result);
         result.assertNoErrors();
     }
 
@@ -70,14 +72,14 @@ public class DataManagerTest {
 
         TransactionResponse response = new TransactionResponse();
         response.setAmountCount(0);
-        response.setResponse(transactions);
+        response.setTransactions(transactions);
 
         beforeCalls(response);
 
         mDataManager.syncTransactions("").subscribe();
 
         verify(mMockService).getTransactions("JWT ");
-        verify(mMockDatabaseHelper).addTransactions(response);
+        verify(mMockDatabaseHelper).addTransactions(response.getTransactions());
     }
 
     @Test
@@ -98,8 +100,8 @@ public class DataManagerTest {
                 .thenReturn(Flowable.just(response));
 
 
-        when(mMockDatabaseHelper.addTransactions(response))
-                .thenReturn(Flowable.just(response));
+        when(mMockDatabaseHelper.addTransactions(response.getTransactions()))
+                .thenReturn(Flowable.just(response.getTransactions()));
     }
 
 }

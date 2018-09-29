@@ -15,7 +15,7 @@ public class TransactionResponse {
     private float amountCount;
     @SerializedName("response")
     @Expose
-    private List<Transaction> response = null;
+    private List<Transaction> transactions = null;
 
     public float getAmountCount() {
         return amountCount;
@@ -25,11 +25,11 @@ public class TransactionResponse {
         this.amountCount = amountCount;
     }
 
-    public List<Transaction> getResponse() {
-        return response;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setResponse(List<Transaction> response) {
-        this.response = response;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }

@@ -10,7 +10,10 @@ import android.os.IBinder;
 import com.hulkdx.moneymanagerv2.HulkApplication;
 import com.hulkdx.moneymanagerv2.util.NetworkUtil;
 import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
 import timber.log.Timber;
 
@@ -53,12 +56,13 @@ public class SyncService extends Service {
 
         if (mDisposables != null) mDisposables.clear();
         mDisposables.add(
-                mDataManager.syncTransactions(mDataManager.getPreferencesHelper().getToken())
+                mDataManager
+                        .syncTransactions(mDataManager.getPreferencesHelper().getToken())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 transactions -> {
                                     Timber.i("sync Transactions onNext");
-                                    mDataManager.getPreferencesHelper().setUserMoney(
-                                            transactions.getAmountCount());
                                     stopService(true);
                                 },
                                 error -> {

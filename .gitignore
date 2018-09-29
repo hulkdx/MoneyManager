@@ -90,6 +90,9 @@ captures/
 .idea/misc.xml
 .idea/dictionaries
 .idea/libraries
+.idea/*
+.project
+.classpath
 
 # Keystore files
 *.jks

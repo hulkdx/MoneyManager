@@ -12,6 +12,7 @@ import timber.log.Timber;
 import com.hulkdx.moneymanagerv2.injection.component.ApplicationComponent;
 import com.hulkdx.moneymanagerv2.injection.component.DaggerApplicationComponent;
 import com.hulkdx.moneymanagerv2.injection.module.ApplicationModule;
+import com.squareup.leakcanary.LeakCanary;
 
 public class HulkApplication extends Application {
     private ApplicationComponent mApplicationComponent;
@@ -22,6 +23,14 @@ public class HulkApplication extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                // You should not init your app in this process.
+                return;
+            }
+            LeakCanary.install(this);
+
         } else {
             Fabric.with(this, new Crashlytics());
         }

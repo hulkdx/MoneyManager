@@ -4,6 +4,8 @@
 
 package com.hulkdx.moneymanagerv2.ui.main;
 
+import android.os.HandlerThread;
+
 import com.hulkdx.moneymanagerv2.data.DataManager;
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 import com.hulkdx.moneymanagerv2.data.model.Category;
@@ -11,6 +13,8 @@ import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
 import com.hulkdx.moneymanagerv2.ui.base.BasePresenter;
 import javax.inject.Inject;
+
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -21,6 +25,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private CompositeDisposable mDisposables;
     private final DataManager mDataManager;
+    private Scheduler mBackgroundSchedulers;
 
     @Inject
     public MainPresenter(DataManager dataManager) {
@@ -31,6 +36,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     @Override
     public void attachView(MainMvpView mvpView) {
         super.attachView(mvpView);
+
+        HandlerThread thread = new HandlerThread("MyHandlerThread");
+        thread.start();
+        mBackgroundSchedulers = AndroidSchedulers.from(thread.getLooper());
     }
 
     @Override
@@ -48,6 +57,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     public void loadTransactions() {
         mDisposables.add(
                 mDataManager.getTransactions()
+                .subscribeOn(mBackgroundSchedulers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactions -> {
@@ -64,12 +74,14 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
+    
     /**
      * Add a new Transaction.
      */
     public void addTransaction(final Transaction newTransaction, long categoryId) {
         mDisposables.add(
                 mDataManager.addTransaction(newTransaction, categoryId)
+                .subscribeOn(mBackgroundSchedulers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         val -> Timber.i("addTransaction onNext"),
@@ -86,12 +98,14 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 )
         );
     }
+    
     /**
      * Update the Transaction with TransactionId.
      */
     public void updateTransaction(long TransactionId, Transaction_Fields[] key, Object[] value) {
         mDisposables.add(
                 mDataManager.updateTransaction(TransactionId, key, value)
+                        .subscribeOn(mBackgroundSchedulers)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 val -> {},
@@ -103,12 +117,14 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         )
         );
     }
+    
     /**
      * Load categories from Database.
      */
     public void loadCategories() {
         mDisposables.add(
                 mDataManager.getCategories()
+                .subscribeOn(mBackgroundSchedulers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         categories -> getMvpView().showCategories(categories),
@@ -126,6 +142,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     public void addCategory(final Category newCategory) {
         mDisposables.add(
                 mDataManager.addCategory(newCategory)
+                .subscribeOn(mBackgroundSchedulers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         val -> Timber.i("addCategory onNext"),
@@ -148,6 +165,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                           int isDailyOrMonthlyOrYearly) {
         mDisposables.add(
                 mDataManager.searchTransactionWithDate(day, month, year, isDailyOrMonthlyOrYearly)
+                .subscribeOn(mBackgroundSchedulers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         transactions -> {
@@ -172,6 +190,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         mDisposables.add(
                 mDataManager
                         .deleteTransactions(selectedIds)
+                        .subscribeOn(mBackgroundSchedulers)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 transactionResponse -> {

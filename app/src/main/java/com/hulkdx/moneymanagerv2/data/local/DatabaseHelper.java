@@ -39,7 +39,7 @@ public class DatabaseHelper extends RealmHelper {
         return getData(Transaction.class,
                        realmQuery -> realmQuery.sort(new String[] {"date", "id"} ,
                                                      new Sort[] {Sort.DESCENDING, Sort.DESCENDING})
-                                                .findAllAsync());
+                                                .findAll());
     }
     /**
      * Add a new Transaction into database.
@@ -48,7 +48,7 @@ public class DatabaseHelper extends RealmHelper {
      */
     public Flowable<Transaction> addTransaction(final Transaction newTransaction,
                                                 final long categoryId) {
-        return executeTransactionAsync((bgRealm, subscriber) -> {
+        return executeTransaction((bgRealm, subscriber) -> {
             // If the id equals to zero that means the id is not set and
             // it is not synced ( the id is not from the api).
             if (newTransaction.getId() == 0) {
@@ -81,22 +81,22 @@ public class DatabaseHelper extends RealmHelper {
             } else if (isDailyOrMonthlyOrYearly == 0) {
                 query.equalTo("date", String.format(Locale.ENGLISH, "%d-%02d-%02d", year, month, day));
             }
-            return query.findAllAsync();
+            return query.findAll();
         });
     }
     /**
      * Add a list of Transactions from the api into database.
-     * @param response : @link TransactionResponse from DataManager:syncTransactions
+     * @param transactions : List of transactions to be added.
      */
-    public Flowable<TransactionResponse> addTransactions(TransactionResponse response) {
-        return executeTransactionAsync((bgRealm, subscriber) -> {
-            bgRealm.copyToRealmOrUpdate(response.getResponse());
-            subscriber.onNext(response);
+    public Flowable<List<Transaction>> addTransactions(List<Transaction> transactions) {
+        return executeTransaction((realm, subscriber) -> {
+            realm.copyToRealmOrUpdate(transactions);
+            subscriber.onNext(transactions);
         });
     }
 
     public Flowable<TransactionResponse> removeTransactions(long[] selectedIds, boolean isSync) {
-        return executeTransactionAsync(false, true, (bgRealm, subscriber) ->
+        return executeTransaction(false, true, (bgRealm, subscriber) ->
         {
             RealmQuery<Transaction> query = bgRealm.where(Transaction.class);
 
@@ -142,7 +142,7 @@ public class DatabaseHelper extends RealmHelper {
                                               Transaction_Fields[] keys,
                                               Object[] values) {
 
-        return executeTransactionAsync((bgRealm, subscriber) -> {
+        return executeTransaction((bgRealm, subscriber) -> {
             Transaction transaction = bgRealm.where(Transaction.class).equalTo("id", transactionId).findFirst();
             if (transaction == null) {
                 subscriber.onError(new Throwable("cannot update transaction, its not on db"));
@@ -176,14 +176,14 @@ public class DatabaseHelper extends RealmHelper {
      * Get all categories from db.
      */
     public Flowable<List<Category>> getCategories() {
-        return findAllAsyncData(Category.class);
+        return findAllData(Category.class);
     }
     /*
      * Add a new Category into database.
      * @param newCategory : the new category to be added in database.
      */
     public Flowable<Category> addCategory(final Category newCategory) {
-        return executeTransactionAsync((bgRealm, subscriber) -> {
+        return executeTransaction((bgRealm, subscriber) -> {
             if (newCategory.getId() == 0) {
                 // Auto Incremental Id
                 Number currentIdNum = bgRealm.where(Category.class).max("id");
@@ -198,7 +198,7 @@ public class DatabaseHelper extends RealmHelper {
      * @param categories : the list of categories
      */
     public Flowable<List<Category>> addCategories(List<Category> categories) {
-        return executeTransactionAsync((bgRealm, subscriber) -> {
+        return executeTransaction((bgRealm, subscriber) -> {
             bgRealm.copyToRealmOrUpdate(categories);
         });
     }

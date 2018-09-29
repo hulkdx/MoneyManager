@@ -1,6 +1,5 @@
 package com.hulkdx.moneymanagerv2.data.local;
 
-import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.util.RxUtil;
 
 import java.util.List;
@@ -12,7 +11,9 @@ import javax.inject.Provider;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
+import io.reactivex.disposables.Disposables;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -33,34 +34,24 @@ class RealmHelper {
         mRealmProvider = realmProvider;
     }
 
-    <T> Flowable<T> executeTransactionAsync(RealmExecution<T> exec) {
-        return executeTransactionAsync(true, true, exec);
+    <T> Flowable<T> executeTransaction(RealmExecution<T> exec) {
+        return executeTransaction(true, true, exec);
     }
 
-    <T> Flowable<T> executeTransactionAsync(boolean onComplete, boolean onError, RealmExecution<T> exec) {
+    <T> Flowable<T> executeTransaction(boolean onComplete, boolean onError, RealmExecution<T> exec) {
         return Flowable.create(subscriber -> {
             Realm realm = null;
             try {
                 lock.lock();
                 realm = mRealmProvider.get();
-                realm.executeTransactionAsync(bgRealm ->
-                        {
-                            exec.executeTransactionBlock(bgRealm, subscriber);
-                        },
-                        () ->
-                        {
-                            if (onComplete) {
-                                subscriber.onComplete();
-                            }
-                        },
-                        error ->
-                        {
-                            if (onError) {
-                                subscriber.onError(error);
-                            }
-                        }
-                );
-
+                try {
+                    realm.beginTransaction();
+                    exec.executeTransactionBlock(realm, subscriber);
+                    realm.commitTransaction();
+                } catch (Exception ex) {
+                    if (onError) subscriber.onError(ex);
+                }
+                if (onComplete) subscriber.onComplete();
             } finally {
                 if (realm != null) {
                     realm.close();
@@ -71,25 +62,37 @@ class RealmHelper {
     }
 
     <T extends RealmModel> Flowable<List<T>> getData(Class<T> clazz, DoQuery<T> realmQuery) {
-        Realm realm = null;
-        try {
+        return Flowable.defer( () -> Flowable.create(emitter -> {
             lock.lock();
-            realm = mRealmProvider.get();
-
-            RealmQuery<T> query = realm.where(clazz);
-            RealmResults<T> results = realmQuery.doQuery(query);
-
-            return RxUtil.createFlowableFromRealmResult(realm.getConfiguration(), results)
-                    .filter(RealmResults::isLoaded)
-                    .map(transactions -> transactions);
-
-        } finally {
+            Realm realm = mRealmProvider.get();
             lock.unlock();
-        }
+            try {
+
+                RealmQuery<T> query = realm.where(clazz);
+                final RealmResults<T> results = realmQuery.doQuery(query);
+
+                final Realm observableRealm = Realm.getInstance(realm.getConfiguration());
+
+                final RealmChangeListener<RealmResults<T>> listener =
+                        result -> {
+                            List<T> resz = observableRealm.copyFromRealm(results);
+                            emitter.onNext(resz);
+                        };
+                results.addChangeListener(listener);
+                emitter.setDisposable(Disposables.fromRunnable(() -> {
+                    results.removeChangeListener(listener);
+                    observableRealm.close();
+                }));
+                emitter.onNext(observableRealm.copyFromRealm(results));
+            } catch (Exception e) {
+                e.printStackTrace();
+                emitter.onError(e);
+            }
+        }, BackpressureStrategy.LATEST));
     }
 
-    <T extends RealmModel> Flowable<List<T>> findAllAsyncData(Class<T> clazz) {
-        return getData(clazz, RealmQuery::findAllAsync);
+    <T extends RealmModel> Flowable<List<T>> findAllData(Class<T> clazz) {
+        return getData(clazz, RealmQuery::findAll);
     }
 
     public interface RealmExecution<T> {
