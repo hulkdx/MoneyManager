@@ -11,6 +11,7 @@ import com.hulkdx.moneymanagerv2.di.components.ApplicationComponent
 import com.hulkdx.moneymanagerv2.di.components.ConfigPersistentComponent
 import com.hulkdx.moneymanagerv2.di.components.DaggerConfigPersistentComponent
 import com.hulkdx.moneymanagerv2.di.modules.ActivityModule
+import com.hulkdx.moneymanagerv2.utils.ConfigPersistentHelper
 import timber.log.Timber
 
 /**
@@ -19,18 +20,11 @@ import timber.log.Timber
 @Suppress("MemberVisibilityCanBePrivate")
 abstract class BaseActivity : AppCompatActivity() {
 
-    companion object {
-        private const val ACTIVITY_ID = "ACTIVITY_ID"
-
-        private var sActivityId = 0
-        private val sComponentsMap = LongSparseArray<ConfigPersistentComponent>()
-    }
-
+    lateinit var applicationComponent: ApplicationComponent
     lateinit var activityComponent: ActivityComponent
         private set
 
-    private val applicationComponent: ApplicationComponent
-        get() = HulkApplication.get(this).applicationComponent
+    private val configPersistentHelper = ConfigPersistentHelper()
 
     //---------------------------------------------------------------
     // Lifecycle
@@ -38,8 +32,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        createConfigPersistentActivityComponent(savedInstanceState)
+        applicationComponent = HulkApplication.get(this).applicationComponent
+        configPersistentHelper.create(savedInstanceState, this)
     }
 
     override fun onStart() {
@@ -76,7 +70,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun onDestroyWithoutConfigurationChange() {
-        removeConfigPersistentComponent()
+        configPersistentHelper.remove()
     }
 
     // Update UI elements on this function:
@@ -84,37 +78,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     // Stop updating UI elements on this function:
     protected fun onUnbindUI() {}
-
-    //---------------------------------------------------------------
-    // Config Persistent Component
-    //---------------------------------------------------------------
-
-    /**
-     * Create ActivityComponent that can survive a configuration using a static HashMap. (In memory)
-     */
-    private fun createConfigPersistentActivityComponent(savedInstanceState: Bundle?) {
-        sActivityId = savedInstanceState?.getInt(ACTIVITY_ID) ?: sActivityId + 1
-
-        val configPersistentComponent: ConfigPersistentComponent =
-                sComponentsMap.get(sActivityId.toLong(), null) ?:
-                createNewConfigPersistentComponent()
-
-        activityComponent = configPersistentComponent.activityComponent(ActivityModule(this))
-    }
-
-    private fun createNewConfigPersistentComponent(): ConfigPersistentComponent {
-        Timber.v("Creating new ConfigPersistentComponent")
-        val configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                .applicationComponent(applicationComponent)
-                .build()
-        sComponentsMap.put(sActivityId.toLong(), configPersistentComponent)
-        return configPersistentComponent
-    }
-
-    private fun removeConfigPersistentComponent() {
-        Timber.v("Clearing Component id=%d", sActivityId)
-        sComponentsMap.remove(sActivityId.toLong())
-    }
 
     //---------------------------------------------------------------
     // Fragments

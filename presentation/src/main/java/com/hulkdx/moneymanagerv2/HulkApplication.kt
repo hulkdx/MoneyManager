@@ -59,7 +59,7 @@ class HulkApplication : Application() {
 
     companion object {
 
-        operator fun get(context: Context): HulkApplication {
+        fun get(context: Context): HulkApplication {
             return context.applicationContext as HulkApplication
         }
     }
