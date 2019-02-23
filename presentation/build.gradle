@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+    //buildToolsVersion "24.0.1"
+    defaultConfig {
+        applicationId "com.hulkdx.moneymanagerv2"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation project(':domain')
+    implementation project(':data')
+
+    def dep     = rootProject.ext.presentationDependencies
+    def depTest = rootProject.ext.presentationTestDependencies
+
+    implementation      dep.appcompat
+    kapt                dep.daggerCompiler
+    implementation      dep.dagger
+    implementation      dep.recyclerView
+    implementation      dep.rxJava
+    implementation      dep.rxAndroid
+    compileOnly         dep.javaxAnnotation
+    implementation      dep.leakCanary
+    implementation      dep.timber
+    implementation      dep.kotlinStd
+    implementation      dep.liveData
+    kapt                dep.liveDataAnnotation
+
+    androidTestImplementation depTest.runner
+    androidTestImplementation depTest.mockito
+}
