@@ -1,7 +1,3 @@
-/**
- * Created by Mohammad Jafarzadeh Rezvan on 6/13/2017.
- */
-
 package com.hulkdx.moneymanagerv2;
 
 import android.app.Application;
@@ -16,6 +12,10 @@ import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 6/13/2017.
+ * Updated on 23/2/2019.
+ */
 public class HulkApplication extends Application {
     private ApplicationComponent mApplicationComponent;
 
@@ -23,6 +23,19 @@ public class HulkApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        initDagger();
+        initLeakDetection();
+        initTimberLog();
+    }
+
+    private void initDagger() {
+        mApplicationComponent =
+                DaggerApplicationComponent.builder()
+                        .applicationModule(new ApplicationModule(this))
+                        .build();
+    }
+
+    private void initLeakDetection() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
 
@@ -32,9 +45,13 @@ public class HulkApplication extends Application {
                 return;
             }
             LeakCanary.install(this);
+        }
+    }
 
-        } else {
-            Fabric.with(this, new Crashlytics());
+    private void initTimberLog() {
+        // This will initialise Timber
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
         }
     }
 
@@ -42,12 +59,7 @@ public class HulkApplication extends Application {
         return (HulkApplication) context.getApplicationContext();
     }
 
-    public ApplicationComponent getComponent() {
-        if (mApplicationComponent == null) {
-            mApplicationComponent = DaggerApplicationComponent.builder()
-                    .applicationModule(new ApplicationModule(this))
-                    .build();
-        }
+    public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
     }
 

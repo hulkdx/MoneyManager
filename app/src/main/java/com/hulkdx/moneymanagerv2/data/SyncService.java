@@ -40,7 +40,7 @@ public class SyncService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        HulkApplication.get(this).getComponent().inject(this);
+        HulkApplication.get(this).getApplicationComponent().inject(this);
         mDisposables = new CompositeDisposable();
     }
 

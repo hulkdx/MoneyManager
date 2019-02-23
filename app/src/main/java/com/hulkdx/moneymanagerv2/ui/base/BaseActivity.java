@@ -41,7 +41,7 @@ public class BaseActivity extends AppCompatActivity {
         if (!sComponentsMap.containsKey(mActivityId)) {
             Timber.i("Creating new ConfigPersistentComponent id=%d", mActivityId);
             configPersistentComponent = DaggerConfigPersistentComponent.builder()
-                    .applicationComponent(HulkApplication.get(this).getComponent())
+                    .applicationComponent(HulkApplication.get(this).getApplicationComponent())
                     .build();
             sComponentsMap.put(mActivityId, configPersistentComponent);
         } else {
