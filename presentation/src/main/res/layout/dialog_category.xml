@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/category_dialog_margins"
+        android:textColor="@color/black"
+        android:text="@string/category"/>
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapSentences"
+        android:layout_marginLeft="@dimen/category_dialog_margins"
+        android:layout_marginRight="@dimen/category_dialog_margins"
+        android:hint="@string/name"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/category_dialog_margins"
+        android:layout_marginRight="@dimen/category_dialog_margins">
+
+        <LinearLayout
+            android:id="@+id/colors_linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <!-- The view below will add to LinearLayout from array string.-->
+            <!--<ImageView-->
+                <!--android:layout_width="@dimen/category_dialog_images_width"-->
+                <!--android:layout_height="@dimen/category_dialog_images_height"-->
+                <!--android:src="@drawable/button_add"-->
+                <!--android:background="@android:color/holo_blue_dark" />-->
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!--<Button-->
+        <!--android:id="@+id/enterBtn"-->
+        <!--android:layout_width="90dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:background="@drawable/selector_btn_add"-->
+        <!--android:layout_gravity="center_horizontal"/>-->
+
+</LinearLayout>

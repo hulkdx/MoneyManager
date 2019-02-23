@@ -4,6 +4,7 @@ package com.hulkdx.moneymanagerv2.di.components
 import dagger.Subcomponent
 import com.hulkdx.moneymanagerv2.di.PerActivity
 import com.hulkdx.moneymanagerv2.di.modules.ActivityModule
+import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialActivity
 import com.hulkdx.moneymanagerv2.ui.main.MainActivity
 import com.hulkdx.moneymanagerv2.ui.main.MainFragment
 
@@ -16,4 +17,5 @@ interface ActivityComponent {
 
     fun inject(activity: MainActivity)
     fun inject(mainFragment: MainFragment)
+    fun inject(chooserActivity: TutorialActivity)
 }
