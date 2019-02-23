@@ -2,17 +2,12 @@ package com.hulkdx.moneymanagerv2.ui.base
 
 import android.os.Build
 import android.os.Bundle
-import android.util.LongSparseArray
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.HulkApplication
 import com.hulkdx.moneymanagerv2.di.components.ActivityComponent
 import com.hulkdx.moneymanagerv2.di.components.ApplicationComponent
-import com.hulkdx.moneymanagerv2.di.components.ConfigPersistentComponent
-import com.hulkdx.moneymanagerv2.di.components.DaggerConfigPersistentComponent
-import com.hulkdx.moneymanagerv2.di.modules.ActivityModule
 import com.hulkdx.moneymanagerv2.utils.ConfigPersistentHelper
-import timber.log.Timber
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
@@ -20,11 +15,11 @@ import timber.log.Timber
 @Suppress("MemberVisibilityCanBePrivate")
 abstract class BaseActivity : AppCompatActivity() {
 
-    lateinit var applicationComponent: ApplicationComponent
-    lateinit var activityComponent: ActivityComponent
+    lateinit var mApplicationComponent: ApplicationComponent
+    lateinit var mActivityComponent: ActivityComponent
         private set
 
-    private val configPersistentHelper = ConfigPersistentHelper()
+    private val mConfigPersistentHelper = ConfigPersistentHelper()
 
     //---------------------------------------------------------------
     // Lifecycle
@@ -32,8 +27,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        applicationComponent = HulkApplication.get(this).applicationComponent
-        configPersistentHelper.create(savedInstanceState, this)
+        mApplicationComponent = HulkApplication.get(this).applicationComponent
+        mConfigPersistentHelper.create(savedInstanceState, this)
     }
 
     override fun onStart() {
@@ -70,7 +65,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected fun onDestroyWithoutConfigurationChange() {
-        configPersistentHelper.remove()
+        mConfigPersistentHelper.remove()
     }
 
     // Update UI elements on this function:

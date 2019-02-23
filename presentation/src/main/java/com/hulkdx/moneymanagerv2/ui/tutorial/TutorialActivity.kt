@@ -19,7 +19,7 @@ class TutorialActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chooser)
-        activityComponent.inject(this)
+        mActivityComponent.inject(this)
 
 //        if (mDataManager!!.checkLoggedIn()) {
 //            redirectToMainActivity()

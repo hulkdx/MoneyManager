@@ -15,7 +15,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        activityComponent.inject(this)
+        mActivityComponent.inject(this)
 
         if (savedInstanceState == null) {
             addFragment(R.id.fragmentContainer, MainFragment())
