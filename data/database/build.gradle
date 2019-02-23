@@ -18,7 +18,7 @@ android {
 }
 
 dependencies {
-    implementation project(':data')
+    implementation project(':data:repository')
     implementation project(':domain')
 
     def dep = rootProject.ext.dataDependencies
