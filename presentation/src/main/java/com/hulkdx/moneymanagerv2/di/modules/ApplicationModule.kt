@@ -6,11 +6,13 @@ import com.hulkdx.moneymanagerv2.di.ApplicationContext
 import com.hulkdx.moneymanagerv2.executor.UiThread
 import dagger.Module
 import dagger.Provides
-import hulkdx.com.data.repository.AuthRepository
+import hulkdx.com.data.datasource.IDataBase
+import hulkdx.com.data.repository.UserRepository
+import hulkdx.com.database.DataBaseHelper
 import hulkdx.com.domain.executor.CustomThreadExecutor
 import hulkdx.com.domain.executor.PostExecutionThread
 import hulkdx.com.domain.executor.ThreadExecutor
-import hulkdx.com.domain.repository.IAuthRepository
+import hulkdx.com.domain.repository.IUserRepository
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
@@ -34,7 +36,14 @@ class ApplicationModule(private val mApplication: Application) {
     }
 
     @Provides
-    fun provideAuthRepository(authRepository: AuthRepository): IAuthRepository {
-        return authRepository
+    fun provideAuthRepository(userRepository: UserRepository): IUserRepository {
+        return userRepository
     }
+
+    @Provides
+    fun provideDataBase(userRepository: DataBaseHelper): IDataBase {
+        return userRepository
+    }
+
+
 }
