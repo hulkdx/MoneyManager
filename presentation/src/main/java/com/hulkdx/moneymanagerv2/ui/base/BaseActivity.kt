@@ -1,12 +1,15 @@
 package com.hulkdx.moneymanagerv2.ui.base
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.HulkApplication
+import com.hulkdx.moneymanagerv2.ViewModelProviderFactory
 import com.hulkdx.moneymanagerv2.di.components.ActivityComponent
 import com.hulkdx.moneymanagerv2.di.components.ApplicationComponent
+import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialActivity
 import com.hulkdx.moneymanagerv2.utils.ConfigPersistentHelper
 
 /**
@@ -16,7 +19,11 @@ import com.hulkdx.moneymanagerv2.utils.ConfigPersistentHelper
 abstract class BaseActivity : AppCompatActivity() {
 
     lateinit var mApplicationComponent: ApplicationComponent
+        private set
     lateinit var mActivityComponent: ActivityComponent
+        private set
+
+    lateinit var mViewModelProviderFactory: ViewModelProviderFactory
         private set
 
     private val mConfigPersistentHelper = ConfigPersistentHelper()
@@ -28,7 +35,8 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mApplicationComponent = HulkApplication.get(this).applicationComponent
-        mConfigPersistentHelper.create(savedInstanceState, this)
+        mActivityComponent = mConfigPersistentHelper.create(savedInstanceState, this)
+        mViewModelProviderFactory = mActivityComponent.viewModelProviderFactory()
     }
 
     override fun onStart() {

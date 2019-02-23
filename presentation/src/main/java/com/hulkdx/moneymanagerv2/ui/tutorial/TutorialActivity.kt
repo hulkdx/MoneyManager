@@ -1,11 +1,11 @@
 package com.hulkdx.moneymanagerv2.ui.tutorial
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-
 import com.hulkdx.moneymanagerv2.R
-import com.hulkdx.moneymanagerv2.ui.base.BaseActivity
-import com.hulkdx.moneymanagerv2.ui.main.MainActivity
+import com.hulkdx.moneymanagerv2.ui.auth.AuthActivity
+import kotlinx.android.synthetic.main.activity_chooser.*
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 8/14/2017.
@@ -13,34 +13,31 @@ import com.hulkdx.moneymanagerv2.ui.main.MainActivity
  *
  * The entry point of the application.
  */
-class TutorialActivity : BaseActivity() {
-
+class TutorialActivity : AuthActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chooser)
         mActivityComponent.inject(this)
 
-//        if (mDataManager!!.checkLoggedIn()) {
-//            redirectToMainActivity()
-//        }
+        if (mAuthViewModel.isUserLoggedInSync()) {
+            return
+        }
+
+        setContentView(R.layout.activity_chooser)
+
+        btn_yes.setOnClickListener {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        btn_no.setOnClickListener {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
     }
 
-    private fun redirectToMainActivity() {
-        val i = Intent(this, MainActivity::class.java)
-        startActivity(i)
-        finish()
+    companion object {
+        fun startActivity(context: Context) {
+            val intent = Intent()
+            context.startActivity(intent)
+        }
     }
-//
-//    @OnClick(R.id.btn_yes)
-//    fun onClickYes() {
-//        val intent = Intent(this, LoginSyncActivity::class.java)
-//        startActivity(intent)
-//    }
-//
-//    @OnClick(R.id.btn_no)
-//    fun onClickNo() {
-//        val intent = Intent(this, LoginActivity::class.java)
-//        startActivity(intent)
-//    }
 }

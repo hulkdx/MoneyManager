@@ -23,6 +23,7 @@ ext {
 
     presentationDependencies = [
             appcompat:          "androidx.appcompat:appcompat:${androidxAppcompatVersion}",
+            cardView:           "androidx.cardview:cardview:1.0.0",
             daggerCompiler:     "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger:             "com.google.dagger:dagger:${daggerVersion}",
             recyclerView:       "androidx.recyclerview:recyclerview:${recyclerViewVersion}",

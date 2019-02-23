@@ -3,23 +3,17 @@
 package hulkdx.com.data.remote
 
 import com.google.gson.GsonBuilder
-import java.util.concurrent.TimeUnit
-
-import hulkdx.com.data.model.GitHubRepositoryEntity
-import io.reactivex.Flowable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 10/11/2018.
  */
 interface RemoteService {
 
-    @GET("users/hulkdx/repos")
-    fun repos(): Flowable<List<GitHubRepositoryEntity>>
 
     object Factory {
         const val ENDPOINT = "https://api.github.com/"

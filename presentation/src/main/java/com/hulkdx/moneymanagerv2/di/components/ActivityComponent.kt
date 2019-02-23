@@ -1,12 +1,12 @@
 package com.hulkdx.moneymanagerv2.di.components
 
 
-import dagger.Subcomponent
+import com.hulkdx.moneymanagerv2.ViewModelProviderFactory
 import com.hulkdx.moneymanagerv2.di.PerActivity
 import com.hulkdx.moneymanagerv2.di.modules.ActivityModule
+import com.hulkdx.moneymanagerv2.ui.auth.AuthActivity
 import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialActivity
-import com.hulkdx.moneymanagerv2.ui.main.MainActivity
-import com.hulkdx.moneymanagerv2.ui.main.MainFragment
+import dagger.Subcomponent
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
@@ -15,7 +15,8 @@ import com.hulkdx.moneymanagerv2.ui.main.MainFragment
 @Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {
 
-    fun inject(activity: MainActivity)
-    fun inject(mainFragment: MainFragment)
+    fun viewModelProviderFactory(): ViewModelProviderFactory
+
     fun inject(chooserActivity: TutorialActivity)
+    fun inject(authActivity: AuthActivity)
 }
