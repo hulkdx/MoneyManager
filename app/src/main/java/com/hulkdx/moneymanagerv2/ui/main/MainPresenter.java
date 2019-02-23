@@ -19,7 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-i
+
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private CompositeDisposable mDisposables;

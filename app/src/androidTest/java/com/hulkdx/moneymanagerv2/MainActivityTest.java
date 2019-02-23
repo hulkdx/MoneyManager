@@ -1,12 +1,12 @@
 package com.hulkdx.moneymanagerv2;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import com.hulkdx.moneymanagerv2.injections.TestComponentRule;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import io.reactivex.Flowable;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkNotNull;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.core.deps.guava.base.Preconditions.checkNotNull;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static com.hulkdx.moneymanagerv2.common.TestDataFactory.makeListTransactions;
 import static org.mockito.Mockito.when;
 

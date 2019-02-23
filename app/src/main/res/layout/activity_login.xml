@@ -7,7 +7,7 @@
     android:gravity="center"
     android:layout_margin="10dp">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_input_layout"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" >
@@ -17,9 +17,9 @@
             android:layout_height="wrap_content"
             android:inputType="textCapSentences"
             android:hint="@string/login_your_name"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/initial_input_layout"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:hint="@string/login_init_money"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
         android:id="@+id/spinner_currency"

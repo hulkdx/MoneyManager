@@ -3,7 +3,7 @@ package com.hulkdx.moneymanagerv2.util;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 8/4/2017.

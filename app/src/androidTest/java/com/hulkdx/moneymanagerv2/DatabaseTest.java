@@ -1,10 +1,9 @@
 package com.hulkdx.moneymanagerv2;
 
-import android.support.test.InstrumentationRegistry;
-import android.support.test.annotation.UiThreadTest;
-import android.support.test.rule.UiThreadTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.annotation.UiThreadTest;
+import androidx.test.rule.UiThreadTestRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
@@ -13,26 +12,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Provider;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
+
 import static com.hulkdx.moneymanagerv2.common.TestDataFactory.makeListTransactions;
-import static com.hulkdx.moneymanagerv2.common.TestDataFactory.makeRandomTransaction;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 19/09/2017.

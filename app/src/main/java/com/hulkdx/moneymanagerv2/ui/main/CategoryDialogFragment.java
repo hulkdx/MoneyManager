@@ -10,8 +10,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,7 +48,7 @@ public class CategoryDialogFragment extends DialogFragment
         mNameEditText = mView.findViewById(R.id.et_name);
         mColorsLinearLayout = mView.findViewById(R.id.colors_linearLayout);
         createColorImageView();
-        return new android.support.v7.app.AlertDialog.Builder(getActivity())
+        return new androidx.appcompat.app.AlertDialog.Builder(getActivity())
                 .setNeutralButton(R.string.dialog_action_ok, this)
                 .setView(mView)
                 .create();

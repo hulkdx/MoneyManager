@@ -6,7 +6,7 @@ package com.hulkdx.moneymanagerv2.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
