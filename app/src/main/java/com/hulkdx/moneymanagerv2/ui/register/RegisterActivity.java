@@ -22,6 +22,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

@@ -1,7 +1,3 @@
-/**
- * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
- */
-
 package com.hulkdx.moneymanagerv2.ui.main;
 
 import android.app.Activity;
@@ -42,8 +38,10 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.data.SyncService;
+import com.hulkdx.moneymanagerv2.data.SyncServiceListener;
 import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
@@ -51,18 +49,19 @@ import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
 import com.hulkdx.moneymanagerv2.ui.chooser.ChooserActivity;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
 import com.hulkdx.moneymanagerv2.util.FileUtil;
-import com.hulkdx.moneymanagerv2.data.SyncServiceListener;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
@@ -71,8 +70,12 @@ import butterknife.OnEditorAction;
 import butterknife.OnItemSelected;
 import butterknife.OnTouch;
 import timber.log.Timber;
+
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
+/**
+ * Created by Mohammad Jafarzadeh Rezvan on 7/6/2017.
+ */
 public class MainActivity extends BaseActivity implements MainMvpView,
         CategoryDialogFragment.CategoryFragmentListener, CategoryAdapter.Callback,
         SearchView.OnQueryTextListener, PopupMenu.OnMenuItemClickListener, SyncServiceListener {

@@ -4,21 +4,22 @@
 
 package com.hulkdx.moneymanagerv2.data;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper;
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.model.Category;
-import com.hulkdx.moneymanagerv2.data.model.requests.DeleteTransactionsRequestBody;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
 import com.hulkdx.moneymanagerv2.data.model.User;
+import com.hulkdx.moneymanagerv2.data.model.requests.DeleteTransactionsRequestBody;
 import com.hulkdx.moneymanagerv2.data.model.requests.UpdateTransactionRequest;
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

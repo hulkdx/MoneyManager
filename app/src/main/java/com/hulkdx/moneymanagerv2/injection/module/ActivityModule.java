@@ -7,9 +7,10 @@ package com.hulkdx.moneymanagerv2.injection.module;
 import android.app.Activity;
 import android.content.Context;
 
+import com.hulkdx.moneymanagerv2.injection.ActivityContext;
+
 import dagger.Module;
 import dagger.Provides;
-import com.hulkdx.moneymanagerv2.injection.ActivityContext;
 
 @Module
 public class ActivityModule {

@@ -6,12 +6,14 @@ package com.hulkdx.moneymanagerv2.ui.chooser;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.data.DataManager;
 import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
 import com.hulkdx.moneymanagerv2.ui.login.LoginActivity;
 import com.hulkdx.moneymanagerv2.ui.loginsync.LoginSyncActivity;
 import com.hulkdx.moneymanagerv2.ui.main.MainActivity;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;

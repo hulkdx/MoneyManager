@@ -2,6 +2,7 @@ package com.hulkdx.moneymanagerv2.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**

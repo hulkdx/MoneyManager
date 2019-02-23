@@ -4,7 +4,6 @@
 
 package com.hulkdx.moneymanagerv2.injection.component;
 
-import dagger.Subcomponent;
 import com.hulkdx.moneymanagerv2.injection.PerActivity;
 import com.hulkdx.moneymanagerv2.injection.module.ActivityModule;
 import com.hulkdx.moneymanagerv2.ui.chooser.ChooserActivity;
@@ -12,6 +11,8 @@ import com.hulkdx.moneymanagerv2.ui.login.LoginActivity;
 import com.hulkdx.moneymanagerv2.ui.loginsync.LoginSyncActivity;
 import com.hulkdx.moneymanagerv2.ui.main.MainActivity;
 import com.hulkdx.moneymanagerv2.ui.register.RegisterActivity;
+
+import dagger.Subcomponent;
 
 /**
  * This component inject dependencies to all Activities across the application

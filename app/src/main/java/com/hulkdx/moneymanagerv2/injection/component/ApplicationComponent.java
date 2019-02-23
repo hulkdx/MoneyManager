@@ -7,17 +7,17 @@ package com.hulkdx.moneymanagerv2.injection.component;
 import android.app.Application;
 import android.content.Context;
 
-import javax.inject.Singleton;
-
-import dagger.Component;
-import io.realm.Realm;
-
 import com.hulkdx.moneymanagerv2.data.DataManager;
 import com.hulkdx.moneymanagerv2.data.SyncService;
 import com.hulkdx.moneymanagerv2.data.local.PreferencesHelper;
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
 import com.hulkdx.moneymanagerv2.injection.ApplicationContext;
 import com.hulkdx.moneymanagerv2.injection.module.ApplicationModule;
+
+import javax.inject.Singleton;
+
+import dagger.Component;
+import io.realm.Realm;
 
 @Singleton
 @Component(modules = ApplicationModule.class)

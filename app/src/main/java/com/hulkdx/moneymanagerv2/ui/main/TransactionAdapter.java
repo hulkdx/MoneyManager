@@ -17,24 +17,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.injection.ActivityContext;
 import com.hulkdx.moneymanagerv2.util.DialogFactory;
 import com.hulkdx.moneymanagerv2.util.PermissionChecker;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import timber.log.Timber;
 

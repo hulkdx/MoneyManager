@@ -6,15 +6,16 @@ package com.hulkdx.moneymanagerv2.injection.module;
 
 import android.app.Application;
 import android.content.Context;
-import dagger.Module;
-import dagger.Provides;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 import com.hulkdx.moneymanagerv2.data.remote.HulkService;
 import com.hulkdx.moneymanagerv2.injection.ApplicationContext;
 
 import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Provide application-level dependencies.

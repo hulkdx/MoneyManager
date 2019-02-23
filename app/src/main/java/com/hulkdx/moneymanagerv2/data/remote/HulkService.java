@@ -3,10 +3,10 @@ package com.hulkdx.moneymanagerv2.data.remote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hulkdx.moneymanagerv2.data.model.Category;
-import com.hulkdx.moneymanagerv2.data.model.requests.DeleteTransactionsRequestBody;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
 import com.hulkdx.moneymanagerv2.data.model.User;
+import com.hulkdx.moneymanagerv2.data.model.requests.DeleteTransactionsRequestBody;
 import com.hulkdx.moneymanagerv2.data.model.requests.UpdateTransactionRequest;
 
 import java.util.List;

@@ -4,10 +4,11 @@
 
 package com.hulkdx.moneymanagerv2.injection.component;
 
-import dagger.Component;
 import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
 import com.hulkdx.moneymanagerv2.injection.module.ActivityModule;
 import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
+
+import dagger.Component;
 
 /**
  * A dagger component that will live during the lifecycle of an Activity but it won't

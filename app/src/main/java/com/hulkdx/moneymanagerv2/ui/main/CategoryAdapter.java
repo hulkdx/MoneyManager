@@ -11,12 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.injection.ApplicationContext;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

@@ -11,12 +11,15 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.hulkdx.moneymanagerv2.R;
 import com.hulkdx.moneymanagerv2.ui.base.BaseActivity;
 import com.hulkdx.moneymanagerv2.ui.main.MainActivity;
 import com.hulkdx.moneymanagerv2.ui.register.RegisterActivity;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

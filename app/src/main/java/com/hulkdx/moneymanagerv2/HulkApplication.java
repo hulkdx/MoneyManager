@@ -6,13 +6,15 @@ package com.hulkdx.moneymanagerv2;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
-import timber.log.Timber;
 import com.hulkdx.moneymanagerv2.injection.component.ApplicationComponent;
 import com.hulkdx.moneymanagerv2.injection.component.DaggerApplicationComponent;
 import com.hulkdx.moneymanagerv2.injection.module.ApplicationModule;
 import com.squareup.leakcanary.LeakCanary;
+
+import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 public class HulkApplication extends Application {
     private ApplicationComponent mApplicationComponent;

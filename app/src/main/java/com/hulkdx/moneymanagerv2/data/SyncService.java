@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.IBinder;
+
 import com.hulkdx.moneymanagerv2.HulkApplication;
 import com.hulkdx.moneymanagerv2.util.NetworkUtil;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;

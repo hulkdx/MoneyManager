@@ -1,9 +1,8 @@
 package com.hulkdx.moneymanagerv2.data.model.requests;
 
-import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 
 import java.util.ArrayList;
 import java.util.HashMap;

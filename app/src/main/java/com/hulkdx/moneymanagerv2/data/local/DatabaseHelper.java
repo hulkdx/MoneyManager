@@ -6,11 +6,14 @@ package com.hulkdx.moneymanagerv2.data.local;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
 import com.hulkdx.moneymanagerv2.data.model.TransactionResponse;
+
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+
 import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmQuery;

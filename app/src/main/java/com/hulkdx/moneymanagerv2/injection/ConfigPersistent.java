@@ -4,12 +4,12 @@
 
 package com.hulkdx.moneymanagerv2.injection;
 
+import com.hulkdx.moneymanagerv2.injection.component.ConfigPersistentComponent;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
-
-import com.hulkdx.moneymanagerv2.injection.component.ConfigPersistentComponent;
 
 /**
  * A scoping annotation to permit dependencies conform to the life of the

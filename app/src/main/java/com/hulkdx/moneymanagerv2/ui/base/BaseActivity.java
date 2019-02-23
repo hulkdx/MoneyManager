@@ -3,16 +3,17 @@ package com.hulkdx.moneymanagerv2.ui.base;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-
-import timber.log.Timber;
 import com.hulkdx.moneymanagerv2.HulkApplication;
 import com.hulkdx.moneymanagerv2.injection.component.ActivityComponent;
 import com.hulkdx.moneymanagerv2.injection.component.ConfigPersistentComponent;
 import com.hulkdx.moneymanagerv2.injection.component.DaggerConfigPersistentComponent;
 import com.hulkdx.moneymanagerv2.injection.module.ActivityModule;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
+import timber.log.Timber;
 
 /**
  * Abstract activity that every other Activity in this application must implement. It handles

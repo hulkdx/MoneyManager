@@ -3,10 +3,11 @@
  */
 package com.hulkdx.moneymanagerv2.ui.login;
 
-import javax.inject.Inject;
 import com.hulkdx.moneymanagerv2.data.DataManager;
 import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
 import com.hulkdx.moneymanagerv2.ui.base.BasePresenter;
+
+import javax.inject.Inject;
 
 @ConfigPersistent
 public class LoginPresenter extends BasePresenter<LoginMvpView> {

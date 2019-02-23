@@ -6,9 +6,11 @@ package com.hulkdx.moneymanagerv2.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.hulkdx.moneymanagerv2.injection.ApplicationContext;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import com.hulkdx.moneymanagerv2.injection.ApplicationContext;
 
 @Singleton
 public class PreferencesHelper {

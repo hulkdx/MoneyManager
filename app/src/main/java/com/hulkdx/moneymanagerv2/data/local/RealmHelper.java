@@ -1,7 +1,5 @@
 package com.hulkdx.moneymanagerv2.data.local;
 
-import com.hulkdx.moneymanagerv2.util.RxUtil;
-
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

@@ -7,6 +7,7 @@ import com.hulkdx.moneymanagerv2.data.DataManager;
 import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
 import com.hulkdx.moneymanagerv2.ui.base.BasePresenter;
 import com.hulkdx.moneymanagerv2.util.JsonReader;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;

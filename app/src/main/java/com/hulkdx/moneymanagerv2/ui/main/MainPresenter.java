@@ -10,17 +10,16 @@ import com.hulkdx.moneymanagerv2.data.DataManager;
 import com.hulkdx.moneymanagerv2.data.local.DatabaseHelper.Transaction_Fields;
 import com.hulkdx.moneymanagerv2.data.model.Category;
 import com.hulkdx.moneymanagerv2.data.model.Transaction;
-import com.hulkdx.moneymanagerv2.injection.ConfigPersistent;
 import com.hulkdx.moneymanagerv2.ui.base.BasePresenter;
+
 import javax.inject.Inject;
 
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-@ConfigPersistent
+i
 public class MainPresenter extends BasePresenter<MainMvpView> {
 
     private CompositeDisposable mDisposables;
