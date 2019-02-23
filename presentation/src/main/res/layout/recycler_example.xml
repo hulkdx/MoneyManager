@@ -27,7 +27,6 @@
     <!-- divider? haha -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/colorPrimaryDark"/>
+        android:layout_height="5dp"/>
 
 </LinearLayout>

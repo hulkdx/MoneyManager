@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.LongSparseArray
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.hulkdx.moneymanagerv2.MyApplication
+import com.hulkdx.moneymanagerv2.HulkApplication
 import com.hulkdx.moneymanagerv2.di.components.ActivityComponent
 import com.hulkdx.moneymanagerv2.di.components.ApplicationComponent
 import com.hulkdx.moneymanagerv2.di.components.ConfigPersistentComponent
@@ -30,7 +30,7 @@ abstract class BaseActivity : AppCompatActivity() {
         private set
 
     private val applicationComponent: ApplicationComponent
-        get() = MyApplication.get(this).applicationComponent
+        get() = HulkApplication.get(this).applicationComponent
 
     //---------------------------------------------------------------
     // Lifecycle

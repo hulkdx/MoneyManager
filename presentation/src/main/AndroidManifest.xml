@@ -32,10 +32,16 @@
             <!--android:name="com.hulkdx.moneymanagerv2.ui.login.LoginActivity"-->
             <!--android:label="@string/app_name" />-->
 
-        <!--<activity android:name="com.hulkdx.moneymanagerv2.ui.main.MainActivity"-->
-            <!--android:windowSoftInputMode="stateHidden|adjustPan"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:theme="@style/AppThemeMainActivity" />-->
+        <activity android:name="com.hulkdx.moneymanagerv2.ui.main.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeMainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
 
         <!--<activity android:name="com.hulkdx.moneymanagerv2.ui.loginsync.LoginSyncActivity"-->
