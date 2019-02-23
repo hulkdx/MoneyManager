@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hulkdx.moneymanagerv2.di.ConfigPersistent
+import hulkdx.com.domain.interactor.AuthUseCase
 
 import javax.inject.Inject
 
@@ -13,7 +14,7 @@ import javax.inject.Inject
  */
 @SuppressLint("Registered")
 @ConfigPersistent
-class AuthViewModel @Inject constructor(): ViewModel()  {
+class AuthViewModel @Inject constructor(val mAuthUseCase: AuthUseCase): ViewModel()  {
 
     private val mIsUserLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -25,7 +26,7 @@ class AuthViewModel @Inject constructor(): ViewModel()  {
     }
 
     fun isUserLoggedInSync(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mAuthUseCase.isLoggedIn()
     }
 
 }

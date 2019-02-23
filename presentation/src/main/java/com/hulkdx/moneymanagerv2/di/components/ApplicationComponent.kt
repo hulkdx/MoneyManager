@@ -7,6 +7,7 @@ import com.hulkdx.moneymanagerv2.di.ApplicationContext
 import com.hulkdx.moneymanagerv2.di.modules.ApplicationModule
 import com.hulkdx.moneymanagerv2.di.modules.NetworkModule
 import dagger.Component
+import hulkdx.com.domain.interactor.AuthUseCase
 import javax.inject.Singleton
 
 /**
@@ -20,4 +21,5 @@ interface ApplicationComponent {
     fun context():     Context
     fun application(): Application
 
+    fun authUseCase(): AuthUseCase
 }
