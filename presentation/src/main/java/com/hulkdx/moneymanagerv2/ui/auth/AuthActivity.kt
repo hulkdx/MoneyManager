@@ -31,12 +31,12 @@ open class AuthActivity : BaseActivity() {
 
         if (this is TutorialActivity) return
 
-        mAuthViewModel.userLoggedInLiveData().observe(this, Observer {
-            Timber.i("mIsUserLoggedIn $it")
-            if (!it) {
-                TutorialActivity.startActivity(this)
-                finish()
-            }
-        })
+//        mAuthViewModel.userLoggedInLiveData().observe(this, Observer {
+//            Timber.i("mIsUserLoggedIn $it")
+//            if (!it) {
+//                TutorialActivity.startActivity(this)
+//                finish()
+//            }
+//        })
     }
 }

@@ -11,6 +11,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class DatabaseHelper @Inject constructor(private val mUserDataBaseHelper: UserTable): IDataBase {
+    override fun setUser(user: User) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun getUser(): User? {
         return mUserDataBaseHelper.getUser()

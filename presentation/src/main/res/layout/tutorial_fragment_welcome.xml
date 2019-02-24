@@ -9,9 +9,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/welcome"
+        android:fontFamily="@font/laila"
+        android:textColor="@color/blue"
+        android:textSize="60sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:text="@string/sync_desc"
-        android:fontFamily="sans-serif"
-        android:textSize="15sp"/>
+        android:fontFamily="@font/laila"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="22sp"/>
 
     <Button
         android:id="@+id/btn_yes"

@@ -1,7 +1,6 @@
 package hulkdx.com.domain.interactor
 
 import hulkdx.com.domain.RANDOM_USER
-import hulkdx.com.domain.interactor.AuthUseCase
 import hulkdx.com.domain.repository.IUserRepository
 import org.junit.Assert.*
 import org.junit.Before
@@ -11,7 +10,6 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnit
@@ -35,7 +33,7 @@ class AuthUseCaseTest {
 
     @Test
     fun isUserLoggedInSyncCallGetUser() {
-        authUseCase.isLoggedIn()
+        authUseCase.isLoggedInSync()
 
         verify(mUserRepository).getUser()
     }
@@ -43,14 +41,14 @@ class AuthUseCaseTest {
     @Test
     fun isUserLoggedInSyncReturnsFalseUponNull() {
         `when`(mUserRepository.getUser()).thenReturn(null)
-        val result = authUseCase.isLoggedIn()
+        val result = authUseCase.isLoggedInSync()
         assertFalse(result)
     }
 
     @Test
     fun isUserLoggedInSyncReturnsTrueUponValidUser() {
         `when`(mUserRepository.getUser()).thenReturn(RANDOM_USER)
-        val result = authUseCase.isLoggedIn()
+        val result = authUseCase.isLoggedInSync()
         assertTrue(result)
     }
 

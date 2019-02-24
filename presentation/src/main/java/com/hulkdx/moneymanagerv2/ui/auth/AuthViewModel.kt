@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hulkdx.com.domain.di.ConfigPersistent
 import hulkdx.com.domain.interactor.AuthUseCase
+import io.reactivex.functions.Consumer
 
 import javax.inject.Inject
 
@@ -18,15 +19,26 @@ class AuthViewModel @Inject constructor(private val mAuthUseCase: AuthUseCase): 
 
     private val mIsUserLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
 
+    override fun onCleared() {
+        super.onCleared()
+        mAuthUseCase.dispose()
+    }
+
     fun userLoggedInLiveData(): LiveData<Boolean> {
         if (mIsUserLoggedIn.value == null) {
-
+            isUserLoggedInAsync()
         }
         return mIsUserLoggedIn
     }
 
+    private fun isUserLoggedInAsync() {
+        mAuthUseCase.isLoggedInAsync(Consumer {
+            mIsUserLoggedIn.value = it
+        })
+    }
+
     fun isUserLoggedInSync(): Boolean {
-        return mAuthUseCase.isLoggedIn()
+        return mAuthUseCase.isLoggedInSync()
     }
 
 }

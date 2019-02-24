@@ -34,8 +34,7 @@
         <item>JPY</item>
         <item>CNY</item>
     </string-array>
-    <string name="sync_desc">You can use this application by syncing the data to a server or without
-        syncing and saving the data locally on the device.\n\nDo you want to sync your data?</string>
+    <string name="sync_desc">Do you want to sync your data automatically to the server?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enter">Enter</string>
@@ -92,5 +91,6 @@
     <!-- Popup Menu Select Pictures-->
     <string name="take_new_picture">Take a new picture</string>
     <string name="choose_gallery">Choose from Gallery</string>
+    <string name="welcome">WELCOME</string>
 
 </resources>

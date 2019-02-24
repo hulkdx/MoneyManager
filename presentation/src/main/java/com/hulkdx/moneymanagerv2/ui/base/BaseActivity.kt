@@ -32,6 +32,10 @@ abstract class BaseActivity : AppCompatActivity() {
     // Lifecycle
     //---------------------------------------------------------------
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mApplicationComponent = HulkApplication.get(this).applicationComponent
@@ -86,8 +90,19 @@ abstract class BaseActivity : AppCompatActivity() {
     // Fragments
     //---------------------------------------------------------------
 
-    protected fun addFragment(containerViewId: Int, fragment: Fragment) {
-        supportFragmentManager.beginTransaction().add(containerViewId, fragment).commit()
+    fun addFragment(containerViewId: Int, fragment: Fragment) {
+        supportFragmentManager
+                .beginTransaction()
+                .add(containerViewId, fragment)
+                .commit()
+    }
+
+    fun replaceFragment(containerViewId: Int, fragment: Fragment) {
+        supportFragmentManager
+                .beginTransaction()
+                .replace(containerViewId, fragment)
+                .addToBackStack(fragment.tag)
+                .commitAllowingStateLoss()
     }
 
 }

@@ -11,11 +11,11 @@ ext {
     final daggerVersion = '2.20'
     final rxJavaVersion = '2.1.1'
     final rxAndroidVersion = '2.0.1'
+    final googleMaterialVersion = '1.0.0-rc01'
     final javaxAnnotationVersion = '1.0'
     final retrofitVersion   = '2.3.0'
     final timberVersion     = '4.7.1'
     final lifecycleVersion = "2.0.0"
-
     //Testing
     final mockitoVersion = '2.8.9'
     final mockitoInlineVersion = '2.13.0'
@@ -38,7 +38,8 @@ ext {
             timber:             "com.jakewharton.timber:timber:${timberVersion}",
             kotlinStd:          "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
             liveData:           "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
-            liveDataAnnotation:  "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+            liveDataAnnotation: "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion",
+            material:           "com.google.android.material:material:$googleMaterialVersion",
     ]
 
     presentationTestDependencies = [

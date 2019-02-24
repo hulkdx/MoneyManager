@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.ui.auth.AuthActivity
-import kotlinx.android.synthetic.main.activity_chooser.*
+import timber.log.Timber
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 8/14/2017.
@@ -15,24 +15,28 @@ import kotlinx.android.synthetic.main.activity_chooser.*
  */
 class TutorialActivity : AuthActivity() {
 
+    //---------------------------------------------------------------
+    // Lifecycle
+    //---------------------------------------------------------------
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mActivityComponent.inject(this)
+        setContentView(R.layout.activity_tutorial)
 
         if (mAuthViewModel.isUserLoggedInSync()) {
-            return
+            TODO("not implemented")
         }
 
-        setContentView(R.layout.activity_chooser)
-
-        btn_yes.setOnClickListener {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        btn_no.setOnClickListener {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (savedInstanceState == null) {
+            Timber.i("create fragment")
+            addFragment(R.id.container, WelcomeFragment())
         }
     }
+
+    //---------------------------------------------------------------
+    // statics
+    //---------------------------------------------------------------
 
     companion object {
         fun startActivity(context: Context) {

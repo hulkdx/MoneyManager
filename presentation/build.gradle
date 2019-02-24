@@ -37,6 +37,7 @@ dependencies {
     def depTest = rootProject.ext.presentationTestDependencies
 
     implementation      dep.appcompat
+    implementation      dep.material
     implementation      dep.cardView
     implementation      dep.recyclerView
     compileOnly         dep.javaxAnnotation

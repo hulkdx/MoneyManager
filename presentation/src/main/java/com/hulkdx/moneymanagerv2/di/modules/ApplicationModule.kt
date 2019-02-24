@@ -13,6 +13,8 @@ import hulkdx.com.domain.executor.CustomThreadExecutor
 import hulkdx.com.domain.executor.PostExecutionThread
 import hulkdx.com.domain.executor.ThreadExecutor
 import hulkdx.com.domain.repository.IUserRepository
+import hulkdx.com.repository.datasource.IMemoryCache
+import hulkdx.com.repository.datasource.MemoryCache
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
@@ -45,5 +47,8 @@ class ApplicationModule(private val mApplication: Application) {
         return userRepository
     }
 
-
+    @Provides
+    fun provideMemoryCache(memoryCache: MemoryCache): IMemoryCache {
+        return memoryCache
+    }
 }
