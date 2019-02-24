@@ -2,13 +2,13 @@ package com.hulkdx.moneymanagerv2.di.modules
 
 import android.app.Application
 import android.content.Context
-import com.hulkdx.moneymanagerv2.di.ApplicationContext
+import hulkdx.com.domain.di.ApplicationContext
 import com.hulkdx.moneymanagerv2.executor.UiThread
 import dagger.Module
 import dagger.Provides
-import hulkdx.com.data.datasource.IDataBase
-import hulkdx.com.data.repository.UserRepository
-import hulkdx.com.database.DataBaseHelper
+import hulkdx.com.repository.datasource.IDataBase
+import hulkdx.com.repository.repository.UserRepository
+import hulkdx.com.database.DatabaseHelper
 import hulkdx.com.domain.executor.CustomThreadExecutor
 import hulkdx.com.domain.executor.PostExecutionThread
 import hulkdx.com.domain.executor.ThreadExecutor
@@ -41,7 +41,7 @@ class ApplicationModule(private val mApplication: Application) {
     }
 
     @Provides
-    fun provideDataBase(userRepository: DataBaseHelper): IDataBase {
+    fun provideDataBase(userRepository: DatabaseHelper): IDataBase {
         return userRepository
     }
 

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hulkdx.moneymanagerv2.di.ConfigPersistent
+import hulkdx.com.domain.di.ConfigPersistent
 import hulkdx.com.domain.interactor.AuthUseCase
 
 import javax.inject.Inject
@@ -14,13 +14,13 @@ import javax.inject.Inject
  */
 @SuppressLint("Registered")
 @ConfigPersistent
-class AuthViewModel @Inject constructor(val mAuthUseCase: AuthUseCase): ViewModel()  {
+class AuthViewModel @Inject constructor(private val mAuthUseCase: AuthUseCase): ViewModel()  {
 
     private val mIsUserLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
 
-    fun isUserLoggedIn(): LiveData<Boolean> {
+    fun userLoggedInLiveData(): LiveData<Boolean> {
         if (mIsUserLoggedIn.value == null) {
-            // TODO
+
         }
         return mIsUserLoggedIn
     }

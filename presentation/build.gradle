@@ -38,18 +38,21 @@ dependencies {
 
     implementation      dep.appcompat
     implementation      dep.cardView
-    kapt                dep.daggerCompiler
-    implementation      dep.dagger
     implementation      dep.recyclerView
-    implementation      dep.rxJava
-    implementation      dep.rxAndroid
     compileOnly         dep.javaxAnnotation
-    implementation      dep.leakCanary
-    implementation      dep.timber
-    implementation      dep.kotlinStd
     implementation      dep.liveData
     kapt                dep.liveDataAnnotation
 
-    androidTestImplementation depTest.runner
-    androidTestImplementation depTest.mockito
+    kapt                dep.daggerCompiler
+    implementation      dep.dagger
+
+    implementation      dep.rxJava
+    implementation      dep.rxAndroid
+    implementation      dep.leakCanary
+    implementation      dep.timber
+    implementation      dep.kotlinStd
+
+    testImplementation depTest.mockito
+    testImplementation depTest.mockitoInline
+    testImplementation depTest.jUnit
 }

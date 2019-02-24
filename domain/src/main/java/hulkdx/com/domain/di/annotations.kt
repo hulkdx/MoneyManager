@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanagerv2.di
+package hulkdx.com.domain.di
 
 import javax.inject.Qualifier
 import javax.inject.Scope

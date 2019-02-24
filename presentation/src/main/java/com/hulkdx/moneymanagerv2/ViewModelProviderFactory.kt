@@ -2,7 +2,7 @@ package com.hulkdx.moneymanagerv2
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hulkdx.moneymanagerv2.di.PerActivity
+import hulkdx.com.domain.di.PerActivity
 import com.hulkdx.moneymanagerv2.ui.auth.AuthViewModel
 import javax.inject.Inject
 

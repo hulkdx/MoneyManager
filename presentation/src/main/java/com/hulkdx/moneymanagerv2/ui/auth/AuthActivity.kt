@@ -31,7 +31,7 @@ open class AuthActivity : BaseActivity() {
 
         if (this is TutorialActivity) return
 
-        mAuthViewModel.isUserLoggedIn().observe(this, Observer {
+        mAuthViewModel.userLoggedInLiveData().observe(this, Observer {
             Timber.i("mIsUserLoggedIn $it")
             if (!it) {
                 TutorialActivity.startActivity(this)

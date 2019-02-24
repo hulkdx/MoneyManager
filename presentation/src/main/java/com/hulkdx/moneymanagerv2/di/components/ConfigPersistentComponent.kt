@@ -5,7 +5,7 @@
 package com.hulkdx.moneymanagerv2.di.components
 
 import dagger.Component
-import com.hulkdx.moneymanagerv2.di.ConfigPersistent
+import hulkdx.com.domain.di.ConfigPersistent
 import com.hulkdx.moneymanagerv2.di.modules.ActivityModule
 import com.hulkdx.moneymanagerv2.di.modules.ConfigPersistentModule
 

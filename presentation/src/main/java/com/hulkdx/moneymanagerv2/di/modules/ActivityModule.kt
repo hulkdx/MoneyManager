@@ -5,7 +5,7 @@ import android.content.Context
 
 import dagger.Module
 import dagger.Provides
-import com.hulkdx.moneymanagerv2.di.ActivityContext
+import hulkdx.com.domain.di.ActivityContext
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.

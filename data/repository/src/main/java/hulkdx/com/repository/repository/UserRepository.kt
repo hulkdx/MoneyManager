@@ -1,6 +1,6 @@
-package hulkdx.com.data.repository
+package hulkdx.com.repository.repository
 
-import hulkdx.com.data.datasource.IDataBase
+import hulkdx.com.repository.datasource.IDataBase
 import hulkdx.com.domain.models.User
 import hulkdx.com.domain.repository.IUserRepository
 import javax.inject.Inject

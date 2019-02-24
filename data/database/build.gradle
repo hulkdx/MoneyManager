@@ -15,6 +15,12 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 }
 
 dependencies {
@@ -22,12 +28,15 @@ dependencies {
     implementation project(':domain')
 
     def dep = rootProject.ext.dataDependencies
+    def depTest = rootProject.ext.dataTestDependencies
 
-    annotationProcessor dep.daggerCompiler
+    kapt                dep.daggerCompiler
     implementation      dep.dagger
+    implementation      dep.kotlinStd
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-repositories {
-    mavenCentral()
+    testImplementation depTest.jUnit
+    testImplementation depTest.mockito
+    androidTestImplementation depTest.jUnit
+    androidTestImplementation depTest.mockito
+    androidTestImplementation depTest.runner
 }

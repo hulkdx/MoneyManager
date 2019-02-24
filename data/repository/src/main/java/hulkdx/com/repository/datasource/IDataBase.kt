@@ -1,4 +1,4 @@
-package hulkdx.com.data.datasource
+package hulkdx.com.repository.datasource
 
 import hulkdx.com.domain.models.User
 

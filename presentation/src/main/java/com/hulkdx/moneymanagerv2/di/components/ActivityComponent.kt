@@ -2,7 +2,7 @@ package com.hulkdx.moneymanagerv2.di.components
 
 
 import com.hulkdx.moneymanagerv2.ViewModelProviderFactory
-import com.hulkdx.moneymanagerv2.di.PerActivity
+import hulkdx.com.domain.di.PerActivity
 import com.hulkdx.moneymanagerv2.di.modules.ActivityModule
 import com.hulkdx.moneymanagerv2.ui.auth.AuthActivity
 import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialActivity
