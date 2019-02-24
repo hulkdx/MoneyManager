@@ -3,9 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_margin="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:text="@string/app_name_without_version"
+        android:fontFamily="@font/laila"
+        android:textColor="@color/blue"
+        android:gravity="center"
+        w/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_input_layout"
@@ -15,6 +25,8 @@
             android:id="@+id/et_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/laila"
             android:hint="@string/login_your_name"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -28,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
+            android:textSize="20sp"
+            android:fontFamily="@font/laila"
             android:hint="@string/password"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -36,6 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/laila"
+        android:textSize="12sp"
         android:textColor="@color/red"
         tools:text="Error: user exist!"/>
 

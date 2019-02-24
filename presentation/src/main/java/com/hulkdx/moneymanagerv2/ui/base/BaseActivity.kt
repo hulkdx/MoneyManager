@@ -1,6 +1,5 @@
 package com.hulkdx.moneymanagerv2.ui.base
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +8,6 @@ import com.hulkdx.moneymanagerv2.HulkApplication
 import com.hulkdx.moneymanagerv2.ViewModelProviderFactory
 import com.hulkdx.moneymanagerv2.di.components.ActivityComponent
 import com.hulkdx.moneymanagerv2.di.components.ApplicationComponent
-import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialActivity
 import com.hulkdx.moneymanagerv2.utils.ConfigPersistentHelper
 
 /**
@@ -31,10 +29,6 @@ abstract class BaseActivity : AppCompatActivity() {
     //---------------------------------------------------------------
     // Lifecycle
     //---------------------------------------------------------------
-
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,18 +80,22 @@ abstract class BaseActivity : AppCompatActivity() {
     // Stop updating UI elements on this function:
     protected fun onUnbindUI() {}
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+    }
+
     //---------------------------------------------------------------
     // Fragments
     //---------------------------------------------------------------
 
-    fun addFragment(containerViewId: Int, fragment: Fragment) {
+    fun addFragment(containerViewId: Int, fragment: BaseFragment<*>) {
         supportFragmentManager
                 .beginTransaction()
                 .add(containerViewId, fragment)
                 .commit()
     }
 
-    fun replaceFragment(containerViewId: Int, fragment: Fragment) {
+    fun replaceFragment(containerViewId: Int, fragment: BaseFragment<*>) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(containerViewId, fragment)

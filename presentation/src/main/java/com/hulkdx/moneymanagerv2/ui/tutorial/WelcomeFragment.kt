@@ -13,6 +13,10 @@ import kotlinx.android.synthetic.main.tutorial_fragment_welcome.*
  */
 class WelcomeFragment: BaseFragment<TutorialActivity>() {
 
+    //---------------------------------------------------------------
+    // Lifecycle
+    //---------------------------------------------------------------
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

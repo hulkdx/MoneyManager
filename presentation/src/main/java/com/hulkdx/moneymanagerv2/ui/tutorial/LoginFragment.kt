@@ -46,7 +46,7 @@ class LoginFragment: BaseFragment<TutorialActivity>() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(
-                if (isSync) R.layout.fragment_login_sync else R.layout.fragment_login,
+                if (isSync) R.layout.tutorial_fragment_login else R.layout.tutorial_fragment_login,
                 container, false)
     }
 
@@ -61,5 +61,10 @@ class LoginFragment: BaseFragment<TutorialActivity>() {
         val arg = arguments ?: throw WrongArgumentException()
         isSync = arg.getBoolean(ARG_LOGIN_TYPE)
     }
+
+    //---------------------------------------------------------------
+    // Override
+    //---------------------------------------------------------------
+
 }
 

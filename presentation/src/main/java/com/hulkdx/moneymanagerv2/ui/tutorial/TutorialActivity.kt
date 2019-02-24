@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.ui.auth.AuthActivity
+import com.hulkdx.moneymanagerv2.ui.base.BaseFragment
 import timber.log.Timber
 
 /**
@@ -28,7 +29,17 @@ class TutorialActivity : AuthActivity() {
             TODO("not implemented")
         }
 
-        if (savedInstanceState == null) {
+        configureFragments()
+    }
+
+    //---------------------------------------------------------------
+    // Fragments
+    //---------------------------------------------------------------
+
+    private fun configureFragments() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.container)
+
+        if (currentFragment == null) {
             Timber.i("create fragment")
             addFragment(R.id.container, WelcomeFragment())
         }
