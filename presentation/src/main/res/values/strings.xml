@@ -35,7 +35,7 @@
         <item>JPY</item>
         <item>CNY</item>
     </string-array>
-    <string name="sync_desc">Do you want to sync your data automatically to server?</string>
+    <string name="sync_desc">Do you want to sync your data to server?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enter">Enter</string>
