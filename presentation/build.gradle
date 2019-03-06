@@ -57,4 +57,12 @@ dependencies {
     testImplementation depTest.mockito
     testImplementation depTest.mockitoInline
     testImplementation depTest.jUnit
+
+    androidTestImplementation depTest.runner
+    androidTestImplementation depTest.rules
+    androidTestImplementation depTest.espresso
+    androidTestImplementation depTest.mockito
+//    androidTestImplementation dep.javaxAnnotation
+    androidTestImplementation depTest.mockitoInline
+    kaptAndroidTest dep.daggerCompiler
 }

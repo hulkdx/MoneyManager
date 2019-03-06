@@ -17,11 +17,16 @@ ext {
     final retrofitVersion   = '2.3.0'
     final timberVersion     = '4.7.1'
     final lifecycleVersion = "2.0.0"
-    //Testing
+
+    // Test Libraries
     final mockitoVersion = '2.8.9'
     final mockitoInlineVersion = '2.13.0'
-    final androidxRunnerVersion = '1.1.0'
     final jUnit = "junit:junit:4.12"
+
+    // Android Test Libraries
+    final androidxRunnerVersion = '1.1.0'
+    final androidxRulesVersion = androidxRunnerVersion
+    final espressoVersion = '3.1.0'
 
     // DEBUG
     final leakCanaryVersion = '1.3.1'
@@ -47,6 +52,8 @@ ext {
     presentationTestDependencies = [
             mockito:            "org.mockito:mockito-core:${mockitoVersion}",
             runner:             "androidx.test.ext:junit:${androidxRunnerVersion}",
+            espresso:           "androidx.test.espresso:espresso-core:$espressoVersion",
+            rules:              "androidx.test:rules:$androidxRulesVersion",
             mockitoInline:      "org.mockito:mockito-inline:$mockitoInlineVersion",
             jUnit:              jUnit,
     ]
