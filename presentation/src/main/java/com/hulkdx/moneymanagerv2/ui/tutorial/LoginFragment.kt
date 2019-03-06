@@ -13,14 +13,15 @@ import com.hulkdx.moneymanagerv2.utils.WrongArgumentException
  */
 class LoginFragment: BaseFragment<TutorialActivity>() {
 
-    private var isSync = false
-
     //---------------------------------------------------------------
     // statics
     //---------------------------------------------------------------
 
     companion object {
         private const val ARG_LOGIN_TYPE = "ARG_LOGIN_TYPE"
+
+        const val STEP_ID_SYNC = 1
+        const val STEP_ID_NON_SYNC = 2
 
         fun newInstance(isSync: Boolean): LoginFragment {
             val fragment = LoginFragment()
@@ -34,13 +35,20 @@ class LoginFragment: BaseFragment<TutorialActivity>() {
     }
 
     //---------------------------------------------------------------
-    // Lifecycle
+    // fields
     //---------------------------------------------------------------
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getAllArguments()
+    private val args: Bundle by lazy {
+        return@lazy arguments ?: throw WrongArgumentException()
     }
+
+    val isSync: Boolean by lazy {
+        return@lazy args.getBoolean(ARG_LOGIN_TYPE)
+    }
+
+    //---------------------------------------------------------------
+    // Lifecycle
+    //---------------------------------------------------------------
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -57,10 +65,6 @@ class LoginFragment: BaseFragment<TutorialActivity>() {
     // Arguments
     //---------------------------------------------------------------
 
-    private fun getAllArguments() {
-        val arg = arguments ?: throw WrongArgumentException()
-        isSync = arg.getBoolean(ARG_LOGIN_TYPE)
-    }
 
     //---------------------------------------------------------------
     // Override

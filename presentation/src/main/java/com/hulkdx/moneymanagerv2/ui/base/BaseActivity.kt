@@ -70,7 +70,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    protected fun onDestroyWithoutConfigurationChange() {
+    protected open fun onDestroyWithoutConfigurationChange() {
         mConfigPersistentHelper.remove()
     }
 
@@ -95,7 +95,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 .commit()
     }
 
-    fun replaceFragment(containerViewId: Int, fragment: BaseFragment<*>) {
+    open fun replaceFragment(containerViewId: Int, fragment: BaseFragment<*>) {
         supportFragmentManager
                 .beginTransaction()
                 .replace(containerViewId, fragment)

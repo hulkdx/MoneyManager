@@ -13,6 +13,10 @@ import kotlinx.android.synthetic.main.tutorial_fragment_welcome.*
  */
 class WelcomeFragment: BaseFragment<TutorialActivity>() {
 
+    companion object {
+        const val STEP_ID = 0
+    }
+
     //---------------------------------------------------------------
     // Lifecycle
     //---------------------------------------------------------------
