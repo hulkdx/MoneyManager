@@ -43,7 +43,6 @@ dependencies {
     compileOnly         dep.javaxAnnotation
     implementation      dep.liveData
     kapt                dep.liveDataAnnotation
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     kapt                dep.daggerCompiler
     implementation      dep.dagger
@@ -53,9 +52,9 @@ dependencies {
     implementation      dep.leakCanary
     implementation      dep.timber
     implementation      dep.kotlinStd
+    implementation      dep.constraintLayout
 
     testImplementation depTest.mockito
     testImplementation depTest.mockitoInline
     testImplementation depTest.jUnit
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

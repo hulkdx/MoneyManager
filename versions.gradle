@@ -7,6 +7,7 @@ ext {
 
     // Libraries
     final androidxAppcompatVersion = '1.0.2'
+    final androidxConstraintLayoutVersion = '1.1.3'
     final recyclerViewVersion = '1.0.0'
     final daggerVersion = '2.20'
     final rxJavaVersion = '2.1.1'
@@ -40,6 +41,7 @@ ext {
             liveData:           "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
             liveDataAnnotation: "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion",
             material:           "com.google.android.material:material:$googleMaterialVersion",
+            constraintLayout:   "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion",
     ]
 
     presentationTestDependencies = [

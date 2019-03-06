@@ -14,8 +14,7 @@
         android:text="@string/app_name_without_version"
         android:fontFamily="@font/laila"
         android:textColor="@color/blue"
-        android:gravity="center"
-        w/>
+        android:gravity="center" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_input_layout"
