@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanagerv2
+package com.hulkdx.moneymanagerv2.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,9 +10,10 @@ import javax.inject.Inject
  * Created by Mohammad Jafarzadeh Rezvan on 06/02/2019.
  */
 @PerActivity
-class ViewModelProviderFactory @Inject constructor() : ViewModelProvider.Factory {
+class ViewModelProviderFactory @Inject constructor(
+        private val mAuthViewModel: AuthViewModel
+) : ViewModelProvider.Factory {
 
-    @Inject lateinit var mAuthViewModel: AuthViewModel
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

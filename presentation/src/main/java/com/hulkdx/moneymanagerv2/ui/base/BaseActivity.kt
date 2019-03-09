@@ -3,9 +3,8 @@ package com.hulkdx.moneymanagerv2.ui.base
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.HulkApplication
-import com.hulkdx.moneymanagerv2.ViewModelProviderFactory
+import com.hulkdx.moneymanagerv2.utils.ViewModelProviderFactory
 import com.hulkdx.moneymanagerv2.di.components.ActivityComponent
 import com.hulkdx.moneymanagerv2.di.components.ApplicationComponent
 import com.hulkdx.moneymanagerv2.utils.ConfigPersistentHelper
@@ -80,7 +79,7 @@ abstract class BaseActivity : AppCompatActivity() {
     // Stop updating UI elements on this function:
     protected fun onUnbindUI() {}
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
     }
 

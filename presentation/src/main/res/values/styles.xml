@@ -1,32 +1,15 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-
-
-
-
-
-    -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-
-
-
-
-
-        -->
-    </style>
-
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryDarkColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+
     </style>
 
     <!-- Application theme. -->
@@ -34,5 +17,16 @@
         <item name="android:windowBackground">@drawable/main_background</item>
     </style>
 
+    <style name="EditTextLoginStyle">
+        <item name="android:fontFamily">@font/laila</item>
+        <item name="android:background">@drawable/blue_rectangle_border</item>
+        <item name="android:textColor">@color/primaryColor</item>
+        <item name="android:textColorHint">@color/primaryColor</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
 
 </resources>
