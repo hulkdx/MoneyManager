@@ -6,7 +6,7 @@
     android:layout_height="fill_parent">
 
     <EditText
-        android:id="@+id/et_username"
+        android:id="@+id/usernameEditText"
         style="@style/EditTextLoginStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -17,15 +17,15 @@
         android:hint="@string/username"
         android:inputType="text"
         app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="@+id/error_tv"
-        app:layout_constraintEnd_toStartOf="@+id/et_password"
+        app:layout_constraintBottom_toBottomOf="@+id/errorTextView"
+        app:layout_constraintEnd_toStartOf="@+id/passwordEditText"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline7"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/passwordEditText"
         style="@style/EditTextLoginStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -39,11 +39,11 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toEndOf="@+id/et_username"
+        app:layout_constraintStart_toEndOf="@+id/usernameEditText"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -58,10 +58,10 @@
         app:layout_constraintDimensionRatio="4:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/error_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/errorTextView" />
 
     <TextView
-        android:id="@+id/error_tv"
+        android:id="@+id/errorTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -96,7 +96,7 @@
         app:layout_constraintDimensionRatio="w,10:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"

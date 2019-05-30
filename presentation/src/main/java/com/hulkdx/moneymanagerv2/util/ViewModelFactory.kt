@@ -2,7 +2,7 @@ package com.hulkdx.moneymanagerv2.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialViewModel
+import com.hulkdx.moneymanagerv2.ui.login.LoginViewModel
 import javax.inject.Inject
 
 /**
@@ -15,8 +15,8 @@ class ViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass == TutorialViewModel::class.java) {
-            return TutorialViewModel() as T
+        if (modelClass == LoginViewModel::class.java) {
+            return LoginViewModel() as T
         }
         throw RuntimeException("Please add other ViewModels")
     }

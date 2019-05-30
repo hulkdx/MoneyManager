@@ -3,7 +3,6 @@ package com.hulkdx.moneymanagerv2.ui.tutorial
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.hulkdx.moneymanagerv2.R
-import com.hulkdx.moneymanagerv2.di.components.TutorialComponent
 import com.hulkdx.moneymanagerv2.util.addFragment
 
 /**

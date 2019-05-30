@@ -1,26 +1,25 @@
 package com.hulkdx.moneymanagerv2.di.modules
 
 import androidx.fragment.app.FragmentActivity
-import com.hulkdx.moneymanagerv2.ui.tutorial.TutorialViewModel
+import com.hulkdx.moneymanagerv2.ui.login.LoginViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
 
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
  */
 @Module
-abstract class TutorialModule {
+abstract class LoginModule {
     @Module
     companion object {
         @JvmStatic
         @Provides
         fun provideTutorialViewModel(fragmentActivity: FragmentActivity,
-                                     factory: ViewModelFactory): TutorialViewModel {
-            return ViewModelProviders.of(fragmentActivity, factory).get(TutorialViewModel::class.java)
+                                     factory: ViewModelFactory): LoginViewModel {
+            return ViewModelProviders.of(fragmentActivity, factory).get(LoginViewModel::class.java)
         }
     }
 
