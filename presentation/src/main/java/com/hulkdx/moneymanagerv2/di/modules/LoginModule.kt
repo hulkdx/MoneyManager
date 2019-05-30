@@ -1,5 +1,6 @@
 package com.hulkdx.moneymanagerv2.di.modules
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.hulkdx.moneymanagerv2.ui.login.LoginViewModel
 import androidx.lifecycle.ViewModelProviders
@@ -17,9 +18,9 @@ abstract class LoginModule {
     companion object {
         @JvmStatic
         @Provides
-        fun provideTutorialViewModel(fragmentActivity: FragmentActivity,
+        fun provideTutorialViewModel(fragment: Fragment,
                                      factory: ViewModelFactory): LoginViewModel {
-            return ViewModelProviders.of(fragmentActivity, factory).get(LoginViewModel::class.java)
+            return ViewModelProviders.of(fragment, factory).get(LoginViewModel::class.java)
         }
     }
 

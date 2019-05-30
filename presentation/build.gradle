@@ -41,25 +41,7 @@ dependencies {
     implementation      leakCanary
     implementation      liveData
     kapt                liveDataAnnotation
-//    implementation      dep.material
-//    implementation      dep.cardView
-//    compileOnly         dep.javaxAnnotation
 
-//
-
-//
-//    implementation      dep.rxJava
-//    implementation      dep.rxAndroid
-//    implementation      dep.timber
-//
-//    testImplementation depTest.mockito
-//    testImplementation depTest.mockitoInline
-//    testImplementation depTest.jUnit
-//
-//    androidTestImplementation depTest.runner
-//    androidTestImplementation depTest.rules
-//    androidTestImplementation depTest.espresso
-//    androidTestImplementation depTest.mockito
-//    androidTestImplementation depTest.mockitoInline
-//    kaptAndroidTest dep.daggerCompiler
+    testImplementation  jUnit
+    testImplementation  mockito
 }

@@ -1,6 +1,8 @@
 package com.hulkdx.moneymanagerv2.di.components
 
 import android.app.Activity
+import androidx.fragment.app.Fragment
+import com.hulkdx.moneymanagerv2.HulkApplication
 import com.hulkdx.moneymanagerv2.di.TutorialScope
 import com.hulkdx.moneymanagerv2.di.modules.LoginModule
 import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
@@ -19,7 +21,7 @@ interface LoginComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun activity(activity: Activity): Builder
+        fun fragment(fragment: Fragment): Builder
 
         fun applicationComponent(applicationComponent: ApplicationComponent): Builder
         fun build(): LoginComponent
@@ -29,7 +31,11 @@ interface LoginComponent {
 
     companion object {
         fun inject(loginFragment: LoginFragment) {
-            DaggerLoginComponent.builder().build().inject(loginFragment)
+            DaggerLoginComponent.builder()
+                    .fragment(loginFragment)
+                    .applicationComponent(HulkApplication.applicationComponent(loginFragment.requireContext()))
+                    .build()
+                    .inject(loginFragment)
         }
     }
 }
