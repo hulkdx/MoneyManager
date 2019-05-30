@@ -44,4 +44,5 @@ dependencies {
 
     testImplementation  jUnit
     testImplementation  mockito
+    testImplementation  archTesting
 }
