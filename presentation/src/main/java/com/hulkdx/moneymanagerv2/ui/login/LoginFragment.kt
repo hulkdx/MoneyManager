@@ -10,6 +10,7 @@ import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.components.LoginComponent.Companion.inject
 import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
 import com.hulkdx.moneymanagerv2.util.replaceFragment
+import hulkdx.com.domain.data.remote.RemoteStatus
 import kotlinx.android.synthetic.main.tutorial_fragment_login.*
 import javax.inject.Inject
 
@@ -46,13 +47,36 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mLoginViewModel.getUserLoggedIn().observe(this, Observer {
-            if (it) {
-                replaceFragment(R.id.container, ListTransactionsFragment())
+            when (it.status) {
+                RemoteStatus.SUCCESS -> {
+                    loginSuccessful()
+                }
+                RemoteStatus.AUTH_ERROR -> {
+                    loginFailedWrongCredential()
+                }
+                RemoteStatus.NETWORK_ERROR, RemoteStatus.GENERAL_ERROR -> {
+                    loginFailedGeneralError()
+                }
             }
         })
     }
 
     // endregion Lifecycle -------------------------------------------------------------
+    // region Login Callbacks -------------------------------------------------------------
+
+    private fun loginSuccessful() {
+        replaceFragment(R.id.container, ListTransactionsFragment())
+    }
+
+    private fun loginFailedGeneralError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun loginFailedWrongCredential() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    // endregion Login Callbacks -------------------------------------------------------------
 
 }
 

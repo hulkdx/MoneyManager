@@ -5,6 +5,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    implementation project(':domain')
+    
     kapt                daggerCompiler
     implementation      dagger
     implementation      kotlinStd

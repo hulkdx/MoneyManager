@@ -2,6 +2,8 @@ package com.hulkdx.moneymanagerv2.di.modules
 
 import dagger.Module
 import dagger.Provides
+import hulkdx.com.data.remote.ApiManagerImpl
+import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.util.CustomThreadExecutor
@@ -26,5 +28,9 @@ abstract class ApplicationModule {
         @Provides
         fun provideBackgroundScheduler(customThreadExecutor: CustomThreadExecutor): Scheduler =
                 Schedulers.from(customThreadExecutor)
+
+        @JvmStatic
+        @Provides
+        fun provideApiManager(apiManagerImpl: ApiManagerImpl): ApiManager = apiManagerImpl
     }
 }

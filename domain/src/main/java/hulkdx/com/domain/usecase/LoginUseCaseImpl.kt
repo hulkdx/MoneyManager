@@ -1,8 +1,14 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.data.remote.ApiManager
+import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
+import hulkdx.com.domain.usecase.LoginUseCase.*
+import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,12 +18,30 @@ import javax.inject.Singleton
 @Singleton
 class LoginUseCaseImpl @Inject constructor(
         @BackgroundScheduler private val mBackgroundScheduler: Scheduler,
-        @UiScheduler         private val mUiScheduler: Scheduler
+        @UiScheduler         private val mUiScheduler: Scheduler,
+                             private val mApiManager: ApiManager
 ): LoginUseCase {
+
+    private var mDisposable: Disposable? = null
 
     override fun loginAsync(username: String,
                             password: String,
-                            onComplete: (LoginUseCase.LoginResult) -> Unit) {
+                            onComplete: (LoginResult) -> Unit) {
+        mDisposable = mApiManager
+                .loginSync(username, password)
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mUiScheduler)
+                .subscribe({
+                    onComplete(LoginResult(it.status))
+                }, {
+                    onComplete(LoginResult(RemoteStatus.GENERAL_ERROR, throwable = it))
+                })
+    }
+
+    override fun dispose() {
+        mDisposable?.apply {
+            if (!isDisposed) dispose()
+        }
     }
 
 }

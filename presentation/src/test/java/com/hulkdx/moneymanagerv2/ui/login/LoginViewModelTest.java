@@ -16,11 +16,11 @@ import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
+import hulkdx.com.domain.data.remote.RemoteStatus;
 import hulkdx.com.domain.usecase.LoginUseCase;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
-import static hulkdx.com.domain.usecase.LoginUseCase.LOGIN_RESULT_SUCCESS;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
@@ -34,6 +34,7 @@ public class LoginViewModelTest {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    public static final String THROWABLE_MESSAGE = "THROWABLE_MESSAGE";
 
     // endregion constants -------------------------------------------------------------------------
 
@@ -69,23 +70,37 @@ public class LoginViewModelTest {
         assertThat(password, is(PASSWORD));
     }
 
-    @Test
-    public void login_success_changeUserLoggerInTrue() throws Exception {
-        // Arrange
-        success();
-        // Act
-        SUT.login(USERNAME, PASSWORD);
-        Boolean result = SUT.getUserLoggedIn().getValue();
-        // Assert
-        assertThat(result, is(true));
-    }
-
     // region helper methods -----------------------------------------------------------------------
 
     private void success() {
         doAnswer(invocation -> {
             Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
-            argument.invoke(new LoginUseCase.LoginResult(LOGIN_RESULT_SUCCESS));
+            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.SUCCESS, null));
+            return null;
+        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+    }
+
+    private void authError() {
+        doAnswer(invocation -> {
+            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.AUTH_ERROR, null));
+            return null;
+        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+    }
+
+    private void networkError() {
+        doAnswer(invocation -> {
+            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.NETWORK_ERROR, null));
+            return null;
+        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+    }
+
+    private void generalError() {
+        doAnswer(invocation -> {
+            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.GENERAL_ERROR,
+                    new RuntimeException(THROWABLE_MESSAGE)));
             return null;
         }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
     }

@@ -1,46 +1,101 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.data.remote.ApiManager
+import hulkdx.com.domain.data.remote.RemoteStatus
+import io.reactivex.Scheduler
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.ArgumentCaptor
 import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
 
 import org.junit.Assert.*
 import org.mockito.Mockito.*
-import org.hamcrest.CoreMatchers.*
-import org.mockito.ArgumentMatchers.*
+import org.mockito.ArgumentMatchers
+import java.lang.RuntimeException
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+@Suppress("RedundantVisibilityModifier")
 class LoginUseCaseImplTest {
     // region constants ----------------------------------------------------------------------------
+    companion object {
+        const val USERNAME      = "username"
+        const val PASSWORD      = "username"
+        const val TOKEN         = "token"
+        const val THROWABLE_MSG = "THROWABLE_MSG"
+    }
     // endregion constants -------------------------------------------------------------------------
 
     // region helper fields ------------------------------------------------------------------------
 
-    @Rule
-    var mMockitoJUnit = MockitoJUnit.rule()
+    @get:Rule
+    public var mMockitoJUnit = MockitoJUnit.rule()!!
+
+    @Mock lateinit var mApiManager: ApiManager
+    private lateinit var mTestScheduler: Scheduler
 
     // endregion helper fields ---------------------------------------------------------------------
 
-    private var SUT: LoginUseCaseImpl? = null
+    private lateinit var SUT: LoginUseCaseImpl
 
     @Before
     fun setup() {
-        SUT = LoginUseCaseImpl()
+        mTestScheduler = Schedulers.trampoline()
+        SUT = LoginUseCaseImpl(mTestScheduler, mTestScheduler, mApiManager)
     }
 
-//    @Test
-//    fun loginAsync() {
-//        // Arrange
-//        // Act
-//        SUT.()
-//        // Assert
-//    }
+    @Test
+    fun loginAsync_mustPassParamsToApiManager() {
+        // Arrange
+        // Act
+        SUT.loginAsync(USERNAME, PASSWORD) {}
+        // Assert
+        verify(mApiManager).loginSync(USERNAME, PASSWORD)
+    }
+
+    @Test
+    fun loginAsync_success_callTheCallbackSuccess() {
+        // Arrange
+        success()
+        // Act
+        var result = false
+        SUT.loginAsync(USERNAME, PASSWORD) {
+            result = it.status == RemoteStatus.SUCCESS
+        }
+        // Assert
+        assertTrue(result)
+    }
+
+    @Test
+    fun loginAsync_throwsException_callTheCallbackGeneralError() {
+        // Arrange
+        throwsError()
+        var result = false
+        var throwable: Throwable? = null
+        // Act
+        SUT.loginAsync(USERNAME, PASSWORD) {
+            result = it.status == RemoteStatus.GENERAL_ERROR
+            throwable = it.throwable
+        }
+        // Assert
+        assertTrue(result)
+        assertThat(throwable!!.message, `is`(THROWABLE_MSG))
+    }
+
+    private fun success() {
+        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, TOKEN)))
+    }
+
+    private fun throwsError() {
+        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+                .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
+    }
 
     // region helper methods -----------------------------------------------------------------------
     // endregion helper methods --------------------------------------------------------------------
