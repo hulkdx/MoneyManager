@@ -41,6 +41,7 @@ dependencies {
     implementation      leakCanary
     implementation      liveData
     kapt                liveDataAnnotation
+    implementation      rxAndroid
 
     testImplementation  jUnit
     testImplementation  mockito

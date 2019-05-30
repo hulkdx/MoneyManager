@@ -1,9 +1,8 @@
 package com.hulkdx.moneymanagerv2.di.components
 
-import android.app.Activity
 import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.HulkApplication
-import com.hulkdx.moneymanagerv2.di.TutorialScope
+import hulkdx.com.domain.di.TutorialScope
 import com.hulkdx.moneymanagerv2.di.modules.LoginModule
 import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
 import dagger.BindsInstance
