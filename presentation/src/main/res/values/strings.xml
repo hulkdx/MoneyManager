@@ -3,6 +3,10 @@
     <string name="app_name">Money Manager Version 2</string>
 
     <!-- Tutorial Activity -->
+    <string name="welcome">WELCOME</string>
+    <string name="sync_desc">Do you want to sync your data to server?</string>
+    <string name="no" >No</string>
+    <string name="yes" >Yes</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="create_account">Create Account</string>
