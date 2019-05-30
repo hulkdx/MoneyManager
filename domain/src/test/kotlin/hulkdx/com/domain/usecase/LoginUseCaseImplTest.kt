@@ -1,5 +1,6 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Scheduler
@@ -103,7 +104,7 @@ class LoginUseCaseImplTest {
 
     private fun success() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, "", "", "", "", "", TOKEN)))
+                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, User("", "", "", "", ""), TOKEN)))
     }
 
     private fun throwsRuntimeException() {

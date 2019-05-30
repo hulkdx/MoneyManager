@@ -82,11 +82,11 @@ class ApiManagerImplTest {
         var token     = ""        
         SUT.loginSync(USERNAME, PASSWORD).subscribe(Consumer {
             status    = it.status   
-            username  = it.username 
-            firstName = it.firstName
-            lastName  = it.lastName 
-            email     = it.email    
-            currency  = it.currency 
+            username  = it.user.username
+            firstName = it.user.firstName
+            lastName  = it.user.lastName
+            email     = it.user.email
+            currency  = it.user.currency
             token     = it.token    
         })
         // Assert

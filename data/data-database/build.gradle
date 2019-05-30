@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.realm:realm-gradle-plugin:5.11.0"
+    }
+}
+
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion compile_sdk_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion compile_sdk_version
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    testOptions {
+    }
+
+}
+
+dependencies {
+    implementation project(':domain')
+
+    kapt                daggerCompiler
+    implementation      dagger
+    implementation      kotlinStd
+
+    testImplementation jUnit
+    testImplementation mockito
+}

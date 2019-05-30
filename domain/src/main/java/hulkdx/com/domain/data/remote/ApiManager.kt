@@ -1,5 +1,6 @@
 package hulkdx.com.domain.data.remote
 
+import hulkdx.com.domain.data.model.User
 import io.reactivex.Single
 
 /**
@@ -10,11 +11,7 @@ interface ApiManager {
 
     data class LoginApiResponse(
             val status: RemoteStatus,
-            val username: String,
-            val firstName: String,
-            val lastName: String,
-            val email: String,
-            val currency: String,
+            val user: User,
             val token: String
     )
 }
