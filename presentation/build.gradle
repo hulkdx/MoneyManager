@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -30,38 +30,36 @@ android {
 dependencies {
 
     implementation project(':domain')
-    implementation project(':data:repository')
-    implementation project(':data:database')
 
-    def dep     = rootProject.ext.presentationDependencies
-    def depTest = rootProject.ext.presentationTestDependencies
+    kapt                daggerCompiler
+    implementation      dagger
+    implementation      kotlinStd
 
-    implementation      dep.appcompat
-    implementation      dep.material
-    implementation      dep.cardView
-    implementation      dep.recyclerView
-    compileOnly         dep.javaxAnnotation
-    implementation      dep.liveData
-    kapt                dep.liveDataAnnotation
+    implementation      appcompat
+    implementation      recyclerView
+    implementation      constraintLayout
+    implementation      leakCanary
+    implementation      liveData
+    kapt                liveDataAnnotation
+//    implementation      dep.material
+//    implementation      dep.cardView
+//    compileOnly         dep.javaxAnnotation
 
-    kapt                dep.daggerCompiler
-    implementation      dep.dagger
+//
 
-    implementation      dep.rxJava
-    implementation      dep.rxAndroid
-    implementation      dep.leakCanary
-    implementation      dep.timber
-    implementation      dep.kotlinStd
-    implementation      dep.constraintLayout
-
-    testImplementation depTest.mockito
-    testImplementation depTest.mockitoInline
-    testImplementation depTest.jUnit
-
-    androidTestImplementation depTest.runner
-    androidTestImplementation depTest.rules
-    androidTestImplementation depTest.espresso
-    androidTestImplementation depTest.mockito
-    androidTestImplementation depTest.mockitoInline
-    kaptAndroidTest dep.daggerCompiler
+//
+//    implementation      dep.rxJava
+//    implementation      dep.rxAndroid
+//    implementation      dep.timber
+//
+//    testImplementation depTest.mockito
+//    testImplementation depTest.mockitoInline
+//    testImplementation depTest.jUnit
+//
+//    androidTestImplementation depTest.runner
+//    androidTestImplementation depTest.rules
+//    androidTestImplementation depTest.espresso
+//    androidTestImplementation depTest.mockito
+//    androidTestImplementation depTest.mockitoInline
+//    kaptAndroidTest dep.daggerCompiler
 }

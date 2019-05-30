@@ -32,10 +32,10 @@
             <!--android:name="com.hulkdx.moneymanagerv2.ui.login.LoginActivity"-->
             <!--android:label="@string/app_name" />-->
 
-        <activity android:name="com.hulkdx.moneymanagerv2.ui.main.MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:label="@string/app_name"
-            android:theme="@style/AppThemeMainActivity" />
+        <!--<activity android:name="com.hulkdx.moneymanagerv2.ui.main.MainActivity"-->
+            <!--android:windowSoftInputMode="stateHidden|adjustPan"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:theme="@style/AppThemeMainActivity" />-->
 
 
         <!--<activity android:name="com.hulkdx.moneymanagerv2.ui.loginsync.LoginSyncActivity"-->
@@ -46,17 +46,6 @@
 
         <!--&lt;!&ndash; Services &ndash;&gt;-->
         <!--<service android:name="com.hulkdx.moneymanagerv2.data.SyncService"/>-->
-
-        <!-- Provides -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.hulkdx.moneymanagerv2.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
 
     </application>
 

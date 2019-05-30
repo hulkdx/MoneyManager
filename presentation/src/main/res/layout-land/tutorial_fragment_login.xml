@@ -14,7 +14,7 @@
         android:layout_marginRight="8dp"
         android:fontFamily="@font/laila"
         android:gravity="center_vertical"
-        android:hint="@string/login_your_name"
+        android:hint="@string/username"
         android:inputType="text"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="@+id/error_tv"

@@ -13,7 +13,7 @@
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/laila"
         android:gravity="center_vertical"
-        android:hint="@string/login_your_name"
+        android:hint="@string/username"
         android:inputType="text"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/et_password"

@@ -5,17 +5,5 @@ targetCompatibility = 1.8
 
 dependencies {
 
-    def dep = rootProject.ext.domainDependencies
-    def depTest = rootProject.ext.domainTestDependencies
-
-    annotationProcessor dep.daggerCompiler
-    implementation      dep.dagger
-    implementation      dep.rxJava
-    implementation      dep.kotlinStd
-
-    testImplementation depTest.mockito
-    testImplementation depTest.mockitoInline
-    testImplementation depTest.jUnit
-
 }
 
