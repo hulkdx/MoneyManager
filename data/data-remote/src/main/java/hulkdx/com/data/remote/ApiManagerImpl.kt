@@ -56,22 +56,22 @@ class ApiManagerImpl @Inject constructor(
                     }
 
                     val user = User(usernameJ, firstName, lastName,
-                            email, currency)
-                    return@map LoginApiResponse(RemoteStatus.SUCCESS, user, token)
+                            email, currency, token)
+                    return@map LoginApiResponse(RemoteStatus.SUCCESS, user)
                 }
                 500 -> {
                     // invalid username and password
                     it.errorBody()?.string()?.let { jsonErrorString ->
                         JsonParser().parse(jsonErrorString).asJsonObject.get("error").asString?.apply {
-                            val user = User("", "", "", "", "")
-                            return@map LoginApiResponse(RemoteStatus.AUTH_ERROR, user, "")
+                            val user = User("", "", "", "", "", "")
+                            return@map LoginApiResponse(RemoteStatus.AUTH_ERROR, user)
                         }
                     }
                 }
             }
 
             return@map LoginApiResponse(RemoteStatus.GENERAL_ERROR, User("",
-                    "", "", "", ""), "")
+                    "", "", "", "", ""))
         }
     }
 

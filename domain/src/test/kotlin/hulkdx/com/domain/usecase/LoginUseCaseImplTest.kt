@@ -104,7 +104,7 @@ class LoginUseCaseImplTest {
 
     private fun success() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, User("", "", "", "", ""), TOKEN)))
+                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, User("", "", "", "", "", TOKEN))))
     }
 
     private fun throwsRuntimeException() {

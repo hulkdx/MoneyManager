@@ -7,4 +7,5 @@ data class User(val username: String,
                 val firstName: String,
                 val lastName: String,
                 val email: String,
-                val currency: String)
+                val currency: String,
+                val token: String)

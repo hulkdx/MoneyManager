@@ -33,6 +33,7 @@ class HulkApplication : Application() {
 
     private fun initDagger() {
         applicationComponent = DaggerApplicationComponent.builder()
+                .applicationContext(this)
                 .build()
     }
 

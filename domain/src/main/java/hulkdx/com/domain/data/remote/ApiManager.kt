@@ -11,7 +11,6 @@ interface ApiManager {
 
     data class LoginApiResponse(
             val status: RemoteStatus,
-            val user: User,
-            val token: String
+            val user: User
     )
 }

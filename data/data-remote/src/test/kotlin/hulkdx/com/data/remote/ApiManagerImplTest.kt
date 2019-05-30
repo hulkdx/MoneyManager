@@ -72,7 +72,6 @@ class ApiManagerImplTest {
     fun loginSync_successWithStatus200WithValidToken_sendRemoteStatusSUCCESSAndUser() {
         // Arrange
         success()
-        // Act
         var status: RemoteStatus? = null
         var username  = ""           
         var firstName = ""            
@@ -80,6 +79,8 @@ class ApiManagerImplTest {
         var email     = ""        
         var currency  = ""           
         var token     = ""        
+        
+        // Act
         SUT.loginSync(USERNAME, PASSWORD).subscribe(Consumer {
             status    = it.status   
             username  = it.user.username
@@ -87,7 +88,7 @@ class ApiManagerImplTest {
             lastName  = it.user.lastName
             email     = it.user.email
             currency  = it.user.currency
-            token     = it.token    
+            token     = it.user.token    
         })
         // Assert
         assertThat(status,   `is`(RemoteStatus.SUCCESS))

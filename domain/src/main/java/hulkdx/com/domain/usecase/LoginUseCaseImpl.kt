@@ -31,6 +31,9 @@ class LoginUseCaseImpl @Inject constructor(
         mDisposable = mApiManager
                 .loginSync(username, password)
                 .subscribeOn(mBackgroundScheduler)
+                .doOnSuccess {
+                    // TODO save it into database.
+                }
                 .observeOn(mUiScheduler)
                 .subscribe({
                     onComplete(LoginResult(it.status))
