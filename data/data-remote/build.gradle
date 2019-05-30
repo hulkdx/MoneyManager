@@ -11,6 +11,9 @@ dependencies {
     implementation      dagger
     implementation      kotlinStd
     implementation      rxJava
+    implementation      retrofit
+    implementation      retrofitRxJava
+    implementation      retrofitGson
 
     testImplementation  jUnit
     testImplementation  mockito

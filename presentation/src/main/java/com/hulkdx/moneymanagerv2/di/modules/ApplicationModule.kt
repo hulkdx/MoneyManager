@@ -15,22 +15,15 @@ import io.reactivex.schedulers.Schedulers
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
  */
 @Module
-abstract class ApplicationModule {
-    @Module
-    companion object {
-        @JvmStatic
-        @UiScheduler
-        @Provides
-        fun provideUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
+object ApplicationModule {
+    @JvmStatic
+    @UiScheduler
+    @Provides
+    fun provideUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
 
-        @JvmStatic
-        @BackgroundScheduler
-        @Provides
-        fun provideBackgroundScheduler(customThreadExecutor: CustomThreadExecutor): Scheduler =
-                Schedulers.from(customThreadExecutor)
-
-        @JvmStatic
-        @Provides
-        fun provideApiManager(apiManagerImpl: ApiManagerImpl): ApiManager = apiManagerImpl
-    }
+    @JvmStatic
+    @BackgroundScheduler
+    @Provides
+    fun provideBackgroundScheduler(customThreadExecutor: CustomThreadExecutor): Scheduler =
+            Schedulers.from(customThreadExecutor)
 }

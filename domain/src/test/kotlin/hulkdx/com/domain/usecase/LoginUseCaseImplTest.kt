@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnit
 import org.junit.Assert.*
 import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers
+import java.io.IOException
 import java.lang.RuntimeException
 
 /**
@@ -52,6 +53,7 @@ class LoginUseCaseImplTest {
     @Test
     fun loginAsync_mustPassParamsToApiManager() {
         // Arrange
+        success()
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
@@ -74,7 +76,7 @@ class LoginUseCaseImplTest {
     @Test
     fun loginAsync_throwsException_callTheCallbackGeneralError() {
         // Arrange
-        throwsError()
+        throwsRuntimeException()
         var result = false
         var throwable: Throwable? = null
         // Act
@@ -87,14 +89,31 @@ class LoginUseCaseImplTest {
         assertThat(throwable!!.message, `is`(THROWABLE_MSG))
     }
 
-    private fun success() {
-        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, TOKEN)))
+    @Test
+    fun loginAsync_ioException_callTheCallbackNetworkError() {
+        // Arrange
+        throwsIoException()
+        var throwable: Throwable? = null
+        // Act
+        SUT.loginAsync(USERNAME, PASSWORD) {
+            // Assert
+            assertTrue(it.status == RemoteStatus.NETWORK_ERROR)
+        }
     }
 
-    private fun throwsError() {
+    private fun success() {
+        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, "", "", "", "", "", TOKEN)))
+    }
+
+    private fun throwsRuntimeException() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
+    }
+
+    private fun throwsIoException() {
+        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+                .thenReturn(Single.fromCallable { throw IOException() })
     }
 
     // region helper methods -----------------------------------------------------------------------

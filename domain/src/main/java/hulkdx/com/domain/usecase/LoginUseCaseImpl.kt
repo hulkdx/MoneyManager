@@ -9,6 +9,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -34,7 +35,11 @@ class LoginUseCaseImpl @Inject constructor(
                 .subscribe({
                     onComplete(LoginResult(it.status))
                 }, {
-                    onComplete(LoginResult(RemoteStatus.GENERAL_ERROR, throwable = it))
+                    if (it is IOException) {
+                        onComplete(LoginResult(RemoteStatus.NETWORK_ERROR, throwable = it))
+                    } else {
+                        onComplete(LoginResult(RemoteStatus.GENERAL_ERROR, throwable = it))
+                    }
                 })
     }
 
