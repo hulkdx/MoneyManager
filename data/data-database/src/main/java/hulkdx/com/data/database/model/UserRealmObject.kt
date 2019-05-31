@@ -1,4 +1,4 @@
-package hulkdx.com.data.model
+package hulkdx.com.data.database.model
 
 import hulkdx.com.domain.data.model.User
 import io.realm.RealmObject

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.hulkdx.moneymanagerv2.R
-import com.hulkdx.moneymanagerv2.di.components.LoginComponent.Companion.inject
+import com.hulkdx.moneymanagerv2.di.components.inject
 import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import hulkdx.com.domain.data.remote.RemoteStatus

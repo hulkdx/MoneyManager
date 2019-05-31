@@ -12,14 +12,13 @@ import javax.inject.Singleton
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+
+private const val CORE_SIZE = 3
+private const val MAX_CORE_SIZE = 10
+private const val KEEP_ALIVE_TIME_SECOND = 1L
+
 @Singleton
 class CustomThreadExecutor @Inject constructor() : Executor {
-
-    companion object {
-        private const val CORE_SIZE = 3
-        private const val MAX_CORE_SIZE = 10
-        private const val KEEP_ALIVE_TIME_SECOND = 1L
-    }
 
     private val mThreadPoolExecutor: ThreadPoolExecutor
     private val mThreadCounter = AtomicInteger()

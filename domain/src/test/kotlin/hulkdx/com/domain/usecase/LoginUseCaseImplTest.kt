@@ -1,5 +1,6 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.data.database.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.RemoteStatus
@@ -22,16 +23,16 @@ import java.lang.RuntimeException
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+
+// region constants ----------------------------------------------------------------------------
+const val USERNAME      = "username"
+const val PASSWORD      = "username"
+const val TOKEN         = "token"
+const val THROWABLE_MSG = "THROWABLE_MSG"
+// endregion constants -------------------------------------------------------------------------
+
 @Suppress("RedundantVisibilityModifier")
 class LoginUseCaseImplTest {
-    // region constants ----------------------------------------------------------------------------
-    companion object {
-        const val USERNAME      = "username"
-        const val PASSWORD      = "username"
-        const val TOKEN         = "token"
-        const val THROWABLE_MSG = "THROWABLE_MSG"
-    }
-    // endregion constants -------------------------------------------------------------------------
 
     // region helper fields ------------------------------------------------------------------------
 
@@ -39,6 +40,7 @@ class LoginUseCaseImplTest {
     public var mMockitoJUnit = MockitoJUnit.rule()!!
 
     @Mock lateinit var mApiManager: ApiManager
+    @Mock lateinit var mDatabaseManager: DatabaseManager
     private lateinit var mTestScheduler: Scheduler
 
     // endregion helper fields ---------------------------------------------------------------------
@@ -48,7 +50,7 @@ class LoginUseCaseImplTest {
     @Before
     fun setup() {
         mTestScheduler = Schedulers.trampoline()
-        SUT = LoginUseCaseImpl(mTestScheduler, mTestScheduler, mApiManager)
+        SUT = LoginUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mApiManager)
     }
 
     @Test
@@ -102,6 +104,8 @@ class LoginUseCaseImplTest {
         }
     }
 
+    // region helper methods -----------------------------------------------------------------------
+
     private fun success() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, User("", "", "", "", "", TOKEN))))
@@ -117,7 +121,6 @@ class LoginUseCaseImplTest {
                 .thenReturn(Single.fromCallable { throw IOException() })
     }
 
-    // region helper methods -----------------------------------------------------------------------
     // endregion helper methods --------------------------------------------------------------------
 
 }

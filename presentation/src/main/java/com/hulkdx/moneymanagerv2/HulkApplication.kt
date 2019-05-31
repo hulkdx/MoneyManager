@@ -9,20 +9,18 @@ import com.squareup.leakcanary.LeakCanary
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+
+// region Statics -------------------------------------------------------------------------------
+
+fun applicationComponent(context: Context): ApplicationComponent {
+    return (context.applicationContext as HulkApplication).applicationComponent
+}
+
+// endregion Statics --------------------------------------------------------------------------
+
 class HulkApplication : Application() {
 
-    // region Statics-------------------------------------------------------------------------------
-
-    companion object {
-        @JvmStatic
-        fun applicationComponent(context: Context): ApplicationComponent {
-            return (context.applicationContext as HulkApplication).applicationComponent
-        }
-    }
-
-    // endregion Statics --------------------------------------------------------------------------
-
-    private lateinit var applicationComponent: ApplicationComponent
+    internal lateinit var applicationComponent: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()

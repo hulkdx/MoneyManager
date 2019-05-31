@@ -1,18 +1,19 @@
 package hulkdx.com.data.database
 
-import hulkdx.com.data.model.UserRealmObject
+import hulkdx.com.data.database.model.UserRealmObject
 import hulkdx.com.domain.data.database.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.util.concurrent.locks.ReentrantLock
 import javax.inject.Inject
-
+import javax.inject.Singleton
 
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+@Singleton
 class DatabaseManagerImpl @Inject constructor(
         private val mRealmConfiguration: RealmConfiguration
 ): DatabaseManager {
@@ -21,9 +22,7 @@ class DatabaseManagerImpl @Inject constructor(
 
     override fun saveUser(user: User) {
         user.run {
-            val userRealmObject = UserRealmObject(username, firstName, lastName, email, token,
-                    currency)
-            return@run userRealmObject
+            return@run UserRealmObject(username, firstName, lastName, email, token, currency)
         }.execute { obj, realm ->
             realm.insertOrUpdate(obj)
         }

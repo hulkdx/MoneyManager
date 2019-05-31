@@ -1,5 +1,6 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.data.database.DatabaseManager
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.di.BackgroundScheduler
@@ -20,6 +21,7 @@ import javax.inject.Singleton
 class LoginUseCaseImpl @Inject constructor(
         @BackgroundScheduler private val mBackgroundScheduler: Scheduler,
         @UiScheduler         private val mUiScheduler: Scheduler,
+                             private val mDatabaseManager: DatabaseManager,
                              private val mApiManager: ApiManager
 ): LoginUseCase {
 
