@@ -13,12 +13,12 @@ import com.squareup.leakcanary.LeakCanary
 // region Statics -------------------------------------------------------------------------------
 
 fun applicationComponent(context: Context): ApplicationComponent {
-    return (context.applicationContext as HulkApplication).applicationComponent
+    return (context.applicationContext as MoneyManagerApplication).applicationComponent
 }
 
 // endregion Statics --------------------------------------------------------------------------
 
-class HulkApplication : Application() {
+class MoneyManagerApplication : Application() {
 
     internal lateinit var applicationComponent: ApplicationComponent
 

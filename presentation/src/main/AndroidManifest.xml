@@ -9,7 +9,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
-        android:name="com.hulkdx.moneymanagerv2.HulkApplication"
+        android:name="com.hulkdx.moneymanagerv2.MoneyManagerApplication"
         android:allowBackup="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"

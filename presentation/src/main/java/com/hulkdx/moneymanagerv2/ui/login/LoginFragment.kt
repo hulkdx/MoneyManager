@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.components.inject
 import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
@@ -40,6 +42,7 @@ class LoginFragment : Fragment() {
         loginBtn.setOnClickListener {
             val userName = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
+            loginLoading()
             mLoginViewModel.login(userName, password)
         }
     }
@@ -47,6 +50,13 @@ class LoginFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         mLoginViewModel.getUserLoggedIn().observe(this, Observer {
+
+            if (BuildConfig.DEBUG) {
+                it.throwable?.message?.apply {
+                    Toast.makeText(context, this,Toast.LENGTH_LONG).show()
+                }
+            }
+
             when (it.status) {
                 RemoteStatus.SUCCESS -> {
                     loginSuccessful()
@@ -54,7 +64,10 @@ class LoginFragment : Fragment() {
                 RemoteStatus.AUTH_ERROR -> {
                     loginFailedWrongCredential()
                 }
-                RemoteStatus.NETWORK_ERROR, RemoteStatus.GENERAL_ERROR -> {
+                RemoteStatus.NETWORK_ERROR -> {
+                    loginFailedNetworkError()
+                }
+                RemoteStatus.GENERAL_ERROR -> {
                     loginFailedGeneralError()
                 }
             }
@@ -64,16 +77,27 @@ class LoginFragment : Fragment() {
     // endregion Lifecycle -------------------------------------------------------------
     // region Login Callbacks -------------------------------------------------------------
 
+    private fun loginLoading() {
+        errorTextView.visibility = View.GONE
+    }
+
     private fun loginSuccessful() {
         replaceFragment(R.id.container, ListTransactionsFragment())
     }
 
     private fun loginFailedGeneralError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        errorTextView.text = getString(R.string.generalError)
+        errorTextView.visibility = View.VISIBLE
     }
 
     private fun loginFailedWrongCredential() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        errorTextView.text = getString(R.string.authError)
+        errorTextView.visibility = View.VISIBLE
+    }
+
+    private fun loginFailedNetworkError() {
+        errorTextView.text = getString(R.string.networkError)
+        errorTextView.visibility = View.VISIBLE
     }
 
     // endregion Login Callbacks -------------------------------------------------------------

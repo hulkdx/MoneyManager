@@ -2,14 +2,18 @@
 <resources>
     <string name="app_name">Money Manager Version 2</string>
 
-    <!-- Tutorial Activity -->
+    <!-- WelcomeFragment -->
     <string name="welcome">WELCOME</string>
     <string name="sync_desc">Do you want to sync your data to server?</string>
     <string name="no" >No</string>
     <string name="yes" >Yes</string>
+    <!-- LoginFragment -->
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="create_account">Create Account</string>
     <string name="login" >Login</string>
+    <string name="authError">Incorrect Username and Password</string>
+    <string name="generalError">Something went wrong, please retry again</string>
+    <string name="networkError">Unable to connect to the internet</string>
 
 </resources>

@@ -74,7 +74,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        tools:text="Error: user exist!" />
+        tools:text="@string/networkError"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/register"
