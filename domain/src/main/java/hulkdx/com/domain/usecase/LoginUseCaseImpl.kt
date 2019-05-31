@@ -1,6 +1,7 @@
 package hulkdx.com.domain.usecase
 
 import hulkdx.com.domain.data.database.DatabaseManager
+import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.di.BackgroundScheduler
@@ -34,7 +35,9 @@ class LoginUseCaseImpl @Inject constructor(
                 .loginSync(username, password)
                 .subscribeOn(mBackgroundScheduler)
                 .doOnSuccess {
-                    // TODO save it into database.
+                    if (it.status == RemoteStatus.SUCCESS) {
+                        mDatabaseManager.saveUser(it.user)
+                    }
                 }
                 .observeOn(mUiScheduler)
                 .subscribe({
