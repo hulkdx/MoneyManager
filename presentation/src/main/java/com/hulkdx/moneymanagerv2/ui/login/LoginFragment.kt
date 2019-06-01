@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.transition.ChangeBounds
+import androidx.transition.TransitionManager
 import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.components.inject
@@ -78,7 +80,7 @@ class LoginFragment : Fragment() {
     // region Login Callbacks -------------------------------------------------------------
 
     private fun loginLoading() {
-        errorTextView.visibility = View.GONE
+        animateErrorTextView(false)
     }
 
     private fun loginSuccessful() {
@@ -86,21 +88,29 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginFailedGeneralError() {
+        animateErrorTextView(true)
         errorTextView.text = getString(R.string.generalError)
-        errorTextView.visibility = View.VISIBLE
     }
 
     private fun loginFailedWrongCredential() {
+        animateErrorTextView(true)
         errorTextView.text = getString(R.string.authError)
-        errorTextView.visibility = View.VISIBLE
     }
 
     private fun loginFailedNetworkError() {
+        animateErrorTextView(true)
         errorTextView.text = getString(R.string.networkError)
-        errorTextView.visibility = View.VISIBLE
     }
 
     // endregion Login Callbacks -------------------------------------------------------------
+
+    private fun animateErrorTextView(isVisible: Boolean) {
+        val transition = ChangeBounds()
+        transition.addTarget(errorTextView)
+        transition.duration = 150
+        TransitionManager.beginDelayedTransition(loginContainer)
+        errorTextView.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
 
 }
 
