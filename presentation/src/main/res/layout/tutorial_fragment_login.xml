@@ -79,7 +79,7 @@
         tools:visibility="visible"/>
 
     <TextView
-        android:id="@+id/register"
+        android:id="@+id/registerBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

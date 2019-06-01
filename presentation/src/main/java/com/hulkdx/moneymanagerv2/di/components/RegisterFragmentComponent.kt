@@ -1,28 +1,27 @@
 package com.hulkdx.moneymanagerv2.di.components
 
 import androidx.fragment.app.Fragment
-import com.hulkdx.moneymanagerv2.applicationComponent
 import hulkdx.com.domain.di.TutorialScope
-import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
+import com.hulkdx.moneymanagerv2.ui.register.RegisterFragment
 import dagger.BindsInstance
 import dagger.Component
 
 /**
- * @See LoginFragment
+ * @See RegisterFragment
  * Created by Mohammad Jafarzadeh Rezvan on 09/11/2018.
  */
 @TutorialScope
 @Component(modules = [
 ], dependencies = [ApplicationComponent::class])
-interface LoginFragmentComponent {
+interface RegisterFragmentComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
         fun fragment(fragment: Fragment): Builder
 
         fun applicationComponent(applicationComponent: ApplicationComponent): Builder
-        fun build(): LoginFragmentComponent
+        fun build(): RegisterFragmentComponent
     }
 
-    fun inject(loginFragment: LoginFragment)
+    fun inject(registerFragment: RegisterFragment)
 }

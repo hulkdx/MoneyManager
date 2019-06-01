@@ -2,6 +2,7 @@ package com.hulkdx.moneymanagerv2.di.components
 
 import android.content.Context
 import com.hulkdx.moneymanagerv2.di.modules.ApplicationModule
+import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import dagger.BindsInstance
 import dagger.Component
 import hulkdx.com.data.database.di.DatabaseModule
@@ -31,4 +32,5 @@ interface ApplicationComponent {
     }
 
     fun loginUseCase(): LoginUseCase
+    fun viewModelFactory(): ViewModelFactory
 }

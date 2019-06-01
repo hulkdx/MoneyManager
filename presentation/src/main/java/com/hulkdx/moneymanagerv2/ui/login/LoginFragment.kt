@@ -11,26 +11,26 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
-import com.hulkdx.moneymanagerv2.di.components.inject
+import com.hulkdx.moneymanagerv2.di.inject
+import com.hulkdx.moneymanagerv2.ui.register.RegisterFragment
 import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
+import com.hulkdx.moneymanagerv2.util.getViewModel
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import hulkdx.com.domain.data.remote.RemoteStatus
 import kotlinx.android.synthetic.main.tutorial_fragment_login.*
-import javax.inject.Inject
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 24/02/2019.
  */
 class LoginFragment : Fragment() {
 
-    @Inject
     lateinit var mLoginViewModel: LoginViewModel
 
     // region Lifecycle ---------------------------------------------------------------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject(this)
+        inject()
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -41,11 +41,15 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mLoginViewModel = getViewModel()
         loginBtn.setOnClickListener {
             val userName = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
             loginLoading()
             mLoginViewModel.login(userName, password)
+        }
+        registerBtn.setOnClickListener {
+            replaceFragment(R.id.container, RegisterFragment())
         }
     }
 

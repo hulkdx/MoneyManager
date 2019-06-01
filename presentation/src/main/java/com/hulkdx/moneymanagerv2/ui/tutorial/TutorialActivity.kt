@@ -8,7 +8,7 @@ import com.hulkdx.moneymanagerv2.util.addFragment
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
-class TutorialActivity : AppCompatActivity() {
+class TutorialActivity: AppCompatActivity() {
 
     // region Lifecycle ----------------------------------------------------------------------------
 
