@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.usecase.LoginUseCase
 import hulkdx.com.domain.usecase.LoginUseCase.LoginResult
+import javax.inject.Inject
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
         private val mLoginUseCase: LoginUseCase
 ): ViewModel() {
 

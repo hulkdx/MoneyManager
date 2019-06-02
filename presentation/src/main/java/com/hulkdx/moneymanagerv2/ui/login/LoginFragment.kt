@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.tutorial_fragment_login.*
  */
 class LoginFragment : Fragment() {
 
-    lateinit var mLoginViewModel: LoginViewModel
+    private lateinit var mLoginViewModel: LoginViewModel
 
     // region Lifecycle ---------------------------------------------------------------
 
