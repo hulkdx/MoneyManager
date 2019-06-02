@@ -5,7 +5,22 @@
     android:id="@+id/loginContainer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    tools:ignore="Autofill"
     >
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerBtn"
+        tools:visibility="visible"/>
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -19,7 +34,7 @@
         android:hint="@string/username"
         android:inputType="text"
         app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="@+id/errorTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline8"
         app:layout_constraintEnd_toStartOf="@+id/passwordEditText"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="@+id/guideline4"

@@ -103,24 +103,29 @@ class LoginFragment : Fragment() {
     // region Login Callbacks -------------------------------------------------------------
 
     private fun loginLoading() {
+        loadingProgressBar.visibility = View.VISIBLE
         animateErrorTextView(false)
     }
 
     private fun loginSuccessful() {
+        loadingProgressBar.visibility = View.GONE
         replaceFragment(R.id.container, ListTransactionsFragment())
     }
 
     private fun loginFailedGeneralError() {
+        loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
         errorTextView.text = getString(R.string.generalError)
     }
 
     private fun loginFailedWrongCredential() {
+        loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
         errorTextView.text = getString(R.string.authError)
     }
 
     private fun loginFailedNetworkError() {
+        loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
         errorTextView.text = getString(R.string.networkError)
     }
