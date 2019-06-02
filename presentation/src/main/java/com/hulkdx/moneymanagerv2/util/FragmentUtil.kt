@@ -32,5 +32,6 @@ fun FragmentActivity.addFragment(container: Int, fragment: Fragment) {
 fun FragmentActivity.replaceFragment(container: Int, fragment: Fragment) {
     supportFragmentManager.beginTransaction()
             .replace(container, fragment)
+            .addToBackStack(null)
             .commitAllowingStateLoss()
 }
