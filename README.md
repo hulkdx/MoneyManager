@@ -1,3 +1,6 @@
+
+[![CircleCI](https://circleci.com/gh/hulkdx/MoneyManager/tree/refactor.svg?style=shield)](https://circleci.com/gh/hulkdx/MoneyManager/tree/refactor)
+
 # Money Manager
 Money Manager is an open source project.
 
