@@ -50,7 +50,7 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mAuthViewModel.getUserLoggedIn().observe(this, Observer {
+        mAuthViewModel.getLoginResult().observe(this, Observer {
 
             if (BuildConfig.DEBUG) {
                 it.throwable?.message?.apply {

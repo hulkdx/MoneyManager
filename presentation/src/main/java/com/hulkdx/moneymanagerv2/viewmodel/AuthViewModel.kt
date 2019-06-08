@@ -17,18 +17,27 @@ class AuthViewModel @Inject constructor(
 
     private var mLoginResult = MutableLiveData<LoginResult>()
 
-    override fun onCleared() {
-        super.onCleared()
-        mLoginUseCase.dispose()
-    }
-
     fun login(username: String, password: String) {
         mLoginUseCase.loginAsync(username, password, onComplete = {
             mLoginResult.value = it
         })
     }
 
-    fun getUserLoggedIn(): LiveData<LoginResult> {
+    fun register() {
+        TODO()
+    }
+
+    // region helper methods -----------------------------------------------------------------------
+
+    override fun onCleared() {
+        super.onCleared()
+        mLoginUseCase.dispose()
+    }
+
+    fun getLoginResult(): LiveData<LoginResult> {
         return mLoginResult
     }
+
+    // endregion helper methods -----------------------------------------------------------------------
+
 }
