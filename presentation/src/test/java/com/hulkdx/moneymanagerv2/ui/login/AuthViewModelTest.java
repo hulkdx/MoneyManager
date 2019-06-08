@@ -59,11 +59,11 @@ public class AuthViewModelTest {
         success();
         // Act
         SUT.login(USERNAME, PASSWORD);
+        // Assert
         verify(mLoginUseCase).loginAsync(ac.capture(), ac.capture(), any());
         List<String> values = ac.getAllValues();
         String username = values.get(0);
         String password = values.get(1);
-        // Assert
         assertThat(username, is(USERNAME));
         assertThat(password, is(PASSWORD));
     }
