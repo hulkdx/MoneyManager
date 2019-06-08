@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.R
-import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
 import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import kotlinx.android.synthetic.main.tutorial_fragment_welcome.*

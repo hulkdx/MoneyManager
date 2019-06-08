@@ -1,26 +1,23 @@
-package com.hulkdx.moneymanagerv2.ui.login
+package com.hulkdx.moneymanagerv2.ui.tutorial
 
 import android.animation.Animator
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.AnimatorRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.transition.ChangeBounds
-import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
-import com.hulkdx.moneymanagerv2.ui.register.RegisterFragment
 import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import com.hulkdx.moneymanagerv2.util.replaceFragment
+import com.hulkdx.moneymanagerv2.viewmodel.AuthViewModel
 import hulkdx.com.domain.data.remote.RemoteStatus
 import kotlinx.android.synthetic.main.tutorial_fragment_login.*
 
@@ -29,7 +26,7 @@ import kotlinx.android.synthetic.main.tutorial_fragment_login.*
  */
 class LoginFragment : Fragment() {
 
-    private lateinit var mLoginViewModel: LoginViewModel
+    private lateinit var mAuthViewModel: AuthViewModel
 
     // region Lifecycle ---------------------------------------------------------------
 
@@ -46,14 +43,14 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mLoginViewModel = getViewModel()
+        mAuthViewModel = getViewModel()
         setupLoginBtn()
         setupRegisterBtn()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mLoginViewModel.getUserLoggedIn().observe(this, Observer {
+        mAuthViewModel.getUserLoggedIn().observe(this, Observer {
 
             if (BuildConfig.DEBUG) {
                 it.throwable?.message?.apply {
@@ -86,7 +83,7 @@ class LoginFragment : Fragment() {
             val userName = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
             loginLoading()
-            mLoginViewModel.login(userName, password)
+            mAuthViewModel.login(userName, password)
         }
     }
 

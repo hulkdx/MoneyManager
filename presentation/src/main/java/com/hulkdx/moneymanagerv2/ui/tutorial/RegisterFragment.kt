@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanagerv2.ui.register
+package com.hulkdx.moneymanagerv2.ui.tutorial
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
+import com.hulkdx.moneymanagerv2.viewmodel.AuthViewModel
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import kotlinx.android.synthetic.main.tutorial_fragment_register.*
 
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.tutorial_fragment_register.*
  */
 class RegisterFragment : Fragment() {
 
-    private lateinit var mRegisterViewModel: RegisterViewModel
+    private lateinit var mRegisterViewModel: AuthViewModel
 
     // region Lifecycle ---------------------------------------------------------------
 

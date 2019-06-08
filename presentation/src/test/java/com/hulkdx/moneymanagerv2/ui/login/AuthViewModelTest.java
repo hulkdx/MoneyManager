@@ -1,18 +1,16 @@
 package com.hulkdx.moneymanagerv2.ui.login;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.Observer;
+
+import com.hulkdx.moneymanagerv2.viewmodel.AuthViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
@@ -28,7 +26,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
-public class LoginViewModelTest {
+public class AuthViewModelTest {
 
     // region constants ----------------------------------------------------------------------------
 
@@ -47,11 +45,11 @@ public class LoginViewModelTest {
 
     // endregion helper fields ---------------------------------------------------------------------
 
-    private LoginViewModel SUT;
+    private AuthViewModel SUT;
 
     @Before
     public void setup() {
-        SUT = new LoginViewModel(mLoginUseCase);
+        SUT = new AuthViewModel(mLoginUseCase);
     }
 
     @Test

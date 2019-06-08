@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanagerv2.ui.login
+package com.hulkdx.moneymanagerv2.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import javax.inject.Inject
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
-class LoginViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
         private val mLoginUseCase: LoginUseCase
 ): ViewModel() {
 
