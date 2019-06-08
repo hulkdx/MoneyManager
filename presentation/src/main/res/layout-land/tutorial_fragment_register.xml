@@ -19,8 +19,8 @@
         android:inputType="text"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline7"
         app:layout_constraintVertical_chainStyle="packed"
         />
@@ -36,8 +36,8 @@
         android:inputType="textPassword"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
         />
 
@@ -52,10 +52,10 @@
         android:inputType="textEmailAddress"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/currencySpinner"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText"
-       
+
         />
 
     <Spinner
@@ -68,8 +68,8 @@
         android:paddingEnd="10dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/emailEditText"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         tools:listitem="@layout/spinner_currency_fragment_register"
@@ -109,26 +109,11 @@
         android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintDimensionRatio="w,16:1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         tools:text="@string/networkError"
-        tools:visibility="visible"/>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.10"
-        />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.90"
+        tools:visibility="visible"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -136,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30"
+        app:layout_constraintGuide_percent="0.20"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -168,7 +153,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.64"
+        app:layout_constraintGuide_percent="0.58"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -176,7 +161,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.36"
+        app:layout_constraintGuide_percent="0.42"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

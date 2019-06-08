@@ -16,11 +16,12 @@
         android:layout_marginBottom="8dp"
         android:indeterminate="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerBtn"
-        tools:visibility="visible"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"
+        />
 
     <EditText
         android:id="@+id/usernameEditText"
@@ -98,7 +99,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        tools:text="Error: user exist!"
+        tools:text="@string/networkError"
+        tools:visibility="visible"
         />
 
     <TextView
@@ -107,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/laila"
         android:gravity="center"
         android:text="@string/create_account"
@@ -141,7 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45"
+        app:layout_constraintGuide_percent="0.42"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -173,7 +175,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.58"
+        app:layout_constraintGuide_percent="0.6"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -181,7 +183,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.42"
+        app:layout_constraintGuide_percent="0.4"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
