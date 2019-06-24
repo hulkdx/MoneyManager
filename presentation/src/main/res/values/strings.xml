@@ -16,8 +16,11 @@
     <string name="generalError">Something went wrong, please retry again</string>
     <string name="networkError">Unable to connect to the internet</string>
     <!-- RegisterFragment -->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="register">Register</string>
     <string name="register_select_currency">Please select a currency</string>
+
 
 </resources>

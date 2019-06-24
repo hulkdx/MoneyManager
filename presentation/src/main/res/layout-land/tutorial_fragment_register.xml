@@ -9,21 +9,50 @@
     >
 
     <EditText
+        android:id="@+id/firstNameEditText"
+        style="@style/EditTextLoginStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:hint="@string/first_name"
+        android:inputType="textPassword"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/lastNameEditText"
+        app:layout_constraintTop_toTopOf="@+id/guideline7"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintVertical_chainStyle="packed"/>
+
+    <EditText
+        android:id="@+id/lastNameEditText"
+        style="@style/EditTextLoginStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:hint="@string/last_name"
+        android:inputType="textPassword"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/usernameEditText"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/firstNameEditText" />
+
+    <EditText
         android:id="@+id/usernameEditText"
         style="@style/EditTextLoginStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:gravity="center_vertical"
         android:hint="@string/username"
         android:inputType="text"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline7"
-        app:layout_constraintVertical_chainStyle="packed"
-        />
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/lastNameEditText" />
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -36,8 +65,8 @@
         android:inputType="textPassword"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
         />
 
@@ -46,16 +75,15 @@
         style="@style/EditTextLoginStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="center_vertical"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/currencySpinner"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText"
-
         />
 
     <Spinner
@@ -67,9 +95,9 @@
         android:paddingRight="10dp"
         android:paddingEnd="10dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/emailEditText"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         tools:listitem="@layout/spinner_currency_fragment_register"
@@ -91,8 +119,7 @@
         app:layout_constraintDimensionRatio="4:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toBottomOf="@+id/errorTextView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/errorTextView" />
 
     <TextView
         android:id="@+id/errorTextView"
@@ -109,8 +136,8 @@
         android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintDimensionRatio="w,16:1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         tools:text="@string/networkError"
         tools:visibility="visible"
@@ -121,7 +148,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.20"
+        app:layout_constraintGuide_percent="0.1"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -129,11 +156,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.70"
+        app:layout_constraintGuide_percent="0.75"
         />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
+        android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -141,7 +168,7 @@
         />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline9"
+        android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
