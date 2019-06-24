@@ -58,7 +58,8 @@ class RegisterFragment : Fragment() {
                 "MYR",
                 "JPY",
                 "CNY")
-        val currencySpinnerAdapter = ArrayAdapter<String>(context, R.layout.spinner_currency_fragment_register, mCurrencyArray)
+        val currencySpinnerAdapter = ArrayAdapter<String>(context,
+                R.layout.spinner_currency_fragment_register, mCurrencyArray)
         currencySpinner.adapter = currencySpinnerAdapter
     }
 
