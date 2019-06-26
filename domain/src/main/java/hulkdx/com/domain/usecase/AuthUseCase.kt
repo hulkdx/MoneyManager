@@ -23,9 +23,10 @@ interface AuthUseCase {
             var throwable: Throwable? = null
     )
 
-    data class RegisterResult (
-            val status: RemoteStatus,
-            val authError: RegisterAuthError? = null,
-            var throwable: Throwable? = null
-    )
+    sealed class RegisterResult {
+        object Successful: RegisterResult()
+        object AuthError: RegisterResult()
+        data class NetworkError(val throwable: Throwable? = null): RegisterResult()
+        data class GeneralError(val throwable: Throwable? = null): RegisterResult()
+    }
 }

@@ -6,6 +6,7 @@ import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
 import hulkdx.com.domain.data.remote.RegisterAuthError
 import hulkdx.com.domain.data.remote.RemoteStatus
+import hulkdx.com.domain.usecase.AuthUseCase.RegisterResult
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -218,7 +219,7 @@ class AuthUseCaseImplTest {
         var isSuccess = false
         // Act
         SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
-            if (it.status == RemoteStatus.SUCCESS) {
+            if (it is RegisterResult.Successful) {
                 isSuccess = true
             }
         }
@@ -230,42 +231,41 @@ class AuthUseCaseImplTest {
     fun registerAsync_throwsException_callTheCallbackGeneralError() {
         // Arrange
         registerThrowsRuntimeException()
-        var result = false
-        var throwable: Throwable? = null
+        var result: RegisterResult? = null
         // Act
         SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
-            result = it.status == RemoteStatus.GENERAL_ERROR
-            throwable = it.throwable
+            result = it
         }
         // Assert
-        assertTrue(result)
-        assertThat(throwable!!.message, `is`(THROWABLE_MSG))
+        assertTrue(result is RegisterResult.GeneralError)
+        assertThat((result as RegisterResult.GeneralError).throwable!!.message, `is`(THROWABLE_MSG))
     }
 
     @Test
     fun registerAsync_ioException_callTheCallbackNetworkError() {
         // Arrange
         registerThrowsIoException()
-        var status: RemoteStatus? = null
+        var status: RegisterResult? = null
         // Act
         SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
-            status = it.status
+            status = it
         }
         // Assert
-        assertTrue(status == RemoteStatus.NETWORK_ERROR)
+        assertTrue(status is RegisterResult.NetworkError)
     }
 
     @Test
     fun registerAsync_authErrorEmailExists_passAuthErrorToRegisterResult() {
+        TODO()
         // Arrange
-        registerAuthErrorEmailExists()
-        var authError: RegisterAuthError? = null
-        // Act
-        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
-            authError = it.authError
-        }
-        // Assert
-        assertThat(authError, `is`(RegisterAuthError.EMAIL_EXISTS))
+//        registerAuthErrorEmailExists()
+//        var authError: RegisterAuthError? = null
+//        // Act
+//        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+//            authError = it.authError
+//        }
+//        // Assert
+//        assertThat(authError, `is`(RegisterAuthError.EMAIL_EXISTS))
     }
 
     // region helper methods -----------------------------------------------------------------------

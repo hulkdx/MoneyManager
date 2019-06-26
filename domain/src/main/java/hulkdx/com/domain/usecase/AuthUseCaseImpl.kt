@@ -8,6 +8,7 @@ import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.usecase.AuthUseCase.*
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
+import org.omg.PortableInterceptor.SUCCESSFUL
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,12 +60,19 @@ class AuthUseCaseImpl @Inject constructor(
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mUiScheduler)
                 .subscribe({
-                    onComplete(RegisterResult(it.status, it.authError))
+                    when (it.status) {
+                        RemoteStatus.SUCCESS -> onComplete(RegisterResult.Successful)
+                        RemoteStatus.AUTH_ERROR -> {
+                            onComplete(RegisterResult.AuthError)
+                        }
+                        RemoteStatus.NETWORK_ERROR -> onComplete(RegisterResult.NetworkError())
+                        RemoteStatus.GENERAL_ERROR -> onComplete(RegisterResult.GeneralError())
+                    }
                 }, {
                     if (it is IOException) {
-                        onComplete(RegisterResult(RemoteStatus.NETWORK_ERROR, throwable = it))
+                        onComplete(RegisterResult.NetworkError(it))
                     } else {
-                        onComplete(RegisterResult(RemoteStatus.GENERAL_ERROR, throwable = it))
+                        onComplete(RegisterResult.GeneralError(it))
                     }
                 })
     }
