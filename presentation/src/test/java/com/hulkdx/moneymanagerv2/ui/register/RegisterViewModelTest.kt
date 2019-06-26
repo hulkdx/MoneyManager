@@ -18,14 +18,14 @@ import org.mockito.Mockito.*
 @Suppress("PrivatePropertyName")
 class RegisterViewModelTest {
 
-
     // region constants ----------------------------------------------------------------------------
-    private val USERNAME  = "username"
-    private val FIRST_NAME = "firstname"
-    private val LAST_NAME  = "lastname"
-    private val EMAIL     = "email"
-    private val PASSWORD  = "password"
-    private val CURRENCY  = "currency"
+
+    private val USERNAME   = "username"
+    private val FIRST_NAME = "first_name"
+    private val LAST_NAME  = "last_name"
+    private val EMAIL      = "email"
+    private val PASSWORD   = "password"
+    private val CURRENCY   = "currency"
 
     // endregion constants -------------------------------------------------------------------------
 

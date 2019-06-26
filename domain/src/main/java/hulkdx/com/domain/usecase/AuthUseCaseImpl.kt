@@ -48,13 +48,25 @@ class AuthUseCaseImpl @Inject constructor(
     }
 
     override fun registerAsync(firstName: String,
-                               lastName: String,
-                               username: String,
-                               password: String,
-                               email: String,
-                               currency: String,
+                               lastName:  String,
+                               username:  String,
+                               password:  String,
+                               email:     String,
+                               currency:  String,
                                onComplete: (RegisterResult) -> Unit) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mDisposable = mApiManager
+                .registerSync(firstName, lastName, username, password, email, currency)
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mUiScheduler)
+                .subscribe({
+                    onComplete(RegisterResult(it.status, it.authError))
+                }, {
+                    if (it is IOException) {
+                        onComplete(RegisterResult(RemoteStatus.NETWORK_ERROR, throwable = it))
+                    } else {
+                        onComplete(RegisterResult(RemoteStatus.GENERAL_ERROR, throwable = it))
+                    }
+                })
     }
 
     override fun dispose() {

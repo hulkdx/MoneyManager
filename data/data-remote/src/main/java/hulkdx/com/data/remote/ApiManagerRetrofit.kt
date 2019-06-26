@@ -11,6 +11,11 @@ import retrofit2.http.FormUrlEncoded
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
+ *
+ *
+ * TODO: remove FormUrlEncoded in the server.
+ * TODO: change register API => 1. add first name, last name. 2. remove email2
+ * TODO: add some authentication for register API.
  */
 interface ApiManagerRetrofit {
 
@@ -18,4 +23,12 @@ interface ApiManagerRetrofit {
     @POST("login")
     fun postLogin(@Field("username") username: String,
                   @Field("password") password: String): Single<Response<ResponseBody>>
+
+    @FormUrlEncoded
+    @POST("register")
+    fun postRegister(@Field("username") username: String,
+                     @Field("password") password: String,
+                     @Field("email") email: String,
+                     @Field("email2") email2: String,
+                     @Field("currency") currency: String): Single<Response<ResponseBody>>
 }

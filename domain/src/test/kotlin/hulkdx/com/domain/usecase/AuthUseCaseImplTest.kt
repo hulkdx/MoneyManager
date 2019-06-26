@@ -3,6 +3,8 @@ package hulkdx.com.domain.usecase
 import hulkdx.com.domain.data.database.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
+import hulkdx.com.domain.data.remote.ApiManager.*
+import hulkdx.com.domain.data.remote.RegisterAuthError
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -18,8 +20,10 @@ import org.junit.Assert.*
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.*
 import java.io.IOException
 import java.lang.RuntimeException
+import java.util.*
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
@@ -32,6 +36,11 @@ const val TOKEN         = "token"
       val TEST_USER     = User(USERNAME, "", "", "", "", TOKEN)
       val EMPTY_USER    = User("", "", "", "", "", "")
 const val THROWABLE_MSG = "THROWABLE_MSG"
+const val FIRST_NAME = "first_name"
+const val LAST_NAME  = "last_name"
+const val EMAIL      = "email"
+const val CURRENCY   = "currency"
+
 // endregion constants -------------------------------------------------------------------------
 
 @Suppress("RedundantVisibilityModifier")
@@ -194,34 +203,116 @@ class AuthUseCaseImplTest {
 
     @Test
     fun registerAsync_mustPassParamsToApiManager() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // Arrange
+        registerSuccess()
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {}
+        // Assert
+        verify(mApiManager).registerSync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY)
+    }
+
+    @Test
+    fun registerAsync_success_callTheCallbackSuccess() {
+        // Arrange
+        registerSuccess()
+        var isSuccess = false
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+            if (it.status == RemoteStatus.SUCCESS) {
+                isSuccess = true
+            }
+        }
+        // Assert
+        assertTrue(isSuccess)
+    }
+
+    @Test
+    fun registerAsync_throwsException_callTheCallbackGeneralError() {
+        // Arrange
+        registerThrowsRuntimeException()
+        var result = false
+        var throwable: Throwable? = null
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+            result = it.status == RemoteStatus.GENERAL_ERROR
+            throwable = it.throwable
+        }
+        // Assert
+        assertTrue(result)
+        assertThat(throwable!!.message, `is`(THROWABLE_MSG))
+    }
+
+    @Test
+    fun registerAsync_ioException_callTheCallbackNetworkError() {
+        // Arrange
+        registerThrowsIoException()
+        var status: RemoteStatus? = null
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+            status = it.status
+        }
+        // Assert
+        assertTrue(status == RemoteStatus.NETWORK_ERROR)
+    }
+
+    @Test
+    fun registerAsync_authErrorEmailExists_passAuthErrorToRegisterResult() {
+        // Arrange
+        registerAuthErrorEmailExists()
+        var authError: RegisterAuthError? = null
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+            authError = it.authError
+        }
+        // Assert
+        assertThat(authError, `is`(RegisterAuthError.EMAIL_EXISTS))
     }
 
     // region helper methods -----------------------------------------------------------------------
 
     private fun loginSuccess() {
-        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, TEST_USER)))
+        `when`(mApiManager.loginSync(anyString(), anyString()))
+                .thenReturn(Single.just(LoginApiResponse(RemoteStatus.SUCCESS, TEST_USER)))
     }
 
     private fun loginThrowsRuntimeException() {
-        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+        `when`(mApiManager.loginSync(anyString(), anyString()))
                 .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
     }
 
     private fun loginThrowsIoException() {
-        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
+        `when`(mApiManager.loginSync(anyString(), anyString()))
                 .thenReturn(Single.fromCallable { throw IOException() })
     }
 
     private fun loginAuthError() {
-        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.AUTH_ERROR, EMPTY_USER)))
+        `when`(mApiManager.loginSync(anyString(), anyString()))
+                .thenReturn(Single.just(LoginApiResponse(RemoteStatus.AUTH_ERROR, EMPTY_USER)))
     }
 
     private fun loginGeneralError() {
-        `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
-                .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.GENERAL_ERROR, EMPTY_USER)))
+        `when`(mApiManager.loginSync(anyString(), anyString()))
+                .thenReturn(Single.just(LoginApiResponse(RemoteStatus.GENERAL_ERROR, EMPTY_USER)))
+    }
+
+    private fun registerSuccess() {
+        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.SUCCESS)))
+    }
+
+    private fun registerThrowsRuntimeException() {
+        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
+    }
+
+    private fun registerThrowsIoException() {
+        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Single.fromCallable { throw IOException() })
+    }
+
+    private fun registerAuthErrorEmailExists() {
+        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthError.EMAIL_EXISTS)))
     }
 
     // endregion helper methods --------------------------------------------------------------------

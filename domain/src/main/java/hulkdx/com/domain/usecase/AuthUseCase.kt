@@ -1,5 +1,6 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.data.remote.RegisterAuthError
 import hulkdx.com.domain.data.remote.RemoteStatus
 
 /**
@@ -24,7 +25,7 @@ interface AuthUseCase {
 
     data class RegisterResult (
             val status: RemoteStatus,
-            val userToken: String,
+            val authError: RegisterAuthError? = null,
             var throwable: Throwable? = null
     )
 }

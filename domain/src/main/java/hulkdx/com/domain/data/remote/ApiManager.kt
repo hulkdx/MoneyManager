@@ -8,9 +8,20 @@ import io.reactivex.Single
  */
 interface ApiManager {
     fun loginSync(username: String, password: String): Single<LoginApiResponse>
+    fun registerSync(firstName: String,
+                     lastName: String,
+                     username: String,
+                     password: String,
+                     email: String,
+                     currency: String): Single<RegisterApiResponse>
 
     data class LoginApiResponse(
             val status: RemoteStatus,
             val user: User
+    )
+
+    data class RegisterApiResponse(
+            val status: RemoteStatus,
+            val authError: RegisterAuthError? = null
     )
 }
