@@ -59,7 +59,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_mustPassParamsToApiManager() {
         // Arrange
-        success()
+        loginSuccess()
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
@@ -69,7 +69,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_success_callTheCallbackSuccess() {
         // Arrange
-        success()
+        loginSuccess()
         // Act
         var result = false
         SUT.loginAsync(USERNAME, PASSWORD) {
@@ -82,7 +82,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_throwsException_callTheCallbackGeneralError() {
         // Arrange
-        throwsRuntimeException()
+        loginThrowsRuntimeException()
         var result = false
         var throwable: Throwable? = null
         // Act
@@ -98,7 +98,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_ioException_callTheCallbackNetworkError() {
         // Arrange
-        throwsIoException()
+        loginThrowsIoException()
         var status: RemoteStatus? = null
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {
@@ -111,7 +111,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_authError_callTheCallbackAuthError() {
         // Arrange
-        authError()
+        loginAuthError()
         var status: RemoteStatus? = null
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {
@@ -124,7 +124,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_generalError_callTheCallbackGeneralError() {
         // Arrange
-        generalError()
+        loginGeneralError()
         var status: RemoteStatus? = null
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {
@@ -137,7 +137,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_success_saveUserToDatabase() {
         // Arrange
-        success()
+        loginSuccess()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
@@ -151,7 +151,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_authError_NotSaveUserToDatabase() {
         // Arrange
-        authError()
+        loginAuthError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
@@ -162,7 +162,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_generalError_NotSaveUserToDatabase() {
         // Arrange
-        generalError()
+        loginGeneralError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
@@ -173,7 +173,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_throwsRuntimeException_NotSaveUserToDatabase() {
         // Arrange
-        generalError()
+        loginGeneralError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
@@ -184,7 +184,7 @@ class AuthUseCaseImplTest {
     @Test
     fun loginAsync_throwsIoException_NotSaveUserToDatabase() {
         // Arrange
-        generalError()
+        loginGeneralError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
@@ -192,29 +192,34 @@ class AuthUseCaseImplTest {
         verify(mDatabaseManager, never()).saveUser(capture(ac))
     }
 
+    @Test
+    fun registerAsync_mustPassParamsToApiManager() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     // region helper methods -----------------------------------------------------------------------
 
-    private fun success() {
+    private fun loginSuccess() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.SUCCESS, TEST_USER)))
     }
 
-    private fun throwsRuntimeException() {
+    private fun loginThrowsRuntimeException() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
     }
 
-    private fun throwsIoException() {
+    private fun loginThrowsIoException() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.fromCallable { throw IOException() })
     }
 
-    private fun authError() {
+    private fun loginAuthError() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.AUTH_ERROR, EMPTY_USER)))
     }
 
-    private fun generalError() {
+    private fun loginGeneralError() {
         `when`(mApiManager.loginSync(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()))
                 .thenReturn(Single.just(ApiManager.LoginApiResponse(RemoteStatus.GENERAL_ERROR, EMPTY_USER)))
     }

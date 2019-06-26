@@ -8,10 +8,23 @@ import hulkdx.com.domain.data.remote.RemoteStatus
 interface AuthUseCase {
 
     fun loginAsync(username: String, password: String, onComplete: (LoginResult) -> (Unit))
+    fun registerAsync(firstName: String,
+                      lastName: String,
+                      username: String,
+                      password: String,
+                      email: String,
+                      currency: String,
+                      onComplete: (RegisterResult) -> (Unit))
     fun dispose()
 
-    data class LoginResult(
+    data class LoginResult (
             val status: RemoteStatus,
+            var throwable: Throwable? = null
+    )
+
+    data class RegisterResult (
+            val status: RemoteStatus,
+            val userToken: String,
             var throwable: Throwable? = null
     )
 }

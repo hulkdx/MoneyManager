@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.util.List;
+
 import hulkdx.com.domain.data.remote.RemoteStatus;
 import hulkdx.com.domain.usecase.AuthUseCase;
 import kotlin.Unit;
@@ -26,7 +28,7 @@ public class LoginViewModelTest {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
-    public static final String THROWABLE_MESSAGE = "THROWABLE_MESSAGE";
+    private static final String THROWABLE_MESSAGE = "THROWABLE_MESSAGE";
 
     // endregion constants -------------------------------------------------------------------------
 
@@ -55,6 +57,7 @@ public class LoginViewModelTest {
         SUT.login(USERNAME, PASSWORD);
         // Assert
         verify(mAuthUseCase).loginAsync(ac.capture(), ac.capture(), any());
+        List<String> loginAsyncArguments = ac.getAllValues();
     }
 
     // region helper methods -----------------------------------------------------------------------

@@ -22,7 +22,6 @@ class AuthUseCaseImpl @Inject constructor(
                              private val mDatabaseManager: DatabaseManager,
                              private val mApiManager: ApiManager
 ): AuthUseCase {
-
     private var mDisposable: Disposable? = null
 
     override fun loginAsync(username: String,
@@ -46,6 +45,16 @@ class AuthUseCaseImpl @Inject constructor(
                         onComplete(LoginResult(RemoteStatus.GENERAL_ERROR, throwable = it))
                     }
                 })
+    }
+
+    override fun registerAsync(firstName: String,
+                               lastName: String,
+                               username: String,
+                               password: String,
+                               email: String,
+                               currency: String,
+                               onComplete: (RegisterResult) -> Unit) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dispose() {
