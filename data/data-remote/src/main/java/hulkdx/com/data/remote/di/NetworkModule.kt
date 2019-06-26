@@ -12,6 +12,9 @@ import com.google.gson.GsonBuilder
 import hulkdx.com.domain.util.API_BASE_URL
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
+import okhttp3.logging.HttpLoggingInterceptor
+
+
 
 
 /**
@@ -26,9 +29,16 @@ object NetworkModule {
     @JvmStatic
     @Provides
     fun provideApiManagerRetrofit(): ApiManagerRetrofit {
+
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
         val client = OkHttpClient.Builder()
                 .connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS).build()
+                .readTimeout(100, TimeUnit.SECONDS)
+                .addInterceptor(loggingInterceptor)
+                .build()
+
         val gson = GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create()

@@ -27,4 +27,5 @@ allprojects {
     ext.retrofit           = "com.squareup.retrofit2:retrofit:$retrofitVersion"
     ext.retrofitRxJava     = "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     ext.retrofitGson       = "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    ext.okhttpLogIntercept = "com.squareup.okhttp3:logging-interceptor:3.10.0"
 }
