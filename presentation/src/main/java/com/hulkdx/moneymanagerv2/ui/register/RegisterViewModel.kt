@@ -3,9 +3,7 @@ package com.hulkdx.moneymanagerv2.ui.register
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import hulkdx.com.domain.data.remote.RemoteStatus
-import hulkdx.com.domain.usecase.LoginUseCase
-import hulkdx.com.domain.usecase.LoginUseCase.LoginResult
+import hulkdx.com.domain.usecase.AuthUseCase.LoginResult
 import javax.inject.Inject
 
 /**
@@ -13,7 +11,21 @@ import javax.inject.Inject
  */
 class RegisterViewModel @Inject constructor(
 ): ViewModel() {
+
+    private var mRegisterResult = MutableLiveData<LoginResult>()
+
+    fun getRegisterResult(): LiveData<LoginResult> = mRegisterResult
+
     override fun onCleared() {
         super.onCleared()
+    }
+
+    fun register(firstName: String,
+                 lastName: String,
+                 username: String,
+                 password: String,
+                 email: String,
+                 currency: String) {
+
     }
 }

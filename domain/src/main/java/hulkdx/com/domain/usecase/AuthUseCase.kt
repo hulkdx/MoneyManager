@@ -5,7 +5,7 @@ import hulkdx.com.domain.data.remote.RemoteStatus
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
-interface LoginUseCase {
+interface AuthUseCase {
 
     fun loginAsync(username: String, password: String, onComplete: (LoginResult) -> (Unit))
     fun dispose()

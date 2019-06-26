@@ -35,7 +35,7 @@ const val THROWABLE_MSG = "THROWABLE_MSG"
 // endregion constants -------------------------------------------------------------------------
 
 @Suppress("RedundantVisibilityModifier")
-class LoginUseCaseImplTest {
+class AuthUseCaseImplTest {
 
     // region helper fields ------------------------------------------------------------------------
 
@@ -48,12 +48,12 @@ class LoginUseCaseImplTest {
 
     // endregion helper fields ---------------------------------------------------------------------
 
-    private lateinit var SUT: LoginUseCaseImpl
+    private lateinit var SUT: AuthUseCaseImpl
 
     @Before
     fun setup() {
         mTestScheduler = Schedulers.trampoline()
-        SUT = LoginUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mApiManager)
+        SUT = AuthUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mApiManager)
     }
 
     @Test

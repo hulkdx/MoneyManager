@@ -1,18 +1,15 @@
 package com.hulkdx.moneymanagerv2.ui.login
 
 import android.animation.Animator
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.AnimatorRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.transition.ChangeBounds
-import androidx.transition.Fade
 import androidx.transition.TransitionManager
 import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
@@ -53,7 +50,7 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mLoginViewModel.getUserLoggedIn().observe(this, Observer {
+        mLoginViewModel.getLoginResult().observe(this, Observer {
 
             if (BuildConfig.DEBUG) {
                 it.throwable?.message?.apply {

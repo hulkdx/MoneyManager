@@ -1,28 +1,20 @@
 package com.hulkdx.moneymanagerv2.ui.login;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.Observer;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.mockito.stubbing.Answer;
-
-import java.util.List;
 
 import hulkdx.com.domain.data.remote.RemoteStatus;
-import hulkdx.com.domain.usecase.LoginUseCase;
+import hulkdx.com.domain.usecase.AuthUseCase;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
@@ -43,7 +35,7 @@ public class LoginViewModelTest {
     @Rule public MockitoRule mMockitoJUnit = MockitoJUnit.rule();
     @Rule public InstantTaskExecutorRule mInstantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    @Mock public LoginUseCase mLoginUseCase;
+    @Mock public AuthUseCase mAuthUseCase;
 
     // endregion helper fields ---------------------------------------------------------------------
 
@@ -51,7 +43,7 @@ public class LoginViewModelTest {
 
     @Before
     public void setup() {
-        SUT = new LoginViewModel(mLoginUseCase);
+        SUT = new LoginViewModel(mAuthUseCase);
     }
 
     @Test
@@ -61,48 +53,43 @@ public class LoginViewModelTest {
         success();
         // Act
         SUT.login(USERNAME, PASSWORD);
-        verify(mLoginUseCase).loginAsync(ac.capture(), ac.capture(), any());
-        List<String> values = ac.getAllValues();
-        String username = values.get(0);
-        String password = values.get(1);
         // Assert
-        assertThat(username, is(USERNAME));
-        assertThat(password, is(PASSWORD));
+        verify(mAuthUseCase).loginAsync(ac.capture(), ac.capture(), any());
     }
 
     // region helper methods -----------------------------------------------------------------------
 
     private void success() {
         doAnswer(invocation -> {
-            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
-            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.SUCCESS, null));
+            Function1<AuthUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new AuthUseCase.LoginResult(RemoteStatus.SUCCESS, null));
             return null;
-        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+        }).when(mAuthUseCase).loginAsync(anyString(), anyString(), any());
     }
 
     private void authError() {
         doAnswer(invocation -> {
-            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
-            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.AUTH_ERROR, null));
+            Function1<AuthUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new AuthUseCase.LoginResult(RemoteStatus.AUTH_ERROR, null));
             return null;
-        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+        }).when(mAuthUseCase).loginAsync(anyString(), anyString(), any());
     }
 
     private void networkError() {
         doAnswer(invocation -> {
-            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
-            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.NETWORK_ERROR, null));
+            Function1<AuthUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new AuthUseCase.LoginResult(RemoteStatus.NETWORK_ERROR, null));
             return null;
-        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+        }).when(mAuthUseCase).loginAsync(anyString(), anyString(), any());
     }
 
     private void generalError() {
         doAnswer(invocation -> {
-            Function1<LoginUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
-            argument.invoke(new LoginUseCase.LoginResult(RemoteStatus.GENERAL_ERROR,
+            Function1<AuthUseCase.LoginResult, Unit> argument = invocation.getArgument(2);
+            argument.invoke(new AuthUseCase.LoginResult(RemoteStatus.GENERAL_ERROR,
                     new RuntimeException(THROWABLE_MESSAGE)));
             return null;
-        }).when(mLoginUseCase).loginAsync(anyString(), anyString(), any());
+        }).when(mAuthUseCase).loginAsync(anyString(), anyString(), any());
     }
 
     // endregion helper methods --------------------------------------------------------------------

@@ -3,32 +3,30 @@ package com.hulkdx.moneymanagerv2.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import hulkdx.com.domain.data.remote.RemoteStatus
-import hulkdx.com.domain.usecase.LoginUseCase
-import hulkdx.com.domain.usecase.LoginUseCase.LoginResult
+import hulkdx.com.domain.usecase.AuthUseCase
+import hulkdx.com.domain.usecase.AuthUseCase.LoginResult
 import javax.inject.Inject
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
 class LoginViewModel @Inject constructor(
-        private val mLoginUseCase: LoginUseCase
+        private val mAuthUseCase: AuthUseCase
 ): ViewModel() {
 
     private var mLoginResult = MutableLiveData<LoginResult>()
 
+    fun getLoginResult(): LiveData<LoginResult> = mLoginResult
+
     override fun onCleared() {
         super.onCleared()
-        mLoginUseCase.dispose()
+        mAuthUseCase.dispose()
     }
 
     fun login(username: String, password: String) {
-        mLoginUseCase.loginAsync(username, password, onComplete = {
+        mAuthUseCase.loginAsync(username, password, onComplete = {
             mLoginResult.value = it
         })
     }
 
-    fun getUserLoggedIn(): LiveData<LoginResult> {
-        return mLoginResult
-    }
 }

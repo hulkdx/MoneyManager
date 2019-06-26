@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hulkdx.moneymanagerv2.ui.login.LoginViewModel
 import com.hulkdx.moneymanagerv2.ui.register.RegisterViewModel
-import hulkdx.com.domain.usecase.LoginUseCase
 import javax.inject.Inject
 
 /**

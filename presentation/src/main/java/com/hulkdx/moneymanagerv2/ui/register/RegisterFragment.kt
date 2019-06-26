@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
 import com.hulkdx.moneymanagerv2.util.getViewModel
@@ -36,10 +37,15 @@ class RegisterFragment : Fragment() {
         mRegisterViewModel = getViewModel()
 
         setupSpinner()
+        setupRegisterBtn()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        mRegisterViewModel.getRegisterResult().observe(this, Observer {
+
+        })
     }
 
     // endregion Lifecycle -------------------------------------------------------------
@@ -63,4 +69,16 @@ class RegisterFragment : Fragment() {
         currencySpinner.adapter = currencySpinnerAdapter
     }
 
+    private fun setupRegisterBtn() {
+        registerBtn.setOnClickListener {
+            val firstName   = firstNameEditText.text.toString()
+            val lastName    = lastNameEditText.text.toString()
+            val username    = usernameEditText.text.toString()
+            val password    = passwordEditText.text.toString()
+            val email       = emailEditText.text.toString()
+            val currency    = currencySpinner.selectedItem.toString()
+
+            mRegisterViewModel.register(firstName, lastName, username, password, email, currency)
+        }
+    }
 }

@@ -2,8 +2,8 @@ package hulkdx.com.domain.di
 
 import dagger.Module
 import dagger.Provides
-import hulkdx.com.domain.usecase.LoginUseCase
-import hulkdx.com.domain.usecase.LoginUseCaseImpl
+import hulkdx.com.domain.usecase.AuthUseCase
+import hulkdx.com.domain.usecase.AuthUseCaseImpl
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
@@ -12,5 +12,5 @@ import hulkdx.com.domain.usecase.LoginUseCaseImpl
 object UseCaseModule {
     @JvmStatic
     @Provides
-    fun provideLoginUseCase(loginUseCaseImpl: LoginUseCaseImpl): LoginUseCase = loginUseCaseImpl
+    fun provideAuthUseCase(authUseCaseImpl: AuthUseCaseImpl): AuthUseCase = authUseCaseImpl
 }

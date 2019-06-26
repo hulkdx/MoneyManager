@@ -1,16 +1,13 @@
 package hulkdx.com.domain.usecase
 
 import hulkdx.com.domain.data.database.DatabaseManager
-import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
-import hulkdx.com.domain.usecase.LoginUseCase.*
-import io.reactivex.Completable
+import hulkdx.com.domain.usecase.AuthUseCase.*
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,12 +16,12 @@ import javax.inject.Singleton
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
 @Singleton
-class LoginUseCaseImpl @Inject constructor(
+class AuthUseCaseImpl @Inject constructor(
         @BackgroundScheduler private val mBackgroundScheduler: Scheduler,
         @UiScheduler         private val mUiScheduler: Scheduler,
                              private val mDatabaseManager: DatabaseManager,
                              private val mApiManager: ApiManager
-): LoginUseCase {
+): AuthUseCase {
 
     private var mDisposable: Disposable? = null
 

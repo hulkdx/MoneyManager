@@ -9,7 +9,7 @@ import hulkdx.com.data.database.di.DatabaseModule
 import hulkdx.com.data.remote.di.NetworkModule
 import hulkdx.com.domain.di.ApplicationContext
 import hulkdx.com.domain.di.UseCaseModule
-import hulkdx.com.domain.usecase.LoginUseCase
+import hulkdx.com.domain.usecase.AuthUseCase
 import javax.inject.Singleton
 
 /**
@@ -31,6 +31,6 @@ interface ApplicationComponent {
         fun build(): ApplicationComponent
     }
 
-    fun loginUseCase(): LoginUseCase
+    fun AuthUseCase(): AuthUseCase
     fun viewModelFactory(): ViewModelFactory
 }
