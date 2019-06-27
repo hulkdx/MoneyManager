@@ -1,13 +1,14 @@
 package hulkdx.com.data.remote
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
-import hulkdx.com.domain.data.remote.RegisterAuthError
+import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Single
-import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -92,12 +93,27 @@ class ApiManagerImpl @Inject constructor(
                     return@map RegisterApiResponse(RemoteStatus.SUCCESS)
                 }
 
-                500 -> {
+                400, 500 -> {
                     it.errorBody()?.string()?.let { jsonErrorString ->
-                        JsonParser().parse(jsonErrorString).asJsonObject.get("error").asString?.apply {
-                            when(this) {
-                                "This email address has already registered!" -> {
-                                    return@map RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthError.EMAIL_EXISTS)
+                        val json = JsonParser().parse(jsonErrorString) as? JsonObject ?: return@let
+
+                        for ((key, value) in json.entrySet()) {
+                            when (key) {
+                                "error" -> {
+                                    if (value.asString == "This email address has already registered!") {
+                                        return@map RegisterApiResponse(
+                                                RemoteStatus.AUTH_ERROR,
+                                                RegisterAuthErrorStatus.EMAIL_EXISTS
+                                        )
+                                    }
+                                }
+                                "username" -> {
+                                    if (value.asJsonArray[0].asString == "A user with that username already exists.") {
+                                        return@map RegisterApiResponse(
+                                                RemoteStatus.AUTH_ERROR,
+                                                RegisterAuthErrorStatus.USER_EXISTS
+                                        )
+                                    }
                                 }
                             }
                         }

@@ -14,14 +14,14 @@ class Logger(tag: String) {
                     throwable: Throwable?,
                     logLevel: Int,
                     vararg args: Any) {
-        var msg = msg
+        var formattedMsg = msg
 
         if (mDisabled) {
             return
         }
 
         if (args.isNotEmpty()) {
-            msg = String.format(msg, *args)
+            formattedMsg = String.format(msg, *args)
         }
 
         var throwableText: String? = null
@@ -32,8 +32,9 @@ class Logger(tag: String) {
         //
         // Logging to Logcat:
         //
-        val logText = if (throwableText != null) msg + "\n" + throwableText else msg
+        val logText = if (throwableText != null) formattedMsg + "\n" + throwableText else msg
 
+        @Suppress("ConstantConditionIf")
         when (logLevel) {
             TAG_ERROR -> if (sDebugLevel >= TAG_ERROR) {
                 Log.e(mTag, logText)
@@ -117,20 +118,19 @@ class Logger(tag: String) {
 
         private val staticLogger: Logger
             get() {
-                val tag = tag
+                val tag = getTag()
                 return Logger(tag)
             }
 
-        private val tag: String
-            get() {
-                val stackTrace = Throwable().stackTrace
-                if (stackTrace.size < STACK_CALL_LENGTH) {
-                    return "Unknown TAG"
-                }
-                val stackTraceElement = stackTrace[STACK_CALL_LENGTH]
-                val className = stackTraceElement.className
-                return className.substring(className.lastIndexOf('.') + 1)
+        private fun getTag(): String {
+            val stackTrace = Throwable().stackTrace
+            if (stackTrace.size < STACK_CALL_LENGTH) {
+                return "Unknown TAG"
             }
+            val stackTraceElement = stackTrace[STACK_CALL_LENGTH]
+            val className = stackTraceElement.className
+            return className.substring(className.lastIndexOf('.') + 1)
+        }
 
         fun v(msg: String, vararg args: Any) {
             staticLogger.verbose(msg, false, args)

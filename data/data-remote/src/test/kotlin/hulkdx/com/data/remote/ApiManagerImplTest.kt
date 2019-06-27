@@ -1,18 +1,18 @@
 package hulkdx.com.data.remote
 
-import hulkdx.com.domain.data.remote.RegisterAuthError
+import hulkdx.com.domain.data.remote.ApiManager
+import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertThat
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.isNotNull
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 
@@ -55,6 +55,9 @@ class ApiManagerImplTest {
     val REGISTER_ERROR_EMAIL_EXISTS_JSON = "{\n" +
             "\"error\": \"This email address has already registered!\"\n" +
             "}"
+
+    val REGISTER_ERROR_USERNAME_EXISTS_JSON = "{\"username\":[\"A user with that username already exists.\"]}"
+
     // endregion constants -------------------------------------------------------------------------
 
     // region helper fields ------------------------------------------------------------------------
@@ -155,7 +158,7 @@ class ApiManagerImplTest {
         // Arrange
         registerErrorEmailExists()
         var status: RemoteStatus = RemoteStatus.SUCCESS
-        var authError: RegisterAuthError? = null
+        var authError: RegisterAuthErrorStatus? = null
         // Act
         SUT.registerSync(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
                 .subscribe(Consumer {
@@ -164,7 +167,24 @@ class ApiManagerImplTest {
                 })
         // Assert
         assertThat(status, `is`(RemoteStatus.AUTH_ERROR))
-        assertThat(authError, `is`(RegisterAuthError.EMAIL_EXISTS))
+        assertThat(authError, `is`(RegisterAuthErrorStatus.EMAIL_EXISTS))
+    }
+
+
+    @Test
+    fun registerSync_errorUsernameExists_sendAuthError() {
+        // Arrange
+        registerErrorUsernameExists()
+        var result: ApiManager.RegisterApiResponse? = null
+        // Act
+        SUT.registerSync(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
+                .subscribe(Consumer {
+                    result = it
+                })
+        // Assert
+        assertTrue(result != null)
+        assertThat(result!!.status, `is`(RemoteStatus.AUTH_ERROR))
+        assertThat(result!!.authError, `is`(RegisterAuthErrorStatus.USER_EXISTS))
     }
 
 
@@ -198,6 +218,12 @@ class ApiManagerImplTest {
         `when`(mApiManagerRetrofit.postRegister(anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.just(Response.error(500,
                         ResponseBody.create(null, REGISTER_ERROR_EMAIL_EXISTS_JSON))))
+    }
+
+    private fun registerErrorUsernameExists() {
+        `when`(mApiManagerRetrofit.postRegister(anyString(), anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Single.just(Response.error(400,
+                        ResponseBody.create(null, REGISTER_ERROR_USERNAME_EXISTS_JSON))))
     }
 
     // endregion helper methods --------------------------------------------------------------------

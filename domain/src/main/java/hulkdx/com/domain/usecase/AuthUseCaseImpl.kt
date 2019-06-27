@@ -8,8 +8,8 @@ import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.usecase.AuthUseCase.*
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
-import org.omg.PortableInterceptor.SUCCESSFUL
 import java.io.IOException
+import java.lang.RuntimeException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,11 +59,14 @@ class AuthUseCaseImpl @Inject constructor(
                 .registerSync(firstName, lastName, username, password, email, currency)
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mUiScheduler)
-                .subscribe({
-                    when (it.status) {
+                .subscribe({ apiResult ->
+                    when (apiResult.status) {
                         RemoteStatus.SUCCESS -> onComplete(RegisterResult.Successful)
                         RemoteStatus.AUTH_ERROR -> {
-                            onComplete(RegisterResult.AuthError)
+                            if (apiResult.authError == null) {
+                                throw RuntimeException("apiResult.authError is null")
+                            }
+                            onComplete(RegisterResult.AuthError(apiResult.authError))
                         }
                         RemoteStatus.NETWORK_ERROR -> onComplete(RegisterResult.NetworkError())
                         RemoteStatus.GENERAL_ERROR -> onComplete(RegisterResult.GeneralError())

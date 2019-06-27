@@ -4,7 +4,7 @@ import hulkdx.com.domain.data.database.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
-import hulkdx.com.domain.data.remote.RegisterAuthError
+import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.usecase.AuthUseCase.RegisterResult
 import io.reactivex.Scheduler
@@ -20,11 +20,8 @@ import org.mockito.junit.MockitoJUnit
 import org.junit.Assert.*
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.*
 import java.io.IOException
 import java.lang.RuntimeException
-import java.util.*
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
@@ -256,16 +253,30 @@ class AuthUseCaseImplTest {
 
     @Test
     fun registerAsync_authErrorEmailExists_passAuthErrorToRegisterResult() {
-        TODO()
         // Arrange
-//        registerAuthErrorEmailExists()
-//        var authError: RegisterAuthError? = null
-//        // Act
-//        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
-//            authError = it.authError
-//        }
-//        // Assert
-//        assertThat(authError, `is`(RegisterAuthError.EMAIL_EXISTS))
+        registerAuthErrorEmailExists()
+        var result: RegisterResult? = null
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is RegisterResult.AuthError)
+        assertTrue((result as RegisterResult.AuthError).status == RegisterAuthErrorStatus.EMAIL_EXISTS)
+    }
+
+    @Test
+    fun registerAsync_authErrorUserExists_passAuthErrorToRegisterResult() {
+        // Arrange
+        registerAuthErrorUserExists()
+        var result: RegisterResult? = null
+        // Act
+        SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is RegisterResult.AuthError)
+        assertTrue((result as RegisterResult.AuthError).status == RegisterAuthErrorStatus.USER_EXISTS)
     }
 
     // region helper methods -----------------------------------------------------------------------
@@ -312,7 +323,13 @@ class AuthUseCaseImplTest {
 
     private fun registerAuthErrorEmailExists() {
         `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
-                .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthError.EMAIL_EXISTS)))
+                .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthErrorStatus.EMAIL_EXISTS)))
+    }
+
+
+    private fun registerAuthErrorUserExists() {
+        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+                .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthErrorStatus.USER_EXISTS)))
     }
 
     // endregion helper methods --------------------------------------------------------------------

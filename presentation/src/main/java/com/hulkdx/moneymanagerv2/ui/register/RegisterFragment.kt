@@ -13,8 +13,8 @@ import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import hulkdx.com.domain.data.model.SUPPORTED_CURRENCIES
-import hulkdx.com.domain.data.remote.RegisterAuthError
-import hulkdx.com.domain.data.remote.RemoteStatus
+import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
+import hulkdx.com.domain.usecase.AuthUseCase
 import kotlinx.android.synthetic.main.tutorial_fragment_register.*
 
 /**
@@ -48,23 +48,24 @@ class RegisterFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mRegisterViewModel.getRegisterResult().observe(this, Observer {
+        mRegisterViewModel.getRegisterResult().observe(this, Observer { registerResult ->
 
-            if (BuildConfig.DEBUG) {
-                it.throwable?.message?.apply {
-                    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
-                }
-            }
-
-            when (it.status) {
-                RemoteStatus.SUCCESS        -> registerSuccess()
-                RemoteStatus.AUTH_ERROR     -> {
-                    when (it.authError) {
-                        RegisterAuthError.EMAIL_EXISTS -> registerEmailAlreadyExists()
+            when (registerResult) {
+                is AuthUseCase.RegisterResult.Successful -> registerSuccess()
+                is AuthUseCase.RegisterResult.AuthError -> {
+                    when (registerResult.status) {
+                        RegisterAuthErrorStatus.EMAIL_EXISTS -> registerEmailAlreadyExists()
+                        RegisterAuthErrorStatus.USER_EXISTS  -> registerUserAlreadyExists()
                     }
                 }
-                RemoteStatus.NETWORK_ERROR  -> registerNetworkError()
-                RemoteStatus.GENERAL_ERROR  -> registerGeneralError()
+                is AuthUseCase.RegisterResult.NetworkError -> {
+                    showDebugRegisterResult(registerResult.throwable)
+                    registerNetworkError()
+                }
+                is AuthUseCase.RegisterResult.GeneralError -> {
+                    showDebugRegisterResult(registerResult.throwable)
+                    registerGeneralError()
+                }
             }
         })
     }
@@ -75,7 +76,7 @@ class RegisterFragment : Fragment() {
     private fun setupSpinner() {
         val currencyArray = arrayOf(getString(R.string.register_select_currency)) +
                 SUPPORTED_CURRENCIES
-        val currencySpinnerAdapter = ArrayAdapter<String>(context,
+        val currencySpinnerAdapter = ArrayAdapter<String>(context!!,
                 R.layout.spinner_currency_fragment_register, currencyArray)
         currencySpinner.adapter = currencySpinnerAdapter
     }
@@ -112,6 +113,19 @@ class RegisterFragment : Fragment() {
         Toast.makeText(context, "registerEmailAlreadyExists", Toast.LENGTH_LONG).show()
     }
 
+    private fun registerUserAlreadyExists() {
+        Toast.makeText(context, "registerUserAlreadyExists", Toast.LENGTH_LONG).show()
+    }
+
     // endregion Register Callbacks -------------------------------------------------------------
+    // region Extra -------------------------------------------------------------
+
+    private fun showDebugRegisterResult(throwable: Throwable?) {
+        if (BuildConfig.DEBUG && throwable != null && throwable.message != null) {
+            Toast.makeText(context, throwable.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // endregion Extra -------------------------------------------------------------
 
 }

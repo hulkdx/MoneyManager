@@ -22,6 +22,6 @@ interface ApiManager {
 
     data class RegisterApiResponse(
             val status: RemoteStatus,
-            val authError: RegisterAuthError? = null
+            val authError: RegisterAuthErrorStatus? = null
     )
 }
