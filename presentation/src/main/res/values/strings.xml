@@ -7,20 +7,38 @@
     <string name="sync_desc">Do you want to sync your data to server?</string>
     <string name="no" >No</string>
     <string name="yes" >Yes</string>
+
     <!-- LoginFragment -->
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="create_account">Create Account</string>
     <string name="login" >Login</string>
-    <string name="authError">Incorrect Username and Password</string>
-    <string name="generalError">Something went wrong, please retry again</string>
-    <string name="networkError">Unable to connect to the internet</string>
+    <string name="auth_error">Incorrect Username and Password</string>
+    <string name="general_error">Something went wrong, please retry again</string>
+    <string name="network_error">Unable to connect to the internet</string>
+
     <!-- RegisterFragment -->
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
     <string name="register">Register</string>
     <string name="register_select_currency">Please select a currency</string>
+    <string name="register_error_user_exists">User already exists</string>
+    <string name="register_error_email_exists">Email already exists</string>
 
+    <!-- TransactionFragmentList -->
+    <string name="balance">Balance</string>
+    <string name="euro">EUR</string>
+    <string-array name="transaction_spinner_value">
+        <item>Total</item>
+        <item>Daily</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+    <string name="empty_list">The list is empty.</string>
+    <string name="date">Date</string>
+    <string name="delete_image_view_desc">Delete an item</string>
+    <string name="select_all">Select all</string>
+    <string name="value">Value</string>
 
 </resources>

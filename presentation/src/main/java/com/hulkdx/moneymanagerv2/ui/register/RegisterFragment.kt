@@ -11,14 +11,18 @@ import androidx.lifecycle.Observer
 import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
+import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
 import com.hulkdx.moneymanagerv2.util.getViewModel
-import hulkdx.com.domain.data.model.SUPPORTED_CURRENCIES
+import com.hulkdx.moneymanagerv2.util.replaceFragment
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.usecase.AuthUseCase
+import hulkdx.com.domain.util.SUPPORTED_CURRENCIES
 import kotlinx.android.synthetic.main.tutorial_fragment_register.*
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 24/02/2019.
+ *
+ * TODO add a progressbar and animations.
  */
 class RegisterFragment : Fragment() {
 
@@ -90,6 +94,7 @@ class RegisterFragment : Fragment() {
             val email       = emailEditText.text.toString()
             val currency    = currencySpinner.selectedItem.toString()
 
+            registerLoading()
             mRegisterViewModel.register(firstName, lastName, username, password, email, currency)
         }
     }
@@ -98,23 +103,36 @@ class RegisterFragment : Fragment() {
     // region Register Callbacks -------------------------------------------------------------
 
     private fun registerGeneralError() {
-        Toast.makeText(context, "registerGeneralError", Toast.LENGTH_LONG).show()
+        val message = getString(R.string.general_error)
+        registerShowError(message)
     }
 
     private fun registerNetworkError() {
-        Toast.makeText(context, "registerNetworkError", Toast.LENGTH_LONG).show()
-    }
-
-    private fun registerSuccess() {
-        Toast.makeText(context, "registerSuccess", Toast.LENGTH_LONG).show()
+        val message = getString(R.string.network_error)
+        registerShowError(message)
     }
 
     private fun registerEmailAlreadyExists() {
-        Toast.makeText(context, "registerEmailAlreadyExists", Toast.LENGTH_LONG).show()
+        val message = getString(R.string.register_error_email_exists)
+        registerShowError(message)
     }
 
     private fun registerUserAlreadyExists() {
-        Toast.makeText(context, "registerUserAlreadyExists", Toast.LENGTH_LONG).show()
+        val message = getString(R.string.register_error_user_exists)
+        registerShowError(message)
+    }
+
+    private fun registerLoading() {
+        errorTextView.visibility = View.GONE
+    }
+
+    private fun registerSuccess() {
+        replaceFragment(R.id.container, LoginFragment())
+    }
+
+    private fun registerShowError(message: String) {
+        errorTextView.text = message
+        errorTextView.visibility = View.VISIBLE
     }
 
     // endregion Register Callbacks -------------------------------------------------------------

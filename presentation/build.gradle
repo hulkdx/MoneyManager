@@ -32,6 +32,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':data:data-remote')
     implementation project(':data:data-database')
+    implementation project(':data:data-cache')
 
     kapt                daggerCompiler
     implementation      dagger
@@ -45,6 +46,7 @@ dependencies {
     kapt                liveDataAnnotation
     implementation      rxAndroid
     implementation      transition
+    implementation      cardView
 
     testImplementation  jUnit
     testImplementation  mockito

@@ -1,4 +1,4 @@
-package com.hulkdx.moneymanagerv2.ui.tutorial
+package com.hulkdx.moneymanagerv2.ui.welcome
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
-import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
+import com.hulkdx.moneymanagerv2.ui.transaction.TransactionFragmentList
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import kotlinx.android.synthetic.main.tutorial_fragment_welcome.*
 
@@ -35,7 +35,7 @@ class WelcomeFragment: Fragment() {
             replaceFragment(R.id.container, LoginFragment())
         }
         btn_no.setOnClickListener {
-            replaceFragment(R.id.container, ListTransactionsFragment())
+            replaceFragment(R.id.container, TransactionFragmentList())
         }
     }
 }

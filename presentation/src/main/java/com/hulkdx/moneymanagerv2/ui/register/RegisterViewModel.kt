@@ -21,6 +21,7 @@ class RegisterViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        mAuthUseCase.dispose()
     }
 
     fun register(firstName: String,

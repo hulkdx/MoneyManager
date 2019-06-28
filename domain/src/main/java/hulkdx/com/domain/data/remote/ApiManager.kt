@@ -7,13 +7,13 @@ import io.reactivex.Single
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
 interface ApiManager {
-    fun loginSync(username: String, password: String): Single<LoginApiResponse>
-    fun registerSync(firstName: String,
-                     lastName: String,
-                     username: String,
-                     password: String,
-                     email: String,
-                     currency: String): Single<RegisterApiResponse>
+    fun login(username: String, password: String): Single<LoginApiResponse>
+    fun register(firstName: String,
+                 lastName: String,
+                 username: String,
+                 password: String,
+                 email: String,
+                 currency: String): Single<RegisterApiResponse>
 
     data class LoginApiResponse(
             val status: RemoteStatus,

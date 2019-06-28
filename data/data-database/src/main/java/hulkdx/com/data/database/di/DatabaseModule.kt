@@ -6,7 +6,7 @@ import dagger.Module
 import io.realm.RealmConfiguration
 import dagger.Provides
 import hulkdx.com.data.database.DatabaseManagerImpl
-import hulkdx.com.domain.data.database.DatabaseManager
+import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.di.ApplicationContext
 import io.realm.Realm
 import javax.inject.Singleton

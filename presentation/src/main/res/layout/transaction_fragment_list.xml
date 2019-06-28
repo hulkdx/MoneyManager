@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    tools:context="com.hulkdx.moneymanagerv2.ui.main.MainActivity"
+    tools:ignore="ContentDescription"
+    >
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/main_activity_border_transparent"
+        android:padding="7dp"
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/balance"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/tv_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/black"
+            tools:ignore="HardcodedText"
+            />
+
+        <TextView
+            android:id="@+id/tv_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="@string/euro"
+            android:textColor="@color/black"
+            />
+
+    </LinearLayout>
+
+    <!-- This relative layout is required for the transparent background -->
+    <RelativeLayout
+        android:id="@+id/rootListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/main_activity_border_transparent"
+        android:padding="10dp"
+        >
+
+        <Spinner
+            android:id="@+id/spinner_chooserList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/main_activity_border_transparent"
+            android:gravity="center_horizontal"
+            android:padding="4dp"
+            tools:entries="@array/transaction_spinner_value"
+            />
+
+        <ImageView
+            android:id="@+id/previous_arrow_ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/current_selected_date_textview"
+            android:layout_toStartOf="@+id/current_selected_date_textview"
+            android:layout_toLeftOf="@+id/current_selected_date_textview"
+            android:src="@drawable/selector_ic_skip_prev"
+            />
+
+        <TextView
+            android:id="@+id/current_selected_date_textview"
+            android:layout_width="160dp"
+            android:layout_height="24dp"
+            android:layout_below="@+id/spinner_chooserList"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            tools:text="Today"
+            />
+
+        <ImageView
+            android:id="@+id/next_arrow_ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/current_selected_date_textview"
+            android:layout_toEndOf="@+id/current_selected_date_textview"
+            android:layout_toRightOf="@+id/current_selected_date_textview"
+            android:src="@drawable/selector_ic_skip_next"
+            />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/current_selected_date_textview">
+
+            <include layout="@layout/main_list_view"/>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout3"
+        android:gravity="center"
+        android:text="@string/empty_list"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:visibility="gone"
+        />
+
+    <!-- bottom layout when its NOT expanded -->
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/main_activity_border_transparent"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="visible"
+        >
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_plus"
+            />
+
+    </LinearLayout>
+
+    <!-- bottom layout when its expanded -->
+    <LinearLayout
+        android:id="@+id/bottom_layout_expanded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/main_activity_border_transparent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <!-- categories -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/cardview_category"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/imageview_date"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_date"
+                />
+
+            <ImageView
+                android:id="@+id/imageview_add_attachment"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_add_a_photo_black_24dp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+                />
+
+            <EditText
+                android:id="@+id/et_add_new_balance"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="2"
+                android:background="@android:color/transparent"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:labelFor="@+id/et_add_new_balance"
+                android:hint="@string/value"
+                />
+
+            <TextView
+                android:id="@+id/tv_currency_plus"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:ignore="HardcodedText"
+                />
+
+            <TextView
+                android:id="@+id/tv_currency_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/euro"
+                android:textColor="@color/black"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- The Date Section, appears when date icon clicked. -->
+    <LinearLayout
+        android:id="@+id/bottom_layout_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/main_activity_border"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables"
+            >
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_date"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:gravity="center_vertical"
+                android:text="@string/date"
+                />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:spinnersShown="true"
+            layout="@layout/date_picker"
+            />
+
+        <Button
+            android:id="@+id/button_date_done"
+            android:layout_width="@dimen/buttons_add_width"
+            android:layout_height="@dimen/buttons_add_height"
+            android:layout_gravity="center"
+            android:background="@drawable/selector_btn_done"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

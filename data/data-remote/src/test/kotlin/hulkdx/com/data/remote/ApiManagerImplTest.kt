@@ -12,7 +12,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 
@@ -75,17 +74,17 @@ class ApiManagerImplTest {
     }
 
     @Test
-    fun loginSync_callApiManagerRetrofit() {
+    fun login_callApiManagerRetrofit() {
         // Arrange
         loginSuccess()
         // Act
-        SUT.loginSync(USERNAME, PASSWORD)
+        SUT.login(USERNAME, PASSWORD)
         // Assert
         verify(mApiManagerRetrofit).postLogin(USERNAME, PASSWORD)
     }
 
     @Test
-    fun loginSync_successWithStatus200WithValidToken_sendRemoteStatusSUCCESSAndUser() {
+    fun login_successWithStatus200WithValidToken_sendRemoteStatusSUCCESSAndUser() {
         // Arrange
         loginSuccess()
         var status: RemoteStatus? = null
@@ -97,7 +96,7 @@ class ApiManagerImplTest {
         var token     = ""        
         
         // Act
-        SUT.loginSync(USERNAME, PASSWORD).subscribe(Consumer {
+        SUT.login(USERNAME, PASSWORD).subscribe(Consumer {
             status    = it.status   
             username  = it.user.username
             firstName = it.user.firstName
@@ -117,12 +116,12 @@ class ApiManagerImplTest {
     }
 
     @Test
-    fun loginSync_authProblem_sendAuthErrorStatus() {
+    fun login_authProblem_sendAuthErrorStatus() {
         // Arrange
         loginAuthProblem()
         // Act
         var status: RemoteStatus? = null
-        SUT.loginSync(USERNAME, PASSWORD).subscribe(Consumer {
+        SUT.login(USERNAME, PASSWORD).subscribe(Consumer {
             status = it.status
         })
         // Assert
@@ -131,12 +130,12 @@ class ApiManagerImplTest {
     }
 
     @Test
-    fun loginSync_emptyString400_sendGeneralError() {
+    fun login_emptyString400_sendGeneralError() {
         // Arrange
         loginEmptyString()
         // Act
         var status: RemoteStatus? = null
-        SUT.loginSync(USERNAME, PASSWORD).subscribe(Consumer {
+        SUT.login(USERNAME, PASSWORD).subscribe(Consumer {
             status = it.status
         })
         // Assert
@@ -144,23 +143,23 @@ class ApiManagerImplTest {
     }
 
     @Test
-    fun registerSync_callApiManagerRetrofit() {
+    fun register_callApiManagerRetrofit() {
         // Arrange
         registerSuccess()
         // Act
-        SUT.registerSync(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
+        SUT.register(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
         // Assert
         verify(mApiManagerRetrofit).postRegister(USERNAME, PASSWORD, JSON_EMAIL, JSON_EMAIL, JSON_CURRENCY)
     }
 
     @Test
-    fun registerSync_errorEmailExists_sendAuthError() {
+    fun register_errorEmailExists_sendAuthError() {
         // Arrange
         registerErrorEmailExists()
         var status: RemoteStatus = RemoteStatus.SUCCESS
         var authError: RegisterAuthErrorStatus? = null
         // Act
-        SUT.registerSync(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
+        SUT.register(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
                 .subscribe(Consumer {
                     authError = it.authError
                     status    = it.status
@@ -172,12 +171,12 @@ class ApiManagerImplTest {
 
 
     @Test
-    fun registerSync_errorUsernameExists_sendAuthError() {
+    fun register_errorUsernameExists_sendAuthError() {
         // Arrange
         registerErrorUsernameExists()
         var result: ApiManager.RegisterApiResponse? = null
         // Act
-        SUT.registerSync(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
+        SUT.register(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
                 .subscribe(Consumer {
                     result = it
                 })

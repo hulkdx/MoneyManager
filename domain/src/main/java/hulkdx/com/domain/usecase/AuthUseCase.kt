@@ -16,6 +16,8 @@ interface AuthUseCase {
                       email: String,
                       currency: String,
                       onComplete: (RegisterResult) -> (Unit))
+    fun isLoggedIn(): Boolean
+
     fun dispose()
 
     data class LoginResult (

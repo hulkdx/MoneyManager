@@ -140,7 +140,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        tools:text="@string/networkError"
+        tools:text="@string/network_error"
         tools:visibility="visible"/>
 
     <androidx.constraintlayout.widget.Guideline

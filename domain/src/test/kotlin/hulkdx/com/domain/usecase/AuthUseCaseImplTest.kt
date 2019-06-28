@@ -1,6 +1,7 @@
 package hulkdx.com.domain.usecase
 
-import hulkdx.com.domain.data.database.DatabaseManager
+import hulkdx.com.domain.data.local.CacheManager
+import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
@@ -51,6 +52,7 @@ class AuthUseCaseImplTest {
 
     @Mock lateinit var mApiManager: ApiManager
     @Mock lateinit var mDatabaseManager: DatabaseManager
+    @Mock lateinit var mCacheManager: CacheManager
     private lateinit var mTestScheduler: Scheduler
 
     // endregion helper fields ---------------------------------------------------------------------
@@ -60,8 +62,11 @@ class AuthUseCaseImplTest {
     @Before
     fun setup() {
         mTestScheduler = Schedulers.trampoline()
-        SUT = AuthUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mApiManager)
+        SUT = AuthUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mCacheManager,
+                mApiManager)
     }
+
+    // region loginAsync ---------------------------------------------------------------------------
 
     @Test
     fun loginAsync_mustPassParamsToApiManager() {
@@ -70,7 +75,7 @@ class AuthUseCaseImplTest {
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
-        verify(mApiManager).loginSync(USERNAME, PASSWORD)
+        verify(mApiManager).login(USERNAME, PASSWORD)
     }
 
     @Test
@@ -200,13 +205,38 @@ class AuthUseCaseImplTest {
     }
 
     @Test
+    fun loginAsync_success_saveCache() {
+        // Arrange
+        loginSuccess()
+        val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
+        // Act
+        SUT.loginAsync(USERNAME, PASSWORD) {}
+        // Assert
+        verify(mCacheManager).saveUser(capture(ac))
+        val user = ac.value
+        assertThat(user, `is`(TEST_USER))
+    }
+
+    @Test
+    fun loginAsync_invalidateUserCache() {
+        // Arrange
+        // Act
+        SUT.loginAsync(USERNAME, PASSWORD) {}
+        // Assert
+        verify(mCacheManager).invalidateUser()
+    }
+
+    // endregion loginAsync ------------------------------------------------------------------------
+    // region registerAsync ------------------------------------------------------------------------
+
+    @Test
     fun registerAsync_mustPassParamsToApiManager() {
         // Arrange
         registerSuccess()
         // Act
         SUT.registerAsync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY) {}
         // Assert
-        verify(mApiManager).registerSync(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY)
+        verify(mApiManager).register(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, EMAIL, CURRENCY)
     }
 
     @Test
@@ -279,57 +309,174 @@ class AuthUseCaseImplTest {
         assertTrue((result as RegisterResult.AuthError).status == RegisterAuthErrorStatus.USER_EXISTS)
     }
 
+    // endregion registerAsync ---------------------------------------------------------------------
+    // region isLoggedIn ---------------------------------------------------------------------
+
+    @Test
+    fun isLoggedIn_userInDatabase_resultIsTrue() {
+        // Arrange
+        userInDatabase()
+        // Act
+        val result = SUT.isLoggedIn()
+        // Assert
+        assertTrue(result)
+    }
+
+    @Test
+    fun isLoggedIn_userNotInDatabase_resultIsFalse() {
+        // Arrange
+        userNotInDatabase()
+        // Act
+        val result = SUT.isLoggedIn()
+        // Assert
+        assertFalse(result)
+    }
+
+    @Test
+    fun isLoggedIn_callCacheFirst() {
+        // Arrange
+        // Act
+        SUT.isLoggedIn()
+        // Assert
+        verify(mCacheManager).getUser()
+    }
+
+    @Test
+    fun isLoggedIn_userCached_doNotCallDatabase() {
+        // Arrange
+        userCached()
+        // Act
+        SUT.isLoggedIn()
+        // Assert
+        verify(mDatabaseManager, never()).getUser()
+    }
+
+    @Test
+    fun isLoggedIn_userNotCached_callDatabase() {
+        // Arrange
+        userNotCached()
+        // Act
+        SUT.isLoggedIn()
+        // Assert
+        verify(mDatabaseManager).getUser()
+    }
+
+    @Test
+    fun isLoggedIn_userCached_resultIsTrue() {
+        // Arrange
+        userCached()
+        // Act
+        val result = SUT.isLoggedIn()
+        // Assert
+        assertThat(result, `is`(true))
+    }
+
+    @Test
+    fun isLoggedIn_userNotCached_resultIsFalse() {
+        // Arrange
+        userNotCached()
+        // Act
+        val result = SUT.isLoggedIn()
+        // Assert
+        assertThat(result, `is`(false))
+    }
+
+    @Test
+    fun isLoggedIn_userNotCachedAndUserInDatabase_saveCache() {
+        // Arrange
+        userNotCached()
+        userInDatabase()
+        val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
+        // Act
+        SUT.isLoggedIn()
+        // Assert
+        verify(mCacheManager).saveUser(capture(ac))
+    }
+
+    @Test
+    fun isLoggedIn_userNotCachedAndUserNotInDatabase_neverSaveCache() {
+        // Arrange
+        userNotCached()
+        userNotInDatabase()
+        val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
+        // Act
+        SUT.isLoggedIn()
+        // Assert
+        verify(mCacheManager, never()).saveUser(capture(ac))
+    }
+
+    // endregion isLoggedIn -----------------------------------------------------------------------
     // region helper methods -----------------------------------------------------------------------
 
     private fun loginSuccess() {
-        `when`(mApiManager.loginSync(anyString(), anyString()))
+        `when`(mApiManager.login(anyString(), anyString()))
                 .thenReturn(Single.just(LoginApiResponse(RemoteStatus.SUCCESS, TEST_USER)))
     }
 
     private fun loginThrowsRuntimeException() {
-        `when`(mApiManager.loginSync(anyString(), anyString()))
+        `when`(mApiManager.login(anyString(), anyString()))
                 .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
     }
 
     private fun loginThrowsIoException() {
-        `when`(mApiManager.loginSync(anyString(), anyString()))
+        `when`(mApiManager.login(anyString(), anyString()))
                 .thenReturn(Single.fromCallable { throw IOException() })
     }
 
     private fun loginAuthError() {
-        `when`(mApiManager.loginSync(anyString(), anyString()))
+        `when`(mApiManager.login(anyString(), anyString()))
                 .thenReturn(Single.just(LoginApiResponse(RemoteStatus.AUTH_ERROR, EMPTY_USER)))
     }
 
     private fun loginGeneralError() {
-        `when`(mApiManager.loginSync(anyString(), anyString()))
+        `when`(mApiManager.login(anyString(), anyString()))
                 .thenReturn(Single.just(LoginApiResponse(RemoteStatus.GENERAL_ERROR, EMPTY_USER)))
     }
 
     private fun registerSuccess() {
-        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+        `when`(mApiManager.register(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.SUCCESS)))
     }
 
     private fun registerThrowsRuntimeException() {
-        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+        `when`(mApiManager.register(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.fromCallable { throw RuntimeException(THROWABLE_MSG) })
     }
 
     private fun registerThrowsIoException() {
-        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+        `when`(mApiManager.register(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.fromCallable { throw IOException() })
     }
 
     private fun registerAuthErrorEmailExists() {
-        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+        `when`(mApiManager.register(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthErrorStatus.EMAIL_EXISTS)))
     }
 
 
     private fun registerAuthErrorUserExists() {
-        `when`(mApiManager.registerSync(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
+        `when`(mApiManager.register(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthErrorStatus.USER_EXISTS)))
+    }
+
+    private fun userInDatabase() {
+        `when`(mDatabaseManager.getUser())
+                .thenReturn(TEST_USER)
+    }
+
+    private fun userNotInDatabase() {
+        `when`(mDatabaseManager.getUser())
+                .thenReturn(null)
+    }
+
+    private fun userCached() {
+        `when`(mCacheManager.getUser())
+                .thenReturn(TEST_USER)
+    }
+
+    private fun userNotCached() {
+        `when`(mCacheManager.getUser())
+                .thenReturn(null)
     }
 
     // endregion helper methods --------------------------------------------------------------------

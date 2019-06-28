@@ -15,7 +15,7 @@ import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
 import com.hulkdx.moneymanagerv2.ui.register.RegisterFragment
-import com.hulkdx.moneymanagerv2.ui.transaction.ListTransactionsFragment
+import com.hulkdx.moneymanagerv2.ui.transaction.TransactionFragmentList
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import hulkdx.com.domain.data.remote.RemoteStatus
@@ -106,25 +106,25 @@ class LoginFragment : Fragment() {
 
     private fun loginSuccessful() {
         loadingProgressBar.visibility = View.GONE
-        replaceFragment(R.id.container, ListTransactionsFragment())
+        replaceFragment(R.id.container, TransactionFragmentList())
     }
 
     private fun loginFailedGeneralError() {
         loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
-        errorTextView.text = getString(R.string.generalError)
+        errorTextView.text = getString(R.string.general_error)
     }
 
     private fun loginFailedWrongCredential() {
         loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
-        errorTextView.text = getString(R.string.authError)
+        errorTextView.text = getString(R.string.auth_error)
     }
 
     private fun loginFailedNetworkError() {
         loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
-        errorTextView.text = getString(R.string.networkError)
+        errorTextView.text = getString(R.string.network_error)
     }
 
     // endregion Login Callbacks -------------------------------------------------------------

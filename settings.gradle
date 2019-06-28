@@ -1,2 +1,2 @@
 include ':presentation', ':domain',
-        ':data:data-remote', ':data:data-database'
+        ':data:data-remote', ':data:data-database', ':data:data-cache'

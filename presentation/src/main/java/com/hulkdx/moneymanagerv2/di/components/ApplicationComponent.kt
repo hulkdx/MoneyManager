@@ -5,6 +5,7 @@ import com.hulkdx.moneymanagerv2.di.modules.ApplicationModule
 import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import dagger.BindsInstance
 import dagger.Component
+import hulkdx.com.data.cache.di.CacheModule
 import hulkdx.com.data.database.di.DatabaseModule
 import hulkdx.com.data.remote.di.NetworkModule
 import hulkdx.com.domain.di.ApplicationContext
@@ -20,6 +21,7 @@ import javax.inject.Singleton
     ApplicationModule::class,
     UseCaseModule::class,
     DatabaseModule::class,
+    CacheModule::class,
     NetworkModule::class
 ])
 interface ApplicationComponent {
@@ -31,6 +33,6 @@ interface ApplicationComponent {
         fun build(): ApplicationComponent
     }
 
-    fun AuthUseCase(): AuthUseCase
+    fun authUseCase(): AuthUseCase
     fun viewModelFactory(): ViewModelFactory
 }

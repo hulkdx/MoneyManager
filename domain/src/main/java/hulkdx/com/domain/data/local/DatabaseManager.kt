@@ -1,4 +1,4 @@
-package hulkdx.com.domain.data.database
+package hulkdx.com.domain.data.local
 
 import hulkdx.com.domain.data.model.User
 

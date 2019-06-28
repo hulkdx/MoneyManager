@@ -2,8 +2,7 @@ package hulkdx.com.domain.di
 
 import dagger.Module
 import dagger.Provides
-import hulkdx.com.domain.usecase.AuthUseCase
-import hulkdx.com.domain.usecase.AuthUseCaseImpl
+import hulkdx.com.domain.usecase.*
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
@@ -13,4 +12,13 @@ object UseCaseModule {
     @JvmStatic
     @Provides
     fun provideAuthUseCase(authUseCaseImpl: AuthUseCaseImpl): AuthUseCase = authUseCaseImpl
+
+    @JvmStatic
+    @Provides
+    fun provideTransactionUseCase(useCase: TransactionUseCaseImpl): TransactionUseCase = useCase
+
+    @JvmStatic
+    @Provides
+    fun provideTransactionCategoryUseCase(useCase: TransactionCategoryUseCaseImpl)
+            : TransactionCategoryUseCase = useCase
 }

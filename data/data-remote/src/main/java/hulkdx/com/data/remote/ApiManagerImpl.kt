@@ -20,7 +20,7 @@ class ApiManagerImpl @Inject constructor(
         private val mApiManagerRetrofit: ApiManagerRetrofit
 ): ApiManager {
 
-    override fun loginSync(username: String, password: String): Single<LoginApiResponse> {
+    override fun login(username: String, password: String): Single<LoginApiResponse> {
         return mApiManagerRetrofit.postLogin(username, password).map {
             when (it.code()) {
                 200 -> {
@@ -77,12 +77,12 @@ class ApiManagerImpl @Inject constructor(
         }
     }
 
-    override fun registerSync(firstName: String,
-                              lastName:  String,
-                              username:  String,
-                              password:  String,
-                              email:     String,
-                              currency:  String): Single<RegisterApiResponse> {
+    override fun register(firstName: String,
+                          lastName:  String,
+                          username:  String,
+                          password:  String,
+                          email:     String,
+                          currency:  String): Single<RegisterApiResponse> {
 
         return mApiManagerRetrofit.postRegister(username, password, email, email, currency).map {
             when (it.code()) {

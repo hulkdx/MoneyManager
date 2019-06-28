@@ -1,7 +1,7 @@
 package hulkdx.com.data.database
 
 import hulkdx.com.data.database.model.UserRealmObject
-import hulkdx.com.domain.data.database.DatabaseManager
+import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import io.realm.Realm
 import io.realm.RealmConfiguration

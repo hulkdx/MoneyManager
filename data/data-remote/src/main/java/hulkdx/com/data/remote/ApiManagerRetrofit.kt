@@ -16,6 +16,7 @@ import retrofit2.http.FormUrlEncoded
  * TODO: remove FormUrlEncoded in the server.
  * TODO: change register API => 1. add first name, last name. 2. remove email2
  * TODO: add some authentication for register API.
+ * TODO: register API doesn't return a token. make it return a token.
  */
 interface ApiManagerRetrofit {
 
