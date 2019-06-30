@@ -124,4 +124,8 @@ class ApiManagerImpl @Inject constructor(
         }
     }
 
+    override fun getTransactions(auth: String): Single<TransactionApiResponse> {
+        TODO()
+    }
+
 }

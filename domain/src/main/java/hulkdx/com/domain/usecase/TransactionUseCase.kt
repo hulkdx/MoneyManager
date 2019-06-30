@@ -10,6 +10,6 @@ interface TransactionUseCase {
     fun dispose()
 
     sealed class TransactionResult {
-
+        object AuthenticationError : TransactionResult()
     }
 }

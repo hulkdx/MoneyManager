@@ -22,6 +22,95 @@ import org.mockito.ArgumentMatchers.anyString as anyString
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+
+/**
+ * {
+"amount_count": -12423,
+"response": [
+{
+"id": 239,
+"amount": -214,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 240,
+"amount": -24,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 241,
+"amount": -12112,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 242,
+"amount": -11,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 243,
+"amount": -4,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 244,
+"amount": -5,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 245,
+"amount": -123,
+"date": "2018-09-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 246,
+"amount": -20,
+"date": "2018-10-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 247,
+"amount": -26,
+"date": "2018-10-29",
+"attachment": null,
+"category": null
+},
+{
+"id": 248,
+"amount": 136,
+"date": "2018-10-29",
+"attachment": null,
+"category": {
+"id": 9,
+"name": "Shopping",
+"hexColor": "#FF00FF"
+}
+},
+{
+"id": 249,
+"amount": -20,
+"date": "2017-10-29",
+"attachment": "/storage/emulated/0/Pictures/MoneyManager_20181029_131212.jpg",
+"category": null
+}
+]
+}
+ */
 @Suppress("RedundantVisibilityModifier", "MemberVisibilityCanBePrivate", "PropertyName")
 class ApiManagerImplTest {
 

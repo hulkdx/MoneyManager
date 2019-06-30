@@ -6,6 +6,7 @@ import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
+import hulkdx.com.domain.data.manager.DataSourceManager
 import hulkdx.com.domain.usecase.AuthUseCase.*
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -24,8 +25,10 @@ class AuthUseCaseImpl @Inject constructor(
         @UiScheduler         private val mUiScheduler: Scheduler,
                              private val mDatabaseManager: DatabaseManager,
                              private val mCacheManager: CacheManager,
-                             private val mApiManager: ApiManager
+                             private val mApiManager: ApiManager,
+                             private val mDataSourceManager: DataSourceManager
 ): AuthUseCase {
+
     private var mDisposable: Disposable? = null
 
     override fun loginAsync(username: String,
@@ -86,13 +89,7 @@ class AuthUseCaseImpl @Inject constructor(
     }
 
     override fun isLoggedIn(): Boolean {
-        var user = mCacheManager.getUser()
-        if (user == null) {
-            user = mDatabaseManager.getUser()
-            if (user != null) {
-                mCacheManager.saveUser(user)
-            }
-        }
+        val user = mDataSourceManager.getUser()
         return user != null
     }
 

@@ -1,5 +1,6 @@
 package hulkdx.com.domain.data.remote
 
+import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import io.reactivex.Single
 
@@ -12,8 +13,10 @@ interface ApiManager {
                  lastName: String,
                  username: String,
                  password: String,
-                 email: String,
+                 email:    String,
                  currency: String): Single<RegisterApiResponse>
+
+    fun getTransactions(auth: String): Single<TransactionApiResponse>
 
     data class LoginApiResponse(
             val status: RemoteStatus,
@@ -23,5 +26,10 @@ interface ApiManager {
     data class RegisterApiResponse(
             val status: RemoteStatus,
             val authError: RegisterAuthErrorStatus? = null
+    )
+
+    data class TransactionApiResponse(
+            val status: RemoteStatus,
+            val transactions: List<Transaction>? = null
     )
 }

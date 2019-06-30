@@ -7,6 +7,7 @@ import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
+import hulkdx.com.domain.data.manager.DataSourceManager
 import hulkdx.com.domain.usecase.AuthUseCase.RegisterResult
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -53,6 +54,7 @@ class AuthUseCaseImplTest {
     @Mock lateinit var mApiManager: ApiManager
     @Mock lateinit var mDatabaseManager: DatabaseManager
     @Mock lateinit var mCacheManager: CacheManager
+    @Mock lateinit var mDataSourceManager: DataSourceManager
     private lateinit var mTestScheduler: Scheduler
 
     // endregion helper fields ---------------------------------------------------------------------
@@ -63,7 +65,7 @@ class AuthUseCaseImplTest {
     fun setup() {
         mTestScheduler = Schedulers.trampoline()
         SUT = AuthUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mCacheManager,
-                mApiManager)
+                mApiManager, mDataSourceManager)
     }
 
     // region loginAsync ---------------------------------------------------------------------------
@@ -313,97 +315,14 @@ class AuthUseCaseImplTest {
     // region isLoggedIn ---------------------------------------------------------------------
 
     @Test
-    fun isLoggedIn_userInDatabase_resultIsTrue() {
-        // Arrange
-        userInDatabase()
-        // Act
-        val result = SUT.isLoggedIn()
-        // Assert
-        assertTrue(result)
-    }
-
-    @Test
-    fun isLoggedIn_userNotInDatabase_resultIsFalse() {
-        // Arrange
-        userNotInDatabase()
-        // Act
-        val result = SUT.isLoggedIn()
-        // Assert
-        assertFalse(result)
-    }
-
-    @Test
-    fun isLoggedIn_callCacheFirst() {
+    fun isLoggedIn_callDataSourceManager() {
         // Arrange
         // Act
         SUT.isLoggedIn()
         // Assert
-        verify(mCacheManager).getUser()
+        verify(mDataSourceManager).getUser()
     }
 
-    @Test
-    fun isLoggedIn_userCached_doNotCallDatabase() {
-        // Arrange
-        userCached()
-        // Act
-        SUT.isLoggedIn()
-        // Assert
-        verify(mDatabaseManager, never()).getUser()
-    }
-
-    @Test
-    fun isLoggedIn_userNotCached_callDatabase() {
-        // Arrange
-        userNotCached()
-        // Act
-        SUT.isLoggedIn()
-        // Assert
-        verify(mDatabaseManager).getUser()
-    }
-
-    @Test
-    fun isLoggedIn_userCached_resultIsTrue() {
-        // Arrange
-        userCached()
-        // Act
-        val result = SUT.isLoggedIn()
-        // Assert
-        assertThat(result, `is`(true))
-    }
-
-    @Test
-    fun isLoggedIn_userNotCached_resultIsFalse() {
-        // Arrange
-        userNotCached()
-        // Act
-        val result = SUT.isLoggedIn()
-        // Assert
-        assertThat(result, `is`(false))
-    }
-
-    @Test
-    fun isLoggedIn_userNotCachedAndUserInDatabase_saveCache() {
-        // Arrange
-        userNotCached()
-        userInDatabase()
-        val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
-        // Act
-        SUT.isLoggedIn()
-        // Assert
-        verify(mCacheManager).saveUser(capture(ac))
-    }
-
-    @Test
-    fun isLoggedIn_userNotCachedAndUserNotInDatabase_neverSaveCache() {
-        // Arrange
-        userNotCached()
-        userNotInDatabase()
-        val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
-        // Act
-        SUT.isLoggedIn()
-        // Assert
-        verify(mCacheManager, never()).saveUser(capture(ac))
-    }
 
     // endregion isLoggedIn -----------------------------------------------------------------------
     // region helper methods -----------------------------------------------------------------------
@@ -453,30 +372,9 @@ class AuthUseCaseImplTest {
                 .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthErrorStatus.EMAIL_EXISTS)))
     }
 
-
     private fun registerAuthErrorUserExists() {
         `when`(mApiManager.register(anyString(), anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.just(RegisterApiResponse(RemoteStatus.AUTH_ERROR, RegisterAuthErrorStatus.USER_EXISTS)))
-    }
-
-    private fun userInDatabase() {
-        `when`(mDatabaseManager.getUser())
-                .thenReturn(TEST_USER)
-    }
-
-    private fun userNotInDatabase() {
-        `when`(mDatabaseManager.getUser())
-                .thenReturn(null)
-    }
-
-    private fun userCached() {
-        `when`(mCacheManager.getUser())
-                .thenReturn(TEST_USER)
-    }
-
-    private fun userNotCached() {
-        `when`(mCacheManager.getUser())
-                .thenReturn(null)
     }
 
     // endregion helper methods --------------------------------------------------------------------

@@ -3,10 +3,7 @@ package hulkdx.com.data.remote
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.POST
-import retrofit2.http.FormUrlEncoded
-
+import retrofit2.http.*
 
 
 /**
@@ -32,4 +29,34 @@ interface ApiManagerRetrofit {
                      @Field("email") email: String,
                      @Field("email2") email2: String,
                      @Field("currency") currency: String): Single<Response<ResponseBody>>
+
+
+    @GET("transactions/get")
+    fun getTransactions(@Header("Authorization") auth: String): Single<Response<ResponseBody>>
+
+//    @FormUrlEncoded
+//    @POST("transactions/create")
+//    fun createTransaction(@Header("Authorization") auth: String,
+//                          @Field("amount") amount: Float,
+//                          @Field("date") date: String,
+//                          @Field("attachment") attachment: String,
+//                          @Field("category") categoryId: String): Single<Transaction>
+//
+//
+//    @HTTP(method = "DELETE", path = "transactions/delete", hasBody = true)
+//    fun deleteTransaction(@Header("Authorization") auth: String,
+//                          @Body request: DeleteTransactionsRequestBody): Single<TransactionResponse>
+//
+//    @HTTP(method = "PUT", path = "transactions/update", hasBody = true)
+//    fun updateTransaction(@Header("Authorization") auth: String,
+//                          @Body request: UpdateTransactionRequest): Single<Any>
+//
+//    @GET("categories/get")
+//    fun getCategories(@Header("Authorization") auth: String): Single<List<Category>>
+//
+//    @FormUrlEncoded
+//    @POST("categories/create")
+//    fun createCategory(@Header("Authorization") auth: String,
+//                       @Field("name") name: String,
+//                       @Field("hexColor") hexColor: String): Single<Category>
 }
