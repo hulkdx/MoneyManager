@@ -17,6 +17,7 @@ import com.hulkdx.moneymanagerv2.ui.transaction.TransactionFragmentList
 fun LoginFragment.inject() {
     DaggerLoginFragmentComponent.builder()
             .fragment(this)
+            .context(requireContext())
             .applicationComponent(applicationComponent(requireContext()))
             .build()
             .inject(this)
@@ -25,6 +26,7 @@ fun LoginFragment.inject() {
 fun RegisterFragment.inject() {
     DaggerRegisterFragmentComponent.builder()
             .fragment(this)
+            .context(requireContext())
             .applicationComponent(applicationComponent(requireContext()))
             .build()
             .inject(this)
@@ -34,6 +36,7 @@ fun TransactionFragmentList.inject() {
     DaggerTransactionFragmentListComponent
             .builder()
             .fragment(this)
+            .context(requireContext())
             .applicationComponent(applicationComponent(requireContext()))
             .build()
             .inject(this)

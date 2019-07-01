@@ -11,7 +11,7 @@ import javax.inject.Scope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class TutorialScope
+annotation class MainActivityScope
 
 // endregion Scopes
 // region Qualifier

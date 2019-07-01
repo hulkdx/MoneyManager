@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.transaction_fragment_list.*
 class TransactionFragmentList: Fragment() {
 
     private lateinit var mTransactionViewModel: TransactionViewModel
+    private lateinit var mTransactionListAdapter: TransactionListAdapter
 
     // region Lifecycle ----------------------------------------------------------------------------
 
@@ -73,6 +74,8 @@ class TransactionFragmentList: Fragment() {
     private fun transactionsSuccessful(totalAmount: String, transactions: List<Transaction>) {
         emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
         balanceTextView.text = totalAmount
+        mTransactionListAdapter.mTransactions = transactions
+        mTransactionListAdapter.notifyDataSetChanged()
     }
 
     private fun transactionsNetworkError(throwable: Throwable?) {
