@@ -9,11 +9,14 @@ import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
+import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
+@Singleton
 class TransactionUseCaseImpl @Inject constructor(
         @BackgroundScheduler private val mBackgroundScheduler: Scheduler,
         @UiScheduler         private val mUiScheduler: Scheduler,
@@ -35,10 +38,27 @@ class TransactionUseCaseImpl @Inject constructor(
         mDisposable = mApiManager.getTransactions(user.token)
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mUiScheduler)
-                .subscribe({
-
+                .subscribe({ apiResponse ->
+                    when (apiResponse) {
+                        is ApiManager.TransactionApiResponse.Success -> {
+                            val transactions = apiResponse.transactions
+                            val amount = String.format("%.2f", apiResponse.totalAmount)
+                            mDatabaseManager.saveTransactions(transactions)
+                            onComplete(TransactionResult.Success(transactions, amount))
+                        }
+                        is ApiManager.TransactionApiResponse.GeneralError -> {
+                            onComplete(TransactionResult.GeneralError())
+                        }
+                        is ApiManager.TransactionApiResponse.AuthWrongToken -> {
+                            onComplete(TransactionResult.AuthenticationError)
+                        }
+                    }
                 }, {
-
+                    if (it is IOException) {
+                        onComplete(TransactionResult.NetworkError(it))
+                    } else {
+                        onComplete(TransactionResult.GeneralError(it))
+                    }
                 })
     }
 

@@ -1,5 +1,6 @@
 package com.hulkdx.moneymanagerv2.ui.transaction
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,12 +32,20 @@ class TransactionViewModel @Inject constructor(
     }
 
     fun loadTransactions() {
+        if (mTransactionResult.value != null) {
+            return
+        }
+        mTransactionResult.value = TransactionResult.Loading
         mTransactionUseCase.getTransactions{
             mTransactionResult.value = it
         }
     }
 
     fun loadTransactionCategories() {
+        if (mTransactionCategoryResult.value != null) {
+            return
+        }
+        mTransactionCategoryResult.value = TransactionCategoryResult.Loading
         mTransactionCategoryUseCase.getTransactionCategories {
             mTransactionCategoryResult.value = it
         }

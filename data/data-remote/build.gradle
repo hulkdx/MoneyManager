@@ -16,7 +16,6 @@ dependencies {
     implementation      retrofitGson
     implementation      okhttpLogIntercept
 
-
     testImplementation  jUnit
     testImplementation  mockito
 }

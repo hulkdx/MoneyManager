@@ -10,6 +10,6 @@ interface TransactionCategoryUseCase {
     fun dispose()
 
     sealed class TransactionCategoryResult {
-
+        object Loading: TransactionCategoryResult()
     }
 }

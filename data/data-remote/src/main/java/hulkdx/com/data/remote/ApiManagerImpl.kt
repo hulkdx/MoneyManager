@@ -1,8 +1,10 @@
 package hulkdx.com.data.remote
 
-import com.google.gson.JsonElement
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import hulkdx.com.domain.data.model.Category
+import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
@@ -125,7 +127,126 @@ class ApiManagerImpl @Inject constructor(
     }
 
     override fun getTransactions(auth: String): Single<TransactionApiResponse> {
-        TODO()
+        return mApiManagerRetrofit.getTransactions(auth).map {
+            when (it.code()) {
+                200 -> {
+                    val jsonString = it.body()?.string() ?: ""
+                    val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
+
+                    var totalAmount = 0F
+                    val transactions = mutableListOf<Transaction>()
+
+                    for ((key, value) in resultJsonObject.entrySet()) {
+                        when (key) {
+                            "amount_count" -> {
+                                totalAmount = value.asFloat
+                            }
+                            "response" -> {
+                                val transactionResponseArray = value.asJsonArray
+                                decodeTransactions(transactionResponseArray, transactions)
+                            }
+                        }
+                    }
+                    return@map TransactionApiResponse.Success(transactions, totalAmount)
+                }
+                401 -> {
+                    val jsonString = it.errorBody()?.string() ?: ""
+                    val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
+
+
+                    for ((key, value) in resultJsonObject.entrySet()) {
+                        when (key) {
+                            "detail" -> {
+                                if (value.asString == "Authentication credentials were not provided.") {
+                                    return@map TransactionApiResponse.AuthWrongToken
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            return@map TransactionApiResponse.GeneralError
+        }
+    }
+
+    private fun decodeTransactions(transactionResponseArray: JsonArray?, result: MutableList<Transaction>) {
+
+        if (transactionResponseArray == null) {
+            return
+        }
+
+        for (jsonElement in transactionResponseArray) {
+            val jsonObject = jsonElement.asJsonObject
+
+            var id: Long?           = null
+            var date                = ""
+            var category: Category? = null
+            var amount              = 0F
+            var attachment: String? = null
+
+            for ((key, value) in jsonObject.entrySet()) {
+                when (key) {
+                    "id" -> {
+                        id = value.asLong
+                    }
+                    "totalAmount" -> {
+                        amount = value.asFloat
+                    }
+                    "date" -> {
+                        date = value.asString
+                    }
+                    "attachment" -> {
+                        attachment = if (value.isJsonNull) null else value.asString
+                    }
+                    "category" -> {
+                        if (!value.isJsonNull) {
+                            category = decodeCategory(value.asJsonObject)
+                        }
+                    }
+                }
+            }
+
+            if (id == null) {
+                continue
+            }
+
+            val transaction = Transaction(id, date, category, amount, attachment)
+            result.add(transaction)
+        }
+    }
+
+    private fun decodeCategory(jsonObject: JsonObject?): Category? {
+        var result: Category? = null
+        if (jsonObject == null) {
+            return result
+        }
+
+        var id: Long? = null
+        var name     = ""
+        var hexColor = ""
+
+        for ((key, value) in jsonObject.entrySet()) {
+            when (key) {
+                "id" -> {
+                    id = value.asLong
+                }
+                "name" -> {
+                    name = value.asString
+                }
+                "hexColor" -> {
+                    hexColor = value.asString
+                }
+            }
+        }
+
+        if (id == null) {
+            return result
+        }
+
+        result = Category(id, name, hexColor)
+
+        return result
     }
 
 }

@@ -30,7 +30,7 @@
             />
 
         <TextView
-            android:id="@+id/tv_balance"
+            android:id="@+id/balanceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
@@ -120,7 +120,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/tv_empty_list"
+        android:id="@+id/emptyTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/linearLayout3"
@@ -164,6 +164,7 @@
         android:background="@drawable/main_activity_border_transparent"
         android:orientation="vertical"
         android:padding="10dp"
+        android:visibility="gone"
         >
 
         <!-- categories -->
@@ -257,7 +258,7 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:visibility="gone"
-        tools:visibility="visible"
+        tools:visibility="gone"
         >
 
         <LinearLayout

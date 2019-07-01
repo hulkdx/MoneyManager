@@ -47,6 +47,7 @@ dependencies {
     implementation      rxAndroid
     implementation      transition
     implementation      cardView
+    implementation      retrofitGson
 
     testImplementation  jUnit
     testImplementation  mockito

@@ -33,6 +33,7 @@ fun RegisterFragment.inject() {
 fun TransactionFragmentList.inject() {
     DaggerTransactionFragmentListComponent
             .builder()
+            .fragment(this)
             .applicationComponent(applicationComponent(requireContext()))
             .build()
             .inject(this)

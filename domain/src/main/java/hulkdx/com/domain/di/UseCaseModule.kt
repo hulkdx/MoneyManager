@@ -2,6 +2,8 @@ package hulkdx.com.domain.di
 
 import dagger.Module
 import dagger.Provides
+import hulkdx.com.domain.data.manager.DataSourceManager
+import hulkdx.com.domain.data.manager.DataSourceManagerImpl
 import hulkdx.com.domain.usecase.*
 
 /**
@@ -9,6 +11,7 @@ import hulkdx.com.domain.usecase.*
  */
 @Module
 object UseCaseModule {
+
     @JvmStatic
     @Provides
     fun provideAuthUseCase(authUseCaseImpl: AuthUseCaseImpl): AuthUseCase = authUseCaseImpl
@@ -21,4 +24,10 @@ object UseCaseModule {
     @Provides
     fun provideTransactionCategoryUseCase(useCase: TransactionCategoryUseCaseImpl)
             : TransactionCategoryUseCase = useCase
+
+    @JvmStatic
+    @Provides
+    fun provideDataSourceManager(dataSourceManagerImpl: DataSourceManagerImpl): DataSourceManager
+            = dataSourceManagerImpl
+
 }

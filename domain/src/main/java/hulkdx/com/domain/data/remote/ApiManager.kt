@@ -28,8 +28,9 @@ interface ApiManager {
             val authError: RegisterAuthErrorStatus? = null
     )
 
-    data class TransactionApiResponse(
-            val status: RemoteStatus,
-            val transactions: List<Transaction>? = null
-    )
+    sealed class TransactionApiResponse {
+        class Success(val transactions: List<Transaction>, val totalAmount: Float): TransactionApiResponse()
+        object GeneralError: TransactionApiResponse()
+        object AuthWrongToken: TransactionApiResponse()
+    }
 }

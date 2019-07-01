@@ -1,6 +1,7 @@
 package hulkdx.com.data.remote
 
 import hulkdx.com.domain.data.remote.ApiManager
+import hulkdx.com.domain.data.remote.ApiManager.TransactionApiResponse
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Single
@@ -23,98 +24,11 @@ import org.mockito.ArgumentMatchers.anyString as anyString
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
 
-/**
- * {
-"amount_count": -12423,
-"response": [
-{
-"id": 239,
-"amount": -214,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 240,
-"amount": -24,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 241,
-"amount": -12112,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 242,
-"amount": -11,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 243,
-"amount": -4,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 244,
-"amount": -5,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 245,
-"amount": -123,
-"date": "2018-09-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 246,
-"amount": -20,
-"date": "2018-10-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 247,
-"amount": -26,
-"date": "2018-10-29",
-"attachment": null,
-"category": null
-},
-{
-"id": 248,
-"amount": 136,
-"date": "2018-10-29",
-"attachment": null,
-"category": {
-"id": 9,
-"name": "Shopping",
-"hexColor": "#FF00FF"
-}
-},
-{
-"id": 249,
-"amount": -20,
-"date": "2017-10-29",
-"attachment": "/storage/emulated/0/Pictures/MoneyManager_20181029_131212.jpg",
-"category": null
-}
-]
-}
- */
 @Suppress("RedundantVisibilityModifier", "MemberVisibilityCanBePrivate", "PropertyName")
 class ApiManagerImplTest {
 
     // region constants ----------------------------------------------------------------------------
+    
     val USERNAME = "USERNAME"
     val PASSWORD = "PASSWORD"
     val JSON_USERNAME = "jusername"
@@ -131,7 +45,7 @@ class ApiManagerImplTest {
             "    \"token\": \"$JSON_TOKEN\",\n" +
             "    \"currency\": \"$JSON_CURRENCY\"\n" +
             "}"
-    val ERROR_JSON = "{\n" +
+    val LOGIN_ERROR_JSON = "{\n" +
             "    \"error\": \"Incorrect username and password!\"\n" +
             "}"
 
@@ -139,12 +53,174 @@ class ApiManagerImplTest {
             "\"username\": \"test667\",\n" +
             "\"email\": \"test25@test.com\"\n" +
             "}"
-
     val REGISTER_ERROR_EMAIL_EXISTS_JSON = "{\n" +
             "\"error\": \"This email address has already registered!\"\n" +
             "}"
-
     val REGISTER_ERROR_USERNAME_EXISTS_JSON = "{\"username\":[\"A user with that username already exists.\"]}"
+
+    val TEST_AUTH = "auth"
+    val GET_TRANSACTION_AMOUNT_COUNT = -12423F
+    
+    val GET_TRANSACTION_CATEGORY_ID_1        = 9
+    val GET_TRANSACTION_CATEGORY_NAME_1      = "Shopping"
+    val GET_TRANSACTION_CATEGORY_HEX_COLOR_1 = "#FF00FF"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_1           = 239
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_1 = -214
+    val GET_TRANSACTION_TRANSACTION_DATE_1         = "2018-09-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_1   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_1     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_2           = 240
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_2 = -24
+    val GET_TRANSACTION_TRANSACTION_DATE_2         = "2018-09-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_2   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_2     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_3           = 241
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_3 = -12112
+    val GET_TRANSACTION_TRANSACTION_DATE_3         = "2018-09-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_3   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_3     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_4           = 242
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_4 = -11
+    val GET_TRANSACTION_TRANSACTION_DATE_4         = "2018-09-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_4   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_4     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_5           = 243
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_5 = -4
+    val GET_TRANSACTION_TRANSACTION_DATE_5         = "2018-09-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_5   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_5     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_6           = 244
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_6 = -5
+    val GET_TRANSACTION_TRANSACTION_DATE_6         = "2018-09-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_6   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_6     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_7           = 245
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_7 = -123
+    val GET_TRANSACTION_TRANSACTION_DATE_7         = "2018-09-30"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_7   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_7     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_8           = 246
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_8 = -20
+    val GET_TRANSACTION_TRANSACTION_DATE_8         = "2018-10-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_8   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_8     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_9           = 247
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_9 = -26
+    val GET_TRANSACTION_TRANSACTION_DATE_9         = "2018-10-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_9   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_9     = "null"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_10           = 248
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_10 = 136
+    val GET_TRANSACTION_TRANSACTION_DATE_10         = "2018-10-30"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_10   = "null"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_10     = "{\n" +
+    "\"id\": $GET_TRANSACTION_CATEGORY_ID_1,\n" +
+    "\"name\": \"$GET_TRANSACTION_CATEGORY_NAME_1\",\n" +
+    "\"hexColor\": \"$GET_TRANSACTION_CATEGORY_HEX_COLOR_1\"\n" +
+    "}\n"
+    
+    val GET_TRANSACTION_TRANSACTION_ID_11           = 249
+    val GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_11 = -20
+    val GET_TRANSACTION_TRANSACTION_DATE_11         = "2017-10-29"
+    val GET_TRANSACTION_TRANSACTION_ATTACHMENT_11   = "/storage/emulated/0/Pictures/MoneyManager_20181029_131212.jpg"
+    val GET_TRANSACTION_TRANSACTION_CATEGORY_11   = "null"
+
+    val GET_TRANSACTION_JSON = "{\n" +
+            "\"amount_count\": $GET_TRANSACTION_AMOUNT_COUNT,\n" +
+            "\"response\": [\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_1,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_1,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_1\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_1,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_1\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_2,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_2,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_2\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_2,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_2\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_3,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_3,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_3\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_3,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_3\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_4,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_4,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_4\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_4,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_4\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_5,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_5,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_5\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_5,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_5\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_6,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_6,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_6\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_6,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_6\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_7,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_7,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_7\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_7,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_7\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_8,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_8,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_8\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_8,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_8\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_9,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_9,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_9\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_9,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_9\n" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_10,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_10,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_10\",\n" +
+            "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_10,\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_10" +
+            "},\n" +
+            "{\n" +
+            "\"id\": $GET_TRANSACTION_TRANSACTION_ID_11,\n" +
+            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_11,\n" +
+            "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_11\",\n" +
+            "\"attachment\": \"$GET_TRANSACTION_TRANSACTION_ATTACHMENT_11\",\n" +
+            "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_11\n" +
+            "}\n" +
+            "]\n" +
+            "}"
+
+    val GET_TRANSACTION_AUTHENTICATION_ERROR = "{\n" +
+            "    \"detail\": \"Authentication credentials were not provided.\"\n" +
+            "}"
 
     // endregion constants -------------------------------------------------------------------------
 
@@ -258,7 +334,6 @@ class ApiManagerImplTest {
         assertThat(authError, `is`(RegisterAuthErrorStatus.EMAIL_EXISTS))
     }
 
-
     @Test
     fun register_errorUsernameExists_sendAuthError() {
         // Arrange
@@ -275,6 +350,114 @@ class ApiManagerImplTest {
         assertThat(result!!.authError, `is`(RegisterAuthErrorStatus.USER_EXISTS))
     }
 
+    @Test
+    fun getTransactions_callRetrofit() {
+        // Arrange
+        getTransactionSuccess()
+        // Act
+        SUT.getTransactions(TEST_AUTH)
+        // Assert
+        verify(mApiManagerRetrofit).getTransactions(TEST_AUTH)
+    }
+
+    @Test
+    fun getTransactions_getTransactionSuccess_resultIsSuccessful() {
+        // Arrange
+        getTransactionSuccess()
+        var result: TransactionApiResponse? = null
+        // Act
+        SUT.getTransactions(TEST_AUTH).subscribe(Consumer {
+            result = it
+        })
+        // Assert
+        assertTrue(result is TransactionApiResponse.Success)
+        val totalAmount = (result as TransactionApiResponse.Success).totalAmount
+        val transaction = (result as TransactionApiResponse.Success).transactions
+        assertThat(totalAmount, `is`(GET_TRANSACTION_AMOUNT_COUNT))
+        assertThat(transaction.size, `is`(11))
+
+        assertThat(transaction[0].id, `is`(GET_TRANSACTION_TRANSACTION_ID_1.toLong()))
+        assertThat(transaction[0].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_1.toFloat()))
+        assertThat(transaction[0].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_1))
+        assertTrue(transaction[0].category == null)
+        assertTrue(transaction[0].attachment == null)
+
+        assertThat(transaction[1].id, `is`(GET_TRANSACTION_TRANSACTION_ID_2.toLong()))
+        assertThat(transaction[1].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_2.toFloat()))
+        assertThat(transaction[1].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_2))
+        assertTrue(transaction[1].category == null)
+        assertTrue(transaction[1].attachment == null)
+
+        assertThat(transaction[2].id, `is`(GET_TRANSACTION_TRANSACTION_ID_3.toLong()))
+        assertThat(transaction[2].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_3.toFloat()))
+        assertThat(transaction[2].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_3))
+        assertTrue(transaction[2].category == null)
+        assertTrue(transaction[2].attachment == null)
+
+        assertThat(transaction[3].id, `is`(GET_TRANSACTION_TRANSACTION_ID_4.toLong()))
+        assertThat(transaction[3].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_4.toFloat()))
+        assertThat(transaction[3].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_4))
+        assertTrue(transaction[3].category == null)
+        assertTrue(transaction[3].attachment == null)
+
+        assertThat(transaction[4].id, `is`(GET_TRANSACTION_TRANSACTION_ID_5.toLong()))
+        assertThat(transaction[4].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_5.toFloat()))
+        assertThat(transaction[4].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_5))
+        assertTrue(transaction[4].category == null)
+        assertTrue(transaction[4].attachment == null)
+
+        assertThat(transaction[5].id, `is`(GET_TRANSACTION_TRANSACTION_ID_6.toLong()))
+        assertThat(transaction[5].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_6.toFloat()))
+        assertThat(transaction[5].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_6))
+        assertTrue(transaction[5].category == null)
+        assertTrue(transaction[5].attachment == null)
+
+        assertThat(transaction[6].id, `is`(GET_TRANSACTION_TRANSACTION_ID_7.toLong()))
+        assertThat(transaction[6].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_7.toFloat()))
+        assertThat(transaction[6].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_7))
+        assertTrue(transaction[6].category == null)
+        assertTrue(transaction[6].attachment == null)
+
+        assertThat(transaction[7].id, `is`(GET_TRANSACTION_TRANSACTION_ID_8.toLong()))
+        assertThat(transaction[7].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_8.toFloat()))
+        assertThat(transaction[7].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_8))
+        assertTrue(transaction[7].category == null)
+        assertTrue(transaction[7].attachment == null)
+
+        assertThat(transaction[8].id, `is`(GET_TRANSACTION_TRANSACTION_ID_9.toLong()))
+        assertThat(transaction[8].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_9.toFloat()))
+        assertThat(transaction[8].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_9))
+        assertTrue(transaction[8].category == null)
+        assertTrue(transaction[8].attachment == null)
+
+        assertThat(transaction[9].id, `is`(GET_TRANSACTION_TRANSACTION_ID_10.toLong()))
+        assertThat(transaction[9].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_10.toFloat()))
+        assertThat(transaction[9].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_10))
+        assertTrue(transaction[9].category!!.id   == GET_TRANSACTION_CATEGORY_ID_1.toLong())
+        assertTrue(transaction[9].category!!.name == GET_TRANSACTION_CATEGORY_NAME_1)
+        assertTrue(transaction[9].category!!.hexColor == GET_TRANSACTION_CATEGORY_HEX_COLOR_1)
+        assertTrue(transaction[9].attachment == null)
+
+        assertThat(transaction[10].id, `is`(GET_TRANSACTION_TRANSACTION_ID_11.toLong()))
+        assertThat(transaction[10].amount, `is`(GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_11.toFloat()))
+        assertThat(transaction[10].date, `is`(GET_TRANSACTION_TRANSACTION_DATE_11))
+        assertTrue(transaction[10].category == null)
+        assertTrue(transaction[10].attachment == GET_TRANSACTION_TRANSACTION_ATTACHMENT_11)
+
+    }
+
+    @Test
+    fun getTransactions_authError_resultIsAuthWrongToken() {
+        // Arrange
+        getTransactionAuthError()
+        var result: TransactionApiResponse? = null
+        // Act
+        SUT.getTransactions(TEST_AUTH).subscribe(Consumer {
+            result = it
+        })
+        // Assert
+        assertTrue(result is TransactionApiResponse.AuthWrongToken)
+    }
 
     // region helper methods -----------------------------------------------------------------------
 
@@ -287,7 +470,7 @@ class ApiManagerImplTest {
     private fun loginAuthProblem() {
         `when`(mApiManagerRetrofit.postLogin(anyString(), anyString()))
                 .thenReturn(Single.just(Response.error(500,
-                        ResponseBody.create(null, ERROR_JSON))))
+                        ResponseBody.create(null, LOGIN_ERROR_JSON))))
     }
 
     private fun loginEmptyString() {
@@ -312,6 +495,18 @@ class ApiManagerImplTest {
         `when`(mApiManagerRetrofit.postRegister(anyString(), anyString(), anyString(), anyString(), anyString()))
                 .thenReturn(Single.just(Response.error(400,
                         ResponseBody.create(null, REGISTER_ERROR_USERNAME_EXISTS_JSON))))
+    }
+
+    private fun getTransactionSuccess() {
+        `when`(mApiManagerRetrofit.getTransactions(anyString()))
+                .thenReturn(Single.just(Response.success(200,
+                        ResponseBody.create(null, GET_TRANSACTION_JSON))))
+    }
+
+    private fun getTransactionAuthError() {
+        `when`(mApiManagerRetrofit.getTransactions(anyString()))
+                .thenReturn(Single.just(Response.error(401,
+                        ResponseBody.create(null, GET_TRANSACTION_AUTHENTICATION_ERROR))))
     }
 
     // endregion helper methods --------------------------------------------------------------------
