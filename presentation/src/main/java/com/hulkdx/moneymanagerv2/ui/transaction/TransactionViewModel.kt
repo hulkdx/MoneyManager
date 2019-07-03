@@ -1,9 +1,10 @@
 package com.hulkdx.moneymanagerv2.ui.transaction
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hulkdx.moneymanagerv2.mapper.TransactionMapper
+import com.hulkdx.moneymanagerv2.model.TransactionModel
 import hulkdx.com.domain.usecase.TransactionCategoryUseCase
 import hulkdx.com.domain.usecase.TransactionCategoryUseCase.*
 import hulkdx.com.domain.usecase.TransactionUseCase
@@ -14,16 +15,18 @@ import javax.inject.Inject
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
 class TransactionViewModel @Inject constructor(
+        private val mTransactionMapper: TransactionMapper,
         private val mTransactionUseCase: TransactionUseCase,
         private val mTransactionCategoryUseCase: TransactionCategoryUseCase
 ) : ViewModel() {
 
-    private var mTransactionResult = MutableLiveData<TransactionResult>()
-    private var mTransactionCategoryResult = MutableLiveData<TransactionCategoryResult>()
+    private var mTransactionResult = MutableLiveData<TransactionViewModelResult>()
+    private var mTransactionCategoryResult = MutableLiveData<TransactionCategoryViewModelResult>()
 
-    fun getTransactionResult(): LiveData<TransactionResult> = mTransactionResult
+    fun getTransactionResult(): LiveData<TransactionViewModelResult> = mTransactionResult
 
-    fun getTransactionCategoryResult(): LiveData<TransactionCategoryResult> = mTransactionCategoryResult
+    fun getTransactionCategoryResult(): LiveData<TransactionCategoryViewModelResult> =
+            mTransactionCategoryResult
 
     override fun onCleared() {
         super.onCleared()
@@ -31,23 +34,77 @@ class TransactionViewModel @Inject constructor(
         mTransactionCategoryUseCase.dispose()
     }
 
+    // region Transactions -------------------------------------------------------------------------
+
     fun loadTransactions() {
         if (mTransactionResult.value != null) {
             return
         }
-        mTransactionResult.value = TransactionResult.Loading
-        mTransactionUseCase.getTransactions{
-            mTransactionResult.value = it
+        mTransactionResult.value = TransactionViewModelResult.Loading
+        mTransactionUseCase.getTransactions {
+            val result: TransactionViewModelResult
+            when (it) {
+                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
+                is TransactionResult.Success -> {
+                    result = TransactionViewModelResult.Success(
+                            mTransactionMapper.mapTransactionList(it.transactions, it.currencyName),
+                            it.amount
+                    )
+                }
+                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
+                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
+            }
+            mTransactionResult.value = result
         }
     }
+
+    fun searchTransactions(searchText: String) {
+        mTransactionUseCase.searchTransactions(searchText) {
+            val result: TransactionViewModelResult
+            when (it) {
+                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
+                is TransactionResult.Success -> {
+                    result = TransactionViewModelResult.Success(
+                            mTransactionMapper.mapTransactionList(it.transactions, it.currencyName),
+                            it.amount
+                    )
+                }
+                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
+                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
+            }
+            mTransactionResult.value = result
+        }
+    }
+
+    // endregion Transactions ----------------------------------------------------------------------
+    // region Category -----------------------------------------------------------------------------
 
     fun loadTransactionCategories() {
         if (mTransactionCategoryResult.value != null) {
             return
         }
-        mTransactionCategoryResult.value = TransactionCategoryResult.Loading
+        mTransactionCategoryResult.value = TransactionCategoryViewModelResult.Loading
         mTransactionCategoryUseCase.getTransactionCategories {
-            mTransactionCategoryResult.value = it
+            // TODO
+            // mTransactionCategoryResult.value = it
         }
+    }
+
+    // endregion Category --------------------------------------------------------------------------
+
+    sealed class TransactionViewModelResult {
+        object Loading: TransactionViewModelResult()
+        object AuthenticationError : TransactionViewModelResult()
+        class Success(val transactions: List<TransactionModel>, val amount: String) : TransactionViewModelResult()
+        class NetworkError(val throwable: Throwable): TransactionViewModelResult()
+        class GeneralError(val throwable: Throwable? = null): TransactionViewModelResult()
+    }
+
+    sealed class TransactionCategoryViewModelResult {
+        class Success(): TransactionCategoryViewModelResult()
+        object Loading: TransactionCategoryViewModelResult()
+        object AuthenticationError : TransactionCategoryViewModelResult()
+        class NetworkError(val throwable: Throwable): TransactionCategoryViewModelResult()
+        class GeneralError(val throwable: Throwable? = null): TransactionCategoryViewModelResult()
     }
 }

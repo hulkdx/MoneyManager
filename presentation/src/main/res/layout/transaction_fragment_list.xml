@@ -113,7 +113,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/current_selected_date_textview">
 
-            <include layout="@layout/main_list_view"/>
+            <include layout="@layout/transaction_main_list_view"/>
 
         </androidx.core.widget.NestedScrollView>
 

@@ -11,6 +11,8 @@ import hulkdx.com.data.remote.di.NetworkModule
 import hulkdx.com.domain.di.ApplicationContext
 import hulkdx.com.domain.di.UseCaseModule
 import hulkdx.com.domain.usecase.AuthUseCase
+import hulkdx.com.domain.usecase.TransactionCategoryUseCase
+import hulkdx.com.domain.usecase.TransactionUseCase
 import javax.inject.Singleton
 
 /**
@@ -34,5 +36,6 @@ interface ApplicationComponent {
     }
 
     fun authUseCase(): AuthUseCase
-    fun viewModelFactory(): ViewModelFactory
+    fun transactionUseCase(): TransactionUseCase
+    fun transactionCategoryUseCase(): TransactionCategoryUseCase
 }

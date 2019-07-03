@@ -12,12 +12,14 @@ import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
 import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
+import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.usecase.AuthUseCase
 import hulkdx.com.domain.util.SUPPORTED_CURRENCIES
 import kotlinx.android.synthetic.main.tutorial_fragment_register.*
+import javax.inject.Inject
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 24/02/2019.
@@ -27,6 +29,8 @@ import kotlinx.android.synthetic.main.tutorial_fragment_register.*
 class RegisterFragment : Fragment() {
 
     private lateinit var mRegisterViewModel: RegisterViewModel
+    @Inject lateinit var mViewModelFactory: ViewModelFactory
+
 
     // region Lifecycle ---------------------------------------------------------------
 
@@ -43,7 +47,7 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRegisterViewModel = getViewModel()
+        mRegisterViewModel = getViewModel(mViewModelFactory)
 
         setupSpinner()
         setupRegisterBtn()

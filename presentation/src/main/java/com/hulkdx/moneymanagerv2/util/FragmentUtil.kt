@@ -10,13 +10,11 @@ import com.hulkdx.moneymanagerv2.applicationComponent
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
  */
 
-inline fun <reified VM: ViewModel> FragmentActivity.getViewModel(): VM {
-    val viewModelFactory = applicationComponent(this).viewModelFactory()
+inline fun <reified VM: ViewModel> FragmentActivity.getViewModel(viewModelFactory: ViewModelFactory): VM {
     return ViewModelProviders.of(this, viewModelFactory).get(VM::class.java)
 }
 
-inline fun <reified VM: ViewModel> Fragment.getViewModel(): VM {
-    val viewModelFactory = applicationComponent(context!!).viewModelFactory()
+inline fun <reified VM: ViewModel> Fragment.getViewModel(viewModelFactory: ViewModelFactory): VM {
     return ViewModelProviders.of(this, viewModelFactory).get(VM::class.java)
 }
 

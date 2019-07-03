@@ -2,9 +2,11 @@ package com.hulkdx.moneymanagerv2.di
 
 import com.hulkdx.moneymanagerv2.applicationComponent
 import com.hulkdx.moneymanagerv2.di.components.DaggerLoginFragmentComponent
+import com.hulkdx.moneymanagerv2.di.components.DaggerMainActivityComponent
 import com.hulkdx.moneymanagerv2.di.components.DaggerRegisterFragmentComponent
 import com.hulkdx.moneymanagerv2.di.components.DaggerTransactionFragmentListComponent
 import com.hulkdx.moneymanagerv2.ui.login.LoginFragment
+import com.hulkdx.moneymanagerv2.ui.main.MainActivity
 import com.hulkdx.moneymanagerv2.ui.register.RegisterFragment
 import com.hulkdx.moneymanagerv2.ui.transaction.TransactionFragmentList
 
@@ -38,6 +40,15 @@ fun TransactionFragmentList.inject() {
             .fragment(this)
             .context(requireContext())
             .applicationComponent(applicationComponent(requireContext()))
+            .build()
+            .inject(this)
+}
+
+fun MainActivity.inject() {
+    DaggerMainActivityComponent
+            .builder()
+            .context(this)
+            .applicationComponent(applicationComponent(this))
             .build()
             .inject(this)
 }

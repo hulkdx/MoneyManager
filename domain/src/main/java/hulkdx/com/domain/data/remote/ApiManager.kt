@@ -16,7 +16,7 @@ interface ApiManager {
                  email:    String,
                  currency: String): Single<RegisterApiResponse>
 
-    fun getTransactions(auth: String): Single<TransactionApiResponse>
+    fun getTransactions(token: String): Single<TransactionApiResponse>
 
     data class LoginApiResponse(
             val status: RemoteStatus,

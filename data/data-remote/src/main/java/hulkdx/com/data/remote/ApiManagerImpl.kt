@@ -126,8 +126,8 @@ class ApiManagerImpl @Inject constructor(
         }
     }
 
-    override fun getTransactions(auth: String): Single<TransactionApiResponse> {
-        return mApiManagerRetrofit.getTransactions(auth).map {
+    override fun getTransactions(token: String): Single<TransactionApiResponse> {
+        return mApiManagerRetrofit.getTransactions("JWT $token").map {
             when (it.code()) {
                 200 -> {
                     val jsonString = it.body()?.string() ?: ""
@@ -190,7 +190,7 @@ class ApiManagerImpl @Inject constructor(
                     "id" -> {
                         id = value.asLong
                     }
-                    "totalAmount" -> {
+                    "amount" -> {
                         amount = value.asFloat
                     }
                     "date" -> {

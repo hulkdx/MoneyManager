@@ -16,10 +16,12 @@ import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
 import com.hulkdx.moneymanagerv2.ui.register.RegisterFragment
 import com.hulkdx.moneymanagerv2.ui.transaction.TransactionFragmentList
+import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import com.hulkdx.moneymanagerv2.util.replaceFragment
 import hulkdx.com.domain.data.remote.RemoteStatus
 import kotlinx.android.synthetic.main.tutorial_fragment_login.*
+import javax.inject.Inject
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 24/02/2019.
@@ -27,6 +29,7 @@ import kotlinx.android.synthetic.main.tutorial_fragment_login.*
 class LoginFragment : Fragment() {
 
     private lateinit var mLoginViewModel: LoginViewModel
+    @Inject lateinit var mViewModelFactory: ViewModelFactory
 
     // region Lifecycle ---------------------------------------------------------------
 
@@ -43,7 +46,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mLoginViewModel = getViewModel()
+        mLoginViewModel = getViewModel(mViewModelFactory)
         setupLoginBtn()
         setupRegisterBtn()
     }

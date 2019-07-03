@@ -44,7 +44,7 @@ class TransactionUseCaseImpl @Inject constructor(
                             val transactions = apiResponse.transactions
                             val amount = String.format("%.2f", apiResponse.totalAmount)
                             mDatabaseManager.saveTransactions(transactions)
-                            onComplete(TransactionResult.Success(transactions, amount))
+                            onComplete(TransactionResult.Success(transactions, amount, user.currency))
                         }
                         is ApiManager.TransactionApiResponse.GeneralError -> {
                             onComplete(TransactionResult.GeneralError())
@@ -60,6 +60,10 @@ class TransactionUseCaseImpl @Inject constructor(
                         onComplete(TransactionResult.GeneralError(it))
                     }
                 })
+    }
+
+    override fun searchTransactions(searchText: String, onComplete: (TransactionResult) -> Unit) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dispose() {

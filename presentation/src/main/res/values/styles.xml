@@ -29,4 +29,8 @@
         <item name="android:paddingRight">10dp</item>
     </style>
 
+    <style name="TransactionSearchViewTheme">
+        <item name="android:editTextColor">@android:color/black</item>
+    </style>
+
 </resources>

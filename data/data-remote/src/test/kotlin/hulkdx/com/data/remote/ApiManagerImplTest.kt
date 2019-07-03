@@ -140,77 +140,77 @@ class ApiManagerImplTest {
             "\"response\": [\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_1,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_1,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_1,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_1\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_1,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_1\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_2,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_2,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_2,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_2\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_2,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_2\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_3,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_3,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_3,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_3\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_3,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_3\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_4,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_4,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_4,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_4\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_4,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_4\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_5,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_5,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_5,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_5\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_5,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_5\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_6,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_6,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_6,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_6\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_6,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_6\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_7,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_7,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_7,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_7\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_7,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_7\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_8,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_8,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_8,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_8\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_8,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_8\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_9,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_9,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_9,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_9\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_9,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_9\n" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_10,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_10,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_10,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_10\",\n" +
             "\"attachment\": $GET_TRANSACTION_TRANSACTION_ATTACHMENT_10,\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_10" +
             "},\n" +
             "{\n" +
             "\"id\": $GET_TRANSACTION_TRANSACTION_ID_11,\n" +
-            "\"totalAmount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_11,\n" +
+            "\"amount\": $GET_TRANSACTION_TRANSACTION_TOTAL_AMOUNT_11,\n" +
             "\"date\": \"$GET_TRANSACTION_TRANSACTION_DATE_11\",\n" +
             "\"attachment\": \"$GET_TRANSACTION_TRANSACTION_ATTACHMENT_11\",\n" +
             "\"category\": $GET_TRANSACTION_TRANSACTION_CATEGORY_11\n" +
@@ -351,13 +351,13 @@ class ApiManagerImplTest {
     }
 
     @Test
-    fun getTransactions_callRetrofit() {
+    fun getTransactions_callRetrofitWithJwt() {
         // Arrange
         getTransactionSuccess()
         // Act
         SUT.getTransactions(TEST_AUTH)
         // Assert
-        verify(mApiManagerRetrofit).getTransactions(TEST_AUTH)
+        verify(mApiManagerRetrofit).getTransactions("JWT $TEST_AUTH")
     }
 
     @Test

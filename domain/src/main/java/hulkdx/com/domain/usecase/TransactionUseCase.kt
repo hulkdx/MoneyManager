@@ -8,13 +8,13 @@ import hulkdx.com.domain.data.model.Transaction
 interface TransactionUseCase {
 
     fun getTransactions(onComplete: (TransactionResult) -> (Unit))
+    fun searchTransactions(searchText: String, onComplete: (TransactionResult) -> (Unit))
 
     fun dispose()
 
     sealed class TransactionResult {
-        object Loading: TransactionResult()
         object AuthenticationError : TransactionResult()
-        class Success(val transactions: List<Transaction>, val amount: String) : TransactionResult()
+        class Success(val transactions: List<Transaction>, val amount: String, val currencyName: String) : TransactionResult()
         class NetworkError(val throwable: Throwable): TransactionResult()
         class GeneralError(val throwable: Throwable? = null): TransactionResult()
     }

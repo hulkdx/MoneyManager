@@ -4,24 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
+import com.hulkdx.moneymanagerv2.model.TransactionModel
+import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.TransactionViewModelResult.*
+import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import com.hulkdx.moneymanagerv2.util.getViewModel
-import hulkdx.com.domain.data.model.Transaction
-import hulkdx.com.domain.usecase.TransactionUseCase
 import kotlinx.android.synthetic.main.transaction_fragment_list.*
+import kotlinx.android.synthetic.main.transaction_main_list_view.*
+import javax.inject.Inject
 
 /**
  * TODO: change the layout to use ConstraintLayout.
  *
  * Created by Mohammad Jafarzadeh Rezvan on 28/06/2019.
  */
-class TransactionFragmentList: Fragment() {
+class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var mTransactionViewModel: TransactionViewModel
-    private lateinit var mTransactionListAdapter: TransactionListAdapter
+    @Inject lateinit var mTransactionListAdapter: TransactionListAdapter
+    @Inject lateinit var mViewModelFactory: ViewModelFactory
 
     // region Lifecycle ----------------------------------------------------------------------------
 
@@ -39,7 +47,9 @@ class TransactionFragmentList: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mTransactionViewModel = getViewModel()
+        mTransactionViewModel = getViewModel(mViewModelFactory)
+
+        setupUI()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,16 +60,17 @@ class TransactionFragmentList: Fragment() {
 
         mTransactionViewModel.getTransactionResult().observe(this, Observer { result ->
             when (result) {
-                TransactionUseCase.TransactionResult.Loading -> {
-                    transactionsLoading()
-                }
-                TransactionUseCase.TransactionResult.AuthenticationError -> transactionsAuthError()
-                is TransactionUseCase.TransactionResult.Success -> transactionsSuccessful(
-                        result.amount, result.transactions)
-                is TransactionUseCase.TransactionResult.NetworkError -> transactionsNetworkError(
-                        result.throwable)
-                is TransactionUseCase.TransactionResult.GeneralError -> transactionsGeneralError(
-                        result.throwable)
+                is Loading             -> transactionsLoading()
+                is AuthenticationError -> transactionsAuthError()
+                is Success             -> transactionsSuccessful(result.amount, result.transactions)
+                is NetworkError        -> transactionsNetworkError(result.throwable)
+                is GeneralError        -> transactionsGeneralError(result.throwable)
+            }
+        })
+
+        mTransactionViewModel.getTransactionCategoryResult().observe(this, Observer { result ->
+            when (result) {
+
             }
         })
     }
@@ -71,7 +82,7 @@ class TransactionFragmentList: Fragment() {
 
     }
 
-    private fun transactionsSuccessful(totalAmount: String, transactions: List<Transaction>) {
+    private fun transactionsSuccessful(totalAmount: String, transactions: List<TransactionModel>) {
         emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
         balanceTextView.text = totalAmount
         mTransactionListAdapter.mTransactions = transactions
@@ -79,11 +90,19 @@ class TransactionFragmentList: Fragment() {
     }
 
     private fun transactionsNetworkError(throwable: Throwable?) {
-
+        if (BuildConfig.DEBUG) {
+            throwable?.message?.apply {
+                Toast.makeText(context, this, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun transactionsGeneralError(throwable: Throwable?) {
-
+        if (BuildConfig.DEBUG) {
+            throwable?.message?.apply {
+                Toast.makeText(context, this, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun transactionsAuthError() {
@@ -91,4 +110,23 @@ class TransactionFragmentList: Fragment() {
     }
 
     // endregion Transaction Callbacks -------------------------------------------------------------
+    // region UI setup -----------------------------------------------------------------------------
+
+    private fun setupUI() {
+        transactionRecyclerView.adapter = mTransactionListAdapter
+        transactionRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        searchView.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean = false
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        newText?.let {
+            mTransactionViewModel.searchTransactions(it)
+        }
+        return false
+    }
+
+    // endregion UI setup --------------------------------------------------------------------------
 }

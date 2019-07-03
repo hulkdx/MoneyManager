@@ -1,6 +1,5 @@
 package com.hulkdx.moneymanagerv2.ui.transaction
 
-import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +8,16 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.hulkdx.moneymanagerv2.R
+import com.hulkdx.moneymanagerv2.model.TransactionModel
 import com.hulkdx.moneymanagerv2.util.ColorUtil
-import hulkdx.com.domain.data.model.Transaction
-import hulkdx.com.domain.di.MainActivityScope
 import javax.inject.Inject
 
 class TransactionListAdapter @Inject constructor(
-        val mColorUtil: ColorUtil
+        private val mColorUtil: ColorUtil
 ): RecyclerView.Adapter<TransactionListAdapter.TransactionHolder>() {
 
-    var mTransactions = listOf<Transaction>()
+    var mTransactions = listOf<TransactionModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -29,29 +26,36 @@ class TransactionListAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: TransactionHolder, position: Int) {
-        val (id, date, category, amount, attachment) = mTransactions[position]
+        val transaction = mTransactions[position]
 
         // Set the background of the layout on odd position to white and on even to grey.
-        holder.rootLayout.setBackgroundColor(if (position % 2 == 0) mColorUtil.mWhiteColor else mColorUtil.mGreyColor)
+        holder.rootLayout.setBackgroundColor(
+                if (position % 2 == 0) mColorUtil.white
+                else mColorUtil.grey
+        )
 
         // Attachment
-        holder.attachmentView.visibility =
-                if (attachment != null && attachment != "")
-                    View.VISIBLE
-                else
-                    View.GONE
+        holder.attachmentView.visibility = transaction.attachmentVisibility
 
         // Category
-        if (category != null) {
-            holder.categoryNameTV.text = category.name
-            // TODO use ColorUtil
-            holder.hexColorIV.setBackgroundColor(
-                    Color.parseColor(category.hexColor))
+        if (transaction.category != null) {
+            holder.categoryNameTV.text = transaction.category.name
+            holder.hexColorIV.setBackgroundColor(transaction.category.hexColorInt)
         }
 
-        // TODO add this logic in UseCase
-        if (amount > 0) {
-        }
+        // Set balance text and colors
+        holder.balanceNumberTV.text = transaction.balanceNumberText
+        holder.balanceNumberTV.setTextColor(transaction.balanceNumberTextColor)
+        holder.balanceCurrencyTV.setTextColor(transaction.balanceNumberTextColor)
+
+        // Currency
+        holder.balanceCurrencyTV.text = transaction.currencyName
+
+        // Date format
+        holder.dateMonthTV.text = transaction.dateMonthText
+        holder.dateDayTV.text = transaction.dateDayText
+
+        // TODO checkbox
     }
 
     override fun getItemCount(): Int {
