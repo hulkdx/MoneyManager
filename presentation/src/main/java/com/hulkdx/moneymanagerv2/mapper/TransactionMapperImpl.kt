@@ -10,8 +10,7 @@ class TransactionMapperImpl @Inject constructor(
         private val mColorUtil: ColorUtil
 ): TransactionMapper {
 
-    override fun mapTransactionList(transactions: List<Transaction>,
-                                    currencyName: String): List<TransactionModel> {
+    override fun mapTransactionList(transactions: List<Transaction>): List<TransactionModel> {
 
         return transactions.map {
             val category = mCategoryMapper.mapCategory(it.category)
@@ -22,8 +21,7 @@ class TransactionMapperImpl @Inject constructor(
                     it.amount,
                     it.attachment,
                     mColorUtil.darkGreen,
-                    mColorUtil.black,
-                    currencyName
+                    mColorUtil.black
             )
         }
     }

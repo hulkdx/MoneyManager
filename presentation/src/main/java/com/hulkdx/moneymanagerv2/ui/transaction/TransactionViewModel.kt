@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.hulkdx.moneymanagerv2.mapper.TransactionMapper
 import com.hulkdx.moneymanagerv2.model.TransactionModel
 import hulkdx.com.domain.usecase.TransactionCategoryUseCase
-import hulkdx.com.domain.usecase.TransactionCategoryUseCase.*
 import hulkdx.com.domain.usecase.TransactionUseCase
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
 import javax.inject.Inject
@@ -47,8 +46,9 @@ class TransactionViewModel @Inject constructor(
                 is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
                 is TransactionResult.Success -> {
                     result = TransactionViewModelResult.Success(
-                            mTransactionMapper.mapTransactionList(it.transactions, it.currencyName),
-                            it.amount
+                            mTransactionMapper.mapTransactionList(it.transactions),
+                            it.amount,
+                            it.currencyName
                     )
                 }
                 is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
@@ -64,10 +64,9 @@ class TransactionViewModel @Inject constructor(
             when (it) {
                 is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
                 is TransactionResult.Success -> {
-                    result = TransactionViewModelResult.Success(
-                            mTransactionMapper.mapTransactionList(it.transactions, it.currencyName),
-                            it.amount
-                    )
+                    val transactionModel = mTransactionMapper.mapTransactionList(it.transactions)
+
+                    result = TransactionViewModelResult.Success(transactionModel)
                 }
                 is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
                 is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
@@ -95,7 +94,9 @@ class TransactionViewModel @Inject constructor(
     sealed class TransactionViewModelResult {
         object Loading: TransactionViewModelResult()
         object AuthenticationError : TransactionViewModelResult()
-        class Success(val transactions: List<TransactionModel>, val amount: String) : TransactionViewModelResult()
+        class Success(val transactions: List<TransactionModel>,
+                      val transactionsTotalAmount: String? = null,
+                      val transactionsCurrencyName: String? = null) : TransactionViewModelResult()
         class NetworkError(val throwable: Throwable): TransactionViewModelResult()
         class GeneralError(val throwable: Throwable? = null): TransactionViewModelResult()
     }

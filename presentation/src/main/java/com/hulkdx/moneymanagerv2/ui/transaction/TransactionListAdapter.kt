@@ -18,6 +18,7 @@ class TransactionListAdapter @Inject constructor(
 ): RecyclerView.Adapter<TransactionListAdapter.TransactionHolder>() {
 
     var mTransactions = listOf<TransactionModel>()
+    var mCurrencyName: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -49,7 +50,7 @@ class TransactionListAdapter @Inject constructor(
         holder.balanceCurrencyTV.setTextColor(transaction.balanceNumberTextColor)
 
         // Currency
-        holder.balanceCurrencyTV.text = transaction.currencyName
+        holder.balanceCurrencyTV.text = mCurrencyName
 
         // Date format
         holder.dateMonthTV.text = transaction.dateMonthText

@@ -62,15 +62,23 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
             when (result) {
                 is Loading             -> transactionsLoading()
                 is AuthenticationError -> transactionsAuthError()
-                is Success             -> transactionsSuccessful(result.amount, result.transactions)
                 is NetworkError        -> transactionsNetworkError(result.throwable)
                 is GeneralError        -> transactionsGeneralError(result.throwable)
+                is Success             -> {
+                    transactionsSuccessful(result.transactions)
+                    if (result.transactionsTotalAmount != null) {
+                        transactionsTotalAmountSuccessful(result.transactionsTotalAmount)
+                    }
+                    if (result.transactionsCurrencyName != null) {
+                        transactionsCurrencyNameSuccessful(result.transactionsCurrencyName)
+                    }
+                }
             }
         })
 
         mTransactionViewModel.getTransactionCategoryResult().observe(this, Observer { result ->
             when (result) {
-
+                // TODO
             }
         })
     }
@@ -82,10 +90,18 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
 
     }
 
-    private fun transactionsSuccessful(totalAmount: String, transactions: List<TransactionModel>) {
+    private fun transactionsSuccessful(transactions: List<TransactionModel>) {
         emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
-        balanceTextView.text = totalAmount
         mTransactionListAdapter.mTransactions = transactions
+        mTransactionListAdapter.notifyDataSetChanged()
+    }
+
+    private fun transactionsTotalAmountSuccessful(totalAmount: String) {
+        balanceTextView.text = totalAmount
+    }
+
+    private fun transactionsCurrencyNameSuccessful(currencyName: String) {
+        mTransactionListAdapter.mCurrencyName = currencyName
         mTransactionListAdapter.notifyDataSetChanged()
     }
 

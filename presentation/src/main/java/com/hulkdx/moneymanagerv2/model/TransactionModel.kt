@@ -10,8 +10,7 @@ class TransactionModel (
         amount: Float,
         attachment: String?,
         balanceNumberPositiveColor: Int,
-        balanceNumberNegativeColor: Int,
-        val currencyName: String
+        balanceNumberNegativeColor: Int
 ) {
 
     val attachmentVisibility: Int =
