@@ -40,13 +40,14 @@ class TransactionViewModel @Inject constructor(
             return
         }
         mTransactionResult.value = TransactionViewModelResult.Loading
-        mTransactionUseCase.getTransactions {
+        mTransactionUseCase.getTransactionsAsync {
             val result: TransactionViewModelResult
             when (it) {
                 is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
                 is TransactionResult.Success -> {
+                    val transactionModels = mTransactionMapper.mapTransactionList(it.transactions)
                     result = TransactionViewModelResult.Success(
-                            mTransactionMapper.mapTransactionList(it.transactions),
+                            transactionModels,
                             it.amount,
                             it.currencyName
                     )
@@ -59,19 +60,9 @@ class TransactionViewModel @Inject constructor(
     }
 
     fun searchTransactions(searchText: String) {
-        mTransactionUseCase.searchTransactions(searchText) {
-            val result: TransactionViewModelResult
-            when (it) {
-                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
-                is TransactionResult.Success -> {
-                    val transactionModel = mTransactionMapper.mapTransactionList(it.transactions)
-
-                    result = TransactionViewModelResult.Success(transactionModel)
-                }
-                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
-                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
-            }
-            mTransactionResult.value = result
+        mTransactionUseCase.searchTransactionsAsync(searchText) {
+            val transactionModels = mTransactionMapper.mapTransactionList(it)
+            mTransactionResult.value = TransactionViewModelResult.Success(transactionModels)
         }
     }
 

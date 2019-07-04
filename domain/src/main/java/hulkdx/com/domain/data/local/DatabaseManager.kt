@@ -12,4 +12,5 @@ interface DatabaseManager {
     fun saveUser(user: User)
 
     fun saveTransactions(transactions: List<Transaction>)
+    fun getTransactions(): List<Transaction>?
 }

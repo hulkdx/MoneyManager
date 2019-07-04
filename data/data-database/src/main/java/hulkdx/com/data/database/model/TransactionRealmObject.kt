@@ -1,5 +1,7 @@
 package hulkdx.com.data.database.model
 
+import hulkdx.com.domain.data.model.Category
+import hulkdx.com.domain.data.model.Transaction
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -18,5 +20,10 @@ internal open class TransactionRealmObject constructor(): RealmObject() {
         this.category = category
         this.amount = amount
         this.attachment = attachment
+    }
+
+    fun mapToTransaction(): Transaction {
+        val category: Category? = this.category?.mapToCategory()
+        return Transaction(id, date, category, amount, attachment)
     }
 }

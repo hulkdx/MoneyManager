@@ -23,6 +23,8 @@ class DatabaseManagerImpl @Inject constructor(
 
     private val mLock = ReentrantLock()
 
+    // region User ---------------------------------------------------------------------------------
+
     override fun saveUser(user: User) {
         user.run {
             return@run UserRealmObject(username, firstName, lastName, email, token, currency)
@@ -35,10 +37,13 @@ class DatabaseManagerImpl @Inject constructor(
         var user: User? = null
         execute { _, realm ->
             val userObject = realm.where(UserRealmObject::class.java).findFirst()
-            user = userObject?.map()
+            user = userObject?.mapToUser()
         }
         return user
     }
+
+    // endregion User ------------------------------------------------------------------------------
+    // region Transaction --------------------------------------------------------------------------
 
     override fun saveTransactions(transactions: List<Transaction>) {
         transactions.map {
@@ -51,6 +56,22 @@ class DatabaseManagerImpl @Inject constructor(
             realm.copyToRealmOrUpdate(listTransactionRealmObject)
         }
     }
+
+    override fun getTransactions(): List<Transaction>? {
+        var result: List<Transaction>? = null
+
+        execute { _, realm ->
+            val transactionRealmObject = realm.where(TransactionRealmObject::class.java).findAll()
+            val s = transactionRealmObject.map {
+                return@map it.mapToTransaction()
+            }
+        }
+
+        return result
+    }
+
+    // endregion Transaction ----------------------------------------------------------------------
+    // region Extra --------------------------------------------------------------------------------
 
     private fun getRealm(): Realm {
         return Realm.getInstance(mRealmConfiguration)
@@ -71,4 +92,7 @@ class DatabaseManagerImpl @Inject constructor(
             mLock.unlock()
         }
     }
+
+    // endregion Extra -----------------------------------------------------------------------------
+
 }

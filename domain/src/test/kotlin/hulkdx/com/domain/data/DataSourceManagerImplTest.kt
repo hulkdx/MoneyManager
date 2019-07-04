@@ -1,8 +1,10 @@
 package hulkdx.com.domain.data
 
+import hulkdx.com.domain.TEST_TRANSACTION_LIST
 import hulkdx.com.domain.data.local.CacheManager
 import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.manager.DataSourceManagerImpl
+import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.usecase.TEST_USER
 import hulkdx.com.domain.usecase.capture
@@ -18,6 +20,7 @@ import org.mockito.junit.MockitoJUnit
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 30/06/2019.
  */
+@Suppress("UNCHECKED_CAST")
 class DataSourceManagerImplTest {
     // region constants ----------------------------------------------------------------------------
     // endregion constants -------------------------------------------------------------------------
@@ -130,6 +133,101 @@ class DataSourceManagerImplTest {
         verify(mCacheManager, never()).saveUser(capture(ac))
     }
 
+    @Test
+    fun getTransaction_transactionInDatabaseAndTransactionNotCached_transactionIsNotEmpty() {
+        // Arrange
+        transactionInDatabase()
+        transactionNotCached()
+        // Act
+        val transaction = SUT.getTransactions()
+        // Assert
+        assertTrue(transaction.isNotEmpty())
+    }
+
+    @Test
+    fun getTransaction_transactionNotInDatabaseAndTransactionNotCached_transactionIsEmpty() {
+        // Arrange
+        transactionNotInDatabase()
+        transactionNotCached()
+        // Act
+        val transaction = SUT.getTransactions()
+        // Assert
+        assertTrue(transaction.isEmpty())
+    }
+
+    @Test
+    fun getTransaction_callCacheFirst() {
+        // Arrange
+        // Act
+        SUT.getTransactions()
+        // Assert
+        verify(mCacheManager).getTransactions()
+    }
+
+    @Test
+    fun getTransaction_transactionCached_doNotCallDatabase() {
+        // Arrange
+        transactionCached()
+        // Act
+        SUT.getTransactions()
+        // Assert
+        verify(mDatabaseManager, never()).getTransactions()
+    }
+
+    @Test
+    fun getTransaction_transactionNotCached_callDatabase() {
+        // Arrange
+        transactionNotCached()
+        // Act
+        SUT.getTransactions()
+        // Assert
+        verify(mDatabaseManager).getTransactions()
+    }
+
+    @Test
+    fun getTransaction_transactionCached_resultIsNotEmpty() {
+        // Arrange
+        transactionCached()
+        // Act
+        val result = SUT.getTransactions()
+        // Assert
+        assertTrue(result.isNotEmpty())
+    }
+
+    @Test
+    fun getTransaction_transactionNotCached_resultIsEmpty() {
+        // Arrange
+        transactionNotCached()
+        // Act
+        val result = SUT.getTransactions()
+        // Assert
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun getTransaction_transactionNotCachedAndTransactionInDatabase_saveCache() {
+        // Arrange
+        transactionNotCached()
+        transactionInDatabase()
+        val ac: ArgumentCaptor<List<Transaction>> = ArgumentCaptor.forClass(List::class.java) as ArgumentCaptor<List<Transaction>>
+        // Act
+        SUT.getTransactions()
+        // Assert
+        verify(mCacheManager).saveTransactions(capture(ac))
+    }
+
+    @Test
+    fun getTransaction_transactionNotCachedAndTransactionNotInDatabase_neverSaveCache() {
+        // Arrange
+        transactionNotCached()
+        transactionNotInDatabase()
+        val ac: ArgumentCaptor<List<Transaction>> = ArgumentCaptor.forClass(List::class.java) as ArgumentCaptor<List<Transaction>>
+        // Act
+        SUT.getTransactions()
+        // Assert
+        verify(mCacheManager, never()).saveTransactions(capture(ac))
+    }
+
     // region helper methods -----------------------------------------------------------------------
 
     private fun userInDatabase() {
@@ -149,6 +247,26 @@ class DataSourceManagerImplTest {
 
     private fun userNotCached() {
         `when`(mCacheManager.getUser())
+                .thenReturn(null)
+    }
+
+    private fun transactionInDatabase() {
+        `when`(mDatabaseManager.getTransactions())
+                .thenReturn(TEST_TRANSACTION_LIST)
+    }
+
+    private fun transactionNotInDatabase() {
+        `when`(mDatabaseManager.getTransactions())
+                .thenReturn(null)
+    }
+
+    private fun transactionCached() {
+        `when`(mCacheManager.getTransactions())
+                .thenReturn(TEST_TRANSACTION_LIST)
+    }
+
+    private fun transactionNotCached() {
+        `when`(mCacheManager.getTransactions())
                 .thenReturn(null)
     }
     

@@ -1,6 +1,7 @@
 package hulkdx.com.data.cache
 
 import hulkdx.com.domain.data.local.CacheManager
+import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import java.util.concurrent.locks.ReentrantLock
 import javax.inject.Inject
@@ -29,6 +30,24 @@ class CacheManagerImpl @Inject constructor(): CacheManager {
             }
         }
 
+    private var mTransactions: List<Transaction>? = null
+        get() {
+            try {
+                mLock.lock()
+                return field
+            } finally {
+                mLock.unlock()
+            }
+        }
+        set(value) {
+            try {
+                mLock.lock()
+                field = value
+            } finally {
+                mLock.unlock()
+            }
+        }
+
     override fun saveUser(user: User) {
         mUser = user
     }
@@ -39,5 +58,13 @@ class CacheManagerImpl @Inject constructor(): CacheManager {
 
     override fun invalidateUser() {
         mUser = null
+    }
+
+    override fun saveTransactions(transactions: List<Transaction>) {
+        mTransactions = transactions
+    }
+
+    override fun getTransactions(): List<Transaction>? {
+        return mTransactions
     }
 }

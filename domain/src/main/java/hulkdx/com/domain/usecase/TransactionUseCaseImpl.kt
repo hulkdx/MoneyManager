@@ -3,12 +3,14 @@ package hulkdx.com.domain.usecase
 import hulkdx.com.domain.data.local.CacheManager
 import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.manager.DataSourceManager
+import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
 import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposable
+import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,16 +28,16 @@ class TransactionUseCaseImpl @Inject constructor(
                              private val mDataSourceManager: DataSourceManager
 ): TransactionUseCase {
 
-    private var mDisposable: Disposable? = null
+    private var mDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun getTransactions(onComplete: (TransactionResult) -> Unit) {
+    override fun getTransactionsAsync(onComplete: (TransactionResult) -> Unit) {
         val user = mDataSourceManager.getUser()
         if (user == null) {
             // Auth error!
             onComplete(TransactionResult.AuthenticationError)
             return
         }
-        mDisposable = mApiManager.getTransactions(user.token)
+        val disposable = mApiManager.getTransactions(user.token)
                 .subscribeOn(mBackgroundScheduler)
                 .observeOn(mUiScheduler)
                 .subscribe({ apiResponse ->
@@ -44,6 +46,7 @@ class TransactionUseCaseImpl @Inject constructor(
                             val transactions = apiResponse.transactions
                             val amount = String.format("%.2f", apiResponse.totalAmount)
                             mDatabaseManager.saveTransactions(transactions)
+                            mCacheManager.saveTransactions(transactions)
                             onComplete(TransactionResult.Success(transactions, amount, user.currency))
                         }
                         is ApiManager.TransactionApiResponse.GeneralError -> {
@@ -60,16 +63,40 @@ class TransactionUseCaseImpl @Inject constructor(
                         onComplete(TransactionResult.GeneralError(it))
                     }
                 })
+
+        mDisposables.add(disposable)
     }
 
-    override fun searchTransactions(searchText: String, onComplete: (TransactionResult) -> Unit) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun searchTransactionsAsync(searchText: String, onComplete: (List<Transaction>) -> Unit) {
+        val disposable = Single.fromCallable { searchTransactions(searchText) }
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mUiScheduler)
+                .subscribe({
+                    onComplete(it)
+                }, {
+                    // ignore, retry?
+                })
+        mDisposables.add(disposable)
+    }
+
+    private fun searchTransactions(searchText: String): List<Transaction> {
+        val transactions = mDataSourceManager.getTransactions()
+
+        val isSearchTextNumber = searchText.matches(Regex("^-?\\d+.?(\\d+)?$"))
+
+        return transactions.filter {
+            if (isSearchTextNumber) {
+                // Search Amount
+                return@filter it.amount.toString() == searchText
+            } else {
+                // Search Category Name
+                return@filter it.category?.name == searchText
+            }
+        }
     }
 
     override fun dispose() {
-        mDisposable?.apply {
-            if (!isDisposed) dispose()
-        }
+        mDisposables.clear()
     }
 
 }

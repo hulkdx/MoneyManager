@@ -61,7 +61,7 @@ class TransactionViewModelTest {
         // Act
         SUT.loadTransactions()
         // Assert
-        verify(mTransactionUseCase).getTransactions(anyKotlin())
+        verify(mTransactionUseCase).getTransactionsAsync(anyKotlin())
     }
 
     @Test
@@ -90,7 +90,7 @@ class TransactionViewModelTest {
         // Act
         SUT.searchTransactions(searchText)
         // Assert
-        verify(mTransactionUseCase).searchTransactions(searchText, anyKotlin())
+        verify(mTransactionUseCase).searchTransactionsAsync(searchText, anyKotlin())
     }
 
     @Test
@@ -110,7 +110,7 @@ class TransactionViewModelTest {
             argument.invoke(TransactionResult.Success(TEST_TRANSACTION_LIST,
                     TEST_TRANSACTION_TOTAL_AMOUNT, TEST_TRANSACTION_CURRENCY))
             null
-        }.`when`(mTransactionUseCase).getTransactions(anyKotlin())
+        }.`when`(mTransactionUseCase).getTransactionsAsync(anyKotlin())
     }
 
     // endregion helper methods --------------------------------------------------------------------

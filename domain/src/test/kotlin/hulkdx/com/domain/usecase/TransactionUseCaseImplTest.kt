@@ -1,14 +1,12 @@
 package hulkdx.com.domain.usecase
 
-import hulkdx.com.domain.TRANSACTION_LIST
-import hulkdx.com.domain.anyKotlin
+import hulkdx.com.domain.*
 import hulkdx.com.domain.data.local.CacheManager
 import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.manager.DataSourceManager
 import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
-import hulkdx.com.domain.data.remote.RemoteStatus
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult.AuthenticationError
 import io.reactivex.Scheduler
@@ -18,17 +16,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.ArgumentCaptor
 import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
 
 import org.junit.Assert.*
 import org.mockito.Mockito.*
 import org.hamcrest.CoreMatchers.*
-import org.mockito.ArgumentMatchers.*
-import org.mockito.ArgumentMatchers.*
 import java.io.IOException
-import java.lang.RuntimeException
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 30/06/2019.
@@ -44,6 +37,8 @@ class TransactionUseCaseImplTest {
 
     val TOTAL_AMOUNT = 10.4252F
     val IO_EXCEPTION_MESSAGE = "IO_EXCEPTION_MESSAGE"
+
+    val TEST_SEARCH_TEXT = "searchText"
 
     // endregion constants -------------------------------------------------------------------------
 
@@ -71,7 +66,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_shouldCallDataSourceManager() {
         // Arrange
         // Act
-        SUT.getTransactions {  }
+        SUT.getTransactionsAsync {  }
         // Assert
         verify(mDataSourceManager).getUser()
     }
@@ -82,7 +77,7 @@ class TransactionUseCaseImplTest {
         noUser()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -96,7 +91,7 @@ class TransactionUseCaseImplTest {
         apiSuccess()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -109,9 +104,9 @@ class TransactionUseCaseImplTest {
         validUser()
         apiSuccess()
         // Act
-        SUT.getTransactions {}
+        SUT.getTransactionsAsync {}
         // Assert
-        verify(mDatabaseManager).saveTransactions(TRANSACTION_LIST)
+        verify(mDatabaseManager).saveTransactions(TEST_TRANSACTION_LIST)
     }
 
     @Test
@@ -121,7 +116,7 @@ class TransactionUseCaseImplTest {
         apiSuccess()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -135,7 +130,7 @@ class TransactionUseCaseImplTest {
         apiIoException()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -149,7 +144,7 @@ class TransactionUseCaseImplTest {
         apiGeneralException()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -163,7 +158,7 @@ class TransactionUseCaseImplTest {
         apiGeneralError()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -177,7 +172,7 @@ class TransactionUseCaseImplTest {
         apiAuthWrongToken()
         var result: TransactionResult? = null
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             result = it
         }
         // Assert
@@ -191,11 +186,61 @@ class TransactionUseCaseImplTest {
         apiSuccess()
         var amount = ""
         // Act
-        SUT.getTransactions {
+        SUT.getTransactionsAsync {
             amount = (it as TransactionResult.Success).amount
         }
         // Assert
         assertThat(amount, `is`("10.43"))
+    }
+
+    @Test
+    fun getTransactions_validUserAndApiSuccess_saveItToCache() {
+        // Arrange
+        validUser()
+        apiSuccess()
+        // Act
+        SUT.getTransactionsAsync {
+        }
+        // Assert
+        verify(mCacheManager).saveTransactions(TEST_TRANSACTION_LIST)
+    }
+
+    @Test
+    fun searchTransactions_validUserAndApiSuccess_saveItToCache() {
+        // Arrange
+        // Act
+        SUT.searchTransactionsAsync(TEST_SEARCH_TEXT) {}
+        // Assert
+        verify(mDataSourceManager).getTransactions()
+    }
+
+    @Test
+    fun searchTransactions_validDataAndSearchTextIsNumber_searchTransactionByAmount() {
+        // Arrange
+        searchTransactionsValidData()
+        var result: List<Transaction> = emptyList()
+        // Act
+        SUT.searchTransactionsAsync(TEST_TRANSACTION_2.amount.toString()) {
+            result = it
+        }
+        // Assert
+        assertThat(result.size, `is`(1))
+        assertThat(result, hasItem(TEST_TRANSACTION_2))
+    }
+
+    @Test
+    fun searchTransactions_validDataAndSearchTextIsString_searchTransactionByCategoryName() {
+        // Arrange
+        searchTransactionsValidData()
+        var result: List<Transaction> = emptyList()
+        // Act
+        SUT.searchTransactionsAsync(TEST_CATEGORY_2.name) {
+            result = it
+        }
+        // Assert
+        assertThat(result.size, `is`(2))
+        assertThat(result, hasItem(TEST_TRANSACTION_3))
+        assertThat(result, hasItem(TEST_TRANSACTION_4))
     }
 
     // region helper methods -----------------------------------------------------------------------
@@ -210,7 +255,7 @@ class TransactionUseCaseImplTest {
 
     private fun apiSuccess() {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
-                Single.just(ApiManager.TransactionApiResponse.Success(TRANSACTION_LIST, TOTAL_AMOUNT))
+                Single.just(ApiManager.TransactionApiResponse.Success(TEST_TRANSACTION_LIST, TOTAL_AMOUNT))
         )
     }
 
@@ -236,6 +281,10 @@ class TransactionUseCaseImplTest {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.fromCallable { ApiManager.TransactionApiResponse.AuthWrongToken }
         )
+    }
+
+    private fun searchTransactionsValidData() {
+        `when`(mDataSourceManager.getTransactions()).thenReturn(TEST_TRANSACTION_LIST)
     }
 
     // endregion helper methods --------------------------------------------------------------------

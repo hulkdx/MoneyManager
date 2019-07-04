@@ -32,7 +32,7 @@ internal open class UserRealmObject constructor(): RealmObject() {
         this.currency = currency
     }
 
-    fun map(): User {
+    fun mapToUser(): User {
         return User(userName, firstName, lastName, email, currency, token)
     }
 }
