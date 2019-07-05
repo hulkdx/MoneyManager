@@ -14,6 +14,7 @@ import io.reactivex.disposables.CompositeDisposable
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.abs
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
@@ -82,12 +83,16 @@ class TransactionUseCaseImpl @Inject constructor(
     private fun searchTransactions(searchText: String): List<Transaction> {
         val transactions = mDataSourceManager.getTransactions()
 
+        if (searchText.isEmpty()) {
+            return transactions
+        }
+
         val isSearchTextNumber = searchText.matches(Regex("^-?\\d+.?(\\d+)?$"))
 
         return transactions.filter {
             if (isSearchTextNumber) {
                 // Search Amount
-                return@filter it.amount.toString() == searchText
+                return@filter abs(it.amount) == abs(searchText.toFloat())
             } else {
                 // Search Category Name
                 return@filter it.category?.name == searchText

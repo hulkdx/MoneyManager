@@ -5,10 +5,12 @@ import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import java.util.concurrent.locks.ReentrantLock
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  *  Cache the data that is needed into memory.
  */
+@Singleton
 class CacheManagerImpl @Inject constructor(): CacheManager {
 
     private var mLock = ReentrantLock()

@@ -19,6 +19,7 @@ class TransactionListAdapter @Inject constructor(
 
     var mTransactions = listOf<TransactionModel>()
     var mCurrencyName: String = ""
+    var mShowCheckbox = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -56,12 +57,23 @@ class TransactionListAdapter @Inject constructor(
         holder.dateMonthTV.text = transaction.dateMonthText
         holder.dateDayTV.text = transaction.dateDayText
 
-        // TODO checkbox
+        // checkbox
+        holder.checkBox.visibility = if (mShowCheckbox) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount(): Int {
         return mTransactions.size
     }
+
+    // region Extra functions ----------------------------------------------------------------------
+
+    fun checkbox(show: Boolean) {
+        mShowCheckbox = show
+        notifyDataSetChanged()
+    }
+
+    // endregion Extra functions -------------------------------------------------------------------
+    // region Holder ----------------------------------------------------------------------
 
     class TransactionHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val rootLayout:        RelativeLayout = itemView.findViewById(R.id.root_layout)
@@ -74,4 +86,7 @@ class TransactionListAdapter @Inject constructor(
         val attachmentView:    View           = itemView.findViewById(R.id.attachment_view)
         val checkBox:          CheckBox       = itemView.findViewById(R.id.checkBox)
     }
+
+    // region Holder ----------------------------------------------------------------------
+
 }

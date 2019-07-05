@@ -62,7 +62,7 @@ class DatabaseManagerImpl @Inject constructor(
 
         execute { _, realm ->
             val transactionRealmObject = realm.where(TransactionRealmObject::class.java).findAll()
-            val s = transactionRealmObject.map {
+            result = transactionRealmObject.map {
                 return@map it.mapToTransaction()
             }
         }

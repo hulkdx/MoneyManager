@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -129,10 +130,24 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
     // region UI setup -----------------------------------------------------------------------------
 
     private fun setupUI() {
+        // transactionRecyclerView
         transactionRecyclerView.adapter = mTransactionListAdapter
         transactionRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        // searchView
         searchView.setOnQueryTextListener(this)
+
+        // deleteImageView
+        var isDeleteSelected = false
+        deleteImageView.setOnClickListener {
+            isDeleteSelected = !isDeleteSelected
+
+            if (isDeleteSelected) {
+                deleteBtnSelected()
+            } else {
+                deleteBtnUnSelected()
+            }
+        }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -145,4 +160,28 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
     }
 
     // endregion UI setup --------------------------------------------------------------------------
+    // region Delete Transaction -------------------------------------------------------------------
+
+    private fun deleteBtnSelected() {
+        // Show the 'select all checkbox'
+        // TODO selectAllCheckBox.visibility = View.VISIBLE
+
+        deleteImageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.red),
+                android.graphics.PorterDuff.Mode.MULTIPLY)
+
+        // Show checkboxes in the list view.
+        // Note: should this logic be done in TransactionViewModel?
+        mTransactionListAdapter.checkbox(true)
+    }
+
+    private fun deleteBtnUnSelected() {
+        // selectAllCheckBox.visibility = View.GONE
+
+        deleteImageView.colorFilter = null
+
+        mTransactionListAdapter.checkbox(false)
+    }
+
+    // endregion Delete Transaction ----------------------------------------------------------------
+
 }

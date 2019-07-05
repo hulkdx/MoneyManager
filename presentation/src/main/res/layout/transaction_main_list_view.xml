@@ -23,7 +23,7 @@
             android:layout_marginBottom="2dp"/>
 
         <ImageView
-            android:id="@+id/delete_imageView"
+            android:id="@+id/deleteImageView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:contentDescription="@string/delete_image_view_desc"
@@ -32,7 +32,7 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/select_all_check_box"
+        android:id="@+id/selectAllCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"

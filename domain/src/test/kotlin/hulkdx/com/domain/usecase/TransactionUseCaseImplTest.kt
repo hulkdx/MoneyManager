@@ -243,6 +243,74 @@ class TransactionUseCaseImplTest {
         assertThat(result, hasItem(TEST_TRANSACTION_4))
     }
 
+    @Test
+    fun searchTransactions_searchTextPositive_returnNegativeAmountTransaction() {
+        // Arrange
+        val searchTextPositive = "11"
+        val transaction = Transaction(1, "2018-09-29", null, -11F, null)
+        `when`(mDataSourceManager.getTransactions()).thenReturn(listOf(
+                transaction
+        ))
+        var result: List<Transaction> = emptyList()
+        // Act
+        SUT.searchTransactionsAsync(searchTextPositive) {
+            result = it
+        }
+        // Assert
+        assertThat(result.size, `is`(1))
+        assertThat(result, hasItem(transaction))
+    }
+
+    @Test
+    fun searchTransactions_searchTextNegative_returnPositiveAmountTransaction() {
+        // Arrange
+        val searchTextNegative = "-11"
+        val transaction = Transaction(1, "2018-09-29", null, 11F, null)
+        `when`(mDataSourceManager.getTransactions()).thenReturn(listOf(
+                transaction
+        ))
+        var result: List<Transaction> = emptyList()
+        // Act
+        SUT.searchTransactionsAsync(searchTextNegative) {
+            result = it
+        }
+        // Assert
+        assertThat(result.size, `is`(1))
+        assertThat(result, hasItem(transaction))
+    }
+
+    @Test
+    fun searchTransactions_searchTextWithPoint_returnTransaction() {
+        // Arrange
+        val searchTextWithPoint = "-11.1"
+        val transaction = Transaction(1, "2018-09-29", null, -11.1F, null)
+        `when`(mDataSourceManager.getTransactions()).thenReturn(listOf(
+                transaction
+        ))
+        var result: List<Transaction> = emptyList()
+        // Act
+        SUT.searchTransactionsAsync(searchTextWithPoint) {
+            result = it
+        }
+        // Assert
+        assertThat(result.size, `is`(1))
+        assertThat(result, hasItem(transaction))
+    }
+    
+    @Test
+    fun searchTransactions_emptySearchText_returnValidData() {
+        // Arrange
+        searchTransactionsValidData()
+        val searchTextEmpty = ""
+        var result: List<Transaction> = emptyList()
+        // Act
+        SUT.searchTransactionsAsync(searchTextEmpty) {
+            result = it
+        }
+        // Assert
+        assertThat(result, `is`(TEST_TRANSACTION_LIST))
+    }
+
     // region helper methods -----------------------------------------------------------------------
 
     private fun noUser() {

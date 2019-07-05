@@ -23,7 +23,7 @@ class TransactionModel (
             if (amount > 0)
                 String.format("+ %.2f", amount)
             else
-                String.format("- %.2f", amount)
+                String.format("- %.2f", -1 * amount)
 
     val balanceNumberTextColor: Int =
             if (amount > 0)

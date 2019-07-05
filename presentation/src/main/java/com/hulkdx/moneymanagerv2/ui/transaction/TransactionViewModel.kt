@@ -66,6 +66,10 @@ class TransactionViewModel @Inject constructor(
         }
     }
 
+    fun deleteTransaction() {
+
+    }
+
     // endregion Transactions ----------------------------------------------------------------------
     // region Category -----------------------------------------------------------------------------
 
