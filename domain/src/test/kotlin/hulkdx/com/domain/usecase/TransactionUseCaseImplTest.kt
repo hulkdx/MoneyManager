@@ -63,7 +63,7 @@ class TransactionUseCaseImplTest {
     }
 
     @Test
-    fun getTransactions_shouldCallDataSourceManager() {
+    fun getTransactions_shouldGetUser() {
         // Arrange
         // Act
         SUT.getTransactionsAsync {  }
@@ -88,7 +88,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUser_callApiManagerWithValidToken() {
         // Arrange
         validUser()
-        apiSuccess()
+        apiSuccessGetTransactions()
         var result: TransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
@@ -102,7 +102,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiSuccess_saveTransactionsInDatabase() {
         // Arrange
         validUser()
-        apiSuccess()
+        apiSuccessGetTransactions()
         // Act
         SUT.getTransactionsAsync {}
         // Assert
@@ -113,7 +113,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiSuccess_callOnComplete() {
         // Arrange
         validUser()
-        apiSuccess()
+        apiSuccessGetTransactions()
         var result: TransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
@@ -127,7 +127,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiIoException_resultIsNetworkError() {
         // Arrange
         validUser()
-        apiIoException()
+        apiIoExceptionGetTransactions()
         var result: TransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
@@ -141,7 +141,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiGeneralException_resultIsGeneralError() {
         // Arrange
         validUser()
-        apiGeneralException()
+        apiGeneralExceptionGetTransactions()
         var result: TransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
@@ -155,7 +155,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiGeneralError_resultIsGeneralError() {
         // Arrange
         validUser()
-        apiGeneralError()
+        apiGeneralErrorGetTransactions()
         var result: TransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
@@ -169,7 +169,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiAuthWrongToken_resultIsAuthenticationError() {
         // Arrange
         validUser()
-        apiAuthWrongToken()
+        apiAuthWrongTokenGetTransactions()
         var result: TransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
@@ -183,7 +183,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiSuccess_amountIsFormattedCorrectly() {
         // Arrange
         validUser()
-        apiSuccess()
+        apiSuccessGetTransactions()
         var amount = ""
         // Act
         SUT.getTransactionsAsync {
@@ -197,7 +197,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_validUserAndApiSuccess_saveItToCache() {
         // Arrange
         validUser()
-        apiSuccess()
+        apiSuccessGetTransactions()
         // Act
         SUT.getTransactionsAsync {
         }
@@ -296,7 +296,7 @@ class TransactionUseCaseImplTest {
         assertThat(result.size, `is`(1))
         assertThat(result, hasItem(transaction))
     }
-    
+
     @Test
     fun searchTransactions_emptySearchText_returnValidData() {
         // Arrange
@@ -311,6 +311,40 @@ class TransactionUseCaseImplTest {
         assertThat(result, `is`(TEST_TRANSACTION_LIST))
     }
 
+    @Test
+    fun deleteTransactionsAsync_shouldGetUser() {
+        // Arrange
+        // Act
+        SUT.deleteTransactionsAsync(listOf()) {  }
+        // Assert
+        verify(mDataSourceManager).getUser()
+    }
+
+    @Test
+    fun deleteTransactionsAsync_noUser_callAuthError() {
+        // Arrange
+        noUser()
+        var result: TransactionResult? = null
+        // Act
+        SUT.deleteTransactionsAsync(listOf()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is AuthenticationError)
+    }
+
+    @Test
+    fun deleteTransactionsAsync_validUser_shouldCallApiManager() {
+        // Arrange
+        validUser()
+        apiSuccessDeleteTransactions()
+        val id: List<Long> = listOf()
+        // Act
+        SUT.deleteTransactionsAsync(id) {}
+        // Assert
+        verify(mApiManager).deleteTransactions(TEST_USER.token, id)
+    }
+
     // region helper methods -----------------------------------------------------------------------
 
     private fun noUser() {
@@ -321,31 +355,31 @@ class TransactionUseCaseImplTest {
         `when`(mDataSourceManager.getUser()).thenReturn(TEST_USER)
     }
 
-    private fun apiSuccess() {
+    private fun apiSuccessGetTransactions() {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.just(ApiManager.TransactionApiResponse.Success(TEST_TRANSACTION_LIST, TOTAL_AMOUNT))
         )
     }
 
-    private fun apiIoException() {
+    private fun apiIoExceptionGetTransactions() {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.fromCallable { throw IOException(IO_EXCEPTION_MESSAGE) }
         )
     }
 
-    private fun apiGeneralException() {
+    private fun apiGeneralExceptionGetTransactions() {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.fromCallable { throw Exception(THROWABLE_MSG) }
         )
     }
 
-    private fun apiGeneralError() {
+    private fun apiGeneralErrorGetTransactions() {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.fromCallable { ApiManager.TransactionApiResponse.GeneralError }
         )
     }
 
-    private fun apiAuthWrongToken() {
+    private fun apiAuthWrongTokenGetTransactions() {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.fromCallable { ApiManager.TransactionApiResponse.AuthWrongToken }
         )
@@ -353,6 +387,12 @@ class TransactionUseCaseImplTest {
 
     private fun searchTransactionsValidData() {
         `when`(mDataSourceManager.getTransactions()).thenReturn(TEST_TRANSACTION_LIST)
+    }
+
+    private fun apiSuccessDeleteTransactions() {
+        `when`(mApiManager.deleteTransactions(anyKotlin(), anyKotlin())).thenReturn(
+                Single.just(ApiManager.TransactionApiResponse.Success(TEST_TRANSACTION_LIST, TOTAL_AMOUNT))
+        )
     }
 
     // endregion helper methods --------------------------------------------------------------------

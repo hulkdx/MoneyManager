@@ -8,6 +8,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.model.TransactionModel
 import com.hulkdx.moneymanagerv2.util.ColorUtil
@@ -18,13 +19,23 @@ class TransactionListAdapter @Inject constructor(
 ): RecyclerView.Adapter<TransactionListAdapter.TransactionHolder>() {
 
     var mTransactions = listOf<TransactionModel>()
-    var mCurrencyName: String = ""
+    var mCurrencyName = ""
     var mShowCheckbox = false
+    val mCheckedItems = mutableListOf<Long>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.cardview_transaction, parent, false)
-        return TransactionHolder(itemView)
+        val viewHolder = TransactionHolder(itemView)
+
+        viewHolder.checkBox.setOnClickListener {
+            val position = viewHolder.adapterPosition
+            if (position != NO_POSITION) {
+                onCheckBoxClicked(mTransactions[position])
+            }
+        }
+
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: TransactionHolder, position: Int) {
@@ -65,15 +76,19 @@ class TransactionListAdapter @Inject constructor(
         return mTransactions.size
     }
 
-    // region Extra functions ----------------------------------------------------------------------
+    // region Checkbox -----------------------------------------------------------------------------
 
     fun checkbox(show: Boolean) {
         mShowCheckbox = show
         notifyDataSetChanged()
     }
 
-    // endregion Extra functions -------------------------------------------------------------------
-    // region Holder ----------------------------------------------------------------------
+    private fun onCheckBoxClicked(transaction: TransactionModel) {
+        mCheckedItems.add(transaction.id)
+    }
+
+    // endregion Checkbox --------------------------------------------------------------------------
+    // region Holder -------------------------------------------------------------------------------
 
     class TransactionHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val rootLayout:        RelativeLayout = itemView.findViewById(R.id.root_layout)

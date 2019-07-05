@@ -4,7 +4,7 @@ import android.view.View
 import java.text.DateFormatSymbols
 
 class TransactionModel (
-        id: Long,
+        val id: Long,
         date: String,
         val category: CategoryModel?,
         amount: Float,

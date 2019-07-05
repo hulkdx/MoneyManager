@@ -3,6 +3,7 @@ package com.hulkdx.moneymanagerv2.ui.transaction
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.hulkdx.moneymanagerv2.mapper.TransactionMapper
 import com.hulkdx.moneymanagerv2.ui.anyKotlin
+import com.hulkdx.moneymanagerv2.ui.capture
 import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.TransactionViewModelResult.Loading
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
@@ -15,10 +16,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 
-@Suppress("PrivatePropertyName", "MemberVisibilityCanBePrivate", "PropertyName")
+@Suppress("PrivatePropertyName", "MemberVisibilityCanBePrivate", "PropertyName", "UNCHECKED_CAST")
 class TransactionViewModelTest {
 
     // region constants ----------------------------------------------------------------------------
@@ -80,17 +82,29 @@ class TransactionViewModelTest {
         // Act
         SUT.loadTransactions()
         // Assert
-        verify(mTransactionMapper).mapTransactionList(TEST_TRANSACTION_LIST, TEST_TRANSACTION_CURRENCY)
+        verify(mTransactionMapper).mapTransactionList(TEST_TRANSACTION_LIST)
     }
 
     @Test
     fun searchTransactions_passToUseCase() {
         // Arrange
         val searchText = "SEARCH_TEXT"
+        val ac: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
         // Act
         SUT.searchTransactions(searchText)
         // Assert
-        verify(mTransactionUseCase).searchTransactionsAsync(searchText, anyKotlin())
+        verify(mTransactionUseCase).searchTransactionsAsync(capture(ac), anyKotlin())
+    }
+
+    @Test
+    fun deleteTransaction_passToUseCase() {
+        // Arrange
+        val id = listOf<Long>()
+        val ac = ArgumentCaptor.forClass(List::class.java) as ArgumentCaptor<List<Long>>
+        // Act
+        SUT.deleteTransaction(id)
+        // Assert
+        verify(mTransactionUseCase).deleteTransactionsAsync(capture(ac), anyKotlin())
     }
 
     @Test

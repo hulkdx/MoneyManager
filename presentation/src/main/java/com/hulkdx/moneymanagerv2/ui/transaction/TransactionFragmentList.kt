@@ -131,6 +131,7 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
 
     private fun setupUI() {
         // transactionRecyclerView
+        transactionRecyclerView.hasFixedSize()
         transactionRecyclerView.adapter = mTransactionListAdapter
         transactionRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -180,6 +181,10 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
         deleteImageView.colorFilter = null
 
         mTransactionListAdapter.checkbox(false)
+        val checkedItems = mTransactionListAdapter.mCheckedItems
+        if (checkedItems.isNotEmpty()) {
+            mTransactionViewModel.deleteTransaction(checkedItems)
+        }
     }
 
     // endregion Delete Transaction ----------------------------------------------------------------

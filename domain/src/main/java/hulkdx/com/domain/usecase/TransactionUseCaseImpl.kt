@@ -100,6 +100,25 @@ class TransactionUseCaseImpl @Inject constructor(
         }
     }
 
+    override fun deleteTransactionsAsync(id: List<Long>, onComplete: (TransactionResult) -> Unit) {
+        val user = mDataSourceManager.getUser()
+        if (user == null) {
+            // Auth error!
+            onComplete(TransactionResult.AuthenticationError)
+            return
+        }
+        val disposable = mApiManager.deleteTransactions(user.token, id)
+                .subscribeOn(mBackgroundScheduler)
+                .observeOn(mUiScheduler)
+                .subscribe({
+                    TODO()
+                }, {
+
+                })
+
+        mDisposables.add(disposable)
+    }
+
     override fun dispose() {
         mDisposables.clear()
     }

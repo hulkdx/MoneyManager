@@ -17,6 +17,7 @@ interface ApiManager {
                  currency: String): Single<RegisterApiResponse>
 
     fun getTransactions(token: String): Single<TransactionApiResponse>
+    fun deleteTransactions(token: String, id: List<Long>): Single<TransactionApiResponse>
 
     data class LoginApiResponse(
             val status: RemoteStatus,

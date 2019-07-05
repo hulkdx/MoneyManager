@@ -8,6 +8,7 @@ import hulkdx.com.domain.data.model.Transaction
 interface TransactionUseCase {
 
     fun getTransactionsAsync(onComplete: (TransactionResult) -> (Unit))
+    fun deleteTransactionsAsync(id: List<Long>, onComplete: (TransactionResult) -> (Unit))
     fun searchTransactionsAsync(searchText: String, onComplete: (List<Transaction>) -> (Unit))
 
     fun dispose()
