@@ -7,7 +7,7 @@ import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.repository.TransactionRepository
 import hulkdx.com.domain.repository.UserRepository
-import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
+import hulkdx.com.domain.usecase.TransactionUseCase.*
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -29,7 +29,7 @@ class TransactionUseCaseImpl @Inject constructor(
 
     private var mDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun getTransactionsAsync(onComplete: (TransactionResult) -> Unit) {
+    override fun getTransactionsAsync(onComplete: (TransactionResult<GetTransactionResult>) -> Unit) {
         val user = mUserRepository.getCurrentUser()
         if (user == null) {
             // Auth error!
@@ -45,7 +45,11 @@ class TransactionUseCaseImpl @Inject constructor(
                         is TransactionApiResponse.Success -> {
                             val transactions = apiResponse.transactions
                             val amount = String.format("%.2f", apiResponse.totalAmount)
-                            onComplete(TransactionResult.Success(transactions, amount, user.currency))
+                            onComplete(TransactionResult.Success(GetTransactionResult(
+                                    transactions,
+                                    amount,
+                                    user.currency
+                            )))
                         }
                         is TransactionApiResponse.GeneralError -> {
                             onComplete(TransactionResult.GeneralError())
@@ -92,7 +96,7 @@ class TransactionUseCaseImpl @Inject constructor(
     }
 
     // TODO if deleting from the api succeed and deleting from db is not.
-    override fun deleteTransactionsAsync(id: List<Long>, onComplete: (TransactionResult) -> Unit) {
+    override fun deleteTransactionsAsync(id: List<Long>, onComplete: (TransactionResult<DeleteTransactionResult>) -> Unit) {
         val user = mUserRepository.getCurrentUser()
         if (user == null) {
             // Auth error!
@@ -106,9 +110,11 @@ class TransactionUseCaseImpl @Inject constructor(
                 .subscribe({ apiResponse ->
                     when (apiResponse) {
                         is TransactionApiResponse.Success -> {
-                            val transactions = apiResponse.transactions
                             val amount = String.format("%.2f", apiResponse.totalAmount)
-                            onComplete(TransactionResult.Success(transactions, amount, user.currency))
+                            onComplete(TransactionResult.Success(DeleteTransactionResult(
+                                    id,
+                                    amount
+                            )))
                         }
                         is TransactionApiResponse.GeneralError -> {
                             onComplete(TransactionResult.GeneralError())

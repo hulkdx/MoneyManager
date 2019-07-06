@@ -11,7 +11,7 @@ import hulkdx.com.domain.data.model.Category
 import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.usecase.TransactionCategoryUseCase
 import hulkdx.com.domain.usecase.TransactionUseCase
-import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
+import hulkdx.com.domain.usecase.TransactionUseCase.*
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -120,9 +120,12 @@ class TransactionViewModelTest {
 
     private fun success() {
         doAnswer { invocation ->
-            val argument = invocation.getArgument<Function1<TransactionResult, Unit>>(0)
-            argument.invoke(TransactionResult.Success(TEST_TRANSACTION_LIST,
-                    TEST_TRANSACTION_TOTAL_AMOUNT, TEST_TRANSACTION_CURRENCY))
+            val argument = invocation.getArgument<Function1<TransactionResult<GetTransactionResult>, Unit>>(0)
+            argument.invoke(TransactionResult.Success(GetTransactionResult(
+                    TEST_TRANSACTION_LIST,
+                    TEST_TRANSACTION_TOTAL_AMOUNT,
+                    TEST_TRANSACTION_CURRENCY
+            )))
             null
         }.`when`(mTransactionUseCase).getTransactionsAsync(anyKotlin())
     }

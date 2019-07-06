@@ -45,11 +45,12 @@ class TransactionViewModel @Inject constructor(
             when (it) {
                 is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
                 is TransactionResult.Success -> {
-                    val transactionModels = mTransactionMapper.mapTransactionList(it.transactions)
+                    val (transactions, amount, currencyName ) = it.data
+                    val transactionModels = mTransactionMapper.mapTransactionList(transactions)
                     result = TransactionViewModelResult.Success(
                             transactionModels,
-                            it.amount,
-                            it.currencyName
+                            amount,
+                            currencyName
                     )
                 }
                 is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
@@ -67,23 +68,23 @@ class TransactionViewModel @Inject constructor(
     }
 
     fun deleteTransaction(id: List<Long>) {
-        mTransactionUseCase.deleteTransactionsAsync(id) {
-            val result: TransactionViewModelResult
-            when (it) {
-                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
-                is TransactionResult.Success -> {
-                    val transactionModels = mTransactionMapper.mapTransactionList(it.transactions)
-                    result = TransactionViewModelResult.Success(
-                            transactionModels,
-                            it.amount,
-                            it.currencyName
-                    )
-                }
-                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
-                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
-            }
-            mTransactionResult.value = result
-        }
+//        mTransactionUseCase.deleteTransactionsAsync(id) {
+//            val result: TransactionViewModelResult
+//            when (it) {
+//                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
+//                is TransactionResult.Success -> {
+//                    val transactionModels = mTransactionMapper.mapTransactionList(it.transactions)
+//                    result = TransactionViewModelResult.Success(
+//                            transactionModels,
+//                            it.amount,
+//                            it.currencyName
+//                    )
+//                }
+//                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
+//                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
+//            }
+//            mTransactionResult.value = result
+//        }
     }
 
     // endregion Transactions ----------------------------------------------------------------------

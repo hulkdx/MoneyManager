@@ -5,7 +5,7 @@ import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.repository.TransactionRepository
 import hulkdx.com.domain.repository.UserRepository
-import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
+import hulkdx.com.domain.usecase.TransactionUseCase.*
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult.AuthenticationError
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -74,7 +74,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_noUser_callAuthError() {
         // Arrange
         noUser()
-        var result: TransactionResult? = null
+        var result: TransactionResult<GetTransactionResult>? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -99,7 +99,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiSuccessGetTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<GetTransactionResult>? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -113,7 +113,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiIoExceptionGetTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<GetTransactionResult>? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -127,7 +127,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiGeneralExceptionGetTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<GetTransactionResult>? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -141,7 +141,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiGeneralErrorGetTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<GetTransactionResult>? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -155,7 +155,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiAuthWrongTokenGetTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<GetTransactionResult>? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -172,7 +172,7 @@ class TransactionUseCaseImplTest {
         var amount = ""
         // Act
         SUT.getTransactionsAsync {
-            amount = (it as TransactionResult.Success).amount
+            amount = (it as TransactionResult.Success).data.amount
         }
         // Assert
         assertThat(amount, `is`("10.43"))
@@ -199,6 +199,9 @@ class TransactionUseCaseImplTest {
         // Assert
         verify(mTransactionRepository).save(TEST_TRANSACTION_LIST)
     }
+
+    // endregion getTransactions -------------------------------------------------------------------
+    // region searchTransactionsAsync --------------------------------------------------------------
 
     @Test
     fun searchTransactionsAsync_emptySearchText_findAllTransaction() {
@@ -227,6 +230,9 @@ class TransactionUseCaseImplTest {
         verify(mTransactionRepository).findByCategoryName("MoneyManager")
     }
 
+    // endregion searchTransactionsAsync -----------------------------------------------------------
+    // region deleteTransactionsAsync --------------------------------------------------------------
+
     @Test
     fun deleteTransactionsAsync_shouldGetCurrentUser() {
         // Arrange
@@ -240,7 +246,7 @@ class TransactionUseCaseImplTest {
     fun deleteTransactionsAsync_noUser_callAuthError() {
         // Arrange
         noUser()
-        var result: TransactionResult? = null
+        var result: TransactionResult<DeleteTransactionResult>? = null
         // Act
         SUT.deleteTransactionsAsync(emptyList()) {
             result = it
@@ -265,7 +271,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiSuccessDeleteTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<DeleteTransactionResult>? = null
         // Act
         SUT.deleteTransactionsAsync(emptyList()) {
             result = it
@@ -279,7 +285,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiIoExceptionDeleteTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<DeleteTransactionResult>? = null
         // Act
         SUT.deleteTransactionsAsync(emptyList()) {
             result = it
@@ -293,7 +299,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiGeneralExceptionDeleteTransactions()
-        var result: TransactionResult? = null
+        var result: TransactionResult<DeleteTransactionResult>? = null
         // Act
         SUT.deleteTransactionsAsync(emptyList()) {
             result = it
@@ -314,8 +320,35 @@ class TransactionUseCaseImplTest {
        verify(mTransactionRepository).deleteById(id)
     }
 
-    // endregion getTransactions -------------------------------------------------------------------
+    @Test
+    fun deleteTransactionsAsync_validUserAndApiAuthWrongToken_resultIsAuthenticationError() {
+        // Arrange
+        validUser()
+        apiAuthWrongTokenDeleteTransactions()
+        var result: TransactionResult<DeleteTransactionResult>? = null
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is AuthenticationError)
+    }
 
+    @Test
+    fun deleteTransactionsAsync_validUserAndApiGeneralError_resultIsGeneralError() {
+        // Arrange
+        validUser()
+        apiGeneralErrorDeleteTransactions()
+        var result: TransactionResult<DeleteTransactionResult>? = null
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is TransactionResult.GeneralError)
+    }
+
+    // endregion deleteTransactionsAsync -----------------------------------------------------------
     // region helper methods -----------------------------------------------------------------------
 
     private fun noUser() {
