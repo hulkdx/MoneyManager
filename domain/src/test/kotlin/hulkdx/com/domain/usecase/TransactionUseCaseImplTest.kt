@@ -1,12 +1,10 @@
 package hulkdx.com.domain.usecase
 
 import hulkdx.com.domain.*
-import hulkdx.com.domain.data.local.CacheManager
-import hulkdx.com.domain.data.local.DatabaseManager
-import hulkdx.com.domain.data.manager.DataSourceManager
-import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
+import hulkdx.com.domain.repository.TransactionRepository
+import hulkdx.com.domain.repository.UserRepository
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult.AuthenticationError
 import io.reactivex.Scheduler
@@ -46,9 +44,8 @@ class TransactionUseCaseImplTest {
 
     @get:Rule var mMockitoJUnit = MockitoJUnit.rule()!!
     @Mock lateinit var mApiManager: ApiManager
-    @Mock lateinit var mDatabaseManager: DatabaseManager
-    @Mock lateinit var mCacheManager: CacheManager
-    @Mock lateinit var mDataSourceManager: DataSourceManager
+    @Mock lateinit var mTransactionRepository: TransactionRepository
+    @Mock lateinit var mUserRepository: UserRepository
     private lateinit var mTestScheduler: Scheduler
 
     // endregion helper fields ---------------------------------------------------------------------
@@ -58,17 +55,19 @@ class TransactionUseCaseImplTest {
     @Before
     fun setup() {
         mTestScheduler = Schedulers.trampoline()
-        SUT = TransactionUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager,
-                mCacheManager, mApiManager, mDataSourceManager)
+        SUT = TransactionUseCaseImpl(mTestScheduler, mTestScheduler, mApiManager, mUserRepository,
+                mTransactionRepository)
     }
 
+    // region getTransactions ----------------------------------------------------------------------
+
     @Test
-    fun getTransactions_shouldGetUser() {
+    fun getTransactions_shouldGetCurrentUser() {
         // Arrange
         // Act
         SUT.getTransactionsAsync {  }
         // Assert
-        verify(mDataSourceManager).getUser()
+        verify(mUserRepository).getCurrentUser()
     }
 
     @Test
@@ -89,24 +88,10 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiSuccessGetTransactions()
-        var result: TransactionResult? = null
-        // Act
-        SUT.getTransactionsAsync {
-            result = it
-        }
-        // Assert
-        verify(mApiManager).getTransactions(TOKEN)
-    }
-
-    @Test
-    fun getTransactions_validUserAndApiSuccess_saveTransactionsInDatabase() {
-        // Arrange
-        validUser()
-        apiSuccessGetTransactions()
         // Act
         SUT.getTransactionsAsync {}
         // Assert
-        verify(mDatabaseManager).saveTransactions(TEST_TRANSACTION_LIST)
+        verify(mApiManager).getTransactions(TOKEN)
     }
 
     @Test
@@ -194,165 +179,54 @@ class TransactionUseCaseImplTest {
     }
 
     @Test
-    fun getTransactions_validUserAndApiSuccess_saveItToCache() {
+    fun getTransactions_validUserAndApiSuccess_saveTransactions() {
         // Arrange
         validUser()
         apiSuccessGetTransactions()
         // Act
-        SUT.getTransactionsAsync {
-        }
+        SUT.getTransactionsAsync {}
         // Assert
-        verify(mCacheManager).saveTransactions(TEST_TRANSACTION_LIST)
+        verify(mTransactionRepository).save(TEST_TRANSACTION_LIST)
     }
 
     @Test
-    fun searchTransactions_validUserAndApiSuccess_saveItToCache() {
+    fun searchTransactionsAsync_emptySearchText_findAllTransaction() {
         // Arrange
         // Act
-        SUT.searchTransactionsAsync(TEST_SEARCH_TEXT) {}
+        SUT.searchTransactionsAsync("") {}
         // Assert
-        verify(mDataSourceManager).getTransactions()
+        verify(mTransactionRepository).findAll()
     }
 
     @Test
-    fun searchTransactions_validDataAndSearchTextIsNumber_searchTransactionByAmount() {
+    fun searchTransactionsAsync_numberSearchText_findByAmountTransaction() {
         // Arrange
-        searchTransactionsValidData()
-        var result: List<Transaction> = emptyList()
         // Act
-        SUT.searchTransactionsAsync(TEST_TRANSACTION_2.amount.toString()) {
-            result = it
-        }
+        SUT.searchTransactionsAsync("2") {}
         // Assert
-        assertThat(result.size, `is`(1))
-        assertThat(result, hasItem(TEST_TRANSACTION_2))
+        verify(mTransactionRepository).findByAbsoluteAmount(2F)
     }
 
-    @Test
-    fun searchTransactions_validDataAndSearchTextIsString_searchTransactionByCategoryName() {
-        // Arrange
-        searchTransactionsValidData()
-        var result: List<Transaction> = emptyList()
-        // Act
-        SUT.searchTransactionsAsync(TEST_CATEGORY_2.name) {
-            result = it
-        }
-        // Assert
-        assertThat(result.size, `is`(2))
-        assertThat(result, hasItem(TEST_TRANSACTION_3))
-        assertThat(result, hasItem(TEST_TRANSACTION_4))
-    }
 
     @Test
-    fun searchTransactions_searchTextPositive_returnNegativeAmountTransaction() {
+    fun searchTransactionsAsync_stringSearchText_findByCategoryNameTransaction() {
         // Arrange
-        val searchTextPositive = "11"
-        val transaction = Transaction(1, "2018-09-29", null, -11F, null)
-        `when`(mDataSourceManager.getTransactions()).thenReturn(listOf(
-                transaction
-        ))
-        var result: List<Transaction> = emptyList()
         // Act
-        SUT.searchTransactionsAsync(searchTextPositive) {
-            result = it
-        }
+        SUT.searchTransactionsAsync("MoneyManager") {}
         // Assert
-        assertThat(result.size, `is`(1))
-        assertThat(result, hasItem(transaction))
+        verify(mTransactionRepository).findByCategoryName("MoneyManager")
     }
 
-    @Test
-    fun searchTransactions_searchTextNegative_returnPositiveAmountTransaction() {
-        // Arrange
-        val searchTextNegative = "-11"
-        val transaction = Transaction(1, "2018-09-29", null, 11F, null)
-        `when`(mDataSourceManager.getTransactions()).thenReturn(listOf(
-                transaction
-        ))
-        var result: List<Transaction> = emptyList()
-        // Act
-        SUT.searchTransactionsAsync(searchTextNegative) {
-            result = it
-        }
-        // Assert
-        assertThat(result.size, `is`(1))
-        assertThat(result, hasItem(transaction))
-    }
-
-    @Test
-    fun searchTransactions_searchTextWithPoint_returnTransaction() {
-        // Arrange
-        val searchTextWithPoint = "-11.1"
-        val transaction = Transaction(1, "2018-09-29", null, -11.1F, null)
-        `when`(mDataSourceManager.getTransactions()).thenReturn(listOf(
-                transaction
-        ))
-        var result: List<Transaction> = emptyList()
-        // Act
-        SUT.searchTransactionsAsync(searchTextWithPoint) {
-            result = it
-        }
-        // Assert
-        assertThat(result.size, `is`(1))
-        assertThat(result, hasItem(transaction))
-    }
-
-    @Test
-    fun searchTransactions_emptySearchText_returnValidData() {
-        // Arrange
-        searchTransactionsValidData()
-        val searchTextEmpty = ""
-        var result: List<Transaction> = emptyList()
-        // Act
-        SUT.searchTransactionsAsync(searchTextEmpty) {
-            result = it
-        }
-        // Assert
-        assertThat(result, `is`(TEST_TRANSACTION_LIST))
-    }
-
-    @Test
-    fun deleteTransactionsAsync_shouldGetUser() {
-        // Arrange
-        // Act
-        SUT.deleteTransactionsAsync(listOf()) {  }
-        // Assert
-        verify(mDataSourceManager).getUser()
-    }
-
-    @Test
-    fun deleteTransactionsAsync_noUser_callAuthError() {
-        // Arrange
-        noUser()
-        var result: TransactionResult? = null
-        // Act
-        SUT.deleteTransactionsAsync(listOf()) {
-            result = it
-        }
-        // Assert
-        assertTrue(result is AuthenticationError)
-    }
-
-    @Test
-    fun deleteTransactionsAsync_validUser_shouldCallApiManager() {
-        // Arrange
-        validUser()
-        apiSuccessDeleteTransactions()
-        val id: List<Long> = listOf()
-        // Act
-        SUT.deleteTransactionsAsync(id) {}
-        // Assert
-        verify(mApiManager).deleteTransactions(TEST_USER.token, id)
-    }
+    // endregion getTransactions -------------------------------------------------------------------
 
     // region helper methods -----------------------------------------------------------------------
 
     private fun noUser() {
-        `when`(mDataSourceManager.getUser()).thenReturn(null)
+        `when`(mUserRepository.getCurrentUser()).thenReturn(null)
     }
 
     private fun validUser() {
-        `when`(mDataSourceManager.getUser()).thenReturn(TEST_USER)
+        `when`(mUserRepository.getCurrentUser()).thenReturn(TEST_USER)
     }
 
     private fun apiSuccessGetTransactions() {
@@ -383,10 +257,6 @@ class TransactionUseCaseImplTest {
         `when`(mApiManager.getTransactions(anyKotlin())).thenReturn(
                 Single.fromCallable { ApiManager.TransactionApiResponse.AuthWrongToken }
         )
-    }
-
-    private fun searchTransactionsValidData() {
-        `when`(mDataSourceManager.getTransactions()).thenReturn(TEST_TRANSACTION_LIST)
     }
 
     private fun apiSuccessDeleteTransactions() {

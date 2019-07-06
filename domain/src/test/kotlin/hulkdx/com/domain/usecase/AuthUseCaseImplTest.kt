@@ -1,13 +1,11 @@
 package hulkdx.com.domain.usecase
 
-import hulkdx.com.domain.data.local.CacheManager
-import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
-import hulkdx.com.domain.data.manager.DataSourceManager
+import hulkdx.com.domain.repository.UserRepository
 import hulkdx.com.domain.usecase.AuthUseCase.RegisterResult
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -52,9 +50,7 @@ class AuthUseCaseImplTest {
     public var mMockitoJUnit = MockitoJUnit.rule()!!
 
     @Mock lateinit var mApiManager: ApiManager
-    @Mock lateinit var mDatabaseManager: DatabaseManager
-    @Mock lateinit var mCacheManager: CacheManager
-    @Mock lateinit var mDataSourceManager: DataSourceManager
+    @Mock lateinit var mUserRepository: UserRepository
     private lateinit var mTestScheduler: Scheduler
 
     // endregion helper fields ---------------------------------------------------------------------
@@ -64,8 +60,7 @@ class AuthUseCaseImplTest {
     @Before
     fun setup() {
         mTestScheduler = Schedulers.trampoline()
-        SUT = AuthUseCaseImpl(mTestScheduler, mTestScheduler, mDatabaseManager, mCacheManager,
-                mApiManager, mDataSourceManager)
+        SUT = AuthUseCaseImpl(mTestScheduler, mTestScheduler, mApiManager, mUserRepository)
     }
 
     // region loginAsync ---------------------------------------------------------------------------
@@ -149,83 +144,61 @@ class AuthUseCaseImplTest {
     }
 
     @Test
-    fun loginAsync_success_saveUserToDatabase() {
+    fun loginAsync_success_saveUser() {
         // Arrange
         loginSuccess()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
-        verify(mDatabaseManager).saveUser(capture(ac))
+        verify(mUserRepository).saveCurrentUser(capture(ac))
         val user = ac.value
         assertThat(user.username, `is`(USERNAME))
         assertThat(user.token, `is`(TOKEN))
     }
 
     @Test
-    fun loginAsync_authError_NotSaveUserToDatabase() {
+    fun loginAsync_authError_NotSaveUser() {
         // Arrange
         loginAuthError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
-        verify(mDatabaseManager, never()).saveUser(capture(ac))
+        verify(mUserRepository, never()).saveCurrentUser(capture(ac))
     }
 
     @Test
-    fun loginAsync_generalError_NotSaveUserToDatabase() {
+    fun loginAsync_generalError_NotSaveUser() {
         // Arrange
         loginGeneralError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
-        verify(mDatabaseManager, never()).saveUser(capture(ac))
+        verify(mUserRepository, never()).saveCurrentUser(capture(ac))
     }
 
     @Test
-    fun loginAsync_throwsRuntimeException_NotSaveUserToDatabase() {
+    fun loginAsync_throwsRuntimeException_NotSaveUser() {
         // Arrange
         loginGeneralError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
-        verify(mDatabaseManager, never()).saveUser(capture(ac))
+        verify(mUserRepository, never()).saveCurrentUser(capture(ac))
     }
 
     @Test
-    fun loginAsync_throwsIoException_NotSaveUserToDatabase() {
+    fun loginAsync_throwsIoException_NotSaveUser() {
         // Arrange
         loginGeneralError()
         val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
         // Act
         SUT.loginAsync(USERNAME, PASSWORD) {}
         // Assert
-        verify(mDatabaseManager, never()).saveUser(capture(ac))
-    }
-
-    @Test
-    fun loginAsync_success_saveCache() {
-        // Arrange
-        loginSuccess()
-        val ac: ArgumentCaptor<User> = ArgumentCaptor.forClass(User::class.java)
-        // Act
-        SUT.loginAsync(USERNAME, PASSWORD) {}
-        // Assert
-        verify(mCacheManager).saveUser(capture(ac))
-        val user = ac.value
-        assertThat(user, `is`(TEST_USER))
-    }
-
-    @Test
-    fun loginAsync_invalidateUserCache() {
-        // Arrange
-        // Act
-        SUT.loginAsync(USERNAME, PASSWORD) {}
-        // Assert
-        verify(mCacheManager).invalidateUser()
+        verify(mUserRepository, never()).saveCurrentUser(capture(ac))
     }
 
     // endregion loginAsync ------------------------------------------------------------------------
@@ -320,7 +293,7 @@ class AuthUseCaseImplTest {
         // Act
         SUT.isLoggedIn()
         // Assert
-        verify(mDataSourceManager).getUser()
+        verify(mUserRepository).getCurrentUser()
     }
 
 

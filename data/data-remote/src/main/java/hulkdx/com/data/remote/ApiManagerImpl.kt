@@ -249,4 +249,7 @@ class ApiManagerImpl @Inject constructor(
         return result
     }
 
+    override fun deleteTransactions(token: String, id: List<Long>): Single<TransactionApiResponse> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

@@ -10,6 +10,7 @@ interface DatabaseManager {
 
     fun getUser(): User?
     fun saveUser(user: User)
+    fun deleteUser()
 
     fun saveTransactions(transactions: List<Transaction>)
     fun getTransactions(): List<Transaction>?

@@ -9,6 +9,7 @@ import hulkdx.com.data.cache.di.CacheModule
 import hulkdx.com.data.database.di.DatabaseModule
 import hulkdx.com.data.remote.di.NetworkModule
 import hulkdx.com.domain.di.ApplicationContext
+import hulkdx.com.domain.di.RepositoryModule
 import hulkdx.com.domain.di.UseCaseModule
 import hulkdx.com.domain.usecase.AuthUseCase
 import hulkdx.com.domain.usecase.TransactionCategoryUseCase
@@ -22,6 +23,7 @@ import javax.inject.Singleton
 @Component(modules = [
     ApplicationModule::class,
     UseCaseModule::class,
+    RepositoryModule::class,
     DatabaseModule::class,
     CacheModule::class,
     NetworkModule::class

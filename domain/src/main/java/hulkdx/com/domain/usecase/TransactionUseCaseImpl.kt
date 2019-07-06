@@ -1,12 +1,11 @@
 package hulkdx.com.domain.usecase
 
-import hulkdx.com.domain.data.local.CacheManager
-import hulkdx.com.domain.data.local.DatabaseManager
-import hulkdx.com.domain.data.manager.DataSourceManager
 import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
+import hulkdx.com.domain.repository.TransactionRepository
+import hulkdx.com.domain.repository.UserRepository
 import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -14,7 +13,6 @@ import io.reactivex.disposables.CompositeDisposable
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.abs
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
@@ -23,16 +21,15 @@ import kotlin.math.abs
 class TransactionUseCaseImpl @Inject constructor(
         @BackgroundScheduler private val mBackgroundScheduler: Scheduler,
         @UiScheduler         private val mUiScheduler: Scheduler,
-                             private val mDatabaseManager: DatabaseManager,
-                             private val mCacheManager: CacheManager,
                              private val mApiManager: ApiManager,
-                             private val mDataSourceManager: DataSourceManager
+                             private val mUserRepository: UserRepository,
+                             private val mTransactionRepository: TransactionRepository
 ): TransactionUseCase {
 
     private var mDisposables: CompositeDisposable = CompositeDisposable()
 
     override fun getTransactionsAsync(onComplete: (TransactionResult) -> Unit) {
-        val user = mDataSourceManager.getUser()
+        val user = mUserRepository.getCurrentUser()
         if (user == null) {
             // Auth error!
             onComplete(TransactionResult.AuthenticationError)
@@ -46,8 +43,7 @@ class TransactionUseCaseImpl @Inject constructor(
                         is ApiManager.TransactionApiResponse.Success -> {
                             val transactions = apiResponse.transactions
                             val amount = String.format("%.2f", apiResponse.totalAmount)
-                            mDatabaseManager.saveTransactions(transactions)
-                            mCacheManager.saveTransactions(transactions)
+                            mTransactionRepository.save(transactions)
                             onComplete(TransactionResult.Success(transactions, amount, user.currency))
                         }
                         is ApiManager.TransactionApiResponse.GeneralError -> {
@@ -81,42 +77,36 @@ class TransactionUseCaseImpl @Inject constructor(
     }
 
     private fun searchTransactions(searchText: String): List<Transaction> {
-        val transactions = mDataSourceManager.getTransactions()
-
         if (searchText.isEmpty()) {
-            return transactions
+            return mTransactionRepository.findAll()
         }
 
         val isSearchTextNumber = searchText.matches(Regex("^-?\\d+.?(\\d+)?$"))
 
-        return transactions.filter {
-            if (isSearchTextNumber) {
-                // Search Amount
-                return@filter abs(it.amount) == abs(searchText.toFloat())
-            } else {
-                // Search Category Name
-                return@filter it.category?.name == searchText
-            }
+        return if (isSearchTextNumber) {
+            mTransactionRepository.findByAbsoluteAmount(searchText.toFloat())
+        } else {
+            mTransactionRepository.findByCategoryName(searchText)
         }
     }
 
     override fun deleteTransactionsAsync(id: List<Long>, onComplete: (TransactionResult) -> Unit) {
-        val user = mDataSourceManager.getUser()
-        if (user == null) {
-            // Auth error!
-            onComplete(TransactionResult.AuthenticationError)
-            return
-        }
-        val disposable = mApiManager.deleteTransactions(user.token, id)
-                .subscribeOn(mBackgroundScheduler)
-                .observeOn(mUiScheduler)
-                .subscribe({
-                    TODO()
-                }, {
-
-                })
-
-        mDisposables.add(disposable)
+//        val user = mDataSourceManager.getUser()
+//        if (user == null) {
+//            // Auth error!
+//            onComplete(TransactionResult.AuthenticationError)
+//            return
+//        }
+//        val disposable = mApiManager.deleteTransactions(user.token, id)
+//                .subscribeOn(mBackgroundScheduler)
+//                .observeOn(mUiScheduler)
+//                .subscribe({
+//                    TODO()
+//                }, {
+//
+//                })
+//
+//        mDisposables.add(disposable)
     }
 
     override fun dispose() {

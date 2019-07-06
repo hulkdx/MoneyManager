@@ -42,6 +42,12 @@ class DatabaseManagerImpl @Inject constructor(
         return user
     }
 
+    override fun deleteUser() {
+        execute { _, realm ->
+            realm.where(UserRealmObject::class.java).findAll().deleteAllFromRealm()
+        }
+    }
+
     // endregion User ------------------------------------------------------------------------------
     // region Transaction --------------------------------------------------------------------------
 
