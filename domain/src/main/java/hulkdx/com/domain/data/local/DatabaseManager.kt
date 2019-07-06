@@ -11,6 +11,7 @@ interface DatabaseManager {
     fun getUser(): User?
     fun saveUser(user: User)
     fun deleteUser()
+    fun updateUserAmount(amount: Float)
 
     fun saveTransactions(transactions: List<Transaction>)
     fun getTransactions(): List<Transaction>?

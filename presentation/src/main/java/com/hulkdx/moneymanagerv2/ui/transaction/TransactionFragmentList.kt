@@ -1,6 +1,7 @@
 package com.hulkdx.moneymanagerv2.ui.transaction
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +15,15 @@ import com.hulkdx.moneymanagerv2.BuildConfig
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.di.inject
 import com.hulkdx.moneymanagerv2.model.TransactionModel
-import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.TransactionViewModelResult.*
+import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.*
+import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.GetTransactionViewModelResult.*
 import com.hulkdx.moneymanagerv2.util.ViewModelFactory
 import com.hulkdx.moneymanagerv2.util.getViewModel
 import kotlinx.android.synthetic.main.transaction_fragment_list.*
 import kotlinx.android.synthetic.main.transaction_main_list_view.*
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * TODO: change the layout to use ConstraintLayout.
@@ -28,6 +32,7 @@ import javax.inject.Inject
  */
 class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
 
+    private val TAG = "TransactionFragmentList"
     private lateinit var mTransactionViewModel: TransactionViewModel
     @Inject lateinit var mTransactionListAdapter: TransactionListAdapter
     @Inject lateinit var mViewModelFactory: ViewModelFactory
@@ -62,11 +67,11 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
         mTransactionViewModel.getTransactionResult().observe(this, Observer { result ->
             when (result) {
                 is Loading             -> transactionsLoading()
-                is AuthenticationError -> transactionsAuthError()
+                is AuthenticationError -> authErrorLogout()
                 is NetworkError        -> transactionsNetworkError(result.throwable)
                 is GeneralError        -> transactionsGeneralError(result.throwable)
-                is Success             -> {
-                    transactionsSuccessful(result.transactions)
+                is Loaded              -> {
+                    transactionsLoaded(result.transactions)
                     if (result.transactionsTotalAmount != null) {
                         transactionsTotalAmountSuccessful(result.transactionsTotalAmount)
                     }
@@ -77,21 +82,42 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
             }
         })
 
-        mTransactionViewModel.getTransactionCategoryResult().observe(this, Observer { result ->
+        mTransactionViewModel.deleteTransactionResult().observe(this, Observer { result ->
             when (result) {
-                // TODO
+                DeleteTransactionViewModelResult.Loading -> transactionsLoading()
+                is DeleteTransactionViewModelResult.AuthenticationError -> {
+                    transactionsDeleteRevertBack(result.oldTransactions)
+                    authErrorLogout()
+                }
+                is DeleteTransactionViewModelResult.NetworkError ->
+                    transactionsDeleteRevertBack(result.oldTransactions, result.throwable)
+                is DeleteTransactionViewModelResult.GeneralError ->
+                    transactionsDeleteRevertBack(result.oldTransactions, result.throwable)
+                is DeleteTransactionViewModelResult.Success -> {
+                    transactionsDeleted(result.newTransactions, result.deletedPositions)
+                    transactionsTotalAmountSuccessful(result.transactionsTotalAmount)
+                }
+                is DeleteTransactionViewModelResult.UnknownError -> {
+                    showFixTheBug(result.throwable)
+                }
             }
+        })
+
+        mTransactionViewModel.getTransactionCategoryResult().observe(this, Observer { result ->
+            //when (result) {
+                // TODO
+            // }
         })
     }
 
     // endregion Lifecycle -------------------------------------------------------------------------
-    // region Transaction Callbacks ----------------------------------------------------------------
+    // region Load Transaction Callbacks -----------------------------------------------------------
 
     private fun transactionsLoading() {
 
     }
 
-    private fun transactionsSuccessful(transactions: List<TransactionModel>) {
+    private fun transactionsLoaded(transactions: List<TransactionModel>) {
         emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
         mTransactionListAdapter.mTransactions = transactions
         mTransactionListAdapter.notifyDataSetChanged()
@@ -107,26 +133,33 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun transactionsNetworkError(throwable: Throwable?) {
-        if (BuildConfig.DEBUG) {
-            throwable?.message?.apply {
-                Toast.makeText(context, this, Toast.LENGTH_LONG).show()
-            }
-        }
+        showThrowableOnDebug(throwable)
     }
 
     private fun transactionsGeneralError(throwable: Throwable?) {
-        if (BuildConfig.DEBUG) {
-            throwable?.message?.apply {
-                Toast.makeText(context, this, Toast.LENGTH_LONG).show()
-            }
+        showThrowableOnDebug(throwable)
+    }
+
+    // endregion Load Transaction Callbacks --------------------------------------------------------
+    // region Delete Transaction Callbacks ---------------------------------------------------------
+
+    private fun transactionsDeleted(transactions: List<TransactionModel>, deletedPositions: Set<Int>) {
+        Log.d(TAG, "transactionsDeleted $transactions positions: $deletedPositions")
+        mTransactionListAdapter.mTransactions = transactions
+        for (position in deletedPositions.reversed()) {
+            mTransactionListAdapter.notifyItemRemoved(position)
         }
+        emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
     }
 
-    private fun transactionsAuthError() {
-        // TODO logout...
+    private fun transactionsDeleteRevertBack(oldTransactions: List<TransactionModel>,
+                                             throwable: Throwable? = null) {
+        Toast.makeText(context, R.string.error_deleting_transactions, Toast.LENGTH_SHORT).show()
+        showThrowableOnDebug(throwable)
+        transactionsLoaded(oldTransactions)
     }
 
-    // endregion Transaction Callbacks -------------------------------------------------------------
+    // endregion Delete Transaction Callbacks ------------------------------------------------------
     // region UI setup -----------------------------------------------------------------------------
 
     private fun setupUI() {
@@ -181,12 +214,40 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
         deleteImageView.colorFilter = null
 
         mTransactionListAdapter.checkbox(false)
-        val checkedItems = mTransactionListAdapter.mCheckedItems
-        if (checkedItems.isNotEmpty()) {
-            mTransactionViewModel.deleteTransaction(checkedItems)
+        val id: List<Long> = ArrayList(mTransactionListAdapter.mCheckedItemIds)
+        val positions: Set<Int> = TreeSet(mTransactionListAdapter.mCheckedItemPositions)
+        Log.d(TAG, positions.toString())
+        if (id.isNotEmpty()) {
+            mTransactionViewModel.deleteTransaction(
+                    positions,
+                    id
+            )
         }
+        mTransactionListAdapter.checkboxClear()
     }
 
     // endregion Delete Transaction ----------------------------------------------------------------
+    // region Extra --------------------------------------------------------------------------------
+
+    private fun showThrowableOnDebug(throwable: Throwable?) {
+        if (BuildConfig.DEBUG) {
+            throwable?.message?.apply {
+                Toast.makeText(context, this, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun showFixTheBug(throwable: Throwable) {
+        if (BuildConfig.DEBUG) {
+            val text = "Please fix the bug :: ${throwable.message}"
+            Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun authErrorLogout() {
+        // TODO authErrorLogout...
+    }
+
+    // endregion Extra -----------------------------------------------------------------------------
 
 }

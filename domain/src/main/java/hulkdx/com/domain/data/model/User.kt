@@ -8,4 +8,5 @@ data class User(val username: String,
                 val lastName: String,
                 val email: String,
                 val currency: String,
-                val token: String)
+                val token: String,
+                var amount: Float)

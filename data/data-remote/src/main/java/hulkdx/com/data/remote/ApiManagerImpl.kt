@@ -3,6 +3,7 @@ package hulkdx.com.data.remote
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import hulkdx.com.data.remote.model.DeleteTransactionsApiRequestBody
 import hulkdx.com.domain.data.model.Category
 import hulkdx.com.domain.data.model.Transaction
 import hulkdx.com.domain.data.model.User
@@ -11,6 +12,7 @@ import hulkdx.com.domain.data.remote.ApiManager.*
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Single
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +24,7 @@ class ApiManagerImpl @Inject constructor(
         private val mApiManagerRetrofit: ApiManagerRetrofit
 ): ApiManager {
 
+    @Throws(IOException::class)
     override fun login(username: String, password: String): Single<LoginApiResponse> {
         return mApiManagerRetrofit.postLogin(username, password).map {
             when (it.code()) {
@@ -60,14 +63,14 @@ class ApiManagerImpl @Inject constructor(
                     }
 
                     val user = User(usernameJ, firstName, lastName,
-                            email, currency, token)
+                            email, currency, token, 0F)
                     return@map LoginApiResponse(RemoteStatus.SUCCESS, user)
                 }
                 500 -> {
                     // invalid username and password
                     it.errorBody()?.string()?.let { jsonErrorString ->
                         JsonParser().parse(jsonErrorString).asJsonObject.get("error").asString?.apply {
-                            val user = User("", "", "", "", "", "")
+                            val user = User("", "", "", "", "", "", 0F)
                             return@map LoginApiResponse(RemoteStatus.AUTH_ERROR, user)
                         }
                     }
@@ -75,10 +78,11 @@ class ApiManagerImpl @Inject constructor(
             }
 
             return@map LoginApiResponse(RemoteStatus.GENERAL_ERROR, User("",
-                    "", "", "", "", ""))
+                    "", "", "", "", "", 0F))
         }
     }
 
+    @Throws(IOException::class)
     override fun register(firstName: String,
                           lastName:  String,
                           username:  String,
@@ -126,48 +130,55 @@ class ApiManagerImpl @Inject constructor(
         }
     }
 
-    override fun getTransactions(token: String): Single<TransactionApiResponse> {
-        return mApiManagerRetrofit.getTransactions("JWT $token").map {
-            when (it.code()) {
-                200 -> {
-                    val jsonString = it.body()?.string() ?: ""
-                    val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
+    @Throws(IOException::class)
+    override fun getTransactions(token: String): TransactionApiResponse<GetTransactionApiResponse> {
+        val response = mApiManagerRetrofit.getTransactions("JWT $token").execute()
+        when (response.code()) {
+            200 -> {
+                val jsonString = response.body()?.string() ?: ""
+                val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
 
-                    var totalAmount = 0F
-                    val transactions = mutableListOf<Transaction>()
+                var totalAmount = 0F
+                val transactions = mutableListOf<Transaction>()
 
-                    for ((key, value) in resultJsonObject.entrySet()) {
-                        when (key) {
-                            "amount_count" -> {
-                                totalAmount = value.asFloat
-                            }
-                            "response" -> {
-                                val transactionResponseArray = value.asJsonArray
-                                decodeTransactions(transactionResponseArray, transactions)
-                            }
+                for ((key, value) in resultJsonObject.entrySet()) {
+                    when (key) {
+                        "amount_count" -> {
+                            totalAmount = value.asFloat
+                        }
+                        "response" -> {
+                            val transactionResponseArray = value.asJsonArray
+                            decodeTransactions(transactionResponseArray, transactions)
                         }
                     }
-                    return@map TransactionApiResponse.Success(transactions, totalAmount)
                 }
-                401 -> {
-                    val jsonString = it.errorBody()?.string() ?: ""
-                    val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
+                return TransactionApiResponse.Success(GetTransactionApiResponse(
+                        transactions,
+                        totalAmount
+                ))
+            }
+            401 -> {
+                val jsonString = response.errorBody()?.string() ?: ""
+                val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
 
 
-                    for ((key, value) in resultJsonObject.entrySet()) {
-                        when (key) {
-                            "detail" -> {
-                                if (value.asString == "Authentication credentials were not provided.") {
-                                    return@map TransactionApiResponse.AuthWrongToken
+                for ((key, value) in resultJsonObject.entrySet()) {
+                    when (key) {
+                        "detail" -> {
+                            when (value.asString) {
+                                "Authentication credentials were not provided.",
+                                "Error decoding signature."-> {
+                                    return TransactionApiResponse.AuthWrongToken
                                 }
                             }
                         }
                     }
-
                 }
+
             }
-            return@map TransactionApiResponse.GeneralError
         }
+        return TransactionApiResponse.GeneralError
+
     }
 
     private fun decodeTransactions(transactionResponseArray: JsonArray?, result: MutableList<Transaction>) {
@@ -249,7 +260,56 @@ class ApiManagerImpl @Inject constructor(
         return result
     }
 
-    override fun deleteTransactions(token: String, id: List<Long>): Single<TransactionApiResponse> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    @Throws(IOException::class)
+    override fun deleteTransactions(token: String, id: List<Long>)
+            : TransactionApiResponse<DeleteTransactionApiResponse> {
+        // TODO test DeleteTransactionsRequestBody with List<Long>
+        val apiResult = mApiManagerRetrofit.deleteTransactions(
+                "JWT $token",
+                DeleteTransactionsApiRequestBody(id.toLongArray())
+        ).execute()
+
+        when (apiResult.code()) {
+            200 -> {
+                val jsonString = apiResult.body()?.string() ?: ""
+                val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
+
+                var totalAmount = 0F
+
+
+                for ((key, value) in resultJsonObject.entrySet()) {
+                    when (key) {
+                        "amount_count" -> {
+                            totalAmount = value.asFloat
+                        }
+                    }
+                }
+                return TransactionApiResponse.Success(DeleteTransactionApiResponse(
+                        totalAmount
+                ))
+            }
+            401 -> {
+                val jsonString = apiResult.errorBody()?.string() ?: ""
+                val resultJsonObject = JsonParser().parse(jsonString).asJsonObject
+
+
+                for ((key, value) in resultJsonObject.entrySet()) {
+                    when (key) {
+                        "error",
+                        "detail" -> {
+                            when (value.asString) {
+                                "Authentication credentials were not provided.",
+                                "Error decoding signature."->
+                                    return TransactionApiResponse.AuthWrongToken
+                                // TODO what should return in this case?
+                                "id XXX does not exist" -> {}
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return TransactionApiResponse.GeneralError
     }
 }

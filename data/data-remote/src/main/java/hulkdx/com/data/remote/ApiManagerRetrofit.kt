@@ -1,7 +1,9 @@
 package hulkdx.com.data.remote
 
+import hulkdx.com.data.remote.model.DeleteTransactionsApiRequestBody
 import io.reactivex.Single
 import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -32,7 +34,7 @@ interface ApiManagerRetrofit {
 
 
     @GET("transactions/get")
-    fun getTransactions(@Header("Authorization") auth: String): Single<Response<ResponseBody>>
+    fun getTransactions(@Header("Authorization") auth: String): Call<ResponseBody>
 
 //    @FormUrlEncoded
 //    @POST("transactions/create")
@@ -43,9 +45,9 @@ interface ApiManagerRetrofit {
 //                          @Field("category") categoryId: String): Single<Transaction>
 //
 //
-//    @HTTP(method = "DELETE", path = "transactions/delete", hasBody = true)
-//    fun deleteTransaction(@Header("Authorization") auth: String,
-//                          @Body request: DeleteTransactionsRequestBody): Single<TransactionResponse>
+    @HTTP(method = "DELETE", path = "transactions/delete", hasBody = true)
+    fun deleteTransactions(@Header("Authorization") auth: String,
+                           @Body request: DeleteTransactionsApiRequestBody): Call<ResponseBody>
 //
 //    @HTTP(method = "PUT", path = "transactions/update", hasBody = true)
 //    fun updateTransaction(@Header("Authorization") auth: String,

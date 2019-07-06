@@ -13,4 +13,6 @@ interface UserRepository {
 
     fun deleteCurrentUser()
 
+    fun updateCurrentUserAmount(amount: Float)
+
 }

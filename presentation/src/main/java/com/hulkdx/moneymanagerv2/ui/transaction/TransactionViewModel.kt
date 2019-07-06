@@ -7,7 +7,7 @@ import com.hulkdx.moneymanagerv2.mapper.TransactionMapper
 import com.hulkdx.moneymanagerv2.model.TransactionModel
 import hulkdx.com.domain.usecase.TransactionCategoryUseCase
 import hulkdx.com.domain.usecase.TransactionUseCase
-import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult
+import hulkdx.com.domain.usecase.TransactionUseCase.*
 import javax.inject.Inject
 
 /**
@@ -19,10 +19,14 @@ class TransactionViewModel @Inject constructor(
         private val mTransactionCategoryUseCase: TransactionCategoryUseCase
 ) : ViewModel() {
 
-    private var mTransactionResult = MutableLiveData<TransactionViewModelResult>()
+    private var mGetTransactionsResult = MutableLiveData<GetTransactionViewModelResult>()
+    private var mDeleteTransactionResult = MutableLiveData<DeleteTransactionViewModelResult>()
     private var mTransactionCategoryResult = MutableLiveData<TransactionCategoryViewModelResult>()
 
-    fun getTransactionResult(): LiveData<TransactionViewModelResult> = mTransactionResult
+    fun getTransactionResult(): LiveData<GetTransactionViewModelResult> = mGetTransactionsResult
+
+    fun deleteTransactionResult(): LiveData<DeleteTransactionViewModelResult>
+            = mDeleteTransactionResult
 
     fun getTransactionCategoryResult(): LiveData<TransactionCategoryViewModelResult> =
             mTransactionCategoryResult
@@ -36,55 +40,68 @@ class TransactionViewModel @Inject constructor(
     // region Transactions -------------------------------------------------------------------------
 
     fun loadTransactions() {
-        if (mTransactionResult.value != null) {
+        if (mGetTransactionsResult.value != null) {
             return
         }
-        mTransactionResult.value = TransactionViewModelResult.Loading
+        mGetTransactionsResult.value = GetTransactionViewModelResult.Loading
         mTransactionUseCase.getTransactionsAsync {
-            val result: TransactionViewModelResult
+            val result: GetTransactionViewModelResult
             when (it) {
-                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
+                is TransactionResult.AuthenticationError -> result = GetTransactionViewModelResult.AuthenticationError
                 is TransactionResult.Success -> {
                     val (transactions, amount, currencyName ) = it.data
                     val transactionModels = mTransactionMapper.mapTransactionList(transactions)
-                    result = TransactionViewModelResult.Success(
+                    result = GetTransactionViewModelResult.Loaded(
                             transactionModels,
                             amount,
                             currencyName
                     )
                 }
-                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
-                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
+                is TransactionResult.NetworkError -> result = GetTransactionViewModelResult.NetworkError(it.throwable)
+                is TransactionResult.GeneralError -> result = GetTransactionViewModelResult.GeneralError(it.throwable)
             }
-            mTransactionResult.value = result
+            mGetTransactionsResult.value = result
         }
     }
 
     fun searchTransactions(searchText: String) {
         mTransactionUseCase.searchTransactionsAsync(searchText) {
             val transactionModels = mTransactionMapper.mapTransactionList(it)
-            mTransactionResult.value = TransactionViewModelResult.Success(transactionModels)
+            mGetTransactionsResult.value = GetTransactionViewModelResult.Loaded(transactionModels)
         }
     }
 
-    fun deleteTransaction(id: List<Long>) {
-//        mTransactionUseCase.deleteTransactionsAsync(id) {
-//            val result: TransactionViewModelResult
-//            when (it) {
-//                is TransactionResult.AuthenticationError -> result = TransactionViewModelResult.AuthenticationError
-//                is TransactionResult.Success -> {
-//                    val transactionModels = mTransactionMapper.mapTransactionList(it.transactions)
-//                    result = TransactionViewModelResult.Success(
-//                            transactionModels,
-//                            it.amount,
-//                            it.currencyName
-//                    )
-//                }
-//                is TransactionResult.NetworkError -> result = TransactionViewModelResult.NetworkError(it.throwable)
-//                is TransactionResult.GeneralError -> result = TransactionViewModelResult.GeneralError(it.throwable)
-//            }
-//            mTransactionResult.value = result
-//        }
+    fun deleteTransaction(positions: Set<Int>, id: List<Long>) {
+        mDeleteTransactionResult.value = DeleteTransactionViewModelResult.Loading
+        mTransactionUseCase.deleteTransactionsAsync(positions, id) {
+            val result: DeleteTransactionViewModelResult
+            when (it) {
+                is DeleteTransactionResult.AuthenticationError -> {
+                    val transactionModels = mTransactionMapper.mapTransactionList(it.oldTransactions)
+                    result = DeleteTransactionViewModelResult.AuthenticationError(transactionModels)
+                }
+                is DeleteTransactionResult.Success -> {
+                    val transactionModels = mTransactionMapper.mapTransactionList(it.newTransactions)
+                    result = DeleteTransactionViewModelResult.Success(
+                            it.amount,
+                            transactionModels,
+                            positions
+                    )
+                }
+                is DeleteTransactionResult.NetworkError -> {
+                    val transactionModels = mTransactionMapper.mapTransactionList(it.oldTransactions)
+                    result = DeleteTransactionViewModelResult.NetworkError(transactionModels, it.throwable)
+                }
+                is DeleteTransactionResult.GeneralError -> {
+                    val transactionModels = mTransactionMapper.mapTransactionList(it.oldTransactions)
+                    result = DeleteTransactionViewModelResult.GeneralError(transactionModels, it.throwable)
+                }
+                is DeleteTransactionResult.UnknownError -> {
+                    result = DeleteTransactionViewModelResult.UnknownError(it.throwable)
+                }
+            }
+            mDeleteTransactionResult.value = result
+        }
     }
 
     // endregion Transactions ----------------------------------------------------------------------
@@ -103,14 +120,34 @@ class TransactionViewModel @Inject constructor(
 
     // endregion Category --------------------------------------------------------------------------
 
-    sealed class TransactionViewModelResult {
-        object Loading: TransactionViewModelResult()
-        object AuthenticationError : TransactionViewModelResult()
-        class Success(val transactions: List<TransactionModel>,
-                      val transactionsTotalAmount: String? = null,
-                      val transactionsCurrencyName: String? = null) : TransactionViewModelResult()
-        class NetworkError(val throwable: Throwable): TransactionViewModelResult()
-        class GeneralError(val throwable: Throwable? = null): TransactionViewModelResult()
+    sealed class GetTransactionViewModelResult {
+        object Loading: GetTransactionViewModelResult()
+        class Loaded(
+                val transactions: List<TransactionModel>,
+                val transactionsTotalAmount: String? = null,
+                val transactionsCurrencyName: String? = null
+        ): GetTransactionViewModelResult()
+        object AuthenticationError : GetTransactionViewModelResult()
+        class NetworkError(val throwable: Throwable): GetTransactionViewModelResult()
+        class GeneralError(val throwable: Throwable? = null): GetTransactionViewModelResult()
+    }
+
+    sealed class DeleteTransactionViewModelResult {
+        object Loading: DeleteTransactionViewModelResult()
+
+        class AuthenticationError(
+                val oldTransactions: List<TransactionModel>): DeleteTransactionViewModelResult()
+        class NetworkError(
+                val oldTransactions: List<TransactionModel>,
+                val throwable:       Throwable): DeleteTransactionViewModelResult()
+        class GeneralError(
+                val oldTransactions: List<TransactionModel>,
+                val throwable:       Throwable? = null): DeleteTransactionViewModelResult()
+        class UnknownError(val throwable: Throwable): DeleteTransactionViewModelResult()
+        class Success(
+                val transactionsTotalAmount: String,
+                val newTransactions:         List<TransactionModel>,
+                val deletedPositions: Set<Int>): DeleteTransactionViewModelResult()
     }
 
     sealed class TransactionCategoryViewModelResult {

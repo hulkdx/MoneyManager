@@ -1,5 +1,6 @@
 package hulkdx.com.domain.usecase
 
+import hulkdx.com.domain.capture
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.data.remote.ApiManager.*
@@ -31,8 +32,8 @@ import java.lang.RuntimeException
 const val USERNAME      = "username"
 const val PASSWORD      = "username"
 const val TOKEN         = "token"
-      val TEST_USER     = User(USERNAME, "", "", "", "", TOKEN)
-      val EMPTY_USER    = User("", "", "", "", "", "")
+      val TEST_USER     = User(USERNAME, "", "", "", "", TOKEN, 0F)
+      val EMPTY_USER    = User("", "", "", "", "", "", 0F)
 const val THROWABLE_MSG = "THROWABLE_MSG"
 const val FIRST_NAME = "first_name"
 const val LAST_NAME  = "last_name"
@@ -353,5 +354,3 @@ class AuthUseCaseImplTest {
     // endregion helper methods --------------------------------------------------------------------
 
 }
-
-fun <T> capture(argumentCaptor: ArgumentCaptor<T>): T = argumentCaptor.capture()

@@ -1,13 +1,17 @@
 package hulkdx.com.domain.usecase
 
 import hulkdx.com.domain.data.model.Transaction
+import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.data.remote.ApiManager
-import hulkdx.com.domain.data.remote.ApiManager.TransactionApiResponse
+import hulkdx.com.domain.data.remote.ApiManager.*
 import hulkdx.com.domain.di.BackgroundScheduler
 import hulkdx.com.domain.di.UiScheduler
 import hulkdx.com.domain.repository.TransactionRepository
 import hulkdx.com.domain.repository.UserRepository
 import hulkdx.com.domain.usecase.TransactionUseCase.*
+import hulkdx.com.domain.util.UserNotExistsException
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -17,6 +21,12 @@ import javax.inject.Singleton
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 2019-05-30.
+ *
+ * TODO: deleteTransactionsAsync == deleting from the api succeed and deleting from db is not.
+ *
+ * TODO: Add a mapper class for mapping the amount.
+ *
+ * TODO: Save the amount in User?
  */
 @Singleton
 class TransactionUseCaseImpl @Inject constructor(
@@ -29,27 +39,22 @@ class TransactionUseCaseImpl @Inject constructor(
 
     private var mDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun getTransactionsAsync(onComplete: (TransactionResult<GetTransactionResult>) -> Unit) {
-        val user = mUserRepository.getCurrentUser()
-        if (user == null) {
-            // Auth error!
-            onComplete(TransactionResult.AuthenticationError)
-            return
-        }
-        val disposable = mApiManager.getTransactions(user.token)
+    override fun getTransactionsAsync(onComplete: (TransactionResult<GetTransactionResult>) -> Unit)
+    {
+        val disposable= Single.fromCallable { getTransaction() }
                 .subscribeOn(mBackgroundScheduler)
-                .saveTransactions()
                 .observeOn(mUiScheduler)
-                .subscribe({ apiResponse ->
+                .subscribe({ pair ->
+                    val apiResponse = pair.first
+                    val user = pair.second
+
                     when (apiResponse) {
-                        is TransactionApiResponse.Success -> {
-                            val transactions = apiResponse.transactions
-                            val amount = String.format("%.2f", apiResponse.totalAmount)
-                            onComplete(TransactionResult.Success(GetTransactionResult(
-                                    transactions,
-                                    amount,
-                                    user.currency
-                            )))
+                        is TransactionApiResponse.Success<GetTransactionApiResponse> -> {
+                            val (transactions, totalAmount) = apiResponse.data
+                            val amount = formatAmount(totalAmount)
+                            onComplete(TransactionResult.Success(
+                                    GetTransactionResult(transactions, amount, user.currency)
+                            ))
                         }
                         is TransactionApiResponse.GeneralError -> {
                             onComplete(TransactionResult.GeneralError())
@@ -58,15 +63,26 @@ class TransactionUseCaseImpl @Inject constructor(
                             onComplete(TransactionResult.AuthenticationError)
                         }
                     }
-                }, {
-                    if (it is IOException) {
-                        onComplete(TransactionResult.NetworkError(it))
-                    } else {
-                        onComplete(TransactionResult.GeneralError(it))
+                }, { throwable ->
+                    when (throwable) {
+                        is IOException -> onComplete(TransactionResult.NetworkError(throwable))
+                        is UserNotExistsException -> { onComplete(TransactionResult.AuthenticationError) }
+                        else -> onComplete(TransactionResult.GeneralError(throwable))
                     }
                 })
 
         mDisposables.add(disposable)
+    }
+
+    private fun getTransaction(): Pair<TransactionApiResponse<GetTransactionApiResponse>, User> {
+        val user = mUserRepository.getCurrentUser() ?: throw UserNotExistsException()
+
+        val apiResponse = mApiManager.getTransactions(user.token)
+        if (apiResponse is TransactionApiResponse.Success) {
+            mTransactionRepository.save(apiResponse.data.transactions)
+            mUserRepository.updateCurrentUserAmount(apiResponse.data.totalAmount)
+        }
+        return Pair(apiResponse, user)
     }
 
     override fun searchTransactionsAsync(searchText: String, onComplete: (List<Transaction>) -> Unit) {
@@ -95,43 +111,74 @@ class TransactionUseCaseImpl @Inject constructor(
         }
     }
 
-    // TODO if deleting from the api succeed and deleting from db is not.
-    override fun deleteTransactionsAsync(id: List<Long>, onComplete: (TransactionResult<DeleteTransactionResult>) -> Unit) {
-        val user = mUserRepository.getCurrentUser()
-        if (user == null) {
-            // Auth error!
-            onComplete(TransactionResult.AuthenticationError)
-            return
-        }
-        val disposable = mApiManager.deleteTransactions(user.token, id)
+    override fun deleteTransactionsAsync(positions: Set<Int>,
+                                         id: List<Long>,
+                                         onComplete: (DeleteTransactionResult) -> Unit)
+    {
+
+        val disposable = deleteTransactions(positions, id)
                 .subscribeOn(mBackgroundScheduler)
-                .deleteTransactions(id)
                 .observeOn(mUiScheduler)
-                .subscribe({ apiResponse ->
-                    when (apiResponse) {
-                        is TransactionApiResponse.Success -> {
-                            val amount = String.format("%.2f", apiResponse.totalAmount)
-                            onComplete(TransactionResult.Success(DeleteTransactionResult(
-                                    id,
-                                    amount
-                            )))
-                        }
-                        is TransactionApiResponse.GeneralError -> {
-                            onComplete(TransactionResult.GeneralError())
-                        }
-                        is TransactionApiResponse.AuthWrongToken -> {
-                            onComplete(TransactionResult.AuthenticationError)
-                        }
-                    }
+                .subscribe({ deleteTransactionResult ->
+                    onComplete(deleteTransactionResult)
                 }, {
-                    if (it is IOException) {
-                        onComplete(TransactionResult.NetworkError(it))
-                    } else {
-                        onComplete(TransactionResult.GeneralError(it))
-                    }
+                    // Should be avoided...
+                    onComplete(DeleteTransactionResult.UnknownError(it))
                 })
 
         mDisposables.add(disposable)
+    }
+
+    /**
+     * positions is a sorted set.
+     */
+    private fun deleteTransactions(positions: Set<Int>, id: List<Long>): Flowable<DeleteTransactionResult>
+    {
+        return Flowable.create({ emitter ->
+            val oldTransactions = mTransactionRepository.findAll()
+
+            try {
+                val newTransactions: MutableList<Transaction> = ArrayList(oldTransactions)
+
+                val user = mUserRepository.getCurrentUser() ?: throw UserNotExistsException()
+
+                var amount = user.amount
+                for (position in positions.reversed()) {
+                    val transaction = newTransactions.removeAt(position)
+                    amount -= transaction.amount
+                }
+
+                //
+                // Immediately run success and try to revert back if a problem occurs...
+                //
+                emitter.onNext(
+                        DeleteTransactionResult.Success(
+                                formatAmount(amount),
+                                newTransactions
+                        )
+                )
+
+                when (mApiManager.deleteTransactions(user.token, id)) {
+                    is TransactionApiResponse.Success<DeleteTransactionApiResponse> -> {
+                        mTransactionRepository.save(newTransactions)
+                    }
+                    is TransactionApiResponse.GeneralError -> {
+                        emitter.onNext(DeleteTransactionResult.GeneralError(oldTransactions))
+                    }
+                    is TransactionApiResponse.AuthWrongToken -> {
+                        emitter.onNext(DeleteTransactionResult.AuthenticationError(oldTransactions))
+                    }
+                }
+
+            } catch (throwable: Throwable) {
+                when (throwable) {
+                    is IOException -> emitter.onNext(DeleteTransactionResult.NetworkError(oldTransactions, throwable))
+                    is UserNotExistsException -> { emitter.onNext(DeleteTransactionResult.AuthenticationError(oldTransactions)) }
+                    else -> emitter.onNext(DeleteTransactionResult.GeneralError(oldTransactions))
+                }
+            }
+        }, BackpressureStrategy.LATEST)
+
     }
 
     // region Extra --------------------------------------------------------------------------------
@@ -140,21 +187,7 @@ class TransactionUseCaseImpl @Inject constructor(
         mDisposables.clear()
     }
 
-    private fun Single<TransactionApiResponse>.saveTransactions(): Single<TransactionApiResponse> {
-        return doOnSuccess { apiResponse ->
-            if (apiResponse is TransactionApiResponse.Success) {
-                mTransactionRepository.save(apiResponse.transactions)
-            }
-        }
-    }
-
-    private fun Single<TransactionApiResponse>.deleteTransactions(id: List<Long>): Single<TransactionApiResponse> {
-        return doOnSuccess { apiResponse ->
-            if (apiResponse is TransactionApiResponse.Success) {
-                mTransactionRepository.deleteById(id)
-            }
-        }
-    }
+    private fun formatAmount(amount: Float): String = String.format("%.2f", amount)
 
     // endregion Extra -----------------------------------------------------------------------------
 

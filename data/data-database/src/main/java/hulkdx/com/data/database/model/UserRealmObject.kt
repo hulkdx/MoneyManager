@@ -22,6 +22,7 @@ internal open class UserRealmObject constructor(): RealmObject() {
     var email: String = ""
     var token: String = ""
     var currency: String = ""
+    var amount: Float = 0F
 
     constructor(userName: String, firstName: String, lastName: String, email: String, token: String, currency: String) : this() {
         this.userName = userName
@@ -33,6 +34,6 @@ internal open class UserRealmObject constructor(): RealmObject() {
     }
 
     fun mapToUser(): User {
-        return User(userName, firstName, lastName, email, currency, token)
+        return User(userName, firstName, lastName, email, currency, token, amount)
     }
 }

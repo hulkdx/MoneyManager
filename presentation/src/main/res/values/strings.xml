@@ -13,9 +13,9 @@
     <string name="password">Password</string>
     <string name="create_account">Create Account</string>
     <string name="login" >Login</string>
-    <string name="auth_error">Incorrect Username and Password</string>
-    <string name="general_error">Something went wrong, please retry again</string>
-    <string name="network_error">Unable to connect to the internet</string>
+    <string name="error_auth">Incorrect Username and Password</string>
+    <string name="error_general">Something went wrong, please retry again</string>
+    <string name="error_network">Unable to connect to the internet</string>
 
     <!-- RegisterFragment -->
     <string name="first_name">First Name</string>
@@ -23,8 +23,8 @@
     <string name="email">Email</string>
     <string name="register">Register</string>
     <string name="register_select_currency">Please select a currency</string>
-    <string name="register_error_user_exists">User already exists</string>
-    <string name="register_error_email_exists">Email already exists</string>
+    <string name="error_register_user_exists">User already exists</string>
+    <string name="error_register_email_exists">Email already exists</string>
 
     <!-- TransactionFragmentList -->
     <string name="balance">Balance</string>
@@ -40,5 +40,6 @@
     <string name="delete_image_view_desc">Delete an item</string>
     <string name="select_all">Select all</string>
     <string name="value">Value</string>
+    <string name="error_deleting_transactions">Error Deleting Transactions: Reverting Transactions Back</string>
 
 </resources>

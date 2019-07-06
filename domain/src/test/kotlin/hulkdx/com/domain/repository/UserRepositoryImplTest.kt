@@ -1,10 +1,10 @@
 package hulkdx.com.domain.repository
 
+import hulkdx.com.domain.capture
 import hulkdx.com.domain.data.local.CacheManager
 import hulkdx.com.domain.data.local.DatabaseManager
 import hulkdx.com.domain.data.model.User
 import hulkdx.com.domain.usecase.TEST_USER
-import hulkdx.com.domain.usecase.capture
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -150,6 +150,17 @@ class UserRepositoryImplTest {
         SUT.getCurrentUser()
         // Assert
         verify(mCacheManager, never()).saveUser(capture(ac))
+    }
+
+    @Test
+    fun updateCurrentUserAmount_callsCacheAndDatabase() {
+        // Arrange
+        val amount = 5f
+        // Act
+        SUT.updateCurrentUserAmount(amount)
+        // Assert
+        verify(mCacheManager).updateUserAmount(amount)
+        verify(mDatabaseManager).updateUserAmount(amount)
     }
 
     // region helper methods -----------------------------------------------------------------------

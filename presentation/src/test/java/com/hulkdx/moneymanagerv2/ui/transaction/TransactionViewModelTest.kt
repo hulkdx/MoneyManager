@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.hulkdx.moneymanagerv2.mapper.TransactionMapper
 import com.hulkdx.moneymanagerv2.ui.anyKotlin
 import com.hulkdx.moneymanagerv2.ui.capture
-import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.TransactionViewModelResult.Loading
+import com.hulkdx.moneymanagerv2.ui.transaction.TransactionViewModel.GetTransactionViewModelResult.Loading
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.verify
 import hulkdx.com.domain.data.model.Category
@@ -100,11 +100,13 @@ class TransactionViewModelTest {
     fun deleteTransaction_passToUseCase() {
         // Arrange
         val id = listOf<Long>()
-        val ac = ArgumentCaptor.forClass(List::class.java) as ArgumentCaptor<List<Long>>
+        val position = setOf<Int>()
+        val ac1 = ArgumentCaptor.forClass(List::class.java) as ArgumentCaptor<List<Long>>
+        val ac2 = ArgumentCaptor.forClass(Set::class.java) as ArgumentCaptor<Set<Int>>
         // Act
-        SUT.deleteTransaction(id)
+        SUT.deleteTransaction(position, id)
         // Assert
-        verify(mTransactionUseCase).deleteTransactionsAsync(capture(ac), anyKotlin())
+        verify(mTransactionUseCase).deleteTransactionsAsync(capture(ac2), capture(ac1), anyKotlin())
     }
 
     @Test

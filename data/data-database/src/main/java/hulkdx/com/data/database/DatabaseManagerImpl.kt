@@ -29,7 +29,9 @@ class DatabaseManagerImpl @Inject constructor(
         user.run {
             return@run UserRealmObject(username, firstName, lastName, email, token, currency)
         }.execute { obj, realm ->
+            realm.beginTransaction()
             realm.insertOrUpdate(obj)
+            realm.commitTransaction()
         }
     }
 
@@ -44,7 +46,19 @@ class DatabaseManagerImpl @Inject constructor(
 
     override fun deleteUser() {
         execute { _, realm ->
-            realm.where(UserRealmObject::class.java).findAll().deleteAllFromRealm()
+            val allUsers = realm.where(UserRealmObject::class.java).findAll()
+            realm.beginTransaction()
+            allUsers.deleteAllFromRealm()
+            realm.commitTransaction()
+        }
+    }
+
+    override fun updateUserAmount(amount: Float) {
+        execute { _, realm ->
+            val user = realm.where(UserRealmObject::class.java).findFirst()
+            realm.beginTransaction()
+            user?.amount = amount
+            realm.commitTransaction()
         }
     }
 
@@ -59,7 +73,9 @@ class DatabaseManagerImpl @Inject constructor(
 
             return@map TransactionRealmObject(it.id, it.date, category, it.amount, it.attachment)
         }.execute { listTransactionRealmObject, realm ->
+            realm.beginTransaction()
             realm.copyToRealmOrUpdate(listTransactionRealmObject)
+            realm.commitTransaction()
         }
     }
 
@@ -88,9 +104,7 @@ class DatabaseManagerImpl @Inject constructor(
         try {
             mLock.lock()
             realm = getRealm()
-            realm.beginTransaction()
             execution(this, realm)
-            realm.commitTransaction()
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.hulkdx.moneymanagerv2.R
 import com.hulkdx.moneymanagerv2.model.TransactionModel
 import com.hulkdx.moneymanagerv2.util.ColorUtil
+import hulkdx.com.domain.usecase.TransactionUseCase.*
 import javax.inject.Inject
 
 class TransactionListAdapter @Inject constructor(
@@ -20,7 +21,8 @@ class TransactionListAdapter @Inject constructor(
 
     var mTransactions = listOf<TransactionModel>()
     var mCurrencyName = ""
-    val mCheckedItems = mutableListOf<Long>()
+    val mCheckedItemPositions = mutableSetOf<Int>()
+    val mCheckedItemIds = mutableListOf<Long>()
 
     private var mShowCheckbox = false
 
@@ -32,7 +34,7 @@ class TransactionListAdapter @Inject constructor(
         viewHolder.checkBox.setOnClickListener {
             val position = viewHolder.adapterPosition
             if (position != NO_POSITION) {
-                onCheckBoxClicked(mTransactions[position])
+                onCheckBoxClicked(position, mTransactions[position])
             }
         }
 
@@ -71,6 +73,7 @@ class TransactionListAdapter @Inject constructor(
 
         // checkbox
         holder.checkBox.visibility = if (mShowCheckbox) View.VISIBLE else View.GONE
+        holder.checkBox.isChecked = transaction.isChecked
     }
 
     override fun getItemCount(): Int {
@@ -84,8 +87,15 @@ class TransactionListAdapter @Inject constructor(
         notifyDataSetChanged()
     }
 
-    private fun onCheckBoxClicked(transaction: TransactionModel) {
-        mCheckedItems.add(transaction.id)
+    private fun onCheckBoxClicked(position: Int, transactionModel: TransactionModel) {
+        mCheckedItemPositions.add(position)
+        mCheckedItemIds.add(transactionModel.id)
+        transactionModel.isChecked = true
+    }
+
+    fun checkboxClear() {
+        mCheckedItemPositions.clear()
+        mCheckedItemIds.clear()
     }
 
     // endregion Checkbox --------------------------------------------------------------------------

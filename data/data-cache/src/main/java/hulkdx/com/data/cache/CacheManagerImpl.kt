@@ -62,6 +62,10 @@ class CacheManagerImpl @Inject constructor(): CacheManager {
         mUser = null
     }
 
+    override fun updateUserAmount(amount: Float) {
+        mUser?.amount = amount
+    }
+
     override fun saveTransactions(transactions: List<Transaction>) {
         mTransactions = transactions
     }

@@ -115,19 +115,19 @@ class LoginFragment : Fragment() {
     private fun loginFailedGeneralError() {
         loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
-        errorTextView.text = getString(R.string.general_error)
+        errorTextView.text = getString(R.string.error_general)
     }
 
     private fun loginFailedWrongCredential() {
         loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
-        errorTextView.text = getString(R.string.auth_error)
+        errorTextView.text = getString(R.string.error_auth)
     }
 
     private fun loginFailedNetworkError() {
         loadingProgressBar.visibility = View.GONE
         animateErrorTextView(true)
-        errorTextView.text = getString(R.string.network_error)
+        errorTextView.text = getString(R.string.error_network)
     }
 
     // endregion Login Callbacks -------------------------------------------------------------

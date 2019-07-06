@@ -34,4 +34,8 @@ class UserRepositoryImpl @Inject constructor(
         mDatabaseManager.deleteUser()
     }
 
+    override fun updateCurrentUserAmount(amount: Float) {
+        mDatabaseManager.updateUserAmount(amount)
+        mCacheManager.updateUserAmount(amount)
+    }
 }

@@ -107,22 +107,22 @@ class RegisterFragment : Fragment() {
     // region Register Callbacks -------------------------------------------------------------
 
     private fun registerGeneralError() {
-        val message = getString(R.string.general_error)
+        val message = getString(R.string.error_general)
         registerShowError(message)
     }
 
     private fun registerNetworkError() {
-        val message = getString(R.string.network_error)
+        val message = getString(R.string.error_network)
         registerShowError(message)
     }
 
     private fun registerEmailAlreadyExists() {
-        val message = getString(R.string.register_error_email_exists)
+        val message = getString(R.string.error_register_email_exists)
         registerShowError(message)
     }
 
     private fun registerUserAlreadyExists() {
-        val message = getString(R.string.register_error_user_exists)
+        val message = getString(R.string.error_register_user_exists)
         registerShowError(message)
     }
 

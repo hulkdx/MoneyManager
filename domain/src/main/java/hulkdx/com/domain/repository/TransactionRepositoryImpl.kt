@@ -43,8 +43,4 @@ class TransactionRepositoryImpl @Inject constructor(
         mCacheManager.saveTransactions(transactions)
         mDatabaseManager.saveTransactions(transactions)
     }
-
-    override fun deleteById(id: List<Long>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }

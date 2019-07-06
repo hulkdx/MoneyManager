@@ -1,22 +1,23 @@
 package hulkdx.com.data.remote
 
-import hulkdx.com.domain.data.remote.ApiManager
-import hulkdx.com.domain.data.remote.ApiManager.TransactionApiResponse
+import hulkdx.com.data.remote.model.DeleteTransactionsApiRequestBody
+import hulkdx.com.domain.data.remote.ApiManager.*
 import hulkdx.com.domain.data.remote.RegisterAuthErrorStatus
 import hulkdx.com.domain.data.remote.RemoteStatus
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 
 import org.mockito.Mockito.*
+import retrofit2.Call
 import retrofit2.Response
 import org.mockito.ArgumentMatchers.anyString as anyString
 
@@ -218,8 +219,22 @@ class ApiManagerImplTest {
             "]\n" +
             "}"
 
-    val GET_TRANSACTION_AUTHENTICATION_ERROR = "{\n" +
+    val AUTHENTICATION_ERROR_NOT_PROVIDED = "{\n" +
             "    \"detail\": \"Authentication credentials were not provided.\"\n" +
+            "}"
+
+    val AUTHENTICATION_ERROR_SIGNATURE_INVALID = "{\n" +
+            "    \"detail\": \"Error decoding signature.\"\n" +
+            "}"
+
+    // TODO expired signature?
+
+    val DELETE_TRANSACTION_SUCCESS = "{\n" +
+            "    \"amount_count\": -12209\n" +
+            "}"
+
+    val DELETE_TRANSACTION_ERROR_ID_DOES_NOT_EXISTS = "{\n" +
+            "    \"error\": \"id 239 does not exist\"\n" +
             "}"
 
     // endregion constants -------------------------------------------------------------------------
@@ -228,6 +243,7 @@ class ApiManagerImplTest {
 
     @get:Rule public var mMockitoJUnit = MockitoJUnit.rule()!!
     @Mock lateinit var mApiManagerRetrofit: ApiManagerRetrofit
+    @Mock lateinit var mCallResponseBody: Call<ResponseBody>
 
     // endregion helper fields ---------------------------------------------------------------------
 
@@ -338,7 +354,7 @@ class ApiManagerImplTest {
     fun register_errorUsernameExists_sendAuthError() {
         // Arrange
         registerErrorUsernameExists()
-        var result: ApiManager.RegisterApiResponse? = null
+        var result: RegisterApiResponse? = null
         // Act
         SUT.register(JSON_FIRST_NAME, JSON_LAST_NAME, USERNAME, PASSWORD, JSON_EMAIL, JSON_CURRENCY)
                 .subscribe(Consumer {
@@ -364,15 +380,12 @@ class ApiManagerImplTest {
     fun getTransactions_getTransactionSuccess_resultIsSuccessful() {
         // Arrange
         getTransactionSuccess()
-        var result: TransactionApiResponse? = null
         // Act
-        SUT.getTransactions(TEST_AUTH).subscribe(Consumer {
-            result = it
-        })
+        val result = SUT.getTransactions(TEST_AUTH)
         // Assert
         assertTrue(result is TransactionApiResponse.Success)
-        val totalAmount = (result as TransactionApiResponse.Success).totalAmount
-        val transaction = (result as TransactionApiResponse.Success).transactions
+        val totalAmount = (result as TransactionApiResponse.Success).data.totalAmount
+        val transaction = (result as TransactionApiResponse.Success).data.transactions
         assertThat(totalAmount, `is`(GET_TRANSACTION_AMOUNT_COUNT))
         assertThat(transaction.size, `is`(11))
 
@@ -447,16 +460,77 @@ class ApiManagerImplTest {
     }
 
     @Test
-    fun getTransactions_authError_resultIsAuthWrongToken() {
+    fun getTransactions_authErrorNotProvided_resultIsAuthWrongToken() {
         // Arrange
-        getTransactionAuthError()
-        var result: TransactionApiResponse? = null
+        getTransactionAuthErrorNotProvided()
         // Act
-        SUT.getTransactions(TEST_AUTH).subscribe(Consumer {
-            result = it
-        })
+        val result = SUT.getTransactions(TEST_AUTH)
         // Assert
         assertTrue(result is TransactionApiResponse.AuthWrongToken)
+    }
+
+    @Test
+    fun getTransactions_authErrorSignatureInvalid_resultIsAuthWrongToken() {
+        // Arrange
+        getTransactionAuthErrorSignatureInvalid()
+        // Act
+        val result = SUT.getTransactions(TEST_AUTH)
+        // Assert
+        assertTrue(result is TransactionApiResponse.AuthWrongToken)
+    }
+
+    @Test
+    fun deleteTransactions_callRetrofitWithJwt() {
+        // Arrange
+        deleteTransactionsSuccess()
+        val ac1: ArgumentCaptor<String> = ArgumentCaptor.forClass(String::class.java)
+        val ac2: ArgumentCaptor<DeleteTransactionsApiRequestBody> = ArgumentCaptor.forClass(DeleteTransactionsApiRequestBody::class.java)
+        val id = listOf(1L, 10L)
+        // Act
+        SUT.deleteTransactions(TEST_AUTH, id)
+        // Assert
+        verify(mApiManagerRetrofit).deleteTransactions(capture(ac1), capture(ac2))
+        assertThat(ac1.value, `is`("JWT $TEST_AUTH"))
+    }
+
+    @Test
+    fun deleteTransactions_getTransactionSuccess_resultIsSuccessful() {
+        // Arrange
+        deleteTransactionsSuccess()
+        // Act
+        val result = SUT.deleteTransactions(TEST_AUTH, emptyList())
+        // Assert
+        assertTrue(result is TransactionApiResponse.Success)
+    }
+
+    @Test
+    fun deleteTransactions_authErrorNotProvided_resultIsAuthWrongToken() {
+        // Arrange
+        deleteTransactionsAuthErrorNotProvided()
+        // Act
+        val result = SUT.deleteTransactions(TEST_AUTH, emptyList())
+        // Assert
+        assertTrue(result is TransactionApiResponse.AuthWrongToken)
+    }
+
+    @Test
+    fun deleteTransactions_authErrorSignatureInvalid_resultIsAuthWrongToken() {
+        // Arrange
+        deleteTransactionsAuthErrorSignatureInvalid()
+        // Act
+        val result = SUT.deleteTransactions(TEST_AUTH, emptyList())
+        // Assert
+        assertTrue(result is TransactionApiResponse.AuthWrongToken)
+    }
+
+    @Test
+    fun deleteTransactions_errorIdExists_resultIsAuthWrongToken() {
+        // Arrange
+        // deleteTransactionsErrorIdExists()
+        // Act
+        // val result = SUT.deleteTransactions(TEST_AUTH, emptyList())
+        // Assert
+        // TODO
     }
 
     // region helper methods -----------------------------------------------------------------------
@@ -498,15 +572,66 @@ class ApiManagerImplTest {
     }
 
     private fun getTransactionSuccess() {
+        val response = Response.success(200,
+                ResponseBody.create(null, GET_TRANSACTION_JSON))
+
         `when`(mApiManagerRetrofit.getTransactions(anyString()))
-                .thenReturn(Single.just(Response.success(200,
-                        ResponseBody.create(null, GET_TRANSACTION_JSON))))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
     }
 
-    private fun getTransactionAuthError() {
+    private fun getTransactionAuthErrorNotProvided() {
+        val response: Response<ResponseBody> = Response.error(401,
+                        ResponseBody.create(null, AUTHENTICATION_ERROR_NOT_PROVIDED))
         `when`(mApiManagerRetrofit.getTransactions(anyString()))
-                .thenReturn(Single.just(Response.error(401,
-                        ResponseBody.create(null, GET_TRANSACTION_AUTHENTICATION_ERROR))))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
+    }
+
+    private fun getTransactionAuthErrorSignatureInvalid() {
+        val response: Response<ResponseBody> = Response.error(401,
+                        ResponseBody.create(null, AUTHENTICATION_ERROR_SIGNATURE_INVALID))
+        `when`(mApiManagerRetrofit.getTransactions(anyString()))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
+    }
+
+    private fun deleteTransactionsSuccess() {
+        val response = Response.success(200,
+                        ResponseBody.create(null, DELETE_TRANSACTION_SUCCESS))
+        `when`(mApiManagerRetrofit.deleteTransactions(anyString(), anyKotlin()))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
+    }
+
+    private fun deleteTransactionsAuthErrorNotProvided() {
+        val response: Response<ResponseBody> = Response.error(401,
+                        ResponseBody.create(null, AUTHENTICATION_ERROR_NOT_PROVIDED))
+        `when`(mApiManagerRetrofit.deleteTransactions(anyString(), anyKotlin()))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
+    }
+
+    private fun deleteTransactionsAuthErrorSignatureInvalid() {
+        val response: Response<ResponseBody> = Response.error(401, ResponseBody.create(null, AUTHENTICATION_ERROR_SIGNATURE_INVALID))
+        `when`(mApiManagerRetrofit.deleteTransactions(anyString(), anyKotlin()))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
+    }
+
+    private fun deleteTransactionsErrorIdExists() {
+        val response: Response<ResponseBody> = Response.error(401,
+                        ResponseBody.create(null, DELETE_TRANSACTION_ERROR_ID_DOES_NOT_EXISTS))
+        `when`(mApiManagerRetrofit.deleteTransactions(anyString(), anyKotlin()))
+                .thenReturn(mCallResponseBody)
+
+        `when`(mCallResponseBody.execute()).thenReturn(response)
     }
 
     // endregion helper methods --------------------------------------------------------------------
