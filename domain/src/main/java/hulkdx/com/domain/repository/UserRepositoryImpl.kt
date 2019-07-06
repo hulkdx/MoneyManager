@@ -25,7 +25,8 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun saveCurrentUser(user: User) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mCacheManager.saveUser(user)
+        mDatabaseManager.saveUser(user)
     }
 
     override fun deleteCurrentUser() {

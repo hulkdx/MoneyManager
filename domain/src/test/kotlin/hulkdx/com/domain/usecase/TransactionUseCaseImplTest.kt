@@ -190,6 +190,17 @@ class TransactionUseCaseImplTest {
     }
 
     @Test
+    fun getTransactions_validUserAndApiSuccess_saveTransactionsOnBackgroundScheduler() {
+        // Arrange
+        validUser()
+        apiSuccessGetTransactions()
+        // Act
+        SUT.getTransactionsAsync {}
+        // Assert
+        verify(mTransactionRepository).save(TEST_TRANSACTION_LIST)
+    }
+
+    @Test
     fun searchTransactionsAsync_emptySearchText_findAllTransaction() {
         // Arrange
         // Act
@@ -207,7 +218,6 @@ class TransactionUseCaseImplTest {
         verify(mTransactionRepository).findByAbsoluteAmount(2F)
     }
 
-
     @Test
     fun searchTransactionsAsync_stringSearchText_findByCategoryNameTransaction() {
         // Arrange
@@ -215,6 +225,93 @@ class TransactionUseCaseImplTest {
         SUT.searchTransactionsAsync("MoneyManager") {}
         // Assert
         verify(mTransactionRepository).findByCategoryName("MoneyManager")
+    }
+
+    @Test
+    fun deleteTransactionsAsync_shouldGetCurrentUser() {
+        // Arrange
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {  }
+        // Assert
+        verify(mUserRepository).getCurrentUser()
+    }
+
+    @Test
+    fun deleteTransactionsAsync_noUser_callAuthError() {
+        // Arrange
+        noUser()
+        var result: TransactionResult? = null
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is AuthenticationError)
+    }
+
+    @Test
+    fun deleteTransactionsAsync_validUser_callApiManagerWithValidToken() {
+        // Arrange
+        validUser()
+        apiSuccessDeleteTransactions()
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {}
+        // Assert
+        verify(mApiManager).deleteTransactions(TOKEN, emptyList())
+    }
+
+    @Test
+    fun deleteTransactionsAsync_validUserAndApiSuccess_callOnComplete() {
+        // Arrange
+        validUser()
+        apiSuccessDeleteTransactions()
+        var result: TransactionResult? = null
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is TransactionResult.Success)
+    }
+
+    @Test
+    fun deleteTransactionsAsync_validUserAndApiIoException_resultIsNetworkError() {
+        // Arrange
+        validUser()
+        apiIoExceptionDeleteTransactions()
+        var result: TransactionResult? = null
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is TransactionResult.NetworkError)
+    }
+
+    @Test
+    fun deleteTransactionsAsync_validUserAndApiGeneralException_resultIsGeneralError() {
+        // Arrange
+        validUser()
+        apiGeneralExceptionDeleteTransactions()
+        var result: TransactionResult? = null
+        // Act
+        SUT.deleteTransactionsAsync(emptyList()) {
+            result = it
+        }
+        // Assert
+        assertTrue(result is TransactionResult.GeneralError)
+    }
+
+    @Test
+    fun deleteTransactionsAsync_apiSuccess_callTransactionRepositoryDeleteById() {
+        // Arrange
+        validUser()
+        apiSuccessDeleteTransactions()
+        val id = listOf(1L, 2L, 3L)
+        // Act
+        SUT.deleteTransactionsAsync(id) {}
+        // Assert
+       verify(mTransactionRepository).deleteById(id)
     }
 
     // endregion getTransactions -------------------------------------------------------------------
@@ -262,6 +359,30 @@ class TransactionUseCaseImplTest {
     private fun apiSuccessDeleteTransactions() {
         `when`(mApiManager.deleteTransactions(anyKotlin(), anyKotlin())).thenReturn(
                 Single.just(ApiManager.TransactionApiResponse.Success(TEST_TRANSACTION_LIST, TOTAL_AMOUNT))
+        )
+    }
+
+    private fun apiIoExceptionDeleteTransactions() {
+        `when`(mApiManager.deleteTransactions(anyKotlin(), anyKotlin())).thenReturn(
+                Single.fromCallable { throw IOException(IO_EXCEPTION_MESSAGE) }
+        )
+    }
+
+    private fun apiGeneralExceptionDeleteTransactions() {
+        `when`(mApiManager.deleteTransactions(anyKotlin(), anyKotlin())).thenReturn(
+                Single.fromCallable { throw Exception(THROWABLE_MSG) }
+        )
+    }
+
+    private fun apiGeneralErrorDeleteTransactions() {
+        `when`(mApiManager.deleteTransactions(anyKotlin(), anyKotlin())).thenReturn(
+                Single.fromCallable { ApiManager.TransactionApiResponse.GeneralError }
+        )
+    }
+
+    private fun apiAuthWrongTokenDeleteTransactions() {
+        `when`(mApiManager.deleteTransactions(anyKotlin(), anyKotlin())).thenReturn(
+                Single.fromCallable { ApiManager.TransactionApiResponse.AuthWrongToken }
         )
     }
 

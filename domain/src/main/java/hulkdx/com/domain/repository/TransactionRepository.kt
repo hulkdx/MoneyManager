@@ -13,4 +13,6 @@ interface TransactionRepository {
 
     fun save(transactions: List<Transaction>)
 
+    fun deleteById(id: List<Long>)
+
 }

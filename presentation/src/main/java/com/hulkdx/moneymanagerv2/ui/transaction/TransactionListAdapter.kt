@@ -20,8 +20,9 @@ class TransactionListAdapter @Inject constructor(
 
     var mTransactions = listOf<TransactionModel>()
     var mCurrencyName = ""
-    var mShowCheckbox = false
     val mCheckedItems = mutableListOf<Long>()
+
+    private var mShowCheckbox = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionHolder {
         val itemView = LayoutInflater.from(parent.context)
