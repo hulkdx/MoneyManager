@@ -3,9 +3,11 @@ package com.hulkdx.moneymanagerv2.ui.transaction
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.DatePicker
 import android.widget.RelativeLayout
 import android.widget.SearchView
 import android.widget.Toast
@@ -40,6 +42,7 @@ class TransactionFragmentList: Fragment() {
     @Inject lateinit var mViewModelFactory: ViewModelFactory
 
     private lateinit var mMiddleRelativeLayoutParam: RelativeLayout.LayoutParams
+    private lateinit var mDatePicker: DatePicker
 
     // region Lifecycle ----------------------------------------------------------------------------
 
@@ -120,6 +123,7 @@ class TransactionFragmentList: Fragment() {
     private fun setupUI() {
 
         mMiddleRelativeLayoutParam = middleRelativeLayout.layoutParams as RelativeLayout.LayoutParams
+        mDatePicker = date_picker as DatePicker
 
         setupTransactionRecyclerView()
 
@@ -134,6 +138,12 @@ class TransactionFragmentList: Fragment() {
         transactionRecyclerView.hasFixedSize()
         transactionRecyclerView.adapter = mTransactionListAdapter
         transactionRecyclerView.layoutManager = LinearLayoutManager(context)
+        transactionRecyclerView.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN && bottomLayoutExpanded.visibility == View.VISIBLE) {
+                hideBottomLayout()
+            }
+            return@setOnTouchListener false
+        }
     }
 
     private fun setupSearchView() {
@@ -188,6 +198,12 @@ class TransactionFragmentList: Fragment() {
         bottomLayout.visibility = View.GONE
         mMiddleRelativeLayoutParam.addRule(RelativeLayout.ABOVE, R.id.bottomLayoutExpanded)
         // TODO show keyboard
+    }
+
+    private fun hideBottomLayout() {
+        bottomLayoutExpanded.visibility = View.GONE
+        bottomLayout.visibility = View.VISIBLE
+        mMiddleRelativeLayoutParam.addRule(RelativeLayout.ABOVE, R.id.bottomLayout)
     }
 
     // endregion UI setup --------------------------------------------------------------------------
@@ -279,7 +295,11 @@ class TransactionFragmentList: Fragment() {
     // region Add Transaction ----------------------------------------------------------------------
 
     private fun addTransaction() {
-        // mTransactionViewModel.addTransaction()
+        val amount = addNewTransactionsEditText.text.toString()
+        val date = "${mDatePicker.year}-${mDatePicker.month + 1}-${mDatePicker.dayOfMonth}"
+        // TODO add category
+        // TODO add attachment
+         mTransactionViewModel.addTransaction(amount, date, null, null, null)
     }
 
     // endregion Add Transaction -------------------------------------------------------------------

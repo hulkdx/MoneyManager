@@ -19,6 +19,8 @@ class TransactionViewModel @Inject constructor(
         private val mTransactionCategoryUseCase: TransactionCategoryUseCase
 ) : ViewModel() {
 
+    // region LiveData -----------------------------------------------------------------------------
+
     private var mGetTransactionsResult = MutableLiveData<GetTransactionViewModelResult>()
     private var mDeleteTransactionResult = MutableLiveData<DeleteTransactionViewModelResult>()
     private var mTransactionCategoryResult = MutableLiveData<TransactionCategoryViewModelResult>()
@@ -30,6 +32,8 @@ class TransactionViewModel @Inject constructor(
 
     fun getTransactionCategoryResult(): LiveData<TransactionCategoryViewModelResult> =
             mTransactionCategoryResult
+
+    // endregion LiveData --------------------------------------------------------------------------
 
     override fun onCleared() {
         super.onCleared()
@@ -106,6 +110,14 @@ class TransactionViewModel @Inject constructor(
         }
     }
 
+    fun addTransaction(amount: String,
+                       date: String,
+                       categoryName: String?,
+                       categoryHexColor: String?,
+                       attachment: String?) {
+        // TODO
+    }
+
     // endregion Transactions ----------------------------------------------------------------------
     // region Category -----------------------------------------------------------------------------
 
@@ -121,6 +133,7 @@ class TransactionViewModel @Inject constructor(
     }
 
     // endregion Category --------------------------------------------------------------------------
+    // region ViewModelResult ----------------------------------------------------------------------
 
     sealed class GetTransactionViewModelResult {
         object Loading: GetTransactionViewModelResult()
@@ -159,4 +172,7 @@ class TransactionViewModel @Inject constructor(
         class NetworkError(val throwable: Throwable): TransactionCategoryViewModelResult()
         class GeneralError(val throwable: Throwable? = null): TransactionCategoryViewModelResult()
     }
+
+    // endregion ViewModelResult -------------------------------------------------------------------
+
 }
