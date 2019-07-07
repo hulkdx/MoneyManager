@@ -22,6 +22,7 @@ import okhttp3.logging.HttpLoggingInterceptor
  */
 @Module
 object NetworkModule {
+
     @JvmStatic
     @Provides
     fun provideApiManager(apiManagerImpl: ApiManagerImpl): ApiManager = apiManagerImpl
@@ -34,8 +35,8 @@ object NetworkModule {
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val client = OkHttpClient.Builder()
-                .connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
                 .build()
 

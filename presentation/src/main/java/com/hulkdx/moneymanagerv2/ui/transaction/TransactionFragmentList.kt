@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.RelativeLayout
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -30,12 +32,14 @@ import kotlin.collections.ArrayList
  *
  * Created by Mohammad Jafarzadeh Rezvan on 28/06/2019.
  */
-class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
+class TransactionFragmentList: Fragment() {
 
-    private val TAG = "TransactionFragmentList"
+    private val mTAG = "TransactionFragmentList"
     private lateinit var mTransactionViewModel: TransactionViewModel
     @Inject lateinit var mTransactionListAdapter: TransactionListAdapter
     @Inject lateinit var mViewModelFactory: ViewModelFactory
+
+    private lateinit var mMiddleRelativeLayoutParam: RelativeLayout.LayoutParams
 
     // region Lifecycle ----------------------------------------------------------------------------
 
@@ -111,6 +115,85 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
     }
 
     // endregion Lifecycle -------------------------------------------------------------------------
+    // region UI setup -----------------------------------------------------------------------------
+
+    private fun setupUI() {
+
+        mMiddleRelativeLayoutParam = middleRelativeLayout.layoutParams as RelativeLayout.LayoutParams
+
+        setupTransactionRecyclerView()
+
+        setupSearchView()
+
+        setupDeleteImageView()
+
+        setupBottomLayout()
+    }
+
+    private fun setupTransactionRecyclerView() {
+        transactionRecyclerView.hasFixedSize()
+        transactionRecyclerView.adapter = mTransactionListAdapter
+        transactionRecyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    private fun setupSearchView() {
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    mTransactionViewModel.searchTransactions(it)
+                }
+                return false
+            }
+        })
+    }
+
+    private fun setupDeleteImageView() {
+        var isDeleteSelected = false
+        deleteImageView.setOnClickListener {
+            isDeleteSelected = !isDeleteSelected
+
+            if (isDeleteSelected) {
+                deleteBtnSelected()
+            } else {
+                deleteBtnUnSelected()
+            }
+        }
+    }
+
+    private fun setupBottomLayout() {
+        bottomLayout.setOnClickListener {
+            expandBottomLayout()
+        }
+        addNewTransactionsEditText.setOnEditorActionListener { tv, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addTransaction()
+                return@setOnEditorActionListener false
+            }
+            return@setOnEditorActionListener true
+        }
+    }
+
+    private fun expandBottomLayout() {
+
+        addNewTransactionsEditText.setText("")
+        // TODO:
+        // mCategoryAdapter.resetSelectedCategories()
+        // mSelectedCategoryId = -1
+        // mSelectedAttachment = null
+
+        bottomLayoutExpanded.visibility = View.VISIBLE
+        bottomLayout.visibility = View.GONE
+        mMiddleRelativeLayoutParam.addRule(RelativeLayout.ABOVE, R.id.bottomLayoutExpanded)
+        // TODO show keyboard
+    }
+
+    // endregion UI setup --------------------------------------------------------------------------
+
+    // region Transaction --------------------------------------------------------------------------
+
     // region Load Transaction Callbacks -----------------------------------------------------------
 
     private fun transactionsLoading() {
@@ -141,59 +224,6 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
     }
 
     // endregion Load Transaction Callbacks --------------------------------------------------------
-    // region Delete Transaction Callbacks ---------------------------------------------------------
-
-    private fun transactionsDeleted(transactions: List<TransactionModel>, deletedPositions: Set<Int>) {
-        Log.d(TAG, "transactionsDeleted $transactions positions: $deletedPositions")
-        mTransactionListAdapter.mTransactions = transactions
-        for (position in deletedPositions.reversed()) {
-            mTransactionListAdapter.notifyItemRemoved(position)
-        }
-        emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
-    }
-
-    private fun transactionsDeleteRevertBack(oldTransactions: List<TransactionModel>,
-                                             throwable: Throwable? = null) {
-        Toast.makeText(context, R.string.error_deleting_transactions, Toast.LENGTH_SHORT).show()
-        showThrowableOnDebug(throwable)
-        transactionsLoaded(oldTransactions)
-    }
-
-    // endregion Delete Transaction Callbacks ------------------------------------------------------
-    // region UI setup -----------------------------------------------------------------------------
-
-    private fun setupUI() {
-        // transactionRecyclerView
-        transactionRecyclerView.hasFixedSize()
-        transactionRecyclerView.adapter = mTransactionListAdapter
-        transactionRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        // searchView
-        searchView.setOnQueryTextListener(this)
-
-        // deleteImageView
-        var isDeleteSelected = false
-        deleteImageView.setOnClickListener {
-            isDeleteSelected = !isDeleteSelected
-
-            if (isDeleteSelected) {
-                deleteBtnSelected()
-            } else {
-                deleteBtnUnSelected()
-            }
-        }
-    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean = false
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let {
-            mTransactionViewModel.searchTransactions(it)
-        }
-        return false
-    }
-
-    // endregion UI setup --------------------------------------------------------------------------
     // region Delete Transaction -------------------------------------------------------------------
 
     private fun deleteBtnSelected() {
@@ -216,7 +246,7 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
         mTransactionListAdapter.checkbox(false)
         val id: List<Long> = ArrayList(mTransactionListAdapter.mCheckedItemIds)
         val positions: Set<Int> = TreeSet(mTransactionListAdapter.mCheckedItemPositions)
-        Log.d(TAG, positions.toString())
+        Log.d(mTAG, positions.toString())
         if (id.isNotEmpty()) {
             mTransactionViewModel.deleteTransaction(
                     positions,
@@ -227,6 +257,35 @@ class TransactionFragmentList: Fragment(), SearchView.OnQueryTextListener {
     }
 
     // endregion Delete Transaction ----------------------------------------------------------------
+    // region Delete Transaction Callbacks ---------------------------------------------------------
+
+    private fun transactionsDeleted(transactions: List<TransactionModel>, deletedPositions: Set<Int>) {
+        Log.d(mTAG, "transactionsDeleted $transactions positions: $deletedPositions")
+        mTransactionListAdapter.mTransactions = transactions
+        for (position in deletedPositions.reversed()) {
+            mTransactionListAdapter.notifyItemRemoved(position)
+        }
+        emptyTextView.visibility = if (transactions.isEmpty()) View.VISIBLE else View.GONE
+    }
+
+    private fun transactionsDeleteRevertBack(oldTransactions: List<TransactionModel>,
+                                             throwable: Throwable? = null) {
+        Toast.makeText(context, R.string.error_deleting_transactions, Toast.LENGTH_SHORT).show()
+        showThrowableOnDebug(throwable)
+        transactionsLoaded(oldTransactions)
+    }
+
+    // endregion Delete Transaction Callbacks ------------------------------------------------------
+    // region Add Transaction ----------------------------------------------------------------------
+
+    private fun addTransaction() {
+        // mTransactionViewModel.addTransaction()
+    }
+
+    // endregion Add Transaction -------------------------------------------------------------------
+
+    // endregion Transaction -----------------------------------------------------------------------
+
     // region Extra --------------------------------------------------------------------------------
 
     private fun showThrowableOnDebug(throwable: Throwable?) {

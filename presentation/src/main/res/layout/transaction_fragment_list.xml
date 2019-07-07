@@ -52,10 +52,10 @@
 
     <!-- This relative layout is required for the transparent background -->
     <RelativeLayout
-        android:id="@+id/rootListView"
+        android:id="@+id/middleRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_layout"
+        android:layout_above="@+id/bottomLayout"
         android:layout_below="@+id/linearLayout3"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -133,7 +133,7 @@
 
     <!-- bottom layout when its NOT expanded -->
     <LinearLayout
-        android:id="@+id/bottom_layout"
+        android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -155,7 +155,7 @@
 
     <!-- bottom layout when its expanded -->
     <LinearLayout
-        android:id="@+id/bottom_layout_expanded"
+        android:id="@+id/bottomLayoutExpanded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -208,7 +208,7 @@
                 />
 
             <EditText
-                android:id="@+id/et_add_new_balance"
+                android:id="@+id/addNewTransactionsEditText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -217,7 +217,8 @@
                 android:background="@android:color/transparent"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
-                android:labelFor="@+id/et_add_new_balance"
+                android:labelFor="@+id/addNewTransactionsEditText"
+                android:textColor="@color/black"
                 android:hint="@string/value"
                 />
 
