@@ -47,18 +47,20 @@ class TransactionViewModel @Inject constructor(
         mTransactionUseCase.getTransactionsAsync {
             val result: GetTransactionViewModelResult
             when (it) {
-                is TransactionResult.AuthenticationError -> result = GetTransactionViewModelResult.AuthenticationError
-                is TransactionResult.Success -> {
-                    val (transactions, amount, currencyName ) = it.data
-                    val transactionModels = mTransactionMapper.mapTransactionList(transactions)
+                is GetTransactionResult.AuthenticationError -> result = GetTransactionViewModelResult.AuthenticationError
+                is GetTransactionResult.Success -> {
+
+                    val transactionModels
+                            = mTransactionMapper.mapTransactionList(it.transactions)
+
                     result = GetTransactionViewModelResult.Loaded(
                             transactionModels,
-                            amount,
-                            currencyName
+                            it.amount,
+                            it.currencyName
                     )
                 }
-                is TransactionResult.NetworkError -> result = GetTransactionViewModelResult.NetworkError(it.throwable)
-                is TransactionResult.GeneralError -> result = GetTransactionViewModelResult.GeneralError(it.throwable)
+                is GetTransactionResult.NetworkError -> result = GetTransactionViewModelResult.NetworkError(it.throwable)
+                is GetTransactionResult.GeneralError -> result = GetTransactionViewModelResult.GeneralError(it.throwable)
             }
             mGetTransactionsResult.value = result
         }

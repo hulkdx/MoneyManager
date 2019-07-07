@@ -122,12 +122,12 @@ class TransactionViewModelTest {
 
     private fun success() {
         doAnswer { invocation ->
-            val argument = invocation.getArgument<Function1<TransactionResult<GetTransactionResult>, Unit>>(0)
-            argument.invoke(TransactionResult.Success(GetTransactionResult(
+            val argument = invocation.getArgument<Function1<GetTransactionResult, Unit>>(0)
+            argument.invoke(GetTransactionResult.Success(
                     TEST_TRANSACTION_LIST,
                     TEST_TRANSACTION_TOTAL_AMOUNT,
                     TEST_TRANSACTION_CURRENCY
-            )))
+            ))
             null
         }.`when`(mTransactionUseCase).getTransactionsAsync(anyKotlin())
     }

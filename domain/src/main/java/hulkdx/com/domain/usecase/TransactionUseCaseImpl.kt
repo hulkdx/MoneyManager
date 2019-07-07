@@ -25,8 +25,6 @@ import javax.inject.Singleton
  * TODO: deleteTransactionsAsync == deleting from the api succeed and deleting from db is not.
  *
  * TODO: Add a mapper class for mapping the amount.
- *
- * TODO: Save the amount in User?
  */
 @Singleton
 class TransactionUseCaseImpl @Inject constructor(
@@ -39,7 +37,7 @@ class TransactionUseCaseImpl @Inject constructor(
 
     private var mDisposables: CompositeDisposable = CompositeDisposable()
 
-    override fun getTransactionsAsync(onComplete: (TransactionResult<GetTransactionResult>) -> Unit)
+    override fun getTransactionsAsync(onComplete: (GetTransactionResult) -> Unit)
     {
         val disposable= Single.fromCallable { getTransaction() }
                 .subscribeOn(mBackgroundScheduler)
@@ -52,22 +50,26 @@ class TransactionUseCaseImpl @Inject constructor(
                         is TransactionApiResponse.Success<GetTransactionApiResponse> -> {
                             val (transactions, totalAmount) = apiResponse.data
                             val amount = formatAmount(totalAmount)
-                            onComplete(TransactionResult.Success(
-                                    GetTransactionResult(transactions, amount, user.currency)
-                            ))
+                            onComplete(
+                                    GetTransactionResult.Success(
+                                            transactions,
+                                            amount,
+                                            user.currency
+                                    )
+                            )
                         }
                         is TransactionApiResponse.GeneralError -> {
-                            onComplete(TransactionResult.GeneralError())
+                            onComplete(GetTransactionResult.GeneralError())
                         }
                         is TransactionApiResponse.AuthWrongToken -> {
-                            onComplete(TransactionResult.AuthenticationError)
+                            onComplete(GetTransactionResult.AuthenticationError)
                         }
                     }
                 }, { throwable ->
                     when (throwable) {
-                        is IOException -> onComplete(TransactionResult.NetworkError(throwable))
-                        is UserNotExistsException -> { onComplete(TransactionResult.AuthenticationError) }
-                        else -> onComplete(TransactionResult.GeneralError(throwable))
+                        is IOException -> onComplete(GetTransactionResult.NetworkError(throwable))
+                        is UserNotExistsException -> { onComplete(GetTransactionResult.AuthenticationError) }
+                        else -> onComplete(GetTransactionResult.GeneralError(throwable))
                     }
                 })
 

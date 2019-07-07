@@ -6,7 +6,7 @@ import hulkdx.com.domain.data.remote.ApiManager
 import hulkdx.com.domain.repository.TransactionRepository
 import hulkdx.com.domain.repository.UserRepository
 import hulkdx.com.domain.usecase.TransactionUseCase.*
-import hulkdx.com.domain.usecase.TransactionUseCase.TransactionResult.AuthenticationError
+import hulkdx.com.domain.usecase.TransactionUseCase.GetTransactionResult.AuthenticationError
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import org.hamcrest.CoreMatchers.`is`
@@ -18,10 +18,8 @@ import org.mockito.junit.MockitoJUnit
 
 import org.junit.Assert.*
 import org.mockito.Mockito.*
-import org.mockito.ArgumentCaptor
 import java.io.IOException
 import java.lang.RuntimeException
-import java.util.*
 
 /**
  * Created by Mohammad Jafarzadeh Rezvan on 30/06/2019.
@@ -76,7 +74,7 @@ class TransactionUseCaseImplTest {
     fun getTransactions_noUser_callAuthError() {
         // Arrange
         noUser()
-        var result: TransactionResult<GetTransactionResult>? = null
+        var result: GetTransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -101,13 +99,13 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiSuccessGetTransactions()
-        var result: TransactionResult<GetTransactionResult>? = null
+        var result: GetTransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
         }
         // Assert
-        assertTrue(result is TransactionResult.Success)
+        assertTrue(result is GetTransactionResult.Success)
     }
 
     @Test
@@ -115,13 +113,13 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiIoExceptionGetTransactions()
-        var result: TransactionResult<GetTransactionResult>? = null
+        var result: GetTransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
         }
         // Assert
-        assertTrue(result is TransactionResult.NetworkError)
+        assertTrue(result is GetTransactionResult.NetworkError)
     }
 
     @Test
@@ -129,13 +127,13 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiGeneralExceptionGetTransactions()
-        var result: TransactionResult<GetTransactionResult>? = null
+        var result: GetTransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
         }
         // Assert
-        assertTrue(result is TransactionResult.GeneralError)
+        assertTrue(result is GetTransactionResult.GeneralError)
     }
 
     @Test
@@ -143,13 +141,13 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiGeneralErrorGetTransactions()
-        var result: TransactionResult<GetTransactionResult>? = null
+        var result: GetTransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
         }
         // Assert
-        assertTrue(result is TransactionResult.GeneralError)
+        assertTrue(result is GetTransactionResult.GeneralError)
     }
 
     @Test
@@ -157,7 +155,7 @@ class TransactionUseCaseImplTest {
         // Arrange
         validUser()
         apiAuthWrongTokenGetTransactions()
-        var result: TransactionResult<GetTransactionResult>? = null
+        var result: GetTransactionResult? = null
         // Act
         SUT.getTransactionsAsync {
             result = it
@@ -174,7 +172,7 @@ class TransactionUseCaseImplTest {
         var amount = ""
         // Act
         SUT.getTransactionsAsync {
-            amount = (it as TransactionResult.Success).data.amount
+            amount = (it as GetTransactionResult.Success).amount
         }
         // Assert
         assertThat(amount, `is`("10.43"))

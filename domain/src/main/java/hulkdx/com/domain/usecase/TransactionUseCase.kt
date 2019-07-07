@@ -7,7 +7,7 @@ import hulkdx.com.domain.data.model.Transaction
  */
 interface TransactionUseCase {
 
-    fun getTransactionsAsync(onComplete: (TransactionResult<GetTransactionResult>) -> (Unit))
+    fun getTransactionsAsync(onComplete: (GetTransactionResult) -> (Unit))
     fun deleteTransactionsAsync(positions: Set<Int>,
                                 id: List<Long>,
                                 onComplete: (DeleteTransactionResult) -> (Unit))
@@ -15,11 +15,13 @@ interface TransactionUseCase {
 
     fun dispose()
 
-    sealed class TransactionResult<out T> {
-        object AuthenticationError : TransactionResult<Nothing>()
-        class Success<T>(val data: T) : TransactionResult<T>()
-        class NetworkError(val throwable: Throwable): TransactionResult<Nothing>()
-        class GeneralError(val throwable: Throwable? = null): TransactionResult<Nothing>()
+    sealed class GetTransactionResult {
+        object AuthenticationError : GetTransactionResult()
+        class Success(val transactions: List<Transaction>,
+                      val amount: String,
+                      val currencyName: String) : GetTransactionResult()
+        class NetworkError(val throwable: Throwable): GetTransactionResult()
+        class GeneralError(val throwable: Throwable? = null): GetTransactionResult()
     }
 
     sealed class DeleteTransactionResult {
@@ -40,8 +42,4 @@ interface TransactionUseCase {
         ): DeleteTransactionResult()
         class UnknownError(val throwable: Throwable): DeleteTransactionResult()
     }
-
-    data class GetTransactionResult (
-        val transactions: List<Transaction>, val amount: String, val currencyName: String
-    )
 }
